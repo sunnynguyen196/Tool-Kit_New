@@ -5,3 +5,7 @@ all_files.txt
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Dependencies
+node_modules/
+

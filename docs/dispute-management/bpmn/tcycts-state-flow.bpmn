@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_1" name="Luồng Trạng thái 1 Yêu cầu Tra soát (TCYCTS)" processRef="Process_tcycts_state_flow"/>
+  </bpmn:collaboration>
+  <bpmn:process id="Process_tcycts_state_flow" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_YCPD" name="YCPD (Phê duyệt Nội bộ TCYCTS)"><bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef><bpmn:flowNodeRef>Task_ApprovePending</bpmn:flowNodeRef><bpmn:flowNodeRef>GW_Approve</bpmn:flowNodeRef><bpmn:flowNodeRef>End_Cancel</bpmn:flowNodeRef><bpmn:flowNodeRef>Task_Approved</bpmn:flowNodeRef></bpmn:lane>
+      <bpmn:lane id="Lane_YCTS" name="YCTS (Xử lý phát hành Cổng QR / Napas)"><bpmn:flowNodeRef>Task_SendQR</bpmn:flowNodeRef><bpmn:flowNodeRef>GW_ValQR</bpmn:flowNodeRef><bpmn:flowNodeRef>End_Failure1</bpmn:flowNodeRef><bpmn:flowNodeRef>Task_Init</bpmn:flowNodeRef><bpmn:flowNodeRef>Task_SendNP</bpmn:flowNodeRef><bpmn:flowNodeRef>GW_ValNP</bpmn:flowNodeRef><bpmn:flowNodeRef>End_Failure2</bpmn:flowNodeRef><bpmn:flowNodeRef>Task_OPEN</bpmn:flowNodeRef><bpmn:flowNodeRef>GW_NPResponse</bpmn:flowNodeRef><bpmn:flowNodeRef>End_PRCD</bpmn:flowNodeRef><bpmn:flowNodeRef>End_RJCD</bpmn:flowNodeRef><bpmn:flowNodeRef>End_EXPI</bpmn:flowNodeRef><bpmn:flowNodeRef>End_EXPR</bpmn:flowNodeRef><bpmn:flowNodeRef>End_EXRJ</bpmn:flowNodeRef></bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="1. MM tạo YCTS"><bpmn:outgoing>Flow_1</bpmn:outgoing></bpmn:startEvent>
+    <bpmn:task id="Task_ApprovePending" name="Trạng thái: Approve Pending"><bpmn:incoming>Flow_1</bpmn:incoming><bpmn:outgoing>Flow_2</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Approve" name="Phê duyệt nội bộ?"><bpmn:incoming>Flow_2</bpmn:incoming><bpmn:outgoing>Flow_3</bpmn:outgoing><bpmn:outgoing>Flow_4</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Cancel" name="Trạng thái: Cancel (Hủy YC)"><bpmn:incoming>Flow_3</bpmn:incoming></bpmn:endEvent>
+    <bpmn:task id="Task_Approved" name="Trạng thái: Approved"><bpmn:incoming>Flow_4</bpmn:incoming><bpmn:outgoing>Flow_5</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_SendQR" name="Gửi YCTS sang QR"><bpmn:incoming>Flow_5</bpmn:incoming><bpmn:outgoing>Flow_6</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="GW_ValQR" name="Kiểm tra QR"><bpmn:incoming>Flow_6</bpmn:incoming><bpmn:outgoing>Flow_7</bpmn:outgoing><bpmn:outgoing>Flow_8</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Failure1" name="Lỗi Validation QR (Failure)"><bpmn:incoming>Flow_7</bpmn:incoming></bpmn:endEvent>
+    <bpmn:task id="Task_Init" name="Trạng thái: Initialization"><bpmn:incoming>Flow_8</bpmn:incoming><bpmn:outgoing>Flow_9</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_SendNP" name="2. Gửi YC sang NP (Napas)"><bpmn:incoming>Flow_9</bpmn:incoming><bpmn:outgoing>Flow_10</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="GW_ValNP" name="Kiểm tra Napas"><bpmn:incoming>Flow_10</bpmn:incoming><bpmn:outgoing>Flow_11</bpmn:outgoing><bpmn:outgoing>Flow_12</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Failure2" name="Lỗi Validation Napas (Failure)"><bpmn:incoming>Flow_11</bpmn:incoming></bpmn:endEvent>
+    <bpmn:task id="Task_OPEN" name="Trạng thái: OPEN (Đang mở YC)"><bpmn:incoming>Flow_12</bpmn:incoming><bpmn:outgoing>Flow_13</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="GW_NPResponse" name="3. Kết quả Napas"><bpmn:incoming>Flow_13</bpmn:incoming><bpmn:outgoing>Flow_14</bpmn:outgoing><bpmn:outgoing>Flow_15</bpmn:outgoing><bpmn:outgoing>Flow_16</bpmn:outgoing><bpmn:outgoing>Flow_17</bpmn:outgoing><bpmn:outgoing>Flow_18</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_PRCD" name="Trạng thái: PRCD (Đồng ý)"><bpmn:incoming>Flow_14</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="End_RJCD" name="Trạng thái: RJCD (Từ chối)"><bpmn:incoming>Flow_15</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="End_EXPI" name="Trạng thái: EXPI (Hết hạn SLA)"><bpmn:incoming>Flow_16</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="End_EXPR" name="Trạng thái: EXPR (Từ chối sau HH)"><bpmn:incoming>Flow_17</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="End_EXRJ" name="Trạng thái: EXRJ (Đồng ý sau HH)"><bpmn:incoming>Flow_18</bpmn:incoming></bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" name="" sourceRef="Start_1" targetRef="Task_ApprovePending"/>
+    <bpmn:sequenceFlow id="Flow_2" name="" sourceRef="Task_ApprovePending" targetRef="GW_Approve"/>
+    <bpmn:sequenceFlow id="Flow_3" name="Từ chối" sourceRef="GW_Approve" targetRef="End_Cancel"/>
+    <bpmn:sequenceFlow id="Flow_4" name="Đồng ý" sourceRef="GW_Approve" targetRef="Task_Approved"/>
+    <bpmn:sequenceFlow id="Flow_5" name="" sourceRef="Task_Approved" targetRef="Task_SendQR"/>
+    <bpmn:sequenceFlow id="Flow_6" name="" sourceRef="Task_SendQR" targetRef="GW_ValQR"/>
+    <bpmn:sequenceFlow id="Flow_7" name="Không hợp lệ" sourceRef="GW_ValQR" targetRef="End_Failure1"/>
+    <bpmn:sequenceFlow id="Flow_8" name="Hợp lệ" sourceRef="GW_ValQR" targetRef="Task_Init"/>
+    <bpmn:sequenceFlow id="Flow_9" name="" sourceRef="Task_Init" targetRef="Task_SendNP"/>
+    <bpmn:sequenceFlow id="Flow_10" name="" sourceRef="Task_SendNP" targetRef="GW_ValNP"/>
+    <bpmn:sequenceFlow id="Flow_11" name="Không hợp lệ" sourceRef="GW_ValNP" targetRef="End_Failure2"/>
+    <bpmn:sequenceFlow id="Flow_12" name="Hợp lệ" sourceRef="GW_ValNP" targetRef="Task_OPEN"/>
+    <bpmn:sequenceFlow id="Flow_13" name="" sourceRef="Task_OPEN" targetRef="GW_NPResponse"/>
+    <bpmn:sequenceFlow id="Flow_14" name="Đồng ý" sourceRef="GW_NPResponse" targetRef="End_PRCD"/>
+    <bpmn:sequenceFlow id="Flow_15" name="Từ chối" sourceRef="GW_NPResponse" targetRef="End_RJCD"/>
+    <bpmn:sequenceFlow id="Flow_16" name="Hết hạn" sourceRef="GW_NPResponse" targetRef="End_EXPI"/>
+    <bpmn:sequenceFlow id="Flow_17" name="Từ chối sau HH" sourceRef="GW_NPResponse" targetRef="End_EXPR"/>
+    <bpmn:sequenceFlow id="Flow_18" name="Đồng ý sau HH" sourceRef="GW_NPResponse" targetRef="End_EXRJ"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape bpmnElement="Participant_1" isHorizontal="false"><dc:Bounds x="0" y="0" width="1600" height="1400"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Lane_YCPD" isHorizontal="false"><dc:Bounds x="0" y="30" width="400" height="1370"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Lane_YCTS" isHorizontal="false"><dc:Bounds x="400" y="30" width="1200" height="1370"/></bpmndi:BPMNShape>
+      
+      <!-- Nodes in YCPD -->
+      <bpmndi:BPMNShape bpmnElement="Start_1"><dc:Bounds x="182" y="80" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Task_ApprovePending"><dc:Bounds x="130" y="160" width="140" height="65"/></bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="GW_Approve">
+        <dc:Bounds x="175" y="270" width="50" height="50"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="65" y="285" width="100" height="20"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="End_Cancel"><dc:Bounds x="60" y="370" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Task_Approved"><dc:Bounds x="240" y="355" width="130" height="65"/></bpmndi:BPMNShape>
+      
+      <!-- Nodes in YCTS -->
+      <bpmndi:BPMNShape bpmnElement="Task_SendQR"><dc:Bounds x="500" y="455" width="140" height="65"/></bpmndi:BPMNShape>
+      
+      <!-- GATEWAY QR LABEL PLACED ON THE LEFT (X=445 Y=580) -->
+      <bpmndi:BPMNShape bpmnElement="GW_ValQR">
+        <dc:Bounds x="545" y="565" width="50" height="50"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="445" y="580" width="90" height="20"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="End_Failure1"><dc:Bounds x="740" y="572" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Task_Init"><dc:Bounds x="500" y="675" width="140" height="65"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Task_SendNP"><dc:Bounds x="500" y="785" width="140" height="65"/></bpmndi:BPMNShape>
+      
+      <!-- GATEWAY NAPAS LABEL PLACED ON THE LEFT (X=435 Y=910) -->
+      <bpmndi:BPMNShape bpmnElement="GW_ValNP">
+        <dc:Bounds x="545" y="895" width="50" height="50"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="435" y="910" width="100" height="20"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="End_Failure2"><dc:Bounds x="740" y="902" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Task_OPEN"><dc:Bounds x="500" y="1005" width="140" height="65"/></bpmndi:BPMNShape>
+      
+      <!-- GATEWAY RESPONSE LABEL PLACED ON TOP OF THE INCOMING UPPER BRANCH (X=710 Y=1075) -->
+      <bpmndi:BPMNShape bpmnElement="GW_NPResponse">
+        <dc:Bounds x="925" y="1120" width="50" height="50"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="710" y="1075" width="120" height="20"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Outcomes in YCTS -->
+      <bpmndi:BPMNShape bpmnElement="End_PRCD"><dc:Bounds x="450" y="1260" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End_RJCD"><dc:Bounds x="700" y="1260" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End_EXPI"><dc:Bounds x="932" y="1260" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End_EXPR"><dc:Bounds x="1170" y="1260" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End_EXRJ"><dc:Bounds x="1420" y="1260" width="36" height="36"/></bpmndi:BPMNShape>
+      
+      <!-- EDGES WITH PERFECT NON-OVERLAPPING LABEL POSITIONS -->
+      <!-- Flow 1: Start -> ApprovePending -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_1"><di:waypoint x="200" y="116"/><di:waypoint x="200" y="160"/></bpmndi:BPMNEdge>
+      
+      <!-- Flow 2: ApprovePending -> GW_Approve -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_2"><di:waypoint x="200" y="225"/><di:waypoint x="200" y="270"/></bpmndi:BPMNEdge>
+      
+      <!-- Flow 3: GW_Approve -> End_Cancel (Left) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_3">
+        <di:waypoint x="175" y="295"/><di:waypoint x="78" y="295"/><di:waypoint x="78" y="370"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="105" y="275" width="40" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 4: GW_Approve -> Task_Approved (Right) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_4">
+        <di:waypoint x="225" y="295"/><di:waypoint x="305" y="295"/><di:waypoint x="305" y="355"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="245" y="275" width="40" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 5: Task_Approved -> Task_SendQR (Cross Lane) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_5">
+        <di:waypoint x="305" y="420"/><di:waypoint x="305" y="440"/><di:waypoint x="570" y="440"/><di:waypoint x="570" y="455"/>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 6: Task_SendQR -> GW_ValQR -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_6"><di:waypoint x="570" y="520"/><di:waypoint x="570" y="565"/></bpmndi:BPMNEdge>
+      
+      <!-- Flow 7: GW_ValQR -> End_Failure1 (Right) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_7">
+        <di:waypoint x="595" y="590"/><di:waypoint x="740" y="590"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="625" y="570" width="75" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 8: GW_ValQR -> Task_Init (Down - LABEL HỢP LỆ AT X=585 Y=630) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_8">
+        <di:waypoint x="570" y="615"/><di:waypoint x="570" y="675"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="585" y="630" width="40" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 9: Task_Init -> Task_SendNP -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_9"><di:waypoint x="570" y="740"/><di:waypoint x="570" y="785"/></bpmndi:BPMNEdge>
+      
+      <!-- Flow 10: Task_SendNP -> GW_ValNP -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_10"><di:waypoint x="570" y="850"/><di:waypoint x="570" y="895"/></bpmndi:BPMNEdge>
+      
+      <!-- Flow 11: GW_ValNP -> End_Failure2 (Right) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_11">
+        <di:waypoint x="595" y="920"/><di:waypoint x="740" y="920"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="625" y="900" width="75" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 12: GW_ValNP -> Task_OPEN (Down - LABEL HỢP LỆ AT X=585 Y=950) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_12">
+        <di:waypoint x="570" y="945"/><di:waypoint x="570" y="1005"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="585" y="950" width="40" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 13: Task_OPEN -> GW_NPResponse (Horizontal line at Y=1095) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_13">
+        <di:waypoint x="570" y="1070"/><di:waypoint x="570" y="1095"/><di:waypoint x="950" y="1095"/><di:waypoint x="950" y="1120"/>
+      </bpmndi:BPMNEdge>
+      
+      <!-- 5 Clean Fan-Out Flows from GW_NPResponse -->
+      <!-- Flow 14: -> PRCD (x=468) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_14">
+        <di:waypoint x="925" y="1145"/><di:waypoint x="468" y="1145"/><di:waypoint x="468" y="1260"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="640" y="1125" width="40" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 15: -> RJCD (x=718) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_15">
+        <di:waypoint x="925" y="1145"/><di:waypoint x="718" y="1145"/><di:waypoint x="718" y="1260"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="780" y="1125" width="40" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 16: -> EXPI (x=950) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_16">
+        <di:waypoint x="950" y="1170"/><di:waypoint x="950" y="1260"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="965" y="1200" width="45" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 17: -> EXPR (x=1188) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_17">
+        <di:waypoint x="975" y="1145"/><di:waypoint x="1188" y="1145"/><di:waypoint x="1188" y="1260"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="1040" y="1125" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Flow 18: -> EXRJ (x=1438) -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_18">
+        <di:waypoint x="975" y="1145"/><di:waypoint x="1438" y="1145"/><di:waypoint x="1438" y="1260"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="1270" y="1125" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

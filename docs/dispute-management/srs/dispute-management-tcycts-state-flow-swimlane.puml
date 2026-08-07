@@ -1,0 +1,124 @@
+@startuml dispute-management-tcycts-state-flow-swimlane
+title LUỒNG TRẠNG THÁI CỦA 1 YÊU CẦU TRA SOÁT (TCYCTS)\nVai trò: TCYCTS CHIỀU TCNL (THANH TOÁN) — Có kỹ thuật kiểm tra (Cấu trúc Trạng thái 3 Nhóm)
+
+skinparam ActivityFontSize 11
+skinparam ActivityBorderColor #002D62
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam SwimlaneHeaderFontSize 11
+skinparam SwimlaneHeaderFontStyle bold
+skinparam SwimlaneBorderColor #A0A0A0
+
+|#E6F0FA| Hệ thống QRGW (TT YCTS tại đối tác) |
+|#FAFAFA| Hệ thống MM (TT YCTS tại Epay) |
+
+|Hệ thống MM (TT YCTS tại Epay)|
+start
+:1. MM tạo YCTS;
+note right
+  - Tiến trình: Chờ xử lý
+  - Trạng thái hết hạn: Chưa hết hạn
+  - TT xử lý tại Epay: —
+  - TT xử lý tại đối tác: —
+end note
+
+if (Hành động Maker?) then (2. Hủy yêu cầu)
+  :Đã hủy;
+  note right: Tiến trình: Đã hủy
+  stop
+else (Tiếp tục xử lý)
+  :3. Xác nhận kiểm tra\n(Đã có xác nhận của Inspector);
+  :Đã kiểm tra;
+  note right: Tiến trình: Đã kiểm tra
+  
+  :4. Gửi phê duyệt tạo YCTS\n(Maker trình duyệt);
+  :Chờ phê duyệt;
+  note right: Tiến trình: Chờ phê duyệt\n(Sinh YCPD ApprovePending)
+  
+  if (Checker phê duyệt?) then (4.2 Từ chối duyệt)
+    :Từ chối duyệt;
+    note right: Quay lại Đã kiểm tra\n(Maker có thể sửa hoặc hủy YCPD)
+    stop
+  else (4.1 Đồng ý duyệt)
+    :Đã phê duyệt;
+    note right: Tiến trình: Đã phê duyệt
+    
+    :5. Gửi YCTS sang QR;
+    
+    |Hệ thống QRGW (TT YCTS tại đối tác)|
+    if (Yêu cầu hợp lệ tại QRGW?) then (Không hợp lệ)
+      :Failure;
+      |Hệ thống MM (TT YCTS tại Epay)|
+      :Xử lý thất bại;
+      note right: Tiến trình: Xử lý thất bại
+      :ĐS xác nhận;
+      :Hoàn tất;
+      note right: Tiến trình: Hoàn tất
+      stop
+    else (Hợp lệ)
+      |Hệ thống QRGW (TT YCTS tại đối tác)|
+      :QR gọi sang Napas;
+      if (Napas tiếp nhận?) then (Không hợp lệ)
+        :Failure;
+        |Hệ thống MM (TT YCTS tại Epay)|
+        :Xử lý thất bại;
+        note right: Tiến trình: Xử lý thất bại
+        :ĐS xác nhận;
+        :Hoàn tất;
+        note right: Tiến trình: Hoàn tất
+        stop
+      else (Hợp lệ)
+        |Hệ thống QRGW (TT YCTS tại đối tác)|
+        :OPEN;
+        note right: TT xử lý tại đối tác: OPEN
+        
+        |Hệ thống MM (TT YCTS tại Epay)|
+        :Chờ phản hồi (MM: OPEN);
+        note right
+          - Tiến trình: Chờ phản hồi
+          - TT xử lý tại Epay: OPEN
+          - TT xử lý tại đối tác: OPEN
+        end note
+        
+        |Hệ thống QRGW (TT YCTS tại đối tác)|
+        :QRGW tiếp nhận phản hồi / IPN;
+        
+        if (IPN thông báo kết quả?) then (EXPI - IPN hết hạn SLA)
+          :EXPI;
+          note right: TT xử lý tại đối tác: EXPI
+          |Hệ thống MM (TT YCTS tại Epay)|
+          :Đã hết hạn;
+          note right
+            - Trạng thái hết hạn: Đã hết hạn
+            (MM tiếp tục chờ kết quả xử lý tiếp theo)
+          end note
+          stop
+        else (EXPR / PRCD / RJCD / EXRJ)
+          |Hệ thống QRGW (TT YCTS tại đối tác)|
+          :EXPR / PRCD / RJCD / EXRJ;
+          note right: TT xử lý tại đối tác: EXPR / PRCD / RJCD / EXRJ
+          
+          |Hệ thống MM (TT YCTS tại Epay)|
+          if (Phản hồi đối tác?) then (EXPR / PRCD (Đồng ý))
+            :PRCD;
+            note right
+              - Tiến trình: Đã phản hồi
+              - TT xử lý tại Epay: PRCD
+            end note
+          else (RJCD / EXRJ (Từ chối))
+            :RJCD;
+            note right
+              - Tiến trình: Đã phản hồi
+              - TT xử lý tại Epay: RJCD
+            end note
+          endif
+          
+          :ĐS xác nhận;
+          :Hoàn tất;
+          note right: Tiến trình: Hoàn tất
+          stop
+        endif
+      endif
+    endif
+  endif
+endif
+@enduml

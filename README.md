@@ -7,8 +7,8 @@
 
 ## 📌 Bắt Đầu Nhanh
 
-1. **Xem Hướng Dẫn Quy Trình Master Chi Tiết**: Mở file [`WORKFLOW-BA-MASTER.md`](file:///C:/Users/Admin/BATOOLKIT/WORKFLOW-BA-MASTER.md).
-2. **Mở BA Skill Interactive Dashboard**: Mở file [`index.html`](file:///C:/Users/Admin/BATOOLKIT/index.html) trực tiếp trên trình duyệt để tra cứu visual workflow, copy prompt 1-click và xem mẫu ví dụ.
+1. **Xem Hướng Dẫn Quy Trình Master Chi Tiết**: Mở file [`WORKFLOW-BA-MASTER.md`](./WORKFLOW-BA-MASTER.md).
+2. **Mở BA Skill Interactive Dashboard**: Mở file [`index.html`](./index.html) trực tiếp trên trình duyệt để tra cứu visual workflow, copy prompt 1-click và xem mẫu ví dụ.
 
 ---
 
@@ -34,7 +34,7 @@ BATOOLKIT/
 
 - **Giai đoạn 1: Brainstorm & Requirements** (`/brainstorm`) — Đột phá ý tưởng, xây dựng BRD, Feature Spec 12 mục & User Story.
 - **Giai đoạn 2: Diagram & Business Modeling** (`/user-flow`, `/bpmn`, `/sequence`, `/usecase-diagram`, `/erd`) — Trực quan hóa luồng công việc & sơ đồ kiến trúc.
-- **Giai đoạn 3: Wireframe HTML Interactive** (`/wireframe-html`) — Tạo giao diện mẫu tương tác HTML sống động kèm Dev/QA Annotations.
+- **Giai đoạn 3: Wireframe HTML & Figma Drawing** (`/wireframe-html`, `/figma`) — Tạo giao diện mẫu tương tác HTML và vẽ tự động lên Figma Desktop qua MCP.
 - **Giai đoạn 4: User Guide & Release** (`/userguide`) — Tự động tổng hợp tài liệu Hướng dẫn Sử dụng đóng gói Web Guide Viewer.
 
 ---

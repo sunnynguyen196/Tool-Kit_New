@@ -1,0 +1,85 @@
+@startuml dispute-management-tctlts-state-flow-swimlane
+title LUỒNG TRẠNG THÁI CỦA 1 YÊU CẦU TRA SOÁT (TCTLTS)\nVai trò: TCTLTS CHIỀU TCNL (THANH TOÁN) — LUỒNG PHẢN HỒI YCTS THỤ ĐỘNG (TS-014)
+
+skinparam ActivityFontSize 11
+skinparam ActivityBorderColor #002D62
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam SwimlaneHeaderFontSize 11
+skinparam SwimlaneHeaderFontStyle bold
+skinparam SwimlaneBorderColor #A0A0A0
+
+|#E6F0FA| Hệ thống QRGW (TT YCTS tại đối tác) |
+|#FAFAFA| Hệ thống MM (TT YCTS tại Epay) |
+
+|Hệ thống QRGW (TT YCTS tại đối tác)|
+start
+:1. Napas gửi YCTS;
+if (Yêu cầu hợp lệ tại QRGW?) then (không hợp lệ)
+  stop
+else (Hợp lệ)
+  :OPEN;
+  note right: TT xử lý tại đối tác: OPEN
+  
+  :4. Gửi yêu cầu tạo YCTS đến MM;
+  
+  |Hệ thống MM (TT YCTS tại Epay)|
+  :Chờ xử lý;
+  note right
+    - MM BẮT BUỘC insert YCTS
+    - Tiến trình: Chờ xử lý
+    - TT xử lý tại Epay: OPEN
+    - TT xử lý tại đối tác: OPEN
+    - Trạng thái hết hạn: Chưa hết hạn
+  end note
+  
+  :Gửi phê duyệt trả lời tra soát\n(trả lời/đồng ý hoàn trả/yêu cầu báo có);
+  :Chờ phê duyệt;
+  note right: Tiến trình: Chờ phê duyệt\n(Sinh YCPD ApprovePending)
+  
+  if (Lãnh đạo phê duyệt?) then (Từ chối duyệt)
+    :Từ chối duyệt;
+    note right: Quay lại Chờ xử lý\n(Maker có thể sửa hoặc lập lại câu trả lời)
+    stop
+  else (Đồng ý duyệt)
+    :Đã phê duyệt;
+    note right: Tiến trình: Đã phê duyệt
+    
+    :Gửi yêu cầu trả lời/đồng ý hoàn trả/yêu cầu báo có;
+    
+    |Hệ thống QRGW (TT YCTS tại đối tác)|
+    if (Yêu cầu hợp lệ tại QRGW?) then (không hợp lệ)
+      |Hệ thống MM (TT YCTS tại Epay)|
+      :Xử lý Thất bại;
+      note right: Tiến trình: Xử lý thất bại
+      stop
+    else (Hợp lệ)
+      |Hệ thống QRGW (TT YCTS tại đối tác)|
+      if (Gửi yêu cầu hoàn trả/báo có sang đối tác?) then (Đối tác phản hồi lỗi)
+        |Hệ thống MM (TT YCTS tại Epay)|
+        :Xử lý Thất bại;
+        note right: Tiến trình: Xử lý thất bại
+        stop
+      else (Đối tác phản hồi yêu cầu hợp lệ)
+        |Hệ thống MM (TT YCTS tại Epay)|
+        :Chờ xử lý đối tác;
+        note right: Tiến trình: Chờ phản hồi
+        
+        :Đối tác thông báo KQ tra soát;
+        :Đã nhận phản hồi đối tác;
+        note right
+          - Tiến trình: Đã phản hồi
+          - Ánh xạ kết quả xử lý tại Epay:
+            + Hoàn trả TC / Báo có TC / IPN thành công ➔ MM: PRCD
+            + Hoàn trả TB / Báo có TB / IPN thất bại ➔ MM: RJCD
+            + IPN SLA quá hạn (EXPI) ➔ Trạng thái hết hạn: Đã hết hạn
+        end note
+        
+        :ĐS xác nhận hoàn tất YCTS;
+        :Hoàn tất;
+        note right: Tiến trình: Hoàn tất
+        stop
+      endif
+    endif
+  endif
+endif
+@enduml

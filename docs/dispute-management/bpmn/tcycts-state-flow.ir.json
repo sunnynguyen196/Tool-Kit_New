@@ -1,0 +1,229 @@
+{
+  "process": {
+    "id": "Process_tcycts_state_flow",
+    "title": "Luồng Trạng thái 1 Yêu cầu Tra soát (TCYCTS)"
+  },
+  "lanes": [
+    {
+      "id": "Lane_YCPD",
+      "name": "YCPD (Phê duyệt Nội bộ TCYCTS)"
+    },
+    {
+      "id": "Lane_YCTS",
+      "name": "YCTS (Xử lý phát hành Cổng QR / Napas)"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "Start_1",
+      "kind": "start",
+      "lane": "Lane_YCPD",
+      "name": "1. MM tạo YCTS"
+    },
+    {
+      "id": "Task_ApprovePending",
+      "kind": "task",
+      "lane": "Lane_YCPD",
+      "name": "Trạng thái: Approve Pending"
+    },
+    {
+      "id": "GW_Approve",
+      "kind": "gateway",
+      "lane": "Lane_YCPD",
+      "name": "Phê duyệt nội bộ?"
+    },
+    {
+      "id": "End_Cancel",
+      "kind": "end",
+      "lane": "Lane_YCPD",
+      "name": "Trạng thái: Cancel (Hủy YC)"
+    },
+    {
+      "id": "Task_Approved",
+      "kind": "task",
+      "lane": "Lane_YCPD",
+      "name": "Trạng thái: Approved"
+    },
+    {
+      "id": "Task_SendQR",
+      "kind": "task",
+      "lane": "Lane_YCTS",
+      "name": "Gửi YCTS sang QR"
+    },
+    {
+      "id": "GW_ValQR",
+      "kind": "gateway",
+      "lane": "Lane_YCTS",
+      "name": "Yêu cầu hợp lệ tại QR?"
+    },
+    {
+      "id": "End_Failure",
+      "kind": "end",
+      "lane": "Lane_YCTS",
+      "name": "Trạng thái: Failure (Lỗi/Không HL)"
+    },
+    {
+      "id": "Task_Init",
+      "kind": "task",
+      "lane": "Lane_YCTS",
+      "name": "Trạng thái: Initialization"
+    },
+    {
+      "id": "Task_SendNP",
+      "kind": "task",
+      "lane": "Lane_YCTS",
+      "name": "2. Gửi YC sang NP (Napas)"
+    },
+    {
+      "id": "GW_ValNP",
+      "kind": "gateway",
+      "lane": "Lane_YCTS",
+      "name": "Yêu cầu hợp lệ tại Napas?"
+    },
+    {
+      "id": "Task_OPEN",
+      "kind": "task",
+      "lane": "Lane_YCTS",
+      "name": "Trạng thái: OPEN (Đang mở YC)"
+    },
+    {
+      "id": "GW_NPResponse",
+      "kind": "gateway",
+      "lane": "Lane_YCTS",
+      "name": "3. Kết quả NP trả lời?"
+    },
+    {
+      "id": "End_PRCD",
+      "kind": "end",
+      "lane": "Lane_YCTS",
+      "name": "Trạng thái: PRCD (Đồng ý)"
+    },
+    {
+      "id": "End_RJCD",
+      "kind": "end",
+      "lane": "Lane_YCTS",
+      "name": "Trạng thái: RJCD (Từ chối)"
+    },
+    {
+      "id": "End_EXPI",
+      "kind": "end",
+      "lane": "Lane_YCTS",
+      "name": "Trạng thái: EXPI (Hết hạn SLA)"
+    },
+    {
+      "id": "End_EXPR",
+      "kind": "end",
+      "lane": "Lane_YCTS",
+      "name": "Trạng thái: EXPR (Từ chối sau HH)"
+    },
+    {
+      "id": "End_EXRJ",
+      "kind": "end",
+      "lane": "Lane_YCTS",
+      "name": "Trạng thái: EXRJ (Đồng ý sau HH)"
+    }
+  ],
+  "flows": [
+    {
+      "id": "Flow_1",
+      "src": "Start_1",
+      "tgt": "Task_ApprovePending"
+    },
+    {
+      "id": "Flow_2",
+      "src": "Task_ApprovePending",
+      "tgt": "GW_Approve"
+    },
+    {
+      "id": "Flow_3",
+      "src": "GW_Approve",
+      "tgt": "End_Cancel",
+      "name": "Từ chối"
+    },
+    {
+      "id": "Flow_4",
+      "src": "GW_Approve",
+      "tgt": "Task_Approved",
+      "name": "Đồng ý"
+    },
+    {
+      "id": "Flow_5",
+      "src": "Task_Approved",
+      "tgt": "Task_SendQR"
+    },
+    {
+      "id": "Flow_6",
+      "src": "Task_SendQR",
+      "tgt": "GW_ValQR"
+    },
+    {
+      "id": "Flow_7",
+      "src": "GW_ValQR",
+      "tgt": "End_Failure",
+      "name": "Không hợp lệ"
+    },
+    {
+      "id": "Flow_8",
+      "src": "GW_ValQR",
+      "tgt": "Task_Init",
+      "name": "Hợp lệ"
+    },
+    {
+      "id": "Flow_9",
+      "src": "Task_Init",
+      "tgt": "Task_SendNP"
+    },
+    {
+      "id": "Flow_10",
+      "src": "Task_SendNP",
+      "tgt": "GW_ValNP"
+    },
+    {
+      "id": "Flow_11",
+      "src": "GW_ValNP",
+      "tgt": "End_Failure",
+      "name": "Không hợp lệ"
+    },
+    {
+      "id": "Flow_12",
+      "src": "GW_ValNP",
+      "tgt": "Task_OPEN",
+      "name": "Hợp lệ"
+    },
+    {
+      "id": "Flow_13",
+      "src": "Task_OPEN",
+      "tgt": "GW_NPResponse"
+    },
+    {
+      "id": "Flow_14",
+      "src": "GW_NPResponse",
+      "tgt": "End_PRCD",
+      "name": "Đồng ý"
+    },
+    {
+      "id": "Flow_15",
+      "src": "GW_NPResponse",
+      "tgt": "End_RJCD",
+      "name": "Từ chối"
+    },
+    {
+      "id": "Flow_16",
+      "src": "GW_NPResponse",
+      "tgt": "End_EXPI",
+      "name": "Hết hạn"
+    },
+    {
+      "id": "Flow_17",
+      "src": "GW_NPResponse",
+      "tgt": "End_EXPR",
+      "name": "Từ chối sau hết hạn"
+    },
+    {
+      "id": "Flow_18",
+      "src": "GW_NPResponse",
+      "tgt": "End_EXRJ",
+      "name": "Đồng ý sau hết hạn"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+@startuml
+!theme plain
+title LUỒNG TRẠNG THÁI CỦA 1 YÊU CẦU TRA SOÁT\nVai trò: TCYCTS CHIỀU TCPL (THANH TOÁN/CHUYỂN TIỀN) hoặc CHIỀU TCNL (CHUYỂN TIỀN)
+
+|YCTS|
+start
+:1. Ví gửi YCTS;
+
+if (Yêu cầu hợp lệ?) then (Không hợp lệ)
+  :Trạng thái: Failure;
+  stop
+else (Hợp lệ)
+  :Trạng thái: Initialization;
+endif
+
+:2. Gửi YC sang NP;
+if (Yêu cầu hợp lệ?) then (Không Hợp lệ)
+  :Trạng thái: Failure;
+  stop
+else (Hợp lệ)
+  :Trạng thái: OPEN;
+endif
+
+:3. NP trả lời;
+if (Kết quả phản hồi?) then (Đồng ý)
+  :Trạng thái: PRCD;
+  stop
+elseif (Từ chối) then
+  :Trạng thái: RJCD;
+  stop
+elseif (Hết hạn) then
+  :Trạng thái: EXPI;
+  stop
+elseif (Từ chối sau hết hạn) then
+  :Trạng thái: EXPR;
+  stop
+else (Đồng ý sau hết hạn)
+  :Trạng thái: EXRJ;
+  stop
+endif
+
+@enduml

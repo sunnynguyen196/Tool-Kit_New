@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_2" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_2">
+    <bpmn:participant id="Participant_2" name="Luồng Trạng thái 1 Yêu cầu Tra soát (TCTLTS)" processRef="Process_tctlts_state_flow"/>
+  </bpmn:collaboration>
+  <bpmn:process id="Process_tctlts_state_flow" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_2">
+      <bpmn:lane id="Lane_YCTS" name="YCTS (Xử lý tiếp nhận & Phản hồi Tra soát TCTLTS)">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_ValNP</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_FailVal</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_OPEN</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_MMResp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_EXPI</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_RJCD1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_EXRJ1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_PendingPartner</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SendNPPartner</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_NPPartnerResp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_PRCD</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_RJCD2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_EXPR</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_EXRJ2</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    
+    <bpmn:startEvent id="Start_1" name="1. Napas gửi YCTS"><bpmn:outgoing>Flow_1</bpmn:outgoing></bpmn:startEvent>
+    <bpmn:exclusiveGateway id="GW_ValNP" name="Kiểm tra hợp lệ"><bpmn:incoming>Flow_1</bpmn:incoming><bpmn:outgoing>Flow_2</bpmn:outgoing><bpmn:outgoing>Flow_3</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_FailVal" name="Không hợp lệ (Failure)"><bpmn:incoming>Flow_2</bpmn:incoming></bpmn:endEvent>
+    <bpmn:task id="Task_OPEN" name="Trạng thái: OPEN (Đã nhận YC)"><bpmn:incoming>Flow_3</bpmn:incoming><bpmn:outgoing>Flow_4</bpmn:outgoing></bpmn:task>
+    
+    <bpmn:exclusiveGateway id="GW_MMResp" name="Phản hồi MM / Napas"><bpmn:incoming>Flow_4</bpmn:incoming><bpmn:outgoing>Flow_5</bpmn:outgoing><bpmn:outgoing>Flow_6</bpmn:outgoing><bpmn:outgoing>Flow_7</bpmn:outgoing><bpmn:outgoing>Flow_8</bpmn:outgoing></bpmn:exclusiveGateway>
+    
+    <bpmn:endEvent id="End_EXPI" name="Trạng thái: EXPI (Napas báo hết hạn)"><bpmn:incoming>Flow_5</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="End_RJCD1" name="Trạng thái: RJCD (MM Từ chối)"><bpmn:incoming>Flow_6</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="End_EXRJ1" name="Trạng thái: EXRJ (MM Từ chối sau HH)"><bpmn:incoming>Flow_7</bpmn:incoming></bpmn:endEvent>
+    
+    <bpmn:task id="Task_PendingPartner" name="Trạng thái: Pending partner"><bpmn:incoming>Flow_8</bpmn:incoming><bpmn:outgoing>Flow_9</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_SendNPPartner" name="Gửi YC hoàn trả/báo có sang NP"><bpmn:incoming>Flow_9</bpmn:incoming><bpmn:outgoing>Flow_10</bpmn:outgoing></bpmn:task>
+    
+    <bpmn:exclusiveGateway id="GW_NPPartnerResp" name="KQ Napas hoàn trả?"><bpmn:incoming>Flow_10</bpmn:incoming><bpmn:outgoing>Flow_11</bpmn:outgoing><bpmn:outgoing>Flow_12</bpmn:outgoing><bpmn:outgoing>Flow_13</bpmn:outgoing><bpmn:outgoing>Flow_14</bpmn:outgoing></bpmn:exclusiveGateway>
+    
+    <bpmn:endEvent id="End_PRCD" name="Trạng thái: PRCD (Thành công)"><bpmn:incoming>Flow_11</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="End_RJCD2" name="Trạng thái: RJCD (Thất bại)"><bpmn:incoming>Flow_12</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="End_EXPR" name="Trạng thái: EXPR (Thành công sau HH)"><bpmn:incoming>Flow_13</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="End_EXRJ2" name="Trạng thái: EXRJ (Thất bại sau HH)"><bpmn:incoming>Flow_14</bpmn:incoming></bpmn:endEvent>
+    
+    <bpmn:sequenceFlow id="Flow_1" name="" sourceRef="Start_1" targetRef="GW_ValNP"/>
+    <bpmn:sequenceFlow id="Flow_2" name="Không hợp lệ" sourceRef="GW_ValNP" targetRef="End_FailVal"/>
+    <bpmn:sequenceFlow id="Flow_3" name="Hợp lệ" sourceRef="GW_ValNP" targetRef="Task_OPEN"/>
+    <bpmn:sequenceFlow id="Flow_4" name="" sourceRef="Task_OPEN" targetRef="GW_MMResp"/>
+    <bpmn:sequenceFlow id="Flow_5" name="4. Napas báo hết hạn" sourceRef="GW_MMResp" targetRef="End_EXPI"/>
+    <bpmn:sequenceFlow id="Flow_6" name="Từ chối" sourceRef="GW_MMResp" targetRef="End_RJCD1"/>
+    <bpmn:sequenceFlow id="Flow_7" name="Từ chối sau HH" sourceRef="GW_MMResp" targetRef="End_EXRJ1"/>
+    <bpmn:sequenceFlow id="Flow_8" name="Đồng ý" sourceRef="GW_MMResp" targetRef="Task_PendingPartner"/>
+    <bpmn:sequenceFlow id="Flow_9" name="" sourceRef="Task_PendingPartner" targetRef="Task_SendNPPartner"/>
+    <bpmn:sequenceFlow id="Flow_10" name="" sourceRef="Task_SendNPPartner" targetRef="GW_NPPartnerResp"/>
+    <bpmn:sequenceFlow id="Flow_11" name="Thành công" sourceRef="GW_NPPartnerResp" targetRef="End_PRCD"/>
+    <bpmn:sequenceFlow id="Flow_12" name="Thất bại" sourceRef="GW_NPPartnerResp" targetRef="End_RJCD2"/>
+    <bpmn:sequenceFlow id="Flow_13" name="Thành công sau HH" sourceRef="GW_NPPartnerResp" targetRef="End_EXPR"/>
+    <bpmn:sequenceFlow id="Flow_14" name="Thất bại sau HH" sourceRef="GW_NPPartnerResp" targetRef="End_EXRJ2"/>
+  </bpmn:process>
+  
+  <bpmndi:BPMNDiagram id="Diagram_2">
+    <bpmndi:BPMNPlane id="Plane_2" bpmnElement="Collaboration_2">
+      <bpmndi:BPMNShape bpmnElement="Participant_2" isHorizontal="false"><dc:Bounds x="0" y="0" width="1450" height="1350"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Lane_YCTS" isHorizontal="false"><dc:Bounds x="0" y="30" width="1450" height="1320"/></bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="Start_1"><dc:Bounds x="482" y="70" width="36" height="36"/></bpmndi:BPMNShape>
+      
+      <!-- GATEWAY VAL NP (LABEL ON THE LEFT) -->
+      <bpmndi:BPMNShape bpmnElement="GW_ValNP">
+        <dc:Bounds x="475" y="150" width="50" height="50"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="365" y="165" width="100" height="20"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="End_FailVal"><dc:Bounds x="250" y="250" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Task_OPEN"><dc:Bounds x="430" y="250" width="140" height="65"/></bpmndi:BPMNShape>
+      
+      <!-- GATEWAY MM RESP -->
+      <bpmndi:BPMNShape bpmnElement="GW_MMResp">
+        <dc:Bounds x="475" y="370" width="50" height="50"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="355" y="385" width="110" height="20"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="End_EXPI"><dc:Bounds x="80" y="490" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End_RJCD1"><dc:Bounds x="250" y="490" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End_EXRJ1"><dc:Bounds x="482" y="490" width="36" height="36"/></bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="Task_PendingPartner"><dc:Bounds x="700" y="480" width="150" height="65"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Task_SendNPPartner"><dc:Bounds x="700" y="590" width="150" height="65"/></bpmndi:BPMNShape>
+      
+      <!-- GATEWAY NP PARTNER RESP -->
+      <bpmndi:BPMNShape bpmnElement="GW_NPPartnerResp">
+        <dc:Bounds x="750" y="700" width="50" height="50"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="620" y="715" width="120" height="20"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="End_PRCD"><dc:Bounds x="450" y="830" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End_RJCD2"><dc:Bounds x="650" y="830" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End_EXPR"><dc:Bounds x="850" y="830" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End_EXRJ2"><dc:Bounds x="1050" y="830" width="36" height="36"/></bpmndi:BPMNShape>
+      
+      <!-- EDGES -->
+      <bpmndi:BPMNEdge bpmnElement="Flow_1"><di:waypoint x="500" y="106"/><di:waypoint x="500" y="150"/></bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_2">
+        <di:waypoint x="475" y="175"/><di:waypoint x="268" y="175"/><di:waypoint x="268" y="250"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="330" y="155" width="75" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_3">
+        <di:waypoint x="500" y="200"/><di:waypoint x="500" y="250"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="510" y="215" width="35" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_4"><di:waypoint x="500" y="315"/><di:waypoint x="500" y="370"/></bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_5">
+        <di:waypoint x="475" y="395"/><di:waypoint x="98" y="395"/><di:waypoint x="98" y="490"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="180" y="375" width="115" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_6">
+        <di:waypoint x="475" y="395"/><di:waypoint x="268" y="395"/><di:waypoint x="268" y="490"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="330" y="375" width="40" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_7">
+        <di:waypoint x="500" y="420"/><di:waypoint x="500" y="490"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="510" y="445" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_8">
+        <di:waypoint x="525" y="395"/><di:waypoint x="775" y="395"/><di:waypoint x="775" y="480"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="620" y="375" width="40" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_9"><di:waypoint x="775" y="545"/><di:waypoint x="775" y="590"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_10"><di:waypoint x="775" y="655"/><di:waypoint x="775" y="700"/></bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_11">
+        <di:waypoint x="750" y="725"/><di:waypoint x="468" y="725"/><di:waypoint x="468" y="830"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="560" y="705" width="60" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_12">
+        <di:waypoint x="750" y="725"/><di:waypoint x="668" y="725"/><di:waypoint x="668" y="830"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="678" y="760" width="45" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_13">
+        <di:waypoint x="800" y="725"/><di:waypoint x="868" y="725"/><di:waypoint x="868" y="830"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="878" y="760" width="105" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="Flow_14">
+        <di:waypoint x="800" y="725"/><di:waypoint x="1068" y="725"/><di:waypoint x="1068" y="830"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="940" y="705" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

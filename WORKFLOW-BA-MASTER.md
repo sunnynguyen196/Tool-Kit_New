@@ -54,10 +54,10 @@ Mọi Skill trong bộ toolkit này đều tuân thủ 5 nguyên tắc bắt bu�
           │
           ▼
 ┌──────────────────┐      /wireframe-html  ┌──────────────────────────────────────────────┐
-│  PHASE 3:        │ ────────────────────► │ • Interactive HTML Wireframes                │
-│  INTERACTIVE     │                       │ • Single-File Navigation & Side Menu         │
+│  PHASE 3:        │      /figma           │ • Interactive HTML Wireframes                │
+│  INTERACTIVE     │ ────────────────────► │ • Figma Desktop Workspace Drawing via MCP    │
 │  WIREFRAMING     │                       │ • Form Simulation & Validation States        │
-│                  │                       │ • Dev/Tester Annotations & Annotate Notes    │
+│                  │                       │ • Dev/Tester Annotations & Complete Cases    │
 └──────────────────┘                       └──────────────────────────────────────────────┘
           │
           ▼
@@ -149,6 +149,21 @@ Sau khi có file Brainstorm/SRS, BA tiến hành vẽ sơ đồ để trực qua
   - File HTML gốc: `wireframes/checkout/index.html`
   - Bộ các màn hình HTML thành phần: `login.html`, `cart.html`, `payment.html`, `success.html`.
 
+#### Skill: `/figma`
+- **Mục tiêu**: Đồng bộ bản vẽ giao diện từ HTML Wireframe và spec nghiệp vụ trực tiếp lên Figma Desktop thông qua kết nối MCP.
+- **Đặc điểm nổi bật**:
+  - Tự động kiểm tra kết nối tới Figma Desktop qua MCP và cảnh báo nếu chưa kết nối.
+  - Vẽ đầy đủ tất cả các màn hình và các kịch bản lỗi (Error states, Modals) đặt song song nhau.
+  - Sử dụng hệ thống Token màu sắc, khoảng cách (Variables) và Component có sẵn trên Figma của bạn.
+  - Chụp ảnh màn hình (screenshot) trên Figma để làm bằng chứng xác thực trong chat.
+
+- **Lệnh thực thi**:
+  ```bash
+  /figma @docs/brainstorm/checkout-flow.md
+  ```
+- **Kết quả đầu ra**:
+  - Các Frame được thiết kế hoàn thiện, sử dụng Auto-layout trên trang canvas của Figma.
+
 ---
 
 ### 📚 GIAI ĐOẠN 4: HƯỚNG DẪN SỬ DỤNG VÀ ĐÓNG GÓI BÀN GIAO
@@ -177,7 +192,7 @@ Trong thư mục dự án BA của bạn:
 
 ### 2. Google Antigravity IDE
 - Bản copy của Skill và Rule đã được đặt sẵn tại `.agents/skills/` và `.agents/rules/`.
-- Bạn chỉ cần mở Antigravity tại workspace `C:\Users\Admin\BATOOLKIT` và gõ yêu cầu tương ứng.
+- Bạn chỉ cần mở Antigravity tại thư mục workspace hiện tại và gõ yêu cầu tương ứng.
 
 ### 3. Codex CLI
 - Các skill nằm trong thư mục `.codex/skills/`.

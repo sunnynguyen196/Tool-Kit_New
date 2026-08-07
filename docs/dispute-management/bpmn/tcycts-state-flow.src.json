@@ -1,0 +1,10 @@
+{
+  "actors": ["YCPD (Phê duyệt Nội bộ TCYCTS)", "YCTS (Xử lý phát hành Cổng QR / Napas)"],
+  "branches": [
+    "Phê duyệt nội bộ: Từ chối / Đồng ý",
+    "Yêu cầu hợp lệ tại QR: Không hợp lệ / Hợp lệ",
+    "Yêu cầu hợp lệ tại Napas: Không hợp lệ / Hợp lệ",
+    "NP trả lời: Đồng ý / Từ chối / Hết hạn / Từ chối sau hết hạn / Đồng ý sau hết hạn"
+  ],
+  "errors": ["Lỗi gửi QR", "Lỗi gửi Napas", "Yêu cầu không hợp lệ"]
+}

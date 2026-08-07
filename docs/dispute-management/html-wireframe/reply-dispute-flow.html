@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dispute-management — Trả lời tra soát | Wireframe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* DESIGN SYSTEM VARIABLES */
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --epay-orange: #ff6b00;
+      --epay-orange-hover: #e05e00;
+      --bg: #f8fafc;
+      --sidebar-bg: #f1f5f9;
+      --border-color: #cbd5e1;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --success-bg: #d1fae5;
+      --success-text: #065f46;
+      --warning-bg: #fef3c7;
+      --warning-text: #92400e;
+      --danger-bg: #fee2e2;
+      --danger-text: #991b1b;
+      --info-bg: #e0f2fe;
+      --info-text: #075985;
+      --purple-bg: #f3e8ff;
+      --purple-text: #6b21a8;
+      --card-bg: #ffffff;
+    }
+
+    /* RESET */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      padding: 24px;
+      line-height: 1.5;
+    }
+    .wf-page { max-width: 1400px; margin: 0 auto; }
+
+    /* HEADER */
+    .wf-header { margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; background: var(--card-bg); padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .wf-feature-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 600; }
+    .wf-flow-title { font-size: 24px; font-weight: 700; margin-top: 4px; color: var(--text-dark); }
+    .wf-flow-meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .wf-flow-desc { font-size: 13px; color: #475569; margin-top: 8px; line-height: 1.5; }
+
+    /* FLOW ROW — screens xếp ngang, TỰ WRAP */
+    .wf-rows { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px 16px; position: relative; }
+
+    /* SCREEN WRAPPER — desktop 1024px */
+    .wf-screen { flex: 0 0 auto; display: none; }
+    .wf-screen.active { display: block; }
+    .wf-page[data-device="desktop"] .wf-screen { width: 1024px; max-width: 100%; margin-bottom: 30px; }
+    .wf-device-tag { display: inline-block; font-size: 10px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 4px; padding: 2px 8px; margin-bottom: 6px; font-weight: 500; background: #fff; }
+    .wf-step-badge {
+      font-size: 11px; font-weight: 700; color: #fff;
+      background: var(--epay-orange); border-radius: 50%;
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 6px;
+      box-shadow: 0 2px 4px rgba(255, 107, 0, 0.2);
+    }
+    .wf-screen-label { font-size: 13px; font-weight: bold; color: var(--text-dark); margin-top: 8px; display: inline-block; }
+    .wf-shared-badge { font-size: 9px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 3px; padding: 0 4px; margin-left: 4px; background: #fff; }
+
+    /* SCREEN FRAME */
+    .wf-screen-frame { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; background: #fff; position: relative; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+    .wf-screen-bar { background: #f8fafc; border-bottom: 1px solid var(--border-color); padding: 8px 12px; display: flex; align-items: center; gap: 6px; }
+    .wf-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--border-color); background: #fff; flex-shrink: 0; }
+    .wf-dot:nth-child(1) { background: #ff5f56; border-color: #e0443e; }
+    .wf-dot:nth-child(2) { background: #ffbd2e; border-color: #dea123; }
+    .wf-dot:nth-child(3) { background: #27c93f; border-color: #1aab29; }
+    .wf-bar-title { font-size: 11px; font-weight: 600; flex: 1; text-align: center; color: var(--text-muted); }
+    .wf-screen-content { padding: 18px; display: flex; flex-direction: column; gap: 12px; min-height: 480px; }
+
+    /* SIDEBAR LAYOUT */
+    .wf-container { display: flex; flex-direction: row; min-height: 540px; position: relative; }
+    .wf-sidebar {
+      width: 230px; flex-shrink: 0; background: var(--sidebar-bg); border-right: 1px solid var(--border-color);
+      display: flex; flex-direction: column; font-size: 12px;
+    }
+    .wf-sidebar-brand {
+      padding: 16px 20px; border-bottom: 1px solid var(--border-color); font-weight: bold; font-size: 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      color: var(--text-dark);
+    }
+    .wf-sidebar-brand span:first-child { color: var(--epay-orange); }
+    
+    .wf-sidebar-menu { display: flex; flex-direction: column; padding: 12px 0; }
+    .wf-menu-section-header {
+      padding: 8px 20px; font-weight: bold; color: var(--text-muted); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .wf-menu-sub-header { padding: 6px 20px 6px 28px; font-weight: bold; color: var(--text-muted); font-size: 11px; }
+    .wf-menu-item {
+      padding: 8px 20px 8px 40px; color: #334155; text-decoration: none; cursor: pointer;
+      display: block; border-left: 4px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .wf-menu-item:hover { background: #e2e8f0; color: var(--text-dark); }
+    .wf-menu-item.active { background: #fff; font-weight: 600; color: var(--text-dark); border-left-color: var(--epay-orange); }
+    .wf-main-content { flex: 1; padding: 18px 22px; display: flex; flex-direction: column; gap: 12px; min-width: 0; background: #fff; }
+    
+    /* APP BRAND */
+    .wf-app-brand { text-align: left; font-size: 14px; font-weight: 700; color: var(--text-dark); padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
+    .wf-app-brand span:first-child { font-weight: bold; color: var(--text-dark); font-size: 14px; }
+    .wf-screen-title { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+
+    /* FORM ELEMENTS */
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: 12px; font-weight: 600; color: #334155; }
+    .field input[type=text], .field input[type=email], .field input[type=number], .field select, .field textarea {
+      border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px;
+      font-size: 13px; width: 100%; background: #fff; color: var(--text-dark);
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .field textarea { height: 70px; resize: none; }
+
+    /* BUTTONS */
+    .btn-primary {
+      display: inline-block;
+      padding: 8px 16px; background: var(--epay-orange); color: #fff;
+      border: 1px solid var(--epay-orange); border-radius: 6px;
+      font-size: 12px; font-weight: 600; cursor: pointer; text-align: center;
+      transition: all 0.2s;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      outline: none;
+    }
+    .btn-primary:hover { background: var(--epay-orange-hover); border-color: var(--epay-orange-hover); }
+    
+    .btn-secondary {
+      display: inline-block;
+      padding: 8px 16px; background: #fff; color: var(--text-dark);
+      border: 1px solid var(--border-color); border-radius: 6px;
+      font-size: 12px; font-weight: 600; cursor: pointer; text-align: center;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .btn-secondary:hover { background: #f8fafc; border-color: var(--text-muted); }
+
+    /* BADGE PILLS */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 9999px;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .badge-warning { background-color: var(--warning-bg); color: var(--warning-text); }
+    .badge-success { background-color: var(--success-bg); color: var(--success-text); }
+    .badge-danger { background-color: var(--danger-bg); color: var(--danger-text); }
+    .badge-info { background-color: var(--info-bg); color: var(--info-text); }
+    .badge-purple { background-color: var(--purple-bg); color: var(--purple-text); }
+
+    /* LINK */
+    .wf-link { font-size: 12px; color: var(--primary); text-decoration: none; cursor: pointer; font-weight: 500; }
+    .wf-link:hover { text-decoration: underline; color: var(--primary-hover); }
+
+    /* BANNERS / INFO */
+    .banner { font-size: 12px; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 6px; display: flex; gap: 8px; align-items: flex-start; line-height: 1.4; margin-bottom: 12px; }
+    .banner-info { background: var(--info-bg); color: var(--info-text); border-color: #b3e0ff; }
+    .banner-warn { background: var(--warning-bg); color: var(--warning-text); border-color: #fde68a; }
+
+    /* TAB SYSTEM */
+    .tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 12px; gap: 4px; }
+    .tab { padding: 8px 16px; font-size: 13px; border: 1px solid var(--border-color); border-bottom: none; background: #f8fafc; cursor: pointer; border-radius: 6px 6px 0 0; color: var(--text-muted); transition: all 0.2s; }
+    .tab:hover { background: #f1f5f9; color: var(--text-dark); }
+    .tab.active { background: #fff; border-color: var(--border-color); font-weight: 600; color: var(--text-dark); border-bottom: 2px solid #fff; position: relative; top: 1px; }
+
+    /* GRID TABLE */
+    .grid-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12px; color: var(--text-dark); }
+    .grid-table th, .grid-table td { border: 1px solid var(--border-color); padding: 10px 12px; text-align: left; }
+    .grid-table th { background: #f8fafc; font-weight: 600; color: var(--text-muted); }
+    .grid-table tr:hover { background: #f8fafc; }
+    .grid-table tr.clickable { cursor: pointer; }
+
+    /* FILTER BOX */
+    .filter-box { border: 1px solid var(--border-color); border-radius: 6px; padding: 14px; margin-bottom: 14px; background: #f8fafc; }
+    .filter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+    /* DETAILS VIEW */
+    .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; background: #fff; font-size: 13px; }
+    .details-row { display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; align-items: center; }
+    .details-label { font-weight: 600; color: var(--text-muted); }
+    .details-val { text-align: right; font-weight: 500; color: var(--text-dark); }
+
+    /* AUDIT LOG */
+    .log-list { font-size: 12px; color: var(--text-dark); display: flex; flex-direction: column; gap: 8px; border-left: 2px solid var(--border-color); padding-left: 16px; margin-left: 8px; margin-top: 8px; }
+    .log-item { position: relative; }
+    .log-item::before { content: "•"; position: absolute; left: -22px; top: -1px; font-size: 18px; color: var(--epay-orange); }
+
+    /* FLOATING TOOLBAR */
+    .wf-floating-toolbar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      z-index: 99999;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 11px;
+    }
+    .wf-floating-toolbar span { font-weight: 600; color: var(--text-muted); margin-right: 4px; }
+    .wf-floating-toolbar button {
+      padding: 5px 10px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      color: var(--text-dark);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .wf-floating-toolbar button:hover {
+      background: #f1f5f9;
+      border-color: var(--text-muted);
+    }
+    .wf-floating-toolbar button.active {
+      background: var(--epay-orange);
+      color: #fff;
+      border-color: var(--epay-orange);
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      background: #10b981;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transform: translateY(-20px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* FOOTER */
+    .wf-footer { margin-top: 36px; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; }
+
+    /* SCREEN DESCRIPTION TABLE */
+    .wf-desc-section { margin-top: 32px; }
+    .wf-desc-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--text-dark); color: var(--text-dark); }
+    .wf-desc-table { width: 100%; border-collapse: collapse; background: #fff; font-size: 12px; }
+    .wf-desc-table th, .wf-desc-table td { border: 1px solid var(--border-color); padding: 8px 10px; text-align: left; vertical-align: top; }
+    .wf-desc-table th { background: #f8fafc; font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--text-muted); }
+    .wf-desc-table td:first-child, .wf-desc-table th:first-child { width: 36px; text-align: center; }
+    .wf-desc-table td:nth-child(2) { width: 180px; }
+    .wf-desc-table td:nth-child(3) { width: 110px; }
+    .wf-desc-table td:nth-child(4) { width: 90px; }
+    .wf-desc-screen-header td { background: var(--text-dark); color: #fff; font-weight: 700; font-size: 12px; }
+  </style>
+</head>
+<body>
+<div class="wf-page" data-device="desktop">
+
+  <div class="wf-header">
+    <div class="wf-feature-label">Feature: dispute-management / Wireframe</div>
+    <div class="wf-flow-title">Trả lời tra soát</div>
+    <div class="wf-flow-meta">2 màn hình · Device: desktop · Tạo: 2026-07-22 · Nguồn: srs/dispute-management-userflow.md</div>
+    <div class="wf-flow-desc">Luồng đối soát viên phản hồi Đồng ý hoặc Từ chối đối với các yêu cầu tra soát nhận được từ đối tác Napas/Epay. Hỗ trợ xử lý trường hợp bị Quá hạn SLA.</div>
+  </div>
+
+  <div class="wf-rows">
+
+    <!-- SCREEN 1: dispute-list [chung] -->
+    <div class="wf-screen" id="s1">
+      <div class="wf-step-badge">1</div>
+      <div class="wf-device-tag">desktop · 1024px</div>
+      <div class="wf-screen-frame">
+        <div class="wf-screen-bar">
+          <div class="wf-dot"></div><div class="wf-dot"></div><div class="wf-dot"></div>
+          <span class="wf-bar-title">Danh sách yêu cầu tra soát - Portal MM</span>
+        </div>
+        <div class="wf-container">
+          <!-- SIDEBAR -->
+          <div class="wf-sidebar">
+            <div class="wf-sidebar-brand">
+              <span>● epay</span>
+              <span style="font-size: 9px; font-weight: normal; color: #888;">v1.0</span>
+            </div>
+            <div class="wf-sidebar-menu">
+              <div class="wf-menu-section-header">
+                <span>XỬ LÝ GIAO DỊCH QRGW</span>
+                <span>▼</span>
+              </div>
+              <div class="wf-menu-sub-header">Giao dịch thu hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Giao dịch chi hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Quản lý tra soát</div>
+              <a class="wf-menu-item active">Quản lý tra soát</a>
+            </div>
+          </div>
+          <!-- MAIN CONTENT -->
+          <div class="wf-main-content">
+            <div class="wf-app-brand">
+              <span>Quản lý tra soát</span>
+              <span style="font-size:12px; font-weight:normal;">Chào, đối soát viên MM</span>
+            </div>
+            
+            <div class="wf-screen-title">Danh sách yêu cầu tra soát</div>
+
+            <div class="filter-box">
+              <div class="filter-grid" style="grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                <div class="field">
+                  <label>MerchantCode</label>
+                  <select>
+                    <option>Tất cả Merchant</option>
+                    <option>MERCH001</option>
+                    <option>MERCH002</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Đối tác thanh toán</label>
+                  <select>
+                    <option>Tất cả đối tác</option>
+                    <option>Napas</option>
+                    <option>Ví Epay</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Loại dịch vụ</label>
+                  <select>
+                    <option>Tất cả loại dịch vụ</option>
+                    <option>Thanh toán</option>
+                    <option>Chuyển tiền</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Vai trò GD gốc</label>
+                  <select>
+                    <option>Tất cả vai trò</option>
+                    <option>TCPL (Tổ chức phát lệnh)</option>
+                    <option>TCNL (Tổ chức nhận lệnh)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Vai trò tra soát</label>
+                  <select>
+                    <option>Tất cả vai trò</option>
+                    <option>TCYCTS (Tổ chức yêu cầu tra soát)</option>
+                    <option>TCTLTS (Tổ chức trả lời tra soát)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Tiến trình tra soát (PCTS)</label>
+                  <select>
+                    <option>Tất cả tiến trình</option>
+                    <option>Chờ xử lý</option>
+                    <option>Đã kiểm tra</option>
+                    <option>Chờ phê duyệt</option>
+                    <option>Đã phê duyệt</option>
+                    <option>Xử lý thất bại</option>
+                    <option>Chờ phản hồi</option>
+                    <option>Đã phản hồi</option>
+                    <option>Hoàn tất</option>
+                    <option>Đã hủy</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Trạng thái xử lý YCTS</label>
+                  <select>
+                    <option>Tất cả kết quả</option>
+                    <option>Đồng ý (EXPR/PRCD)</option>
+                    <option>Từ chối (RJCD/EXRJ)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Trạng thái TS hết hạn</label>
+                  <select>
+                    <option>Tất cả tình trạng SLA</option>
+                    <option>Hết hạn (EXPI)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Loại tra soát</label>
+                  <select>
+                    <option>Tất cả loại tra soát</option>
+                    <option>RQRN</option>
+                    <option>RQSP</option>
+                    <option>GDFT</option>
+                    <option>RQNF</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Người tạo yêu cầu</label>
+                  <select>
+                    <option>Tất cả người tạo</option>
+                    <option>User của hệ thống</option>
+                    <option>Ví Epay</option>
+                    <option>Đối tác</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Người phê duyệt</label>
+                  <select>
+                    <option>Tất cả người duyệt</option>
+                    <option>approver01</option>
+                    <option>approver02</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Thời gian tạo yêu cầu</label>
+                  <input type="datetime-local">
+                </div>
+                <div class="field">
+                  <label>Thời gian xử lý</label>
+                  <input type="datetime-local">
+                </div>
+              </div>
+              <div style="text-align:right; margin-top:10px; display:flex; justify-content:flex-end; gap:8px;">
+                <button class="btn-secondary" style="padding:4px 10px;">Nhập lại</button>
+                <button class="btn-primary" style="padding:4px 10px;">Tìm kiếm</button>
+              </div>
+            </div>
+
+            <div class="tabs">
+              <span class="tab">Tất cả</span>
+              <span class="tab">Chờ phê duyệt (0)</span>
+              <span class="tab active">Chờ xử lý (1)</span>
+              <span class="tab">Quá hạn (1)</span>
+            </div>
+
+            <table class="grid-table">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã tra soát</th>
+                  <th>Loại tra soát</th>
+                  <th>Lý do (RQSP)</th>
+                  <th>Trạng thái tra soát</th>
+                  <th>Vai trò tra soát</th>
+                  <th>Mã giao dịch gốc</th>
+                  <th>Loại giao dịch gốc</th>
+                  <th>Thời gian tạo yêu cầu</th>
+                  <th>Thời gian xử lý</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>TS-002</td>
+                  <td>RQSP</td>
+                  <td>FRAU</td>
+                  <td><strong>Chờ xử lý</strong></td>
+                  <td>TCTLTS</td>
+                  <td>TX-10002</td>
+                  <td>Thanh toán</td>
+                  <td>2026-07-21 09:00</td>
+                  <td>2026-07-22 11:00</td>
+                  <td>
+                    <a class="wf-link">Xem chi tiết</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>TS-003</td>
+                  <td>GDFT</td>
+                  <td>—</td>
+                  <td><strong style="text-decoration: underline;">Quá hạn</strong></td>
+                  <td>TCYCTS</td>
+                  <td>TX-10003</td>
+                  <td>Chuyển tiền</td>
+                  <td>2026-07-15 08:00</td>
+                  <td>2026-07-20 10:00</td>
+                  <td>
+                    <a class="wf-link">Xem chi tiết</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="wf-screen-label">dispute-list <span class="wf-shared-badge">chung</span></div>
+    </div>
+
+    <!-- SCREEN 1B: dispute-list-all -->
+    <div class="wf-screen" id="s1b">
+      <div class="wf-step-badge">1B</div>
+      <div class="wf-device-tag">desktop · 1024px</div>
+      <div class="wf-screen-frame">
+        <div class="wf-screen-bar">
+          <div class="wf-dot"></div><div class="wf-dot"></div><div class="wf-dot"></div>
+          <span class="wf-bar-title">Danh sách yêu cầu tra soát - Tab Tất cả - Portal MM</span>
+        </div>
+        <div class="wf-container">
+          <!-- SIDEBAR -->
+          <div class="wf-sidebar">
+            <div class="wf-sidebar-brand">
+              <span>● epay</span>
+              <span style="font-size: 9px; font-weight: normal; color: #888;">v1.0</span>
+            </div>
+            <div class="wf-sidebar-menu">
+              <div class="wf-menu-section-header">
+                <span>XỬ LÝ GIAO DỊCH QRGW</span>
+                <span>▼</span>
+              </div>
+              <div class="wf-menu-sub-header">Giao dịch thu hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Giao dịch chi hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Quản lý tra soát</div>
+              <a class="wf-menu-item active">Quản lý tra soát</a>
+            </div>
+          </div>
+          <!-- MAIN CONTENT -->
+          <div class="wf-main-content">
+            <div class="wf-app-brand">
+              <span>Quản lý tra soát</span>
+              <span style="font-size:12px; font-weight:normal;">Chào, vận hành MM | <a class="wf-link">Đăng xuất</a></span>
+            </div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <div class="wf-screen-title">Danh sách yêu cầu tra soát</div>
+            </div>
+
+            <div class="filter-box">
+              <div class="filter-grid" style="grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                <div class="field">
+                  <label>MerchantCode</label>
+                  <select>
+                    <option>Tất cả Merchant</option>
+                    <option>MERCH001</option>
+                    <option>MERCH002</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Đối tác thanh toán</label>
+                  <select>
+                    <option>Tất cả đối tác</option>
+                    <option>Napas</option>
+                    <option>Ví Epay</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Loại dịch vụ</label>
+                  <select>
+                    <option>Tất cả loại dịch vụ</option>
+                    <option>Thanh toán</option>
+                    <option>Chuyển tiền</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Vai trò GD gốc</label>
+                  <select>
+                    <option>Tất cả vai trò</option>
+                    <option>TCPL (Tổ chức phát lệnh)</option>
+                    <option>TCNL (Tổ chức nhận lệnh)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Vai trò tra soát</label>
+                  <select>
+                    <option>Tất cả vai trò</option>
+                    <option>TCYCTS (Tổ chức yêu cầu tra soát)</option>
+                    <option>TCTLTS (Tổ chức trả lời tra soát)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Trạng thái tra soát</label>
+                  <select>
+                    <option>Tất cả trạng thái</option>
+                    <option>Chờ phê duyệt</option>
+                    <option>Khởi tạo</option>
+                    <option>Chờ xử lý</option>
+                    <option>Thất bại</option>
+                    <option>Quá hạn</option>
+                    <option>Đồng ý</option>
+                    <option>Từ chối</option>
+                    <option>Đồng ý sau hết hạn</option>
+                    <option>Từ chối sau hết hạn</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Loại tra soát</label>
+                  <select>
+                    <option>Tất cả loại tra soát</option>
+                    <option>RQRN</option>
+                    <option>RQSP</option>
+                    <option>GDFT</option>
+                    <option>RQNF</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Người tạo yêu cầu</label>
+                  <select>
+                    <option>Tất cả người tạo</option>
+                    <option>User của hệ thống</option>
+                    <option>Ví Epay</option>
+                    <option>Đối tác</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Người phê duyệt</label>
+                  <select>
+                    <option>Tất cả người duyệt</option>
+                    <option>approver01</option>
+                    <option>approver02</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Thời gian tạo yêu cầu</label>
+                  <input type="datetime-local" style="border: 1px solid #000; border-radius: 3px; padding: 5px 9px; font-size: 12px; width: 100%; background: #fff; color: #000;">
+                </div>
+                <div class="field">
+                  <label>Thời gian xử lý</label>
+                  <input type="datetime-local" style="border: 1px solid #000; border-radius: 3px; padding: 5px 9px; font-size: 12px; width: 100%; background: #fff; color: #000;">
+                </div>
+              </div>
+              <div style="text-align:right; margin-top:10px; display:flex; justify-content:flex-end; gap:8px;">
+                <button class="btn-secondary" style="padding:4px 10px;">Nhập lại</button>
+                <button class="btn-primary" style="padding:4px 10px;">Tìm kiếm</button>
+              </div>
+            </div>
+
+            <div class="tabs">
+              <span class="tab active">Tất cả</span>
+              <span class="tab">Chờ phê duyệt (0)</span>
+              <span class="tab">Chờ xử lý (1)</span>
+              <span class="tab">Quá hạn (1)</span>
+            </div>
+
+            <table class="grid-table">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã tra soát</th>
+                  <th>Loại tra soát</th>
+                  <th>Lý do (RQSP)</th>
+                  <th>Trạng thái tra soát</th>
+                  <th>Vai trò tra soát</th>
+                  <th>Mã giao dịch gốc</th>
+                  <th>Loại giao dịch gốc</th>
+                  <th>Thời gian tạo yêu cầu</th>
+                  <th>Thời gian xử lý</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>TS-002</td>
+                  <td>RQSP</td>
+                  <td>FRAU</td>
+                  <td><strong>Chờ xử lý</strong></td>
+                  <td>TCTLTS</td>
+                  <td>TX-10002</td>
+                  <td>Thanh toán</td>
+                  <td>2026-07-21 09:00</td>
+                  <td>2026-07-22 11:00</td>
+                  <td>
+                    <a class="wf-link">Xem chi tiết</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="wf-screen-label">dispute-list-all</div>
+    </div>
+
+    <!-- SCREEN 2: dispute-detail (Trạng thái: Chờ xử lý / Quá hạn) -->
+    <div class="wf-screen" id="s2">
+      <div class="wf-step-badge">2</div>
+      <div class="wf-device-tag">desktop · 1024px</div>
+      <div class="wf-screen-frame">
+        <div class="wf-screen-bar">
+          <div class="wf-dot"></div><div class="wf-dot"></div><div class="wf-dot"></div>
+          <span class="wf-bar-title">Chi tiết yêu cầu tra soát - Portal MM</span>
+        </div>
+        <div class="wf-container">
+          <!-- SIDEBAR -->
+          <div class="wf-sidebar">
+            <div class="wf-sidebar-brand">
+              <span>● epay</span>
+              <span style="font-size: 9px; font-weight: normal; color: #888;">v1.0</span>
+            </div>
+            <div class="wf-sidebar-menu">
+              <div class="wf-menu-section-header">
+                <span>XỬ LÝ GIAO DỊCH QRGW</span>
+                <span>▼</span>
+              </div>
+              <div class="wf-menu-sub-header">Giao dịch thu hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Giao dịch chi hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Quản lý tra soát</div>
+              <a class="wf-menu-item active">Quản lý tra soát</a>
+            </div>
+          </div>
+          <!-- MAIN CONTENT -->
+          <div class="wf-main-content">
+            <div class="wf-app-brand">
+              <span>Quản lý tra soát &gt; Xem chi tiết</span>
+              <span style="font-size:12px; font-weight:normal;"><a class="wf-link">&lt; Quay lại danh sách</a></span>
+            </div>
+
+            <div class="wf-screen-title">Chi tiết yêu cầu tra soát: TS-002 (Nhận từ Đối tác)</div>
+
+            <!-- BANNER QUÁ HẠN (Hiển thị có điều kiện nếu trạng thái đang là Quá hạn) -->
+            <div id="s2-overdue-banner" class="banner banner-warn" style="display: none;">
+              <div>⚠</div>
+              <div>
+                <strong>CẢNH BÁO QUÁ HẠN (SLA):</strong> Yêu cầu tra soát này đã quá hạn xử lý theo quy định (3-5 ngày làm việc).<br>
+                Các hành động phản hồi lúc này sẽ được ghi nhận là <strong>"Đồng ý sau hết hạn"</strong> hoặc <strong>"Từ chối sau hết hạn"</strong> và gửi thông báo khẩn cấp qua Telegram Group.
+              </div>
+            </div>
+
+            <div class="details-grid">
+              <div>
+                <div class="details-row">
+                  <span class="details-label">Mã tra soát:</span>
+                  <span class="details-val">TS-002</span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Tiến trình tra soát:</span>
+                  <span class="details-val"><span class="badge badge-purple">Chờ xử lý</span></span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Trạng thái xử lý YCTS:</span>
+                  <span class="details-val"><span class="badge badge-success">🟢 Đồng ý</span></span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Trạng thái TS hết hạn:</span>
+                  <span class="details-val"><span class="badge badge-warning">🟠 Hết hạn</span></span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Loại tra soát:</span>
+                  <span class="details-val">RQSP (Stop Payment)</span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Lý do tra soát:</span>
+                  <span class="details-val">FRAU (Nghi ngờ gian lận)</span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Số tiền tra soát:</span>
+                  <span class="details-val">1,000,000 VND</span>
+                </div>
+              </div>
+              <div>
+                <div class="details-row">
+                  <span class="details-label">Mã giao dịch gốc:</span>
+                  <span class="details-val">TX-10002 (Thanh toán)</span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Tổng tiền gốc:</span>
+                  <span class="details-val">1,000,000 VND</span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Người tạo (Đối tác):</span>
+                  <span class="details-val">Ví Epay</span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Thời gian tạo:</span>
+                  <span class="details-val">2026-07-21 09:00</span>
+                </div>
+                <div class="details-row">
+                  <span class="details-label">Tệp đính kèm:</span>
+                  <span class="details-val"><a class="wf-link">bill_epay_fraud.pdf (2.4 MB) 📥</a></span>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <div style="font-size:12px; font-weight:bold; margin-bottom:4px;">Nội dung mô tả chi tiết từ đối tác:</div>
+              <div style="font-size:12px; border:1px solid #ccc; padding:10px; border-radius:4px; background:#f9f9f9; min-height:50px;">
+                Khách hàng báo mất điện thoại và phát sinh giao dịch không chủ ý. Yêu cầu tạm khóa và hoàn trả.
+              </div>
+            </div>
+
+            <!-- PHẦN THÔNG TIN PHẢN HỒI TRA SOÁT (Bổ sung theo yêu cầu) -->
+            <div style="margin-top:10px; border:1px dashed #ccc; padding:12px; border-radius:4px; background:#fafafa;">
+              <div style="font-size:12px; font-weight:bold; margin-bottom:6px; border-bottom:1px dashed #ddd; padding-bottom:4px;">Thông tin Phản hồi tra soát:</div>
+              <div style="display:grid; grid-template-columns:1fr; gap:6px; font-size:11px;">
+                <div><strong>Trạng thái trả lời:</strong> <span style="color:#888; font-style:italic;">Đang chờ nhập phản hồi bên dưới...</span></div>
+                <div><strong>Nội dung phản hồi:</strong> —</div>
+                <div><strong>Tệp đính kèm phản hồi:</strong> —</div>
+              </div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <div style="font-size:12px; font-weight:bold; margin-bottom:4px;">Lịch sử thay đổi (Audit Log):</div>
+              <div class="log-list">
+                <div class="log-item">2026-07-21 09:00: Ví Epay gọi API tạo yêu cầu. Service QR validate hợp lệ. Trạng thái cập nhật thành: <strong>Chờ xử lý</strong>.</div>
+                <div class="log-item" style="color:#888;">2026-07-22 09:00: (Nếu Quá hạn) Đối tác cập nhật trạng thái: <strong>Quá hạn</strong>. Hệ thống gửi cảnh báo Telegram.</div>
+              </div>
+            </div>
+
+            <!-- PHẦN PHẢN HỒI (Dành cho Đối soát viên MM) -->
+            <div style="border-top:1.5px solid var(--border-color); margin-top:20px; padding-top:14px;">
+              <div class="field" style="margin-bottom:12px;">
+                <label>Giả lập trạng thái SLA (chỉ dùng cho mẫu thử):</label>
+                <div style="font-size:12px; margin-bottom:8px; display:flex; align-items:center;">
+                  <label style="font-weight:normal; display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" id="mock-sla-overdue"> Giả lập Quá hạn SLA (Trạng thái Quá hạn)</label>
+                </div>
+                <label>Trạng thái trả lời *</label>
+                <select id="s2-reply-status">
+                  <option value="APPROVE">Đồng ý tra soát (Approve)</option>
+                  <option value="REJECT">Từ chối tra soát (Reject)</option>
+                </select>
+              </div>
+              <div class="field" style="margin-bottom:12px;">
+                <label>Nội dung phản hồi *</label>
+                <textarea id="s2-reply-comment" placeholder="Nhập lý do chi tiết để phản hồi đồng ý hoặc từ chối..."></textarea>
+              </div>
+              <div class="field" style="margin-bottom:12px;">
+                <label>Tệp đính kèm phản hồi (nếu có)</label>
+                <input type="file" id="s2-reply-file">
+              </div>
+              
+              <div style="display:flex; justify-content:flex-end; gap:12px;">
+                <button class="btn-secondary" id="s2-reject-btn" style="padding:10px 20px;">Từ chối tra soát (Reject)</button>
+                <button class="btn-primary" id="s2-approve-btn" style="padding:10px 20px;">Đồng ý tra soát (Approve)</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="wf-screen-label">dispute-detail</div>
+    </div>
+
+  </div>
+
+  <div class="wf-desc-section">
+    <div class="wf-desc-title">Mô tả màn hình</div>
+    <table class="wf-desc-table">
+      <thead>
+        <tr><th>#</th><th>Items</th><th>Control type</th><th>Data type</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr class="wf-desc-screen-header"><td colspan="5">Screen 1: dispute-list (Danh sách tra soát)</td></tr>
+        <tr class="wf-desc-screen-header"><td colspan="5">Screen 1B: dispute-list-all (Danh sách tra soát - Tab Tất cả)</td></tr>
+        <tr>
+          <td>1</td>
+          <td>Tab "Tất cả"</td>
+          <td>Link</td>
+          <td>Click</td>
+          <td>Hiển thị tất cả các yêu cầu tra soát trên hệ thống mà không lọc theo trạng thái cụ thể.</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Tab "Chờ xử lý"</td>
+          <td>Link</td>
+          <td>Click</td>
+          <td>Hiển thị các yêu cầu tra soát do đối tác (Epay/Napas) gửi sang cần MM kiểm tra và phản hồi.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Tab "Quá hạn"</td>
+          <td>Link</td>
+          <td>Click</td>
+          <td>Hiển thị các yêu cầu tra soát đã quá thời hạn xử lý SLA (3-5 ngày làm việc). Trạng thái này do đối tác gọi API cập nhật.</td>
+        </tr>
+
+        <tr class="wf-desc-screen-header"><td colspan="5">Screen 2: dispute-detail (Màn hình chi tiết - Phản hồi)</td></tr>
+        <tr>
+          <td>1</td>
+          <td>Banner Cảnh báo quá hạn</td>
+          <td>Label</td>
+          <td>ReadOnly</td>
+          <td>Chỉ hiển thị khi trạng thái hiện tại là "Quá hạn". Cảnh báo đối soát viên rằng phản hồi sẽ được lưu dưới dạng sau hết hạn.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Ý kiến phản hồi *</td>
+          <td>Text area</td>
+          <td>Text</td>
+          <td>Bắt buộc nhập ý kiến phản hồi trước khi bấm gửi câu trả lời. Giới hạn tối đa 500 ký tự.</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Nút "Đồng ý tra soát" / "Đồng ý sau hết hạn"</td>
+          <td>Button</td>
+          <td>Click</td>
+          <td>Nhấp để gửi câu trả lời đồng ý hoàn tiền/xử lý tra soát.
+QR cập nhật trạng thái nội bộ ➔ gọi phản hồi sang NP ➔ NP trả về trạng thái cuối ➔ QR lưu vào trường riêng.
+Nếu đang quá hạn ➔ Chuyển thành "Đồng ý sau hết hạn".</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Nút "Từ chối tra soát" / "Từ chối sau hết hạn"</td>
+          <td>Button</td>
+          <td>Click</td>
+          <td>Nhấp để gửi câu trả lời từ chối yêu cầu tra soát.
+QR cập nhật trạng thái nội bộ ➔ gọi phản hồi sang NP ➔ NP trả về trạng thái cuối ➔ QR lưu vào trường riêng.
+Nếu đang quá hạn ➔ Chuyển thành "Từ chối sau hết hạn".</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="wf-floating-toolbar">
+    <span>Mẫu thử:</span>
+    <button data-id="s1" onclick="showScreen('s1')">1. List</button>
+    <button data-id="s1b" onclick="showScreen('s1b')">1B. List All</button>
+    <button data-id="s2" onclick="showScreen('s2')">2. Reply / Detail</button>
+    <button data-id="all" onclick="showAllScreens()">Xem tất cả</button>
+  </div>
+
+  <script>
+    // TOAST NOTIFICATION UTILITY
+    function showToast(message) {
+      let container = document.getElementById('toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = '<span>✓</span> <span>' + message + '</span>';
+      container.appendChild(toast);
+      setTimeout(() => toast.classList.add('show'), 50);
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // STATE VARIABLES
+    let disputeRequests = [
+      { id: 'TS-002', type: 'RQSP', reason: 'FRAU', status: 'Chờ xử lý', role: 'TCTLTS', tx: 'TX-10002', txtype: 'Thanh toán', date: '2026-07-21 09:00', processDate: '—' }
+    ];
+
+    const screens = ['s1', 's1b', 's2'];
+
+    function showScreen(id) {
+      screens.forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.classList.remove('active');
+      });
+      const activeEl = document.getElementById(id);
+      if (activeEl) {
+        activeEl.classList.add('active');
+        window.location.hash = id;
+      }
+      
+      // Update active toolbar button
+      document.querySelectorAll('.wf-floating-toolbar button').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-id') === id) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    function showAllScreens() {
+      screens.forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.classList.add('active');
+      });
+      document.querySelectorAll('.wf-floating-toolbar button').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-id') === 'all') {
+          btn.classList.add('active');
+        }
+      });
+      window.location.hash = 'all';
+    }
+
+    // POPULATE TABLES
+    function updateTables() {
+      // Find table in Screen 1
+      const tbody1 = document.querySelector('#s1 .grid-table tbody');
+      if (tbody1) {
+        tbody1.innerHTML = '';
+        disputeRequests.forEach((req, idx) => {
+          let badgeClass = 'badge-purple';
+          if (req.status === 'Đồng ý' || req.status === 'Đồng ý sau hết hạn') badgeClass = 'badge-success';
+          else if (req.status === 'Từ chối' || req.status === 'Từ chối sau hết hạn') badgeClass = 'badge-danger';
+          else if (req.status === 'Quá hạn') badgeClass = 'badge-warning';
+
+          tbody1.innerHTML += `
+            <tr>
+              <td>${idx + 1}</td>
+              <td><a class="wf-link" onclick="viewDetails('${req.id}')">${req.id}</a></td>
+              <td>${req.type}</td>
+              <td>${req.reason}</td>
+              <td><span class="badge ${badgeClass}">${req.status}</span></td>
+              <td>${req.role}</td>
+              <td>${req.tx}</td>
+              <td>${req.txtype}</td>
+              <td>${req.date}</td>
+              <td>${req.processDate}</td>
+              <td>
+                <a class="wf-link" onclick="viewDetails('${req.id}')">Phản hồi</a>
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      // Find table in Screen 1B
+      const tbody1B = document.querySelector('#s1b .grid-table tbody');
+      if (tbody1B) {
+        tbody1B.innerHTML = '';
+        disputeRequests.forEach((req, idx) => {
+          let badgeClass = 'badge-purple';
+          if (req.status === 'Đồng ý' || req.status === 'Đồng ý sau hết hạn') badgeClass = 'badge-success';
+          else if (req.status === 'Từ chối' || req.status === 'Từ chối sau hết hạn') badgeClass = 'badge-danger';
+          else if (req.status === 'Quá hạn') badgeClass = 'badge-warning';
+
+          tbody1B.innerHTML += `
+            <tr>
+              <td>${idx + 1}</td>
+              <td><a class="wf-link" onclick="viewDetails('${req.id}')">${req.id}</a></td>
+              <td>${req.type}</td>
+              <td>${req.reason}</td>
+              <td><span class="badge ${badgeClass}">${req.status}</span></td>
+              <td>${req.role}</td>
+              <td>${req.tx}</td>
+              <td>${req.txtype}</td>
+              <td>${req.date}</td>
+              <td>${req.processDate}</td>
+              <td>
+                <a class="wf-link" onclick="viewDetails('${req.id}')">Phản hồi</a>
+              </td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    function viewDetails(id) {
+      showScreen('s2');
+    }
+
+    // INITIALIZATION & EVENT LISTENERS
+    window.addEventListener('load', () => {
+      // 1. Initial screen check based on Hash
+      const hash = window.location.hash.replace('#', '');
+      if (hash && (screens.includes(hash) || hash === 'all')) {
+        if (hash === 'all') showAllScreens();
+        else showScreen(hash);
+      } else {
+        showScreen('s1');
+      }
+
+      // 2. Wire up screen transition buttons
+      // Click Quay lại danh sách links
+      document.querySelectorAll('.wf-link').forEach(link => {
+        if (link.textContent.includes('Quay lại danh sách')) {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            showScreen('s1');
+          });
+        }
+      });
+
+      // SLA Overdue mock toggle behavior
+      const slaCheckbox = document.getElementById('mock-sla-overdue');
+      if (slaCheckbox) {
+        slaCheckbox.addEventListener('change', () => {
+          const banner = document.getElementById('s2-overdue-banner');
+          const badge = document.getElementById('s2-status-badge');
+          const rejectBtn = document.getElementById('s2-reject-btn');
+          const approveBtn = document.getElementById('s2-approve-btn');
+          
+          if (slaCheckbox.checked) {
+            banner.style.display = 'flex';
+            badge.textContent = 'Quá hạn';
+            badge.className = 'badge badge-warning';
+            rejectBtn.textContent = 'Từ chối sau hết hạn';
+            approveBtn.textContent = 'Đồng ý sau hết hạn';
+          } else {
+            banner.style.display = 'none';
+            badge.textContent = 'Chờ xử lý';
+            badge.className = 'badge badge-purple';
+            rejectBtn.textContent = 'Từ chối tra soát (Reject)';
+            approveBtn.textContent = 'Đồng ý tra soát (Approve)';
+          }
+        });
+      }
+
+      // Screen 2 Form Actions (Approve/Reject)
+      const s2Approve = document.getElementById('s2-approve-btn');
+      if (s2Approve) {
+        s2Approve.addEventListener('click', (e) => {
+          e.preventDefault();
+          const req = disputeRequests.find(r => r.id === 'TS-002');
+          if (!req) return;
+
+          const isOverdue = document.getElementById('mock-sla-overdue').checked;
+          const statusText = isOverdue ? 'Đồng ý sau hết hạn' : 'Đồng ý';
+          
+          req.status = statusText;
+          req.processDate = new Date().toISOString().slice(0, 19).replace('T', ' ').substring(0, 16);
+          
+          updateTables();
+          showScreen('s1');
+          showToast(`Đã phản hồi: "${statusText}" cho tra soát TS-002 thành công!`);
+        });
+      }
+
+      const s2Reject = document.getElementById('s2-reject-btn');
+      if (s2Reject) {
+        s2Reject.addEventListener('click', (e) => {
+          e.preventDefault();
+          const req = disputeRequests.find(r => r.id === 'TS-002');
+          if (!req) return;
+
+          const isOverdue = document.getElementById('mock-sla-overdue').checked;
+          const statusText = isOverdue ? 'Từ chối sau hết hạn' : 'Từ chối';
+          
+          req.status = statusText;
+          req.processDate = new Date().toISOString().slice(0, 19).replace('T', ' ').substring(0, 16);
+          
+          updateTables();
+          showScreen('s1');
+          showToast(`Đã phản hồi: "${statusText}" cho tra soát TS-002!`);
+        });
+      }
+
+      // Tab switcher in lists
+      document.querySelectorAll('.tabs').forEach(tabBar => {
+        tabBar.querySelectorAll('.tab').forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            tabBar.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            const text = tab.textContent;
+            if (text.includes('Tất cả')) {
+              showScreen('s1b');
+            } else {
+              showScreen('s1');
+            }
+          });
+        });
+      });
+
+      // Populate tables initial run
+      updateTables();
+    });
+
+    // Hashchange listener to support TOC click in main index file
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && screens.includes(hash)) {
+        showScreen(hash);
+      } else if (hash === 'all') {
+        showAllScreens();
+      }
+    });
+  </script>
+</body>
+</html>

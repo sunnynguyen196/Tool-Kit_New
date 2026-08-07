@@ -1,0 +1,34 @@
+2026-07-22 | /brainstorm | @duongnta | docs/dispute-management/brainstorms/quan-ly-tra-soat.md | initial brainstorm dispute management feature
+2026-07-22 | /user-flow | @duongnta | docs/dispute-management/srs/dispute-management-userflow.md | initial user flow 6 screens 3 flows
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/create-dispute-flow.html | generated create dispute flow wireframe
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/approve-dispute-flow.html | generated approve dispute flow wireframe
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/reply-dispute-flow.html | generated reply dispute flow wireframe
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | generated html index navigation
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe-html-index.md | generated metadata index
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/srs/dispute-management-userflow.md | added screen 1B to user flow
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/create-dispute-flow.html | updated dispute-list filter layout and added dispute-list-all screen
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/approve-dispute-flow.html | updated dispute-list filter layout, added dispute-list-all screen, and added dispute response details section
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/reply-dispute-flow.html | updated dispute-list filter layout, added dispute-list-all screen, and added response fields/attachment upload to dispute details form
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | updated index navigation mapping for new screens
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/approve-dispute-flow.html | fixed filter layout styling (added CSS Grid and input styles)
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/reply-dispute-flow.html | fixed filter layout styling (added CSS Grid and input styles)
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/create-dispute-flow.html | updated dispute list filters and data grid columns as specified
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/approve-dispute-flow.html | updated dispute list filters and data grid columns as specified
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/reply-dispute-flow.html | updated dispute list filters and data grid columns as specified
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/srs/dispute-management-userflow.md | restructured dispute creation flow to use transaction search as popup modal
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/create-dispute-flow.html | integrated grayscale left sidebar layout and popup search modal for original transactions
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/approve-dispute-flow.html | integrated grayscale left sidebar layout across all screens
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/reply-dispute-flow.html | integrated grayscale left sidebar layout across all screens
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/* | added Quản lý tra soát menu item and updated screen titles to breadcrumb format
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/* | moved page breadcrumb titles to top bar replacing brand header and cleaned subtitles
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/* | converted lo-fi wireframes to premium, colorful interactive prototypes with SLA and API simulation options
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | refactored landing page into a unified sky blue SPA interactive prototype containing creation, detail, approval, and reply views
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | implemented vertical three-dot action dropdowns, conditionalizing menu items for pending disputes to show edit and hide direct quick approval
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | relocated quick search input below the tab list row, stretching it to 100% width of the grid card container
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | added approval and role details to dispute view, incorporating conditional Refund/Credit transaction sub-tables based on type and reason
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | restricted details view so that disputes with status 'Chờ phê duyệt' do not display refund or credit transaction info
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | restricted reasons (BANK, CUST, FRAU) to RQSP type, and set GDFT to always display refund transaction info when approved
+2026-07-22 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | removed header back buttons, routing navigation instead through a clickable 'Quản lý tra soát' breadcrumb element
+2026-07-23 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | added conditional 'Tạo báo nợ' action item to dropdown menus and details view based on dispute role, type, and resolved status
+2026-07-23 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | integrated debit advice creation popup form modal, rendering generated debit advice parameters (ID, code, processing status, filename) inside details view
+2026-07-23 | /wireframe-html | @duongnta | docs/dispute-management/html-wireframe/dispute-management-wireframe.html | added 'Trạng thái tại đối tác' (Partner Status) conditional field to details view for completed TCTLTS role disputes

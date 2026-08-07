@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dispute-management — Tạo yêu cầu tra soát | Wireframe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* DESIGN SYSTEM VARIABLES */
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --epay-orange: #ff6b00;
+      --epay-orange-hover: #e05e00;
+      --bg: #f8fafc;
+      --sidebar-bg: #f1f5f9;
+      --border-color: #cbd5e1;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --success-bg: #d1fae5;
+      --success-text: #065f46;
+      --warning-bg: #fef3c7;
+      --warning-text: #92400e;
+      --danger-bg: #fee2e2;
+      --danger-text: #991b1b;
+      --info-bg: #e0f2fe;
+      --info-text: #075985;
+      --purple-bg: #f3e8ff;
+      --purple-text: #6b21a8;
+      --card-bg: #ffffff;
+    }
+
+    /* RESET */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      padding: 24px;
+      line-height: 1.5;
+    }
+    .wf-page { max-width: 1400px; margin: 0 auto; }
+
+    /* HEADER */
+    .wf-header { margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; background: var(--card-bg); padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .wf-feature-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 600; }
+    .wf-flow-title { font-size: 24px; font-weight: 700; margin-top: 4px; color: var(--text-dark); }
+    .wf-flow-meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .wf-flow-desc { font-size: 13px; color: #475569; margin-top: 8px; line-height: 1.5; }
+
+    /* FLOW ROW — screens xếp ngang, TỰ WRAP */
+    .wf-rows { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px 16px; position: relative; }
+
+    /* SCREEN WRAPPER — desktop 1024px */
+    .wf-screen { flex: 0 0 auto; display: none; }
+    .wf-screen.active { display: block; }
+    .wf-page[data-device="desktop"] .wf-screen { width: 1024px; max-width: 100%; margin-bottom: 30px; }
+    .wf-device-tag { display: inline-block; font-size: 10px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 4px; padding: 2px 8px; margin-bottom: 6px; font-weight: 500; background: #fff; }
+    .wf-step-badge {
+      font-size: 11px; font-weight: 700; color: #fff;
+      background: var(--epay-orange); border-radius: 50%;
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 6px;
+      box-shadow: 0 2px 4px rgba(255, 107, 0, 0.2);
+    }
+    .wf-screen-label { font-size: 13px; font-weight: bold; color: var(--text-dark); margin-top: 8px; display: inline-block; }
+    .wf-shared-badge { font-size: 9px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 3px; padding: 0 4px; margin-left: 4px; background: #fff; }
+
+    /* SCREEN FRAME */
+    .wf-screen-frame { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; background: #fff; position: relative; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+    .wf-screen-bar { background: #f8fafc; border-bottom: 1px solid var(--border-color); padding: 8px 12px; display: flex; align-items: center; gap: 6px; }
+    .wf-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--border-color); background: #fff; flex-shrink: 0; }
+    .wf-dot:nth-child(1) { background: #ff5f56; border-color: #e0443e; }
+    .wf-dot:nth-child(2) { background: #ffbd2e; border-color: #dea123; }
+    .wf-dot:nth-child(3) { background: #27c93f; border-color: #1aab29; }
+    .wf-bar-title { font-size: 11px; font-weight: 600; flex: 1; text-align: center; color: var(--text-muted); }
+    .wf-screen-content { padding: 18px; display: flex; flex-direction: column; gap: 12px; min-height: 480px; }
+
+    /* SIDEBAR LAYOUT */
+    .wf-container { display: flex; flex-direction: row; min-height: 540px; position: relative; }
+    .wf-sidebar {
+      width: 230px; flex-shrink: 0; background: var(--sidebar-bg); border-right: 1px solid var(--border-color);
+      display: flex; flex-direction: column; font-size: 12px;
+    }
+    .wf-sidebar-brand {
+      padding: 16px 20px; border-bottom: 1px solid var(--border-color); font-weight: bold; font-size: 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      color: var(--text-dark);
+    }
+    .wf-sidebar-brand span:first-child { color: var(--epay-orange); }
+    
+    .wf-sidebar-menu { display: flex; flex-direction: column; padding: 12px 0; }
+    .wf-menu-section-header {
+      padding: 8px 20px; font-weight: bold; color: var(--text-muted); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .wf-menu-sub-header { padding: 6px 20px 6px 28px; font-weight: bold; color: var(--text-muted); font-size: 11px; }
+    .wf-menu-item {
+      padding: 8px 20px 8px 40px; color: #334155; text-decoration: none; cursor: pointer;
+      display: block; border-left: 4px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .wf-menu-item:hover { background: #e2e8f0; color: var(--text-dark); }
+    .wf-menu-item.active { background: #fff; font-weight: 600; color: var(--text-dark); border-left-color: var(--epay-orange); }
+    .wf-main-content { flex: 1; padding: 18px 22px; display: flex; flex-direction: column; gap: 12px; min-width: 0; background: #fff; }
+    
+    /* FORM CONTAINER */
+    .wf-form { width: 100%; max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; background: #fff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+
+    /* APP BRAND */
+    .wf-app-brand { text-align: left; font-size: 14px; font-weight: 700; color: var(--text-dark); padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
+    .wf-app-brand span:first-child { font-weight: bold; color: var(--text-dark); font-size: 14px; }
+    .wf-screen-title { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+
+    /* FORM ELEMENTS */
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: 12px; font-weight: 600; color: #334155; }
+    .field input[type=text], .field input[type=email], .field input[type=number], .field select, .field textarea {
+      border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px;
+      font-size: 13px; width: 100%; background: #fff; color: var(--text-dark);
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .field input[type=text]:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--epay-orange);
+      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
+    }
+    .field textarea { height: 90px; resize: none; }
+    .field input::placeholder { color: #cbd5e1; }
+
+    /* BUTTONS */
+    .btn-primary {
+      display: inline-block;
+      padding: 8px 16px; background: var(--epay-orange); color: #fff;
+      border: 1px solid var(--epay-orange); border-radius: 6px;
+      font-size: 12px; font-weight: 600; cursor: pointer; text-align: center;
+      transition: all 0.2s;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      outline: none;
+    }
+    .btn-primary:hover { background: var(--epay-orange-hover); border-color: var(--epay-orange-hover); }
+    
+    .btn-secondary {
+      display: inline-block;
+      padding: 8px 16px; background: #fff; color: var(--text-dark);
+      border: 1px solid var(--border-color); border-radius: 6px;
+      font-size: 12px; font-weight: 600; cursor: pointer; text-align: center;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .btn-secondary:hover { background: #f8fafc; border-color: var(--text-muted); }
+
+    /* BADGE PILLS */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 9999px;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .badge-warning { background-color: var(--warning-bg); color: var(--warning-text); }
+    .badge-success { background-color: var(--success-bg); color: var(--success-text); }
+    .badge-danger { background-color: var(--danger-bg); color: var(--danger-text); }
+    .badge-info { background-color: var(--info-bg); color: var(--info-text); }
+    .badge-purple { background-color: var(--purple-bg); color: var(--purple-text); }
+
+    /* LINK */
+    .wf-link { font-size: 12px; color: var(--primary); text-decoration: none; cursor: pointer; font-weight: 500; }
+    .wf-link:hover { text-decoration: underline; color: var(--primary-hover); }
+
+    /* BANNERS / INFO */
+    .banner { font-size: 12px; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 6px; display: flex; gap: 8px; align-items: flex-start; line-height: 1.4; }
+    .banner-info { background: var(--info-bg); color: var(--info-text); border-color: #b3e0ff; }
+    .banner-warn { background: var(--warning-bg); color: var(--warning-text); border-color: #fde68a; }
+
+    .hint-text { font-size: 11px; color: var(--text-muted); font-style: italic; }
+
+    /* TAB SYSTEM */
+    .tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 12px; gap: 4px; }
+    .tab { padding: 8px 16px; font-size: 13px; border: 1px solid var(--border-color); border-bottom: none; background: #f8fafc; cursor: pointer; border-radius: 6px 6px 0 0; color: var(--text-muted); transition: all 0.2s; }
+    .tab:hover { background: #f1f5f9; color: var(--text-dark); }
+    .tab.active { background: #fff; border-color: var(--border-color); font-weight: 600; color: var(--text-dark); border-bottom: 2px solid #fff; position: relative; top: 1px; }
+
+    /* GRID TABLE */
+    .grid-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12px; color: var(--text-dark); }
+    .grid-table th, .grid-table td { border: 1px solid var(--border-color); padding: 10px 12px; text-align: left; }
+    .grid-table th { background: #f8fafc; font-weight: 600; color: var(--text-muted); }
+    .grid-table tr:hover { background: #f8fafc; }
+    .grid-table tr.clickable { cursor: pointer; }
+
+    /* FILTER BOX */
+    .filter-box { border: 1px solid var(--border-color); border-radius: 6px; padding: 14px; margin-bottom: 14px; background: #f8fafc; }
+    .filter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+    /* FLOATING TOOLBAR */
+    .wf-floating-toolbar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      z-index: 99999;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 11px;
+    }
+    .wf-floating-toolbar span { font-weight: 600; color: var(--text-muted); margin-right: 4px; }
+    .wf-floating-toolbar button {
+      padding: 5px 10px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      color: var(--text-dark);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .wf-floating-toolbar button:hover {
+      background: #f1f5f9;
+      border-color: var(--text-muted);
+    }
+    .wf-floating-toolbar button.active {
+      background: var(--epay-orange);
+      color: #fff;
+      border-color: var(--epay-orange);
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      background: #10b981;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transform: translateY(-20px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* FOOTER */
+    .wf-footer { margin-top: 36px; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; }
+
+    /* SCREEN DESCRIPTION TABLE */
+    .wf-desc-section { margin-top: 32px; }
+    .wf-desc-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--text-dark); color: var(--text-dark); }
+    .wf-desc-table { width: 100%; border-collapse: collapse; background: #fff; font-size: 12px; }
+    .wf-desc-table th, .wf-desc-table td { border: 1px solid var(--border-color); padding: 8px 10px; text-align: left; vertical-align: top; }
+    .wf-desc-table th { background: #f8fafc; font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--text-muted); }
+    .wf-desc-table td:first-child, .wf-desc-table th:first-child { width: 36px; text-align: center; }
+    .wf-desc-table td:nth-child(2) { width: 180px; }
+    .wf-desc-table td:nth-child(3) { width: 110px; }
+    .wf-desc-table td:nth-child(4) { width: 90px; }
+    .wf-desc-screen-header td { background: var(--text-dark); color: #fff; font-weight: 700; font-size: 12px; }
+  </style>
+</head>
+<body>
+<div class="wf-page" data-device="desktop">
+
+  <div class="wf-header">
+    <div class="wf-feature-label">Feature: dispute-management / Wireframe</div>
+    <div class="wf-flow-title">Tạo yêu cầu tra soát</div>
+    <div class="wf-flow-meta">4 màn hình · Device: desktop · Tạo: 2026-07-22 · Nguồn: srs/dispute-management-userflow.md</div>
+    <div class="wf-flow-desc">Cho phép nhân viên tạo mới yêu cầu tra soát chủ động từ các giao dịch gốc, chỉnh sửa nội dung khi chờ phê duyệt.</div>
+  </div>
+
+  <div class="wf-rows">
+
+    <!-- SCREEN 1: dispute-list -->
+    <div class="wf-screen" id="s1">
+      <div class="wf-step-badge">1</div>
+      <div class="wf-device-tag">desktop · 1024px</div>
+      <div class="wf-screen-frame">
+        <div class="wf-screen-bar">
+          <div class="wf-dot"></div><div class="wf-dot"></div><div class="wf-dot"></div>
+          <span class="wf-bar-title">Danh sách yêu cầu tra soát - Portal MM</span>
+        </div>
+        <div class="wf-container">
+          <!-- SIDEBAR -->
+          <div class="wf-sidebar">
+            <div class="wf-sidebar-brand">
+              <span>● epay</span>
+              <span style="font-size: 9px; font-weight: normal; color: #888;">v1.0</span>
+            </div>
+            <div class="wf-sidebar-menu">
+              <div class="wf-menu-section-header">
+                <span>XỬ LÝ GIAO DỊCH QRGW</span>
+                <span>▼</span>
+              </div>
+              <div class="wf-menu-sub-header">Giao dịch thu hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Giao dịch chi hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Quản lý tra soát</div>
+              <a class="wf-menu-item active">Quản lý tra soát</a>
+            </div>
+          <
+
+          <!-- KHỐI THÔNG TIN TRA SOÁT (FORM TẠO CHUẨN KHỚP ẢNH 2 USER) -->
+          <div class="section-block" style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 16px; background: #ffffff;">
+            <div class="section-hdr" style="background: #e2e8f0; color: #1e293b; padding: 10px 16px; font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; align-items: center;">
+              <span>THÔNG TIN TRA SOÁT</span>
+              <span style="font-size: 13px; font-weight: bold; color: #475569;">∧</span>
+            </div>
+            <div class="section-body" style="padding: 16px; font-size: 12px; line-height: 1.6; display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                  <label style="font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Loại tra soát *</label>
+                  <select class="form-control" disabled style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-size: 12px; color: #0f172a;">
+                    <option selected>RQSP — Sai sót nghiệp vụ</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Lý do tra soát *</label>
+                  <select class="form-control" disabled style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-size: 12px; color: #0f172a;">
+                    <option selected>BANK — Ngân hàng đối tác yêu cầu</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                  <label style="font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Số tiền tra soát *</label>
+                  <input type="text" class="form-control" value="600,000 VND" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; color: #0f172a; font-weight: 700;">
+                </div>
+                <div>
+                  <label style="font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Tệp đính kèm (Ảnh bill/minh chứng) *</label>
+                  <div style="display: flex; align-items: center; padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-size: 12px; color: #0f172a; gap: 8px;">
+                    <span>📎</span> <span style="font-weight: 600; color: #0066ff;">bill_chuyen_tien.png</span> <span style="color: #64748b;">(1.2 MB)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label style="font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Nội dung mô tả chi tiết *</label>
+                <textarea class="form-control" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; color: #0f172a; height: 60px;">Khách hàng báo đã chuyển khoản thành công nhưng merchant chưa ghi nhận đơn hàng. Yêu cầu tra soát hoàn tiền khẩn cấp.</textarea>
+              </div>
+            </div>
+          </div>/div>/div>
+          <!-- MAIN CONTENT -->
+          <div class="wf-main-content">
+            <div class="wf-app-brand" style="margin-bottom: 12px; padding-bottom: 0;">
+    <span>Quản lý tra soát &gt; Tạo yêu cầu tra soát</span>
+    <span style="font-size:12px; font-weight:normal;"><a class="wf-link">&lt; Quay lại danh sách</a></span>
+  </div>
+  <div class="wf-form" style="margin-top: 0; padding-top: 0;">
+                <div class="field" style="border: 1px solid #ccc; padding: 10px; border-radius: 4px; background: #fafafa;">
+                  <label style="font-weight: bold; margin-bottom: 6px;">Chọn giao dịch gốc cần tra soát *</label>
+                  <div style="display:flex; gap:8px;">
+                    <input type="text" placeholder="Chưa chọn giao dịch gốc..." readonly style="background:#f0f0f0; flex:1;">
+                    <button class="btn-primary" style="padding:6px 12px; white-space:nowrap;">Chọn giao dịch gốc</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- POPUP OVERLAY (Màn hình 2) -->
+            <div style="position: absolute; top: 0; left: 220px; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 999;">
+              <div style="background: #fff; border: 2px solid #000; border-radius: 8px; width: 720px; max-width: 100%; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                <!-- Popup header -->
+                <div style="background: #e0e0e0; border-bottom: 1px solid #000; padding: 10px 14px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                  <span>CHỌN GIAO DỊCH GỐC (Màn hình 2)</span>
+                  <a class="wf-link" id="s2-close-btn" style="text-decoration: none; font-weight: bold;">❌</a>
+                </div>
+                <!-- Popup body -->
+                <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px; max-height: 420px; overflow-y: auto;">
+                  <div class="hint-text" style="margin-bottom:10px;">Lưu ý: Chỉ hỗ trợ tạo tra soát đối với giao dịch gốc là chiều TCNL (Tổ chức nhận lệnh).</div>
+
+                  <div class="filter-box">
+                    <div class="filter-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                      <div class="field">
+                        <label>Mã giao dịch gốc (TxID)</label>
+                        <input type="text" placeholder="Nhập mã giao dịch">
+                      </div>
+                      <div class="field">
+                        <label>PTTT (Phương thức TT)</label>
+                        <select>
+                          <option value="VietQR" selected>VietQR</option>
+                          <option value="ATM">Thẻ nội địa / ATM</option>
+                          <option value="INT">Thẻ quốc tế</option>
+                          <option value="WALLET">Ví điện tử</option>
+                        </select>
+                      </div>
+                      <div class="field">
+                        <label>Trạng thái giao dịch</label>
+                        <select>
+                          <option value="SUCCESS" selected>Thành công</option>
+                          <option value="REFUNDED">Đã hoàn tiền</option>
+                          <option value="ALL">Tất cả</option>
+                        </select>
+                      </div>
+                      <div class="field">
+                        <label>Số tiền giao dịch</label>
+                        <input type="number" placeholder="Nhập số tiền">
+                      </div>
+                      <div class="field">
+                        <label>Loại dịch vụ</label>
+                        <select>
+                          <option>Thanh toán</option>
+                          <option>Chuyển tiền</option>
+                        </select>
+                      </div>
+                      <div class="field">
+                        <label>Số điện thoại/Tài khoản</label>
+                        <input type="text" placeholder="Nhập SĐT/Tài khoản">
+                      </div>
+                    </div>
+                    <div style="text-align:right; margin-top:10px; display:flex; justify-content:flex-end; gap:8px;">
+                      <button class="btn-secondary" style="padding:4px 10px; font-size: 11px;">Nhập lại</button>
+                      <button class="btn-primary" style="padding:4px 10px; font-size: 11px;">Tìm kiếm</button>
+                    </div>
+                  </div>
+
+                  <table class="grid-table" style="font-size: 11px;">
+                    <thead>
+                      <tr>
+                        <th style="width:50px;">Chọn</th>
+                        <th>Mã giao dịch</th>
+                        <th>Loại dịch vụ</th>
+                        <th>PTTT</th>
+                        <th>Trạng thái GD</th>
+                        <th>Vai trò</th>
+                        <th>Số tiền</th>
+                        <th>Tài khoản khách</th>
+                        <th>Thời gian GD</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="radio" name="tx_select" checked></td>
+                        <td>TX-10001</td>
+                        <td>Thanh toán</td>
+                        <td>VietQR</td>
+                        <td><span class="badge badge-success">🟢 Thành công</span></td>
+                        <td>TCNL</td>
+                        <td>500,000 VND</td>
+                        <td>0987654321</td>
+                        <td>2026-07-22 09:00</td>
+                      </tr>
+                      <tr>
+                        <td><input type="radio" name="tx_select"></td>
+                        <td>TX-10002</td>
+                        <td>Thanh toán</td>
+                        <td>VietQR</td>
+                        <td><span class="badge badge-success">🟢 Thành công</span></td>
+                        <td>TCNL</td>
+                        <td>1,200,000 VND</td>
+                        <td>0912345678</td>
+                        <td>2026-07-22 08:30</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div style="text-align:right; margin-top:16px; display:flex; justify-content:flex-end; gap:12px;">
+                    <button class="btn-secondary" id="s2-cancel-btn">Hủy bỏ</button>
+                    <button class="btn-primary" id="s2-confirm-btn">Chọn &amp; Xác nhận</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-screen-label">search-original-tx (Popup Chọn giao dịch gốc)</div>
+    </div>
+
+    <!-- SCREEN 3: create-dispute-request -->
+    <div class="wf-screen" id="s3">
+      <div class="wf-step-badge">3</div>
+      <div class="wf-device-tag">desktop · 1024px</div>
+      <div class="wf-screen-frame">
+        <div class="wf-screen-bar">
+          <div class="wf-dot"></div><div class="wf-dot"></div><div class="wf-dot"></div>
+          <span class="wf-bar-title">Nhập thông tin tra soát - Portal MM</span>
+        </div>
+        <div class="wf-container">
+          <!-- SIDEBAR -->
+          <div class="wf-sidebar">
+            <div class="wf-sidebar-brand">
+              <span>● epay</span>
+              <span style="font-size: 9px; font-weight: normal; color: #888;">v1.0</span>
+            </div>
+            <div class="wf-sidebar-menu">
+              <div class="wf-menu-section-header">
+                <span>XỬ LÝ GIAO DỊCH QRGW</span>
+                <span>▼</span>
+              </div>
+              <div class="wf-menu-sub-header">Giao dịch thu hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Giao dịch chi hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Quản lý tra soát</div>
+              <a class="wf-menu-item active">Quản lý tra soát</a>
+            </div>
+          </div>
+          <!-- MAIN CONTENT -->
+          <div class="wf-main-content">
+            <div class="wf-app-brand" style="margin-bottom: 12px; padding-bottom: 0;">
+    <span>Quản lý tra soát &gt; Tạo yêu cầu tra soát</span>
+    <span style="font-size:12px; font-weight:normal;"><a class="wf-link">&lt; Quay lại danh sách</a></span>
+  </div>
+  <div class="wf-form" style="margin-top: 0; padding-top: 0;">
+              <div class="field" style="border: 1px solid #ccc; padding: 10px; border-radius: 4px; background: #fafafa;">
+                <label style="font-weight: bold; margin-bottom: 6px;">Chọn giao dịch gốc cần tra soát *</label>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" id="s3-tx-input" placeholder="Chưa chọn giao dịch gốc..." readonly style="background:#f0f0f0; flex:1;">
+                  <button class="btn-primary" style="padding:6px 12px; white-space:nowrap;">Chọn giao dịch gốc</button>
+                </div>
+                <span class="state-hint" style="margin-top: 4px;">Click để mở popup chọn giao dịch gốc từ hệ thống</span>
+              </div>
+
+              <!-- Form elements locked until transaction is selected -->
+              <div id="s3-form-lock" style="opacity: 0.5; pointer-events: none;">
+                <div class="field">
+                  <label>Loại tra soát *</label>
+                  <select disabled id="s3-type-select">
+                    <option value="RQRN">RQRN — Yêu cầu hoàn trả tiền (Refund Request)</option>
+                    <option value="RQSP">RQSP — Yêu cầu dừng thanh toán (Stop Payment)</option>
+                    <option value="GDFT">GDFT — Lỗi giao dịch (Failed Transaction)</option>
+                    <option value="RQNF">RQNF — Không nhận được dịch vụ/hàng hóa</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Lý do tra soát *</label>
+                  <select disabled id="s3-reason-select">
+                    <option value="CUST">CUST — Yêu cầu từ khách hàng</option>
+                    <option value="BANK">BANK — Lỗi từ hệ thống Ngân hàng/Đối tác</option>
+                    <option value="FRAU">FRAU — Nghi ngờ gian lận (chỉ dùng cho RQSP)</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Số tiền tra soát *</label>
+                  <input type="number" disabled id="s3-amount-input" placeholder="Chọn GD gốc trước...">
+                  <span class="state-hint">Giá trị phải lớn hơn 0 và nhỏ hơn hoặc bằng số tiền gốc</span>
+                </div>
+
+                <div class="field">
+                  <label>Nội dung mô tả chi tiết</label>
+                  <textarea disabled id="s3-desc-textarea" placeholder="Chọn GD gốc trước..."></textarea>
+                </div>
+
+                <div class="field">
+                  <label>Tệp đính kèm (Ảnh bill/minh chứng) *</label>
+                  <input type="file" disabled id="s3-file-input">
+                  <span class="state-hint">Hỗ trợ tối đa 1 file định dạng .pdf, .png, .jpg. Dung lượng tối đa 5MB.</span>
+                </div>
+
+                <div style="margin-top:10px; display:flex; gap:10px;">
+                  <button class="btn-secondary" id="s3-cancel-btn" style="flex:1;">Hủy bỏ</button>
+                  <button class="btn-primary" id="s3-submit-btn" style="flex:1;">Gửi phê duyệt</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-screen-label">create-dispute-request (Trạng thái: Chưa chọn GD gốc)</div>
+    </div>
+
+    <!-- SCREEN 4: update-dispute-request -->
+    <div class="wf-screen" id="s4">
+      <div class="wf-step-badge">4</div>
+      <div class="wf-device-tag">desktop · 1024px</div>
+      <div class="wf-screen-frame">
+        <div class="wf-screen-bar">
+          <div class="wf-dot"></div><div class="wf-dot"></div><div class="wf-dot"></div>
+          <span class="wf-bar-title">Cập nhật yêu cầu tra soát - Portal MM</span>
+        </div>
+        <div class="wf-container">
+          <!-- SIDEBAR -->
+          <div class="wf-sidebar">
+            <div class="wf-sidebar-brand">
+              <span>● epay</span>
+              <span style="font-size: 9px; font-weight: normal; color: #888;">v1.0</span>
+            </div>
+            <div class="wf-sidebar-menu">
+              <div class="wf-menu-section-header">
+                <span>XỬ LÝ GIAO DỊCH QRGW</span>
+                <span>▼</span>
+              </div>
+              <div class="wf-menu-sub-header">Giao dịch thu hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Giao dịch chi hộ</div>
+              <a class="wf-menu-item">GD thanh toán/ chuyển tiền</a>
+              <a class="wf-menu-item">Giao dịch hoàn trả</a>
+              <div class="wf-menu-sub-header">Quản lý tra soát</div>
+              <a class="wf-menu-item active">Quản lý tra soát</a>
+            </div>
+          </div>
+          <!-- MAIN CONTENT -->
+          <div class="wf-main-content">
+            <div class="wf-app-brand" style="margin-bottom: 12px; padding-bottom: 0;">
+    <span>Quản lý tra soát &gt; Tạo yêu cầu tra soát</span>
+    <span style="font-size:12px; font-weight:normal;"><a class="wf-link">&lt; Quay lại danh sách</a></span>
+  </div>
+  <div class="wf-form" style="margin-top: 0; padding-top: 0;">
+              <div class="banner banner-info">
+                <div>ℹ</div>
+                <div>
+                  <strong>Thông tin giao dịch gốc:</strong> TX-10001 (Đã chọn)<br>
+                  Trạng thái hiện tại: <strong>Chờ phê duyệt</strong>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Giao dịch gốc đã chọn</label>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" value="TX-10001 | Thanh toán | 500,000 VND" readonly style="background:#f0f0f0; flex:1; font-weight:bold;">
+                  <button class="btn-secondary" style="padding:6px 12px; white-space:nowrap;">Thay đổi</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Loại tra soát *</label>
+                <select>
+                  <option value="RQRN" selected>RQRN — Yêu cầu hoàn trả tiền (Refund Request)</option>
+                  <option value="RQSP">RQSP — Yêu cầu dừng thanh toán (Stop Payment)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>Lý do tra soát *</label>
+                <select>
+                  <option value="CUST" selected>CUST — Yêu cầu từ khách hàng</option>
+                  <option value="BANK">BANK — Lỗi từ hệ thống Ngân hàng/Đối tác</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>Số tiền tra soát *</label>
+                <input type="number" value="500000">
+              </div>
+
+              <div class="field">
+                <label>Nội dung mô tả chi tiết</label>
+                <textarea>Khách hàng báo chuyển nhầm số tiền, yêu cầu hoàn trả lại.</textarea>
+              </div>
+
+              <div class="field">
+                <label>Tệp đính kèm hiện tại</label>
+                <div style="font-size:12px; border:1px solid #ccc; padding:6px 8px; border-radius:3px; background:#f9f9f9; display:flex; justify-content:space-between; align-items:center;">
+                  <span>bill_chuyen_tien.png (1.2 MB)</span>
+                  <a class="wf-link" style="font-size:11px;">[Thay đổi]</a>
+                </div>
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px;">
+                <button class="btn-secondary" style="flex:1;">Hủy bỏ</button>
+                <button class="btn-primary" style="flex:1;">Lưu thay đổi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-screen-label">update-dispute-request</div>
+    </div>
+
+  </div>
+
+  <div class="wf-desc-section">
+    <div class="wf-desc-title">Mô tả màn hình</div>
+    <table class="wf-desc-table">
+      <thead>
+        <tr><th>#</th><th>Items</th><th>Control type</th><th>Data type</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr class="wf-desc-screen-header"><td colspan="5">Screen 1: dispute-list (Danh sách tra soát)</td></tr>
+        <tr class="wf-desc-screen-header"><td colspan="5">Screen 1B: dispute-list-all (Danh sách tra soát - Tab Tất cả)</td></tr>
+        <tr>
+          <td>1</td>
+          <td>Tab "Tất cả"</td>
+          <td>Link</td>
+          <td>Click</td>
+          <td>Hiển thị tất cả các yêu cầu tra soát trên hệ thống mà không lọc theo trạng thái cụ thể.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Lưới hiển thị dữ liệu</td>
+          <td>Label</td>
+          <td>ReadOnly</td>
+          <td>Hiển thị danh sách các bản ghi tra soát với nhiều trạng thái khác nhau (Chờ phê duyệt, Chờ xử lý, Thất bại, v.v.).</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Nút "Tạo yêu cầu tra soát"</td>
+          <td>Button</td>
+          <td>Click</td>
+          <td>Nhấp để bắt đầu quy trình tạo tra soát chủ động. Chuyển sang màn hình tìm kiếm giao dịch gốc search-original-tx [2].</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Bộ lọc tìm kiếm</td>
+          <td>Dropdown / Textbox</td>
+          <td>Select / Text</td>
+          <td>Lọc danh sách tra soát theo MerchantCode, Đối tác, Loại dịch vụ, Vai trò gốc/tra soát, Trạng thái và Khoảng thời gian.</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Tab trạng thái</td>
+          <td>Link</td>
+          <td>Click</td>
+          <td>Phân loại dữ liệu nhanh: Tất cả, Chờ phê duyệt, Chờ xử lý, Quá hạn.</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Link "Cập nhật" trên lưới</td>
+          <td>Link</td>
+          <td>Click</td>
+          <td>Chỉ hiển thị và khả dụng đối với bản ghi ở trạng thái "Chờ phê duyệt". Nhấp để chuyển tới màn hình update-dispute-request [4].</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Link "Xem chi tiết" trên lưới</td>
+          <td>Link</td>
+          <td>Click</td>
+          <td>Mở màn hình xem chi tiết dispute-detail [3] cho bản ghi đã chọn.</td>
+        </tr>
+
+        <tr class="wf-desc-screen-header"><td colspan="5">Screen 2: search-original-tx (Tìm kiếm giao dịch gốc)</td></tr>
+        <tr>
+          <td>1</td>
+          <td>Bộ lọc tìm giao dịch gốc</td>
+          <td>Textbox / Dropdown</td>
+          <td>Text / Select</td>
+          <td>Tìm kiếm giao dịch từ DB MM bằng mã giao dịch, số tiền, loại dịch vụ và SĐT khách hàng. Chỉ hiển thị các giao dịch là chiều TCNL (Tổ chức nhận lệnh).</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Radio chọn giao dịch gốc</td>
+          <td>Radio button</td>
+          <td>Check</td>
+          <td>Bắt buộc chọn duy nhất một giao dịch gốc trên lưới để tạo yêu cầu tra soát.</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Nút "Tiếp tục tạo tra soát"</td>
+          <td>Button</td>
+          <td>Click</td>
+          <td>Mở form tạo tra soát create-dispute-request [5] cho giao dịch đã chọn. Chỉ kích hoạt khi đã chọn giao dịch.</td>
+        </tr>
+
+        <tr class="wf-desc-screen-header"><td colspan="5">Screen 3: create-dispute-request (Nhập thông tin tạo YCTS)</td></tr>
+        <tr>
+          <td>1</td>
+          <td>Banner thông tin giao dịch gốc</td>
+          <td>Label</td>
+          <td>ReadOnly</td>
+          <td>Hiển thị tóm tắt thông tin giao dịch gốc đang được tra soát để đối chiếu dữ liệu.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Dropdown Loại tra soát</td>
+          <td>Dropdown</td>
+          <td>Select</td>
+          <td>Trường bắt buộc. Chọn loại tra soát gồm: RQRN, RQSP, GDFT, RQNF.</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Dropdown Lý do tra soát</td>
+          <td>Dropdown</td>
+          <td>Select</td>
+          <td>Trường bắt buộc. Chọn lý do gồm: CUST, BANK, FRAU. Lưu ý lý do FRAU chỉ hiển thị khi chọn loại tra soát là RQSP.</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Textbox Số tiền tra soát</td>
+          <td>Textbox</td>
+          <td>Text</td>
+          <td>Trường bắt buộc. Mặc định là số tiền giao dịch gốc. Giá trị phải lớn hơn 0 và không vượt quá số tiền giao dịch gốc.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Tải lên tệp đính kèm</td>
+          <td>Browse Button</td>
+          <td>Click</td>
+          <td>Trường bắt buộc. Cho phép tải lên tối đa 1 file minh chứng giao dịch. Ràng buộc: Định dạng .pdf, .png, .jpg; Dung lượng tối đa 5MB (E-DISP-001/002).</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Nút "Gửi phê duyệt"</td>
+          <td>Button</td>
+          <td>Click</td>
+          <td>Ghi nhận bản ghi tra soát mới vào cơ sở dữ liệu MM với trạng thái ban đầu là "Chờ phê duyệt" và chuyển về màn hình danh sách [1].</td>
+        </tr>
+
+        <tr class="wf-desc-screen-header"><td colspan="5">Screen 4: update-dispute-request (Cập nhật yêu cầu tra soát)</td></tr>
+        <tr>
+          <td>1</td>
+          <td>Thông tin cập nhật</td>
+          <td>Dropdown / Textbox</td>
+          <td>Select / Text</td>
+          <td>Kế thừa thông tin đã nhập trước đó. Cho phép cập nhật loại, lý do, số tiền tra soát, mô tả và thay đổi tệp đính kèm mới.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Nút "Lưu thay đổi"</td>
+          <td>Button</td>
+          <td>Click</td>
+          <td>Lưu các thông tin chỉnh sửa và điều hướng quay lại danh sách tra soát [1].</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="wf-floating-toolbar">
+    <span>Mẫu thử:</span>
+    <button data-id="s1" onclick="showScreen('s1')">1. List</button>
+    <button data-id="s1b" onclick="showScreen('s1b')">1B. List All</button>
+    <button data-id="s2" onclick="showScreen('s2')">2. Popup search</button>
+    <button data-id="s3" onclick="showScreen('s3')">3. Create</button>
+    <button data-id="s4" onclick="showScreen('s4')">4. Update</button>
+    <button data-id="all" onclick="showAllScreens()">Xem tất cả</button>
+  </div>
+
+  <script>
+    // TOAST NOTIFICATION UTILITY
+    function showToast(message) {
+      let container = document.getElementById('toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = '<span>✓</span> <span>' + message + '</span>';
+      container.appendChild(toast);
+      setTimeout(() => toast.classList.add('show'), 50);
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // STATE VARIABLES
+    let disputeRequests = [
+      { id: 'TS-001', type: 'RQRN', reason: 'CUST', status: 'Chờ phê duyệt', role: 'TCYCTS', tx: 'TX-10001', txtype: 'Thanh toán', date: '2026-07-22 10:00', processDate: '—' }
+    ];
+
+    const screens = ['s1', 's1b', 's2', 's3', 's4'];
+
+    function showScreen(id) {
+      screens.forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.classList.remove('active');
+      });
+      const activeEl = document.getElementById(id);
+      if (activeEl) {
+        activeEl.classList.add('active');
+        window.location.hash = id;
+      }
+      
+      // Update active toolbar button
+      document.querySelectorAll('.wf-floating-toolbar button').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-id') === id) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    function showAllScreens() {
+      screens.forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.classList.add('active');
+      });
+      document.querySelectorAll('.wf-floating-toolbar button').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-id') === 'all') {
+          btn.classList.add('active');
+        }
+      });
+      window.location.hash = 'all';
+    }
+
+    // POPULATE TABLES
+    function updateTables() {
+      // Find table in Screen 1
+      const tbody1 = document.querySelector('#s1 .grid-table tbody');
+      if (tbody1) {
+        tbody1.innerHTML = '';
+        disputeRequests.forEach((req, idx) => {
+          let badgeClass = req.status === 'Chờ phê duyệt' ? 'badge-warning' : 'badge-info';
+          tbody1.innerHTML += `
+            <tr>
+              <td>${idx + 1}</td>
+              <td><a class="wf-link" onclick="viewDetails('${req.id}')">${req.id}</a></td>
+              <td>${req.type}</td>
+              <td>${req.reason === '—' ? '—' : req.reason}</td>
+              <td><span class="badge ${badgeClass}">${req.status}</span></td>
+              <td>${req.role}</td>
+              <td>${req.tx}</td>
+              <td>${req.txtype}</td>
+              <td>${req.date}</td>
+              <td>${req.processDate}</td>
+              <td>
+                <a class="wf-link" onclick="viewDetails('${req.id}')">Xem chi tiết</a> | 
+                <a class="wf-link" onclick="updateDispute('${req.id}')">Cập nhật</a>
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      // Find table in Screen 1B
+      const tbody1B = document.querySelector('#s1b .grid-table tbody');
+      if (tbody1B) {
+        tbody1B.innerHTML = '';
+        disputeRequests.forEach((req, idx) => {
+          let badgeClass = req.status === 'Chờ phê duyệt' ? 'badge-warning' : 'badge-info';
+          tbody1B.innerHTML += `
+            <tr>
+              <td>${idx + 1}</td>
+              <td><a class="wf-link" onclick="viewDetails('${req.id}')">${req.id}</a></td>
+              <td>${req.type}</td>
+              <td>${req.reason}</td>
+              <td><span class="badge ${badgeClass}">${req.status}</span></td>
+              <td>${req.role}</td>
+              <td>${req.tx}</td>
+              <td>${req.txtype}</td>
+              <td>${req.date}</td>
+              <td>${req.processDate}</td>
+              <td>
+                <a class="wf-link" onclick="viewDetails('${req.id}')">Xem chi tiết</a> | 
+                <a class="wf-link" onclick="updateDispute('${req.id}')">Cập nhật</a>
+              </td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    function viewDetails(id) {
+      showScreen('s4');
+    }
+
+    function updateDispute(id) {
+      showScreen('s4');
+    }
+
+    // INITIALIZATION & EVENT LISTENERS
+    window.addEventListener('load', () => {
+      // 1. Initial screen check based on Hash
+      const hash = window.location.hash.replace('#', '');
+      if (hash && (screens.includes(hash) || hash === 'all')) {
+        if (hash === 'all') showAllScreens();
+        else showScreen(hash);
+      } else {
+        showScreen('s1');
+      }
+
+      // 2. Wire up screen transition buttons
+      // Click + Tạo yêu cầu tra soát in Screen 1 & 1B
+      document.querySelectorAll('button').forEach(btn => {
+        if (btn.textContent.trim().includes('+ Tạo yêu cầu tra soát')) {
+          btn.addEventListener('click', () => {
+            // Reset Screen 3 form state
+            document.getElementById('s3-tx-input').value = '';
+            document.getElementById('s3-form-lock').style.opacity = '0.5';
+            document.getElementById('s3-form-lock').style.pointerEvents = 'none';
+            document.querySelectorAll('#s3-form-lock select, #s3-form-lock input, #s3-form-lock textarea').forEach(el => el.disabled = true);
+            showScreen('s3');
+          });
+        }
+      });
+
+      // Click Chọn giao dịch gốc inside Screen 3
+      const s3SelectTxBtn = document.querySelector('#s3 .btn-primary');
+      if (s3SelectTxBtn) {
+        s3SelectTxBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          showScreen('s2');
+        });
+      }
+
+      // Click Quay lại danh sách links
+      document.querySelectorAll('.wf-link').forEach(link => {
+        if (link.textContent.includes('Quay lại danh sách') || link.textContent.includes('Hủy bỏ')) {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            showScreen('s1');
+          });
+        }
+      });
+
+      // Screen 2 Popup Close & Cancel
+      const s2Close = document.getElementById('s2-close-btn');
+      if (s2Close) s2Close.addEventListener('click', (e) => { e.preventDefault(); showScreen('s3'); });
+
+      const s2Cancel = document.getElementById('s2-cancel-btn');
+      if (s2Cancel) s2Cancel.addEventListener('click', (e) => { e.preventDefault(); showScreen('s3'); });
+
+      // Screen 2 Popup Confirm Selected Transaction
+      const s2Confirm = document.getElementById('s2-confirm-btn');
+      if (s2Confirm) {
+        s2Confirm.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          // Get selected transaction
+          const selectedRadio = document.querySelector('input[name="tx_select"]:checked');
+          if (selectedRadio) {
+            const tr = selectedRadio.closest('tr');
+            const txId = tr.cells[1].textContent;
+            const txType = tr.cells[2].textContent;
+            const txAmount = tr.cells[4].textContent;
+            
+            // Populate form in Screen 3
+            document.getElementById('s3-tx-input').value = `${txId} | ${txType} | ${txAmount}`;
+            
+            // Unlock fields
+            const lock = document.getElementById('s3-form-lock');
+            lock.style.opacity = '1';
+            lock.style.pointerEvents = 'auto';
+            document.querySelectorAll('#s3-form-lock select, #s3-form-lock input, #s3-form-lock textarea').forEach(el => el.disabled = false);
+            
+            showScreen('s3');
+            showToast('Đã chọn giao dịch gốc thành công!');
+          }
+        });
+      }
+
+      // Screen 3 Form Submit
+      const s3Submit = document.getElementById('s3-submit-btn');
+      if (s3Submit) {
+        s3Submit.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          // Create new record
+          const type = document.getElementById('s3-type-select').value;
+          const reason = document.getElementById('s3-reason-select').value;
+          const amount = parseInt(document.getElementById('s3-amount-input').value) || 500000;
+          const formattedAmount = amount.toLocaleString('en-US') + ' VND';
+          const newId = 'TS-00' + (disputeRequests.length + 1);
+          
+          disputeRequests.unshift({
+            id: newId,
+            type: type,
+            reason: reason,
+            status: 'Chờ phê duyệt',
+            role: 'TCYCTS',
+            tx: 'TX-10001',
+            txtype: 'Thanh toán',
+            date: new Date().toISOString().slice(0, 19).replace('T', ' ').substring(0, 16),
+            processDate: '—'
+          });
+          
+          updateTables();
+          showScreen('s1');
+          showToast(`Gửi yêu cầu tra soát ${newId} chờ phê duyệt thành công!`);
+        });
+      }
+
+      const s3Cancel = document.getElementById('s3-cancel-btn');
+      if (s3Cancel) s3Cancel.addEventListener('click', (e) => { e.preventDefault(); showScreen('s1'); });
+
+      // Screen 4 Form Actions
+      const s4Submit = document.getElementById('s4-submit-btn');
+      if (s4Submit) {
+        s4Submit.addEventListener('click', (e) => {
+          e.preventDefault();
+          showScreen('s1');
+          showToast('Cập nhật yêu cầu tra soát thành công!');
+        });
+      }
+      
+      const s4Cancel = document.getElementById('s4-cancel-btn');
+      if (s4Cancel) s4Cancel.addEventListener('click', (e) => { e.preventDefault(); showScreen('s1'); });
+
+      // Tab switcher in lists
+      document.querySelectorAll('.tabs').forEach(tabBar => {
+        tabBar.querySelectorAll('.tab').forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            tabBar.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            const text = tab.textContent;
+            if (text.includes('Tất cả')) {
+              showScreen('s1b');
+            } else {
+              showScreen('s1');
+            }
+          });
+        });
+      });
+
+      // Populate tables initial run
+      updateTables();
+    });
+
+    // Hashchange listener to support TOC click in main index file
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && screens.includes(hash)) {
+        showScreen(hash);
+      } else if (hash === 'all') {
+        showAllScreens();
+      }
+    });
+  </script>
+</body>
+</html>

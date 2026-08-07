@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1340">
+  <title>LUỒNG ĐĂNG KÝ FACEPAY TRÊN ỨNG DỤNG PETROLIMEX 2.0</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background-color: #FFFFFF;
+      color: #0E3A7E;
+      padding: 30px 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .diagram-board {
+      width: 1300px;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 24px 30px 32px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+
+    /* Main Diagram Title Header */
+    .header-main-title {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header-main-title h1 {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0E3A7E;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+
+    /* Steps 1 to 6 Header Row */
+    .step-headers-grid {
+      display: grid;
+      grid-template-columns: 190px 160px 190px 170px 160px 190px;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .step-header-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .step-num-badge {
+      width: 38px;
+      height: 38px;
+      background-color: #F05A21;
+      color: #FFFFFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      box-shadow: 0 3px 8px rgba(240, 90, 33, 0.3);
+    }
+
+    .step-head-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0E3A7E;
+      line-height: 1.35;
+    }
+
+    /* Main Row: Components 1 -> 6 */
+    .flow-components-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .arrow-next {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .arrow-next svg {
+      width: 20px;
+      height: 20px;
+      fill: #0E3A7E;
+    }
+
+    /* Mobile Phone Frames (Screen 1, 2, 3) */
+    .phone-mockup {
+      width: 190px;
+      height: 380px;
+      background: #FFFFFF;
+      border: 3.5px solid #1E1E1E;
+      border-radius: 30px;
+      padding: 10px 10px 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .phone-notch-pill {
+      width: 60px;
+      height: 6px;
+      background: #1E1E1E;
+      border-radius: 4px;
+      margin: 0 auto 8px;
+    }
+
+    .phone-viewport {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+
+    /* Screen 1 Header Brand */
+    .brand-p-logo {
+      width: 28px;
+      height: 28px;
+      background: #F05A21;
+      color: #FFFFFF;
+      font-weight: 900;
+      font-size: 18px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 3px;
+    }
+
+    .brand-p-title {
+      font-size: 10.5px;
+      font-weight: 900;
+      color: #0E3A7E;
+      text-align: center;
+    }
+
+    .brand-p-subtitle {
+      font-size: 10px;
+      font-weight: 700;
+      color: #333333;
+      text-align: center;
+      margin-top: 1px;
+    }
+
+    /* Input Pill Boxes */
+    .input-field-box {
+      width: 100%;
+      height: 24px;
+      border: 1px solid #CBD5E1;
+      border-radius: 12px;
+      font-size: 9px;
+      color: #94A3B8;
+      padding: 0 10px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      background: #FFFFFF;
+    }
+
+    .button-orange-pill {
+      width: 100%;
+      height: 26px;
+      background: #F05A21;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 13px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Face ID Scanner Frame */
+    .faceid-scan-view {
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .face-scanner-square {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 6px;
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+    }
+
+    .face-bracket {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-color: #10B981;
+      border-style: solid;
+    }
+    .fb-tl { top: 4px; left: 4px; border-width: 2px 0 0 2px; }
+    .fb-tr { top: 4px; right: 4px; border-width: 2px 2px 0 0; }
+    .fb-bl { bottom: 4px; left: 4px; border-width: 0 0 2px 2px; }
+    .fb-br { bottom: 4px; right: 4px; border-width: 0 2px 2px 0; }
+
+    .face-success-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 8px;
+      font-weight: 700;
+      color: #10B981;
+    }
+
+    .caption-below-item {
+      font-size: 10.5px;
+      color: #333333;
+      text-align: center;
+      margin-top: 10px;
+      max-width: 190px;
+      line-height: 1.35;
+    }
+
+    /* Step 2 Cloud Box */
+    .step2-cloud-box {
+      width: 160px;
+      text-align: center;
+    }
+
+    .cloud-oval-bg {
+      width: 125px;
+      height: 100px;
+      margin: 0 auto 10px;
+      background: #E1EFFE;
+      border-radius: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .server-rack-graphic {
+      width: 68px;
+      height: 42px;
+      background: #0E3A7E;
+      border-radius: 6px;
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+
+    .rack-slot {
+      height: 8px;
+      background: #1D4ED8;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      gap: 4px;
+    }
+
+    .rack-led {
+      width: 4px;
+      height: 4px;
+      background: #60A5FA;
+      border-radius: 50%;
+    }
+
+    .cloud-lock-badge {
+      position: absolute;
+      bottom: -6px;
+      width: 32px;
+      height: 32px;
+      background: #0E3A7E;
+      border: 2px solid white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .cloud-text-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #0E3A7E;
+    }
+
+    /* Step 3 Card Options */
+    .card-selection-row {
+      border: 1px solid #CBD5E1;
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #FFFFFF;
+    }
+
+    .card-icon-navy {
+      width: 32px;
+      height: 22px;
+      background: #0E3A7E;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .card-row-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1E293B;
+    }
+
+    .card-row-subtitle {
+      font-size: 8px;
+      color: #64748B;
+    }
+
+    /* Step 4 Petrolimex API Box */
+    .step4-petro-box {
+      width: 170px;
+      text-align: center;
+    }
+
+    .petro-card-container {
+      border: 1px solid #CBD5E1;
+      border-radius: 10px;
+      padding: 12px 10px;
+      background: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin-bottom: 8px;
+    }
+
+    .petro-feature-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #0E3A7E;
+      margin-top: 8px;
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    /* Step 5 Epay Token Box */
+    .step5-epay-box {
+      width: 160px;
+      text-align: center;
+    }
+
+    .epay-logo-flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .epay-logo-text {
+      font-size: 22px;
+      font-weight: 900;
+      color: #0284C7;
+      letter-spacing: -0.5px;
+    }
+
+    .epay-shield-circle {
+      width: 38px;
+      height: 38px;
+      background: #0E3A7E;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      margin: 0 auto 4px;
+    }
+
+    .token-blue-badge {
+      background: #1E50A2;
+      color: white;
+      border-radius: 6px;
+      padding: 6px 14px;
+      display: inline-block;
+      box-shadow: 0 2px 6px rgba(30, 80, 162, 0.3);
+    }
+
+    .token-blue-badge .tb-title {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .token-blue-badge .tb-val {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+
+    /* Step 6 Screen 3 Items */
+    .linked-visa-box {
+      border: 1px solid #E2E8F0;
+      border-radius: 6px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .toggle-green-switch {
+      width: 28px;
+      height: 15px;
+      background: #10B981;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .toggle-green-switch::after {
+      content: '';
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      width: 11px;
+      height: 11px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    /* Step 7 Bottom Row */
+    .step7-bottom-section {
+      margin-top: 10px;
+      border-top: 1px dashed #CBD5E1;
+      padding-top: 18px;
+      position: relative;
+    }
+
+    .step7-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .step7-heading {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0E3A7E;
+    }
+
+    .step7-content-flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+    }
+
+    .step7-dashed-container {
+      border: 1.5px dashed #0284C7;
+      background: #F0F9FF;
+      border-radius: 10px;
+      padding: 10px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .step7-biometric-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0E3A7E;
+    }
+
+    .step7-lock-container {
+      border: 1px solid #CBD5E1;
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #0E3A7E;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    /* Footer Banner */
+    .footer-capsule-banner {
+      margin-top: 24px;
+      background: #E8F1F9;
+      border: 1px solid #BBE0F9;
+      border-radius: 30px;
+      padding: 11px 24px;
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #0E3A7E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* Overlay SVG Dashed Connector Arrows */
+    .connectors-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="diagram-board">
+    
+    <!-- SVG Connectors Overlay -->
+    <svg class="connectors-layer">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#0284C7"/>
+        </marker>
+      </defs>
+
+      <!-- Dashed Line 1: Step 2 Cloud -> Step 7 Biometric Box -->
+      <path d="M 275 295 L 275 420 C 275 442, 365 442, 365 448" fill="none" stroke="#0284C7" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrow)"/>
+
+      <!-- Dashed Line 2: Step 5 Epay -> Token Box -->
+      <path d="M 960 220 L 960 240" fill="none" stroke="#0284C7" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+
+      <!-- Dashed Line 3: Step 6 Phone -> Step 7 Lock Box -->
+      <path d="M 1195 375 L 1195 420 C 1195 442, 940 442, 940 448" fill="none" stroke="#0284C7" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrow)"/>
+    </svg>
+
+    <!-- Main Title -->
+    <div class="header-main-title">
+      <h1>LUỒNG ĐĂNG KÝ FACEPAY TRÊN ỨNG DỤNG PETROLIMEX 2.0</h1>
+    </div>
+
+    <!-- Step Headers 1 -> 6 -->
+    <div class="step-headers-grid">
+      
+      <div class="step-header-cell">
+        <div class="step-num-badge">1</div>
+        <div class="step-head-text">KH đăng ký tài khoản trên Petrolimex 2.0 (xác thực sinh trắc học)</div>
+      </div>
+
+      <div class="step-header-cell">
+        <div class="step-num-badge">2</div>
+        <div class="step-head-text">Hệ thống lưu trữ sinh trắc học</div>
+      </div>
+
+      <div class="step-header-cell">
+        <div class="step-num-badge">3</div>
+        <div class="step-head-text">KH thực hiện liên kết token thanh toán với thẻ nội địa/ thẻ quốc tế</div>
+      </div>
+
+      <div class="step-header-cell">
+        <div class="step-num-badge">4</div>
+        <div class="step-head-text">Hệ thống Petrolimex gửi yêu cầu liên kết token đến CTT Epay</div>
+      </div>
+
+      <div class="step-header-cell">
+        <div class="step-num-badge">5</div>
+        <div class="step-head-text">CTT Epay trả về token liên kết tương ứng</div>
+      </div>
+
+      <div class="step-header-cell">
+        <div class="step-num-badge">6</div>
+        <div class="step-head-text">KH cài đặt nguồn tiền thanh toán sinh trắc học</div>
+      </div>
+
+    </div>
+
+    <!-- Main Flow Components Row -->
+    <div class="flow-components-row">
+
+      <!-- Step 1: Phone Frame 1 -->
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="phone-mockup">
+          <div class="phone-notch-pill"></div>
+          <div class="phone-viewport">
+            <div>
+              <div style="text-align: center; margin-bottom: 8px;">
+                <div class="brand-p-logo">P</div>
+                <div class="brand-p-title">PETROLIMEX 2.0</div>
+                <div class="brand-p-subtitle">Đăng ký tài khoản</div>
+              </div>
+              <div class="input-field-box">Số điện thoại</div>
+              <div class="input-field-box">Mật khẩu</div>
+              <button class="button-orange-pill">Đăng ký</button>
+            </div>
+
+            <div class="faceid-scan-view">
+              <div class="face-scanner-square">
+                <div class="face-bracket fb-tl"></div>
+                <div class="face-bracket fb-tr"></div>
+                <div class="face-bracket fb-bl"></div>
+                <div class="face-bracket fb-br"></div>
+                <!-- Inline SVG Face Illustration matching original portrait -->
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                  <circle cx="30" cy="30" r="28" fill="#E2E8F0"/>
+                  <!-- Hair -->
+                  <path d="M18 22 C18 12, 42 12, 42 22 C42 18, 38 14, 30 14 C22 14, 18 18, 18 22 Z" fill="#1E293B"/>
+                  <!-- Face -->
+                  <circle cx="30" cy="28" r="14" fill="#FCA5A5"/>
+                  <!-- Eyes -->
+                  <circle cx="25" cy="26" r="1.5" fill="#1E293B"/>
+                  <circle cx="35" cy="26" r="1.5" fill="#1E293B"/>
+                  <!-- Smile -->
+                  <path d="M26 32 Q30 35 34 32" stroke="#1E293B" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                  <!-- Shirt/Body -->
+                  <path d="M14 50 C14 38, 46 38, 46 50 Z" fill="#0284C7"/>
+                </svg>
+              </div>
+              <div class="face-success-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="#10B981"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <span>Xác thực sinh trắc học (thành công)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="caption-below-item">
+          KH đăng ký tài khoản và thực hiện xác thực sinh trắc học (Face ID)
+        </div>
+      </div>
+
+      <!-- Arrow 1 -> 2 -->
+      <div class="arrow-next">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="#0E3A7E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- Step 2: Cloud Box -->
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="step2-cloud-box">
+          <div class="cloud-oval-bg">
+            <div class="server-rack-graphic">
+              <div class="rack-slot"><div class="rack-led"></div><div class="rack-led"></div></div>
+              <div class="rack-slot"><div class="rack-led"></div><div class="rack-led"></div></div>
+            </div>
+            <div class="cloud-lock-badge">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            </div>
+          </div>
+          <div class="cloud-text-label">Hệ thống lưu trữ sinh trắc học (được mã hóa)</div>
+        </div>
+        <div class="caption-below-item" style="margin-top: 14px;">
+          Hệ thống Petrolimex 2.0 lưu trữ dữ liệu sinh trắc học của KH an toàn, bảo mật
+        </div>
+      </div>
+
+      <!-- Arrow 2 -> 3 -->
+      <div class="arrow-next">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="#0E3A7E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- Step 3: Phone Frame 2 -->
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="phone-mockup">
+          <div class="phone-notch-pill"></div>
+          <div class="phone-viewport">
+            <div>
+              <div class="brand-p-subtitle" style="text-align: center; margin-bottom: 14px; font-size: 11.5px;">Liên kết thẻ</div>
+              
+              <div class="card-selection-row">
+                <div class="card-icon-navy">
+                  <svg width="18" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                </div>
+                <div>
+                  <div class="card-row-title">Thẻ nội địa</div>
+                  <div class="card-row-subtitle" style="color: #0284C7; font-weight: 700;">NAPAS</div>
+                </div>
+              </div>
+
+              <div class="card-selection-row">
+                <div class="card-icon-navy">
+                  <svg width="18" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                <div>
+                  <div class="card-row-title">Thẻ quốc tế</div>
+                  <div class="card-row-subtitle">VISA / Mastercard / JCB...</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty space inside phone frame, then bottom button -->
+            <button class="button-orange-pill">Tiếp tục</button>
+          </div>
+        </div>
+        <div class="caption-below-item">
+          KH chọn và nhập thông tin thẻ nội địa hoặc thẻ quốc tế để liên kết token thanh toán
+        </div>
+      </div>
+
+      <!-- Arrow 3 -> 4 -->
+      <div class="arrow-next">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="#0E3A7E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- Step 4: Petrolimex Gateway -->
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="step4-petro-box">
+          <div class="petro-card-container">
+            <div class="server-rack-graphic" style="margin: 0 auto 6px; width: 55px; height: 32px;">
+              <div class="rack-slot"><div class="rack-led"></div></div>
+              <div class="rack-slot"><div class="rack-led"></div></div>
+            </div>
+            <div class="brand-p-title" style="display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <span class="brand-p-logo" style="width: 15px; height: 15px; font-size: 10px; margin: 0;">P</span>
+              PETROLIMEX 2.0
+            </div>
+          </div>
+
+          <div class="petro-feature-row">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#0284C7"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            <span>Gửi yêu cầu liên kết token đến CTT Epay (qua API bảo mật)</span>
+          </div>
+
+          <div class="petro-feature-row">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#0E3A7E"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+            <span>Xác thực & truyền dữ liệu an toàn</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 4 -> 5 -->
+      <div class="arrow-next">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="#0E3A7E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- Step 5: Epay Gateway -->
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="step5-epay-box">
+          
+          <div class="epay-logo-flex">
+            <!-- Tri-circle logo matching exact Epay brand icon -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#0284C7">
+              <circle cx="12" cy="6" r="3.5"/>
+              <circle cx="6" cy="16" r="3.5"/>
+              <circle cx="18" cy="16" r="3.5"/>
+            </svg>
+            <span class="epay-logo-text">epay</span>
+          </div>
+
+          <div class="epay-shield-circle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+          </div>
+
+          <div style="font-size: 8.5px; font-weight: 700; color: #0E3A7E; margin-bottom: 8px;">Xử lý liên kết và tạo token</div>
+
+          <div class="token-blue-badge">
+            <div class="tb-title">TOKEN</div>
+            <div class="tb-val">********</div>
+          </div>
+        </div>
+        <div class="caption-below-item" style="margin-top: 12px;">
+          CTT Epay xác thực thông tin, xử lý và trả về token liên kết tương ứng
+        </div>
+      </div>
+
+      <!-- Arrow 5 -> 6 -->
+      <div class="arrow-next">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="#0E3A7E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- Step 6: Phone Frame 3 -->
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="phone-mockup">
+          <div class="phone-notch-pill"></div>
+          <div class="phone-viewport">
+            <div>
+              <div class="brand-p-subtitle" style="text-align: center; margin-bottom: 10px; font-size: 10px;">Nguồn tiền thanh toán (FacePay)</div>
+              
+              <div class="linked-visa-box">
+                <span style="font-weight: 900; font-size: 11px; color: #0E3A7E;">VISA</span>
+                <span style="font-size: 9px; font-weight: 700; color: #64748B;">•••• 1234</span>
+              </div>
+
+              <div style="font-size: 8.5px; font-weight: 700; color: #1E293B; margin-bottom: 6px;">Thanh toán bằng tính trắc học</div>
+              
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#0284C7">
+                  <circle cx="12" cy="12" r="10" fill="#E0F2FE"/>
+                  <circle cx="9" cy="10" r="1.2" fill="#0284C7"/>
+                  <circle cx="15" cy="10" r="1.2" fill="#0284C7"/>
+                  <path d="M8 15 Q12 18 16 15" stroke="#0284C7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                </svg>
+                <div class="toggle-green-switch"></div>
+              </div>
+            </div>
+
+            <!-- Empty space inside phone frame, then bottom button -->
+            <button class="button-orange-pill">Hoàn tất</button>
+          </div>
+        </div>
+        <div class="caption-below-item">
+          KH chọn thẻ đã liên kết làm nguồn tiền mặc định và bật thanh toán sinh trắc học (FacePay)
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Step 7 Bottom Data Binding Section -->
+    <div class="step7-bottom-section">
+      
+      <div class="step7-title-row">
+        <div class="step-num-badge" style="margin-bottom: 0;">7</div>
+        <div class="step7-heading">Hệ thống Petrolimex 2.0 lưu trữ thông tin sinh trắc học với token tương ứng</div>
+      </div>
+
+      <div class="step7-content-flex">
+        
+        <!-- Dashed Border Box -->
+        <div class="step7-dashed-container">
+          <div class="step7-biometric-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#0284C7">
+              <circle cx="12" cy="12" r="10" fill="#E0F2FE"/>
+              <circle cx="9" cy="10" r="1.2" fill="#0284C7"/>
+              <circle cx="15" cy="10" r="1.2" fill="#0284C7"/>
+              <path d="M8 15 Q12 18 16 15" stroke="#0284C7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span>Dữ liệu sinh trắc học (đã mã hóa)</span>
+          </div>
+
+          <span style="font-size: 16px; font-weight: 900; color: #0E3A7E;">+</span>
+
+          <div class="token-blue-badge">
+            <div class="tb-title">TOKEN</div>
+            <div class="tb-val">********</div>
+          </div>
+
+          <span style="font-size: 9.5px; font-weight: 700; color: #64748B;">Token thanh toán tương ứng</span>
+        </div>
+
+        <!-- Lock Shield Box -->
+        <div class="step7-lock-container">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#0E3A7E"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          <span>Lưu trữ an toàn, bảo mật theo chuẩn bảo mật của Petrolimex</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Security Compliance Footer Banner -->
+    <div class="footer-capsule-banner">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#0E3A7E"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+      <span>Bảo mật – An toàn – Tuân thủ quy định của Ngân hàng Nhà nước và các tiêu chuẩn bảo mật quốc tế</span>
+    </div>
+
+  </div>
+
+</body>
+</html>
