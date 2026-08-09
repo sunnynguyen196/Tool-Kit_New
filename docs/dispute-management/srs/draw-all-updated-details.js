@@ -1,6 +1,6 @@
 import http from 'node:http';
 
-const token = "692e143ccec55fc20e635f9f3050a2b4af3a8ba9a5dcd650";
+const token = "bda4982e0ad92e5c69d71b519af0b543e8edd97d3072380a";
 
 function sendRpc(op, params = {}) {
   const payload = JSON.stringify({ op, params });

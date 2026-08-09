@@ -1,6 +1,6 @@
 import http from 'node:http';
 
-const token = "692e143ccec55fc20e635f9f3050a2b4af3a8ba9a5dcd650";
+const token = "bda4982e0ad92e5c69d71b519af0b543e8edd97d3072380a";
 
 function sendRpc(op, params = {}) {
   const payload = JSON.stringify({ op, params });
@@ -65,12 +65,11 @@ async function createText(parentId, name, textContent, x, y, options = {}) {
   return res;
 }
 
-// Hàm vẽ 1 dòng thông tin trong Column Sub-Frame (Nhãn trái, giá trị căn phải x = 352)
-async function createColRowItem(colFrameId, labelText, valueText, y, options = {}) {
-  await createText(colFrameId, `${labelText} Label`, labelText, 0, y, { fontSize: 11, fill: "#64748B" });
+async function createSplitGridRow(colFrameId, labelText, valueText, leftX, rightX, y, options = {}) {
+  await createText(colFrameId, `${labelText} Label`, labelText, leftX, y, { fontSize: 11, fill: "#64748B" });
   const fontSize = options.fontSize || 11;
   const approxWidth = Math.ceil(valueText.length * (fontSize * 0.62));
-  const valX = Math.max(90, 352 - approxWidth);
+  const valX = Math.max(leftX + 110, rightX - approxWidth);
 
   await createText(colFrameId, `${labelText} Value`, valueText, valX, y, {
     fontSize: fontSize,
@@ -78,8 +77,30 @@ async function createColRowItem(colFrameId, labelText, valueText, y, options = {
   });
 }
 
+async function createRightAlignedBadge(colFrameId, labelText, badgeText, leftX, rightX, y, bgHex, textHex, badgeWidth = 90) {
+  await createText(colFrameId, `${labelText} Label`, labelText, leftX, y, { fontSize: 11, fill: "#64748B" });
+  const badgeX = rightX - badgeWidth;
+  
+  await sendRpc("create", {
+    type: "RECTANGLE",
+    parentId: colFrameId,
+    name: `${labelText} Badge Box`,
+    x: badgeX,
+    y: y - 2,
+    width: badgeWidth,
+    height: 20,
+    fills: hexColor(bgHex),
+    cornerRadius: 4
+  });
+
+  await createText(colFrameId, `${labelText} Badge Text`, badgeText, badgeX + 8, y + 1, {
+    fontSize: 10.5,
+    fill: textHex
+  });
+}
+
 async function drawDetailTS007() {
-  console.log("🚀 Bắt đầu vẽ lại Màn hình Chi tiết TS-007: Xử lý thất bại (Chuẩn 100% Ảnh 1 & Ảnh 2)...");
+  console.log("🚀 Bắt đầu vẽ lại Màn hình Chi tiết TS-007 (TCYCTS - XỬ LÝ THẤT BẠI + AUDIT TRAIL)...");
 
   try {
     const searchRes = await sendRpc("search_nodes", { name: "Chi tiết YCTS TS-007 (Xử lý thất bại)" });
@@ -93,14 +114,14 @@ async function drawDetailTS007() {
     console.log("⚠️ Lỗi dọn dẹp:", err.message);
   }
 
-  // 1. Main Canvas tại x = 16500 (1440 x 1180)
+  // Main Canvas tại x = 7500 (1440 x 1620)
   const mainCanvas = await sendRpc("create", {
     type: "FRAME",
     name: "Chi tiết YCTS TS-007 (Xử lý thất bại)",
-    x: 16500,
+    x: 7500,
     y: 0,
     width: 1440,
-    height: 1180,
+    height: 1620,
     fills: hexColor('#F8FAFC'),
     cornerRadius: 0
   });
@@ -111,9 +132,9 @@ async function drawDetailTS007() {
   }
   const mainId = mainCanvas.result.id;
 
-  // 2. Sidebar (220 x 1180)
+  // Sidebar (220 x 1620)
   const sidebar = await sendRpc("create", {
-    type: "FRAME", parentId: mainId, name: "Sidebar", x: 0, y: 0, width: 220, height: 1180, fills: hexColor('#3B82F6')
+    type: "FRAME", parentId: mainId, name: "Sidebar", x: 0, y: 0, width: 220, height: 1620, fills: hexColor('#3B82F6')
   });
   const sidebarId = sidebar.result.id;
 
@@ -146,7 +167,7 @@ async function drawDetailTS007() {
   await createText(subId, "Sub 1 Text", "☕  Tra soát đã gửi", 20, 14, { fontSize: 12, fill: "#3B82F6" });
   await createText(subId, "Sub 2 Text", "📥  Tra soát đã nhận", 20, 48, { fontSize: 12, fill: "#FFFFFF" });
 
-  // 3. Topbar
+  // Topbar
   const topbar = await sendRpc("create", {
     type: "FRAME", parentId: mainId, name: "Topbar", x: 220, y: 0, width: 1220, height: 64, fills: hexColor('#FFFFFF'), strokes: hexColor('#E2E8F0')
   });
@@ -158,15 +179,15 @@ async function drawDetailTS007() {
   await createText(topbarId, "Gear Icon", "⚙", 896, 23, { fontSize: 14, fill: "#64748B" });
   await sendRpc("create", { type: "RECTANGLE", parentId: topbarId, name: "Vertical Red Line", x: 930, y: 16, width: 1.5, height: 32, fills: hexColor('#EF4444') });
   await sendRpc("create", { type: "ELLIPSE", parentId: topbarId, name: "Avatar Circle", x: 950, y: 16, width: 32, height: 32, fills: hexColor('#EF4444') });
-  await createText(topbarId, "Avatar Initial", "L", 961, 23, { fontSize: 13, fill: "#FFFFFF" });
-  await createText(topbarId, "User Account Name", "Lisa (epay Portal)  ▼", 994, 24, { fontSize: 12.5, fill: "#0F172A" });
+  await createText(topbarId, "Avatar Initial", "N", 961, 23, { fontSize: 13, fill: "#FFFFFF" });
+  await createText(topbarId, "User Account Name", "nhannt (epay Portal)  ▼", 994, 24, { fontSize: 12.5, fill: "#0F172A" });
 
-  // 4. Breadcrumb
+  // Breadcrumb
   await createText(mainId, "Breadcrumb Text", "Quản lý tra soát > Tra soát đã gửi > Chi tiết yêu cầu tra soát : TS-007", 246, 84, { fontSize: 11.5, fill: "#94A3B8" });
   await createText(mainId, "Page Title Text", "Chi tiết yêu cầu tra soát TS-007", 246, 108, { fontSize: 22, fill: "#0F172A" });
 
 
-  // 5. KHỐI 1: BỘ TIẾN TRÌNH XỬ LÝ TRA SOÁT (BƯỚC 5: XỬ LÝ THẤT BẠI 🔴 ACTIVE RED)
+  // KHỐI 1: BỘ TIẾN TRÌNH XỬ LÝ TRA SOÁT (STEP 5 ACTIVE - XỬ LÝ THẤT BẠI)
   const stepCard = await sendRpc("create", {
     type: "FRAME", parentId: mainId, name: "Khối 1 - Tiến trình xử lý", x: 246, y: 150, width: 1174, height: 95, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
@@ -175,11 +196,11 @@ async function drawDetailTS007() {
   await sendRpc("create", { type: "RECTANGLE", parentId: stepId, name: "Banner BG", x: 16, y: 12, width: 1142, height: 28, fills: hexColor('#FEF2F2'), cornerRadius: 4 });
   await sendRpc("create", { type: "RECTANGLE", parentId: stepId, name: "Banner Accent Bar", x: 16, y: 12, width: 4, height: 28, fills: hexColor('#DC2626') });
 
-  await createText(stepId, "Banner Left Text", "📊 BỘ TIẾN TRÌNH XỬ LÝ TRA SOÁT — TRẠNG THÁI: Xử lý thất bại (Lỗi kết nối đối tác)", 28, 18, { fontSize: 11.5, fill: "#DC2626" });
+  await createText(stepId, "Banner Left Text", "📊 BỘ TIẾN TRÌNH XỬ LÝ TRA SOÁT — TRẠNG THÁI: Xử lý thất bại (Lỗi kết nối timeout đối tác)", 28, 18, { fontSize: 11.5, fill: "#DC2626" });
   await createText(stepId, "Banner Right Code", "(TS-007)", 1100, 18, { fontSize: 11, fill: "#DC2626" });
 
   await sendRpc("create", { type: "RECTANGLE", parentId: stepId, name: "Step Line BG", x: 80, y: 56, width: 1014, height: 3, fills: hexColor('#CBD5E1') });
-  await sendRpc("create", { type: "RECTANGLE", parentId: stepId, name: "Step Line Done", x: 80, y: 56, width: 676, height: 3, fills: hexColor('#16A34A') });
+  await sendRpc("create", { type: "RECTANGLE", parentId: stepId, name: "Step Line Done", x: 80, y: 56, width: 676, height: 3, fills: hexColor('#2563EB') });
 
   const stepsList = [
     { num: "1", text: "Chờ xử lý", done: true },
@@ -187,8 +208,8 @@ async function drawDetailTS007() {
     { num: "3", text: "Chờ phê duyệt", done: true },
     { num: "4", text: "Đã duyệt", done: true },
     { num: "5", text: "Xử lý thất bại", failed: true },
-    { num: "6", text: "Đã phản hồi", active: false },
-    { num: "7", text: "Hoàn tất", active: false }
+    { num: "6", text: "Đã phản hồi" },
+    { num: "7", text: "Hoàn tất" }
   ];
 
   for (let i = 0; i < stepsList.length; i++) {
@@ -201,7 +222,7 @@ async function drawDetailTS007() {
     let textColor = '#94A3B8';
 
     if (s.done) {
-      circleBg = '#16A34A'; circleBorder = '#16A34A'; numColor = '#FFFFFF'; textColor = '#16A34A';
+      circleBg = '#2563EB'; circleBorder = '#2563EB'; numColor = '#FFFFFF'; textColor = '#2563EB';
     } else if (s.failed) {
       circleBg = '#DC2626'; circleBorder = '#DC2626'; numColor = '#FFFFFF'; textColor = '#DC2626';
     }
@@ -212,7 +233,7 @@ async function drawDetailTS007() {
   }
 
 
-  // 6. KHỐI 2: THÔNG TIN GIAO DỊCH GỐC (3 Column Component Sub-Frames)
+  // KHỐI 2: THÔNG TIN GIAO DỊCH GỐC
   const origTxCard = await sendRpc("create", {
     type: "FRAME", parentId: mainId, name: "Khối 2 - Thông tin giao dịch gốc", x: 246, y: 260, width: 1174, height: 160, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
@@ -221,103 +242,96 @@ async function drawDetailTS007() {
   await sendRpc("create", { type: "RECTANGLE", parentId: origId, name: "Header BG", x: 1, y: 1, width: 1172, height: 34, fills: hexColor('#F1F5F9') });
   await createText(origId, "Header Title", "THÔNG TIN GIAO DỊCH GỐC", 16, 10, { fontSize: 11.5, fill: "#1E293B" });
 
-  // Component Sub-Frame Col 0 (352 Fill x 94 Hug)
-  const c0Frame = await sendRpc("create", { type: "FRAME", parentId: origId, name: "Component Col 0", x: 20, y: 44, width: 352, height: 104, fills: [], strokes: [] });
-  await createColRowItem(c0Frame.result.id, "Mã giao dịch:", "TX-10007", 0, { valColor: "#2563eb" });
-  await createColRowItem(c0Frame.result.id, "Trạng thái giao dịch:", "● Thành công", 26, { valColor: "#16a34a" });
-  await createColRowItem(c0Frame.result.id, "Merchant code:", "PAYME_MERCHANT", 52);
-  await createColRowItem(c0Frame.result.id, "PTTT:", "VietQR", 78);
+  await createSplitGridRow(origId, "Mã giao dịch:", "TX-10007", 20, 370, 46, { valColor: "#2563EB" });
+  await createSplitGridRow(origId, "Trạng thái giao dịch:", "Thành công", 20, 370, 72, { valColor: "#16A34A" });
+  await createSplitGridRow(origId, "Merchant code:", "PAYME_MERCHANT", 20, 370, 98);
+  await createSplitGridRow(origId, "PTTT:", "VietQR", 20, 370, 124);
 
-  // Component Sub-Frame Col 1 (352 Fill x 94 Hug)
-  const c1Frame = await sendRpc("create", { type: "FRAME", parentId: origId, name: "Component Col 1", x: 411, y: 44, width: 352, height: 104, fills: [], strokes: [] });
-  await createColRowItem(c1Frame.result.id, "Ngày giao dịch:", "23/07/2026 15:30:00", 0);
-  await createColRowItem(c1Frame.result.id, "Số tiền giao dịch:", "1,800,000 VND", 26);
-  await createColRowItem(c1Frame.result.id, "Đối tác thanh toán:", "Napas", 52);
-  await createColRowItem(c1Frame.result.id, "Tên dịch vụ:", "Thanh toán VietQR", 78);
+  await createSplitGridRow(origId, "Ngày giao dịch:", "21/07/2026 11:00:00", 400, 750, 46);
+  await createSplitGridRow(origId, "Số tiền giao dịch:", "1,200,000 VND", 400, 750, 72, { valColor: "#0F172A" });
+  await createSplitGridRow(origId, "Đối tác thanh toán:", "Napas", 400, 750, 98);
+  await createSplitGridRow(origId, "Tên dịch vụ:", "Thanh toán VietQR", 400, 750, 124);
 
-  // Component Sub-Frame Col 2 (352 Fill x 94 Hug)
-  const c2Frame = await sendRpc("create", { type: "FRAME", parentId: origId, name: "Component Col 2", x: 802, y: 44, width: 352, height: 104, fills: [], strokes: [] });
-  await createColRowItem(c2Frame.result.id, "Loại giao dịch:", "Thanh toán", 0);
-  await createColRowItem(c2Frame.result.id, "Loại QR:", "Dynamic QR", 26);
-  await createColRowItem(c2Frame.result.id, "Mã đơn hàng (Order ID):", "ORD-10007", 52);
-  await createColRowItem(c2Frame.result.id, "Mã GD Epay:", "EPAYPW00339312", 78);
+  await createSplitGridRow(origId, "Loại giao dịch:", "Thanh toán", 780, 1150, 46);
+  await createSplitGridRow(origId, "Loại QR:", "Dynamic QR", 780, 1150, 72);
+  await createSplitGridRow(origId, "Mã đơn hàng (Order ID):", "ORD-10007", 780, 1150, 98);
+  await createSplitGridRow(origId, "Mã GD Epay:", "EPAYPW00339307", 780, 1150, 124);
 
 
-  // 7. KHỐI 3: THÔNG TIN TRA SOÁT (KHỚP 100% ẢNH 1 USER)
+  // KHỐI 3: THÔNG TIN TRA SOÁT
   const disputeCard = await sendRpc("create", {
-    type: "FRAME", parentId: mainId, name: "Khối 3 - Thông tin tra soát", x: 246, y: 435, width: 1174, height: 210, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
+    type: "FRAME", parentId: mainId, name: "Khối 3 - Thông tin tra soát", x: 246, y: 435, width: 1174, height: 220, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
   const dspId = disputeCard.result.id;
 
-  await sendRpc("create", { type: "RECTANGLE", parentId: dspId, name: "Header BG", x: 1, y: 1, width: 1172, height: 36, fills: hexColor('#F8FAFC') });
-  await createText(dspId, "Header Title", "THÔNG TIN TRA SOÁT", 16, 10, { fontSize: 12, fill: "#1E293B" });
+  await sendRpc("create", { type: "RECTANGLE", parentId: dspId, name: "Header BG", x: 1, y: 1, width: 1172, height: 36, fills: hexColor('#F1F5F9') });
+  await createText(dspId, "Header Title", "Thông tin tra soát", 16, 10, { fontSize: 12.5, fill: "#1E293B" });
   await createText(dspId, "Header Arrow", "▲", 1145, 10, { fontSize: 12, fill: "#475569" });
 
-  // Component Sub-Frame Col 0 (Khớp 100% khung viền xanh như Ảnh 1)
-  const d0Frame = await sendRpc("create", { type: "FRAME", parentId: dspId, name: "Component Col 0 (352 Fill x 94 Hug)", x: 20, y: 48, width: 352, height: 94, fills: [], strokes: [] });
-  await createColRowItem(d0Frame.result.id, "Mã tra soát:", "TS-007", 0, { valColor: "#0F172A" });
-  await createColRowItem(d0Frame.result.id, "Trạng thái tra soát:", "● Xử lý thất bại", 30, { valColor: "#DC2626" });
-  await createColRowItem(d0Frame.result.id, "Loại tra soát:", "RQSP — Sai sót nghiệp vụ", 60);
+  await createSplitGridRow(dspId, "Mã tra soát:", "TS-007", 20, 370, 48, { valColor: "#2563EB" });
+  await createRightAlignedBadge(dspId, "Trạng thái YCTS:", "Xử lý thất bại", 20, 370, 74, '#FEE2E2', '#DC2626', 105);
+  await createSplitGridRow(dspId, "Lý do tra soát:", "BANK — Lỗi kết nối timeout", 20, 370, 100);
+  await createSplitGridRow(dspId, "Thời gian tạo YCTS:", "21/07/2026 11:15:00", 20, 370, 126);
 
-  // Component Sub-Frame Col 1
-  const d1Frame = await sendRpc("create", { type: "FRAME", parentId: dspId, name: "Component Col 1 (352 Fill x 94 Hug)", x: 411, y: 48, width: 352, height: 94, fills: [], strokes: [] });
-  await createColRowItem(d1Frame.result.id, "Vai trò tra soát:", "TCYCTS", 0);
-  await createColRowItem(d1Frame.result.id, "Lý do tra soát:", "BANK — Lỗi kết nối timeout", 30);
-  await createColRowItem(d1Frame.result.id, "Số tiền tra soát:", "1,800,000 VND", 60, { valColor: "#0F172A" });
+  await createSplitGridRow(dspId, "Vai trò tra soát:", "TCYCTS", 400, 750, 48);
+  await createRightAlignedBadge(dspId, "Trạng thái hết hạn:", "Chưa hết hạn", 400, 750, 74, '#DCFCE7', '#166534', 98);
+  await createSplitGridRow(dspId, "Số tiền tra soát:", "1,200,000 VND", 400, 750, 100, { valColor: "#2563EB" });
+  await createSplitGridRow(dspId, "Thời gian xử lý YCTS:", "21/07/2026 12:00:00", 400, 750, 126);
 
-  // Component Sub-Frame Col 2
-  const d2Frame = await sendRpc("create", { type: "FRAME", parentId: dspId, name: "Component Col 2 (352 Fill x 94 Hug)", x: 802, y: 48, width: 352, height: 94, fills: [], strokes: [] });
-  await createColRowItem(d2Frame.result.id, "Trạng thái TS đối tác:", "—", 0);
-  await createColRowItem(d2Frame.result.id, "TCPL tra soát gốc:", "Napas / Epay", 30);
-  await createColRowItem(d2Frame.result.id, "Tệp đính kèm:", "minh_chung.pdf 📎", 60, { valColor: "#2563eb" });
+  await createSplitGridRow(dspId, "Loại tra soát:", "RQSP — Sai sót nghiệp vụ", 780, 1150, 48);
+  await createRightAlignedBadge(dspId, "Trạng thái xử lý tại Epay:", "Thất bại", 780, 1150, 74, '#FEE2E2', '#DC2626', 65);
+  await createRightAlignedBadge(dspId, "Trạng thái xử lý tại đối tác:", "—", 780, 1150, 100, '#F1F5F9', '#94A3B8', 40);
+  await createSplitGridRow(dspId, "File minh chứng đính kèm:", "minh_chung.pdf 📎", 780, 1150, 126, { valColor: "#2563EB" });
 
-  // Đường nét đứt & Nội dung đề nghị
-  await sendRpc("create", { type: "RECTANGLE", parentId: dspId, name: "Dashed Line Separator", x: 20, y: 155, width: 1134, height: 1, fills: hexColor('#E2E8F0') });
-  await createText(dspId, "Proposal Title", "Nội dung đề nghị tra soát:", 20, 170, { fontSize: 11, fill: "#64748B" });
-  await createText(dspId, "Proposal Content", "Giao dịch bị lỗi phía Napas, đề nghị đối tác xử lý hoàn trả.", 180, 170, { fontSize: 11, fill: "#0F172A" });
+  await sendRpc("create", { type: "RECTANGLE", parentId: dspId, name: "Line Separator", x: 20, y: 162, width: 1134, height: 1, fills: hexColor('#E2E8F0') });
+  await createText(dspId, "Proposal Title", "Nội dung đề nghị tra soát:", 20, 175, { fontSize: 11, fill: "#64748B" });
+  await createText(dspId, "Proposal Content", "Giao dịch bị lỗi truyền nhận dữ liệu với Napas.", 180, 175, { fontSize: 11, fill: "#0F172A" });
 
 
-  // 8. KHỐI 4: THÔNG TIN PHÊ DUYỆT (3 Component Sub-Frames)
+  // KHỐI 4: THÔNG TIN XÁC NHẬN PHÊ DUYỆT (RBAC)
   const approvalCard = await sendRpc("create", {
-    type: "FRAME", parentId: mainId, name: "Khối 4 - Thông tin phê duyệt", x: 246, y: 660, width: 1174, height: 130, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
+    type: "FRAME", parentId: mainId, name: "Khối 4 - Thông tin xác nhận phê duyệt (RBAC)", x: 246, y: 670, width: 1174, height: 130, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
   const apprId = approvalCard.result.id;
 
-  await sendRpc("create", { type: "RECTANGLE", parentId: apprId, name: "Header BG", x: 1, y: 1, width: 1172, height: 36, fills: hexColor('#F8FAFC') });
-  await createText(apprId, "Header Title", "THÔNG TIN PHÊ DUYỆT", 16, 10, { fontSize: 12, fill: "#1E293B" });
+  await sendRpc("create", { type: "RECTANGLE", parentId: apprId, name: "Header BG", x: 1, y: 1, width: 1172, height: 36, fills: hexColor('#F1F5F9') });
+  await createText(apprId, "Header Title", "THÔNG TIN XÁC NHẬN PHÊ DUYỆT (RBAC)", 16, 10, { fontSize: 12.5, fill: "#1E293B" });
 
-  const a0Frame = await sendRpc("create", { type: "FRAME", parentId: apprId, name: "Component Col 0", x: 20, y: 48, width: 352, height: 60, fills: [], strokes: [] });
-  await createColRowItem(a0Frame.result.id, "Người YCPD:", "nhannt", 0);
-  await createColRowItem(a0Frame.result.id, "Thời gian tạo YCPD:", "23/07/2026 15:30:00", 26);
+  await createSplitGridRow(apprId, "Người YCPD:", "nhannt", 20, 370, 48);
+  await createSplitGridRow(apprId, "Thời gian tạo YCPD:", "21/07/2026 11:15:00", 20, 370, 74);
 
-  const a1Frame = await sendRpc("create", { type: "FRAME", parentId: apprId, name: "Component Col 1", x: 411, y: 48, width: 352, height: 60, fills: [], strokes: [] });
-  await createColRowItem(a1Frame.result.id, "Người phê duyệt:", "tuandt", 0);
-  await createColRowItem(a1Frame.result.id, "Thời gian phê duyệt:", "23/07/2026 16:00:00", 26);
+  await createSplitGridRow(apprId, "Người phê duyệt:", "tuandt", 400, 750, 48);
+  await createSplitGridRow(apprId, "Thời gian phê duyệt:", "21/07/2026 11:45:00", 400, 750, 74);
 
-  const a2Frame = await sendRpc("create", { type: "FRAME", parentId: apprId, name: "Component Col 2", x: 802, y: 48, width: 352, height: 60, fills: [], strokes: [] });
-  await createColRowItem(a2Frame.result.id, "Trạng thái YCPD:", "● Đã duyệt", 0, { valColor: "#16A34A" });
+  await createSplitGridRow(apprId, "Trạng thái YCPD:", "Đã duyệt", 780, 1150, 48, { valColor: "#16A34A" });
 
 
-  // 9. KHỐI 5: KHỐI LỊCH SỬ THAY ĐỔI (AUDIT LOG BLOCK CHUẨN KHỚP 100% ẢNH 2)
+  // 🌟 KHỐI 5: LỊCH SỬ THAY ĐỔI / NHẬT KÝ TIẾN TRÌNH THỜI GIAN (AUDIT TRAIL TIMELINE)
   const auditCard = await sendRpc("create", {
-    type: "FRAME", parentId: mainId, name: "Khối 5 - Lịch sử thay đổi (Audit Log)", x: 246, y: 805, width: 1174, height: 135, fills: hexColor('#F8FAFC'), strokes: hexColor('#E2E8F0'), cornerRadius: 6
+    type: "FRAME", parentId: mainId, name: "Khối 5 - Lịch sử thay đổi Audit Trail Timeline", x: 246, y: 815, width: 1174, height: 165, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
   const auditId = auditCard.result.id;
 
-  await createText(auditId, "Header Title", "Lịch sử thay đổi (Audit Log):", 16, 14, { fontSize: 12.5, fill: "#1E293B" });
+  await sendRpc("create", { type: "RECTANGLE", parentId: auditId, name: "Header BG", x: 1, y: 1, width: 1172, height: 34, fills: hexColor('#F8FAFC') });
+  await createText(auditId, "Header Title", "⏱️ LỊCH SỬ THAY ĐỔI / NHẬT KÝ TIẾN TRÌNH THỜI GIAN (AUDIT TRAIL TIMELINE)", 16, 10, { fontSize: 11.5, fill: "#1E293B" });
 
-  const auditLogs = [
-    "• 2026-07-23 15:30: Yêu cầu được khởi tạo. Trạng thái: Chờ xử lý",
-    "• 2026-07-23 15:45: inspector01 đã kiểm tra log. Trạng thái cập nhật thành: Đã kiểm tra",
-    "• 2026-07-23 16:00: tuandt đã phê duyệt yêu cầu. Trạng thái cập nhật thành: Đã duyệt",
-    "• 2026-07-23 16:05: Lỗi kết nối với đối tác Napas. Trạng thái cập nhật thành: Xử lý thất bại"
+  const logs = [
+    { time: "21/07/2026 11:15:00", actor: "nhannt (Maker)", action: "Khởi tạo YCTS chủ động TS-007 (RQSP - 1,200,000 VND). Trạng thái: Chờ xử lý" },
+    { time: "21/07/2026 11:30:00", actor: "nhannt (Maker)", action: "Gửi đề xuất yêu cầu tra soát sang Lãnh đạo. Trạng thái cập nhật: Chờ phê duyệt" },
+    { time: "21/07/2026 11:45:00", actor: "tuandt (Checker)", action: "Phê duyệt đề xuất YCTS TS-007. Trạng thái cập nhật thành: Đã duyệt" },
+    { time: "21/07/2026 12:00:00", actor: "System Core Epay", action: "Lỗi kết nối cổng Napas (Connection Timeout 504). Trạng thái cập nhật thành: Xử lý thất bại" }
   ];
 
-  for (let i = 0; i < auditLogs.length; i++) {
-    await createText(auditId, `Audit Log ${i+1}`, auditLogs[i], 16, 42 + i * 22, { fontSize: 11, fill: "#475569" });
+  for (let i = 0; i < logs.length; i++) {
+    const l = logs[i];
+    const ly = 46 + i * 24;
+    await sendRpc("create", { type: "ELLIPSE", parentId: auditId, name: `Dot ${i}`, x: 20, y: ly + 4, width: 6, height: 6, fills: hexColor('#DC2626') });
+    await createText(auditId, `Log Time ${i}`, l.time, 34, ly, { fontSize: 11, fill: "#64748B" });
+    await createText(auditId, `Log Actor ${i}`, `[${l.actor}]`, 175, ly, { fontSize: 11, fill: "#2563EB" });
+    await createText(auditId, `Log Action ${i}`, l.action, 310, ly, { fontSize: 11, fill: "#0F172A" });
   }
 
-  console.log("🎉 ĐÃ VẼ LẠI NỘI DUNG TS-007 CHUẨN 100% KHỚP ẢNH 1 VÀ ẢNH 2 USER!");
+  console.log("🎉 ĐÃ VẼ LẠI MÀN HÌNH CHI TIẾT TS-007 (TCYCTS - XỬ LÝ THẤT BẠI + AUDIT TRAIL)!");
 }
 
 drawDetailTS007().catch(console.error);

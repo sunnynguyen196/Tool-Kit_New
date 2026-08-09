@@ -1,6 +1,6 @@
 import http from 'node:http';
 
-const token = "692e143ccec55fc20e635f9f3050a2b4af3a8ba9a5dcd650";
+const token = "bda4982e0ad92e5c69d71b519af0b543e8edd97d3072380a";
 
 function sendRpc(op, params = {}) {
   const payload = JSON.stringify({ op, params });
@@ -79,7 +79,7 @@ async function createColRowItem(colFrameId, labelText, valueText, y, options = {
 }
 
 async function drawDetailTS014() {
-  console.log("🚀 Bắt đầu vẽ Màn hình Chi tiết TS-014 (Luồng TLTS / Tra soát đã nhận — Chờ xử lý)...");
+  console.log("🚀 Bắt đầu vẽ lại Màn hình Chi tiết TS-014 (Luồng TLTS / Tra soát đã nhận — Chờ xử lý)...");
 
   try {
     const searchRes = await sendRpc("search_nodes", { name: "Chi tiết YCTS đã nhận TS-014 (TLTS - Chờ xử lý)" });
@@ -93,14 +93,14 @@ async function drawDetailTS014() {
     console.log("⚠️ Lỗi dọn dẹp:", err.message);
   }
 
-  // 1. Main Canvas tại x = 19500 (1440 x 1380)
+  // 1. Main Canvas tại x = 19500 (1440 x 1450)
   const mainCanvas = await sendRpc("create", {
     type: "FRAME",
     name: "Chi tiết YCTS đã nhận TS-014 (TLTS - Chờ xử lý)",
     x: 19500,
     y: 0,
     width: 1440,
-    height: 1380,
+    height: 1450,
     fills: hexColor('#F8FAFC'),
     cornerRadius: 0
   });
@@ -111,9 +111,9 @@ async function drawDetailTS014() {
   }
   const mainId = mainCanvas.result.id;
 
-  // 2. Sidebar (220 x 1380)
+  // 2. Sidebar (220 x 1450)
   const sidebar = await sendRpc("create", {
-    type: "FRAME", parentId: mainId, name: "Sidebar", x: 0, y: 0, width: 220, height: 1380, fills: hexColor('#3B82F6')
+    type: "FRAME", parentId: mainId, name: "Sidebar", x: 0, y: 0, width: 220, height: 1450, fills: hexColor('#3B82F6')
   });
   const sidebarId = sidebar.result.id;
 
@@ -166,7 +166,7 @@ async function drawDetailTS014() {
   await createText(mainId, "Page Title Text", "Chi tiết yêu cầu tra soát đã nhận TS-014", 246, 108, { fontSize: 22, fill: "#0F172A" });
 
 
-  // 5. KHỐI 1: BỘ TIẾN TRÌNH XỬ LÝ TRA SOÁT ĐÃ NHẬN (6 BƯỚC TLTS - CHỜ XỬ LÝ ACTIVE)
+  // 5. KHỐI 1: BỘ TIẾN TRÌNH XỬ LÝ TRA SOÁT ĐÃ NHẬN (6 BƯỚC TLTS - BƯỚC 1 CHỜ XỬ LÝ ACTIVE)
   const stepCard = await sendRpc("create", {
     type: "FRAME", parentId: mainId, name: "Khối 1 - Tiến trình xử lý TLTS", x: 246, y: 150, width: 1174, height: 95, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
@@ -208,7 +208,7 @@ async function drawDetailTS014() {
   }
 
 
-  // 6. KHỐI 2: THÔNG TIN GIAO DỊCH GỐC (3 Column Component Sub-Frames)
+  // 6. KHỐI 2: THÔNG TIN GIAO DỊCH GỐC
   const origTxCard = await sendRpc("create", {
     type: "FRAME", parentId: mainId, name: "Khối 2 - Thông tin giao dịch gốc", x: 246, y: 260, width: 1174, height: 160, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
@@ -236,7 +236,7 @@ async function drawDetailTS014() {
   await createColRowItem(c2.result.id, "Mã GD Epay:", "EPAYPW00339312", 78);
 
 
-  // 7. KHỐI 3: THÔNG TIN TRA SOÁT (Full 11 Trường tin + Proposal Line)
+  // 7. KHỐI 3: THÔNG TIN TRA SOÁT
   const dspCard = await sendRpc("create", {
     type: "FRAME", parentId: mainId, name: "Khối 3 - Thông tin tra soát", x: 246, y: 435, width: 1174, height: 235, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
@@ -269,8 +269,9 @@ async function drawDetailTS014() {
 
 
   // 8. KHỐI 4: XỬ LÝ KẾT QUẢ TRA SOÁT ĐÃ NHẬN (RQRN HOÀN TIỀN - ACTION FORM CARD)
+  // 💥 CẬP NHẬT THEO YÊU CẦU: BỎ 'Mã GD hoàn trả' và 'Mã GD hoàn trả đối tác'
   const actionCard = await sendRpc("create", {
-    type: "FRAME", parentId: mainId, name: "Khối 4 - Form Xử lý kết quả TLTS", x: 246, y: 685, width: 1174, height: 310, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
+    type: "FRAME", parentId: mainId, name: "Khối 4 - Form Xử lý kết quả TLTS", x: 246, y: 685, width: 1174, height: 300, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
   const actId = actionCard.result.id;
 
@@ -287,53 +288,57 @@ async function drawDetailTS014() {
   await sendRpc("create", { type: "RECTANGLE", parentId: actId, name: "Input Box", x: 600, y: 66, width: 550, height: 34, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 4 });
   await createText(actId, "Input Text", "Xác nhận giao dịch đủ điều kiện hoàn trả tiền cho khách hàng.", 612, 75, { fontSize: 11.5, fill: "#0F172A" });
 
-  // Sub-box Form: Nhập thông tin giao dịch hoàn trả (Highlight Green Box #F0FDF4)
+  // Sub-box Form: Nhập thông tin giao dịch hoàn trả (Bỏ Mã GD hoàn trả & Mã GD đối tác)
   const refundFormBox = await sendRpc("create", {
-    type: "FRAME", parentId: actId, name: "Khối Nhập thông tin Hoàn trả", x: 20, y: 115, width: 1130, height: 130, fills: hexColor('#F0FDF4'), strokes: hexColor('#BBF7D0'), cornerRadius: 6
+    type: "FRAME", parentId: actId, name: "Khối Nhập thông tin Hoàn trả", x: 20, y: 115, width: 1130, height: 120, fills: hexColor('#F0FDF4'), strokes: hexColor('#BBF7D0'), cornerRadius: 6
   });
   const refBoxId = refundFormBox.result.id;
-  await createText(refBoxId, "Refund Sub Title", "📥 NHẬP THÔNG TIN GIAO DỊCH HOÀN TRẢ (MÃ RQRN)", 16, 12, { fontSize: 12, fill: "#166534" });
+  await createText(refBoxId, "Refund Sub Title", "📥 NHẬP THÔNG TIN GIAO DỊCH HOÀN TRẢ (CẤU TRÚC ĐÃ LƯỢC TỐI ƯU)", 16, 12, { fontSize: 12, fill: "#166534" });
 
-  // Row 1 inputs (3 columns)
-  await createText(refBoxId, "F1 Label", "Mã GD hoàn trả (*)", 16, 38, { fontSize: 10.5, fill: "#475569" });
-  await sendRpc("create", { type: "RECTANGLE", parentId: refBoxId, name: "F1 Input", x: 16, y: 54, width: 350, height: 28, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 4 });
-  await createText(refBoxId, "F1 Text", "REF-10014", 26, 60, { fontSize: 11, fill: "#2563EB" });
+  // 3 Cột nhập liệu gọn gàng: Số tiền hoàn trả | Loại hoàn trả | Lý do hoàn trả
+  await createText(refBoxId, "F1 Label", "Số tiền hoàn trả (*)", 16, 42, { fontSize: 10.5, fill: "#475569" });
+  await sendRpc("create", { type: "RECTANGLE", parentId: refBoxId, name: "F1 Input", x: 16, y: 58, width: 350, height: 30, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 4 });
+  await createText(refBoxId, "F1 Text", "1,800,000 VND", 26, 65, { fontSize: 11.5, fill: "#16A34A" });
 
-  await createText(refBoxId, "F2 Label", "Mã GD hoàn trả đối tác (*)", 390, 38, { fontSize: 10.5, fill: "#475569" });
-  await sendRpc("create", { type: "RECTANGLE", parentId: refBoxId, name: "F2 Input", x: 390, y: 54, width: 350, height: 28, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 4 });
-  await createText(refBoxId, "F2 Text", "PREF-10014", 400, 60, { fontSize: 11, fill: "#0F172A" });
+  await createText(refBoxId, "F2 Label", "Loại hoàn trả", 390, 42, { fontSize: 10.5, fill: "#475569" });
+  await sendRpc("create", { type: "RECTANGLE", parentId: refBoxId, name: "F2 Input Disabled", x: 390, y: 58, width: 350, height: 30, fills: hexColor('#F1F5F9'), strokes: hexColor('#E2E8F0'), cornerRadius: 4 });
+  await createText(refBoxId, "F2 Text", "Toàn phần", 400, 65, { fontSize: 11, fill: "#64748B" });
 
-  await createText(refBoxId, "F3 Label", "Số tiền hoàn trả (*)", 764, 38, { fontSize: 10.5, fill: "#475569" });
-  await sendRpc("create", { type: "RECTANGLE", parentId: refBoxId, name: "F3 Input", x: 764, y: 54, width: 350, height: 28, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 4 });
-  await createText(refBoxId, "F3 Text", "1,800,000 VND", 774, 60, { fontSize: 11, fill: "#16A34A" });
+  await createText(refBoxId, "F3 Label", "Lý do hoàn trả (*)", 764, 42, { fontSize: 10.5, fill: "#475569" });
+  await sendRpc("create", { type: "RECTANGLE", parentId: refBoxId, name: "F3 Input", x: 764, y: 58, width: 350, height: 30, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 4 });
+  await createText(refBoxId, "F3 Text", "Hoàn tiền tra soát TS-014", 774, 65, { fontSize: 11, fill: "#0F172A" });
 
-  // Row 2 inputs (2 columns)
-  await createText(refBoxId, "F4 Label", "Loại hoàn trả", 16, 88, { fontSize: 10.5, fill: "#475569" });
-  await sendRpc("create", { type: "RECTANGLE", parentId: refBoxId, name: "F4 Input Disabled", x: 16, y: 104, width: 350, height: 20, fills: hexColor('#F1F5F9'), strokes: hexColor('#E2E8F0'), cornerRadius: 4 });
-  await createText(refBoxId, "F4 Text", "Toàn phần", 26, 107, { fontSize: 10.5, fill: "#64748B" });
+  // Action Buttons
+  await sendRpc("create", { type: "RECTANGLE", parentId: actId, name: "Cancel Button", x: 860, y: 250, width: 110, height: 34, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 4 });
+  await createText(actId, "Cancel Text", "Hủy bỏ", 898, 260, { fontSize: 11.5, fill: "#475569" });
 
-  await createText(refBoxId, "F5 Label", "Lý do hoàn trả", 390, 88, { fontSize: 10.5, fill: "#475569" });
-  await sendRpc("create", { type: "RECTANGLE", parentId: refBoxId, name: "F5 Input", x: 390, y: 104, width: 724, height: 20, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 4 });
-  await createText(refBoxId, "F5 Text", "Hoàn tiền theo yêu cầu tra soát TS-014", 400, 107, { fontSize: 10.5, fill: "#0F172A" });
-
-  // Buttons at bottom right of action card
-  await sendRpc("create", { type: "RECTANGLE", parentId: actId, name: "Cancel Button", x: 860, y: 260, width: 110, height: 34, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 4 });
-  await createText(actId, "Cancel Text", "Hủy bỏ", 898, 270, { fontSize: 11.5, fill: "#475569" });
-
-  await sendRpc("create", { type: "RECTANGLE", parentId: actId, name: "Submit Button", x: 980, y: 260, width: 170, height: 34, fills: hexColor('#2563EB'), cornerRadius: 4 });
-  await createText(actId, "Submit Text", "📤 Gửi trình phê duyệt", 1000, 270, { fontSize: 11.5, fill: "#FFFFFF" });
+  await sendRpc("create", { type: "RECTANGLE", parentId: actId, name: "Submit Button", x: 980, y: 250, width: 170, height: 34, fills: hexColor('#2563EB'), cornerRadius: 4 });
+  await createText(actId, "Submit Text", "📤 Gửi trình phê duyệt", 1000, 260, { fontSize: 11.5, fill: "#FFFFFF" });
 
 
-  // 9. KHỐI 5: KHỐI LỊCH SỬ THAY ĐỔI (AUDIT LOG BLOCK)
+  // 9. KHỐI 5: LỊCH SỬ THAY ĐỔI / NHẬT KÝ TIẾN TRÌNH THỜI GIAN (AUDIT TRAIL TIMELINE)
   const auditCard = await sendRpc("create", {
-    type: "FRAME", parentId: mainId, name: "Khối 5 - Lịch sử thay đổi (Audit Log)", x: 246, y: 1010, width: 1174, height: 85, fills: hexColor('#F8FAFC'), strokes: hexColor('#E2E8F0'), cornerRadius: 6
+    type: "FRAME", parentId: mainId, name: "Khối 5 - Lịch sử thay đổi Audit Trail Timeline", x: 246, y: 1005, width: 1174, height: 120, fills: hexColor('#FFFFFF'), strokes: hexColor('#CBD5E1'), cornerRadius: 6
   });
   const auditId = auditCard.result.id;
 
-  await createText(auditId, "Header Title", "Lịch sử thay đổi (Audit Log):", 16, 14, { fontSize: 12.5, fill: "#1E293B" });
-  await createText(auditId, "Audit Log 1", "• 2026-07-22 10:00: Yêu cầu tra soát đã nhận TS-014 (RQRN Hoàn tiền 1,800,000 VND) tiếp nhận từ Napas. Trạng thái: Chờ xử lý", 16, 42, { fontSize: 11, fill: "#475569" });
+  await sendRpc("create", { type: "RECTANGLE", parentId: auditId, name: "Header BG", x: 1, y: 1, width: 1172, height: 34, fills: hexColor('#F8FAFC') });
+  await createText(auditId, "Header Title", "⏱️ LỊCH SỬ THAY ĐỔI / NHẬT KÝ TIẾN TRÌNH THỜI GIAN (AUDIT TRAIL TIMELINE)", 16, 10, { fontSize: 11.5, fill: "#1E293B" });
 
-  console.log("🎉 ĐÃ VẼ HOÀN TẤT MÀN HÌNH CHI TIẾT TS-014 (TLTS - CHỜ XỬ LÝ) CHUẨN 100% FIGMA!");
+  const logs = [
+    { time: "22/07/2026 10:00:00", actor: "API Gateway Napas", action: "Tiếp nhận YCTS thụ động TS-014 (RQRN Hoàn tiền 1,800,000 VND). Trạng thái: Chờ xử lý" }
+  ];
+
+  for (let i = 0; i < logs.length; i++) {
+    const l = logs[i];
+    const ly = 46 + i * 24;
+    await sendRpc("create", { type: "ELLIPSE", parentId: auditId, name: `Dot ${i}`, x: 20, y: ly + 4, width: 6, height: 6, fills: hexColor('#2563EB') });
+    await createText(auditId, `Log Time ${i}`, l.time, 34, ly, { fontSize: 11, fill: "#64748B" });
+    await createText(auditId, `Log Actor ${i}`, `[${l.actor}]`, 175, ly, { fontSize: 11, fill: "#2563EB" });
+    await createText(auditId, `Log Action ${i}`, l.action, 340, ly, { fontSize: 11, fill: "#0F172A" });
+  }
+
+  console.log("🎉 ĐÃ VẼ LẠI TS-014 (TLTS - CHỜ XỬ LÝ) CHUẨN 100% FIGMA!");
 }
 
 drawDetailTS014().catch(console.error);

@@ -1,6 +1,6 @@
 import http from 'node:http';
 
-const token = "692e143ccec55fc20e635f9f3050a2b4af3a8ba9a5dcd650";
+const token = "bda4982e0ad92e5c69d71b519af0b543e8edd97d3072380a";
 
 function sendRpc(op, params = {}) {
   const payload = JSON.stringify({ op, params });
@@ -216,7 +216,7 @@ async function drawDetailTS001() {
   await createText(stepId, "Banner Right Code", "(TS-001)", 1100, 18, { fontSize: 11, fill: "#2563EB" });
 
   await sendRpc("create", { type: "RECTANGLE", parentId: stepId, name: "Step Line BG", x: 80, y: 56, width: 1014, height: 3, fills: hexColor('#CBD5E1') });
-  await sendRpc("create", { type: "RECTANGLE", parentId: stepId, name: "Step Line Done", x: 80, y: 56, width: 338, height: 3, fills: hexColor('#16A34A') });
+  await sendRpc("create", { type: "RECTANGLE", parentId: stepId, name: "Step Line Done", x: 80, y: 56, width: 338, height: 3, fills: hexColor('#2563EB') });
 
   const stepsList = [
     { num: "1", text: "Chờ xử lý", done: true },
@@ -237,9 +237,7 @@ async function drawDetailTS001() {
     let numColor = '#94A3B8';
     let textColor = '#94A3B8';
 
-    if (s.done) {
-      circleBg = '#16A34A'; circleBorder = '#16A34A'; numColor = '#FFFFFF'; textColor = '#16A34A';
-    } else if (s.active) {
+    if (s.done || s.active) {
       circleBg = '#2563EB'; circleBorder = '#2563EB'; numColor = '#FFFFFF'; textColor = '#2563EB';
     }
 
@@ -292,18 +290,19 @@ async function drawDetailTS001() {
   await createSplitGridRow(dspId, "Mã tra soát:", "TS-001", 20, 370, 48, { valColor: "#2563EB" });
   await createRightAlignedBadge(dspId, "Trạng thái YCTS:", "Chờ phê duyệt", 20, 370, 74, '#FEF9C3', '#854D0E', 110);
   await createSplitGridRow(dspId, "Lý do tra soát:", "BANK — Lỗi hệ thống ngân hàng", 20, 370, 100);
-  await createSplitGridRow(dspId, "File minh chứng đính kèm:", "minh_chung.pdf 📎", 20, 370, 126, { valColor: "#2563EB" });
+  await createSplitGridRow(dspId, "Thời gian tạo YCTS:", "27/07/2026 10:15:00", 20, 370, 126);
 
   // Cột 1: leftX = 400, rightX = 750
   await createSplitGridRow(dspId, "Vai trò tra soát:", "TCYCTS", 400, 750, 48);
   await createRightAlignedBadge(dspId, "Trạng thái hết hạn:", "Chưa hết hạn", 400, 750, 74, '#DCFCE7', '#166534', 98);
   await createSplitGridRow(dspId, "Số tiền tra soát:", "1,500,000 VND", 400, 750, 100, { valColor: "#2563EB" });
+  await createSplitGridRow(dspId, "Thời gian xử lý YCTS:", "—", 400, 750, 126);
 
   // Cột 2: leftX = 780, rightX = 1150
   await createSplitGridRow(dspId, "Loại tra soát:", "RQRN — Hoàn tiền", 780, 1150, 48);
   await createRightAlignedBadge(dspId, "Trạng thái xử lý tại Epay:", "—", 780, 1150, 74, '#F1F5F9', '#94A3B8', 40);
   await createRightAlignedBadge(dspId, "Trạng thái xử lý tại đối tác:", "—", 780, 1150, 100, '#F1F5F9', '#94A3B8', 40);
-  await createSplitGridRow(dspId, "TCPL tra soát gốc:", "Napas / Epay", 780, 1150, 126);
+  await createSplitGridRow(dspId, "File minh chứng đính kèm:", "minh_chung.pdf 📎", 780, 1150, 126, { valColor: "#2563EB" });
 
   // Dòng Nội dung đề nghị
   await sendRpc("create", { type: "RECTANGLE", parentId: dspId, name: "Line Separator", x: 20, y: 162, width: 1134, height: 1, fills: hexColor('#E2E8F0') });

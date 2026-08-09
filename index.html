@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI4BA Master Workflow Dashboard & Skill Toolkit</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: rgba(22, 31, 49, 0.7);
+      --bg-card-hover: rgba(30, 42, 66, 0.9);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(99, 102, 241, 0.3);
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --secondary: #10b981;
+      --accent: #f59e0b;
+      --pink: #ec4899;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --radius: 16px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 15, 25, 0.85);
+    }
+
+    .header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--pink));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: white;
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .logo-text h1 {
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ffffff, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #4f46e5);
+      border: none;
+      color: white;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    /* Hero Banner */
+    .hero {
+      padding: 48px 0 32px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 20px;
+      color: var(--primary-light);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero h2 {
+      font-size: 38px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto 32px;
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary-light);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Visual Pipeline Tabs */
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pipeline-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .pipeline-tab {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pipeline-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      transition: var(--transition);
+    }
+
+    .pipeline-tab.active {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glow);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .pipeline-tab.active::before {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .tab-step {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary-light);
+      margin-bottom: 8px;
+    }
+
+    .tab-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .tab-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Search Bar */
+    .search-container {
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 20px 14px 48px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .skill-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .skill-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .skill-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(99, 102, 241, 0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-light);
+      font-size: 16px;
+    }
+
+    .skill-name {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .skill-badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .skill-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .prompt-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      color: #a5b4fc;
+      margin-bottom: 16px;
+      position: relative;
+      word-break: break-all;
+    }
+
+    .copy-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: var(--primary-light);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .copy-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Rules Section */
+    .rules-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 48px;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .rule-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .rule-item h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rule-item p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--secondary);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .stats-grid, .pipeline-tabs, .rules-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      .stats-grid, .pipeline-tabs, .skills-grid, .rules-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <i class="fa-solid fa-brain"></i>
+        </div>
+        <div class="logo-text">
+          <h1>AI4BA Master Toolkit</h1>
+          <p>Workflow & Skill System cho Business Analyst</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="file:///C:/Users/Admin/BATOOLKIT/WORKFLOW-BA-MASTER.md" class="btn" target="_blank">
+          <i class="fa-solid fa-book"></i> Hướng Dẫn Master
+        </a>
+        <a href="https://ai4ba.com" class="btn btn-primary" target="_blank">
+          <i class="fa-solid fa-globe"></i> Trang Chủ AI4BA
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Hero Banner -->
+    <section class="hero">
+      <div class="hero-badge">
+        <i class="fa-solid fa-sparkles"></i> Hệ Thống Workflow Skill BA Chuẩn Hóa
+      </div>
+      <h2>Bộ Công Cụ AI Phân Tích Nghiệp Vụ Toàn Diện</h2>
+      <p>Tự động hóa 4 giai đoạn vòng đời BA: từ Ý tưởng sơ khai, Đặc tả BRD/SRS 12 mục, Vẽ sơ đồ BPMN/Sequence, Thiết kế Wireframe HTML tương tác cho tới đóng gói Hướng dẫn sử dụng Product Manual.</p>
+    </section>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">15</div>
+        <div class="stat-label">Skills Chuyên Sâu BA</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">12</div>
+        <div class="stat-label">Bộ Quy Tắc Chuẩn Hóa (Rules)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">4</div>
+        <div class="stat-label">Giai Đoạn Vòng Đời Dự Án</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1-Click</div>
+        <div class="stat-label">Sao Chép Prompt Thông Minh</div>
+      </div>
+    </div>
+
+    <!-- Pipeline Tabs -->
+    <div class="section-title">
+      <i class="fa-solid fa-diagram-project" style="color: var(--primary-light);"></i>
+      Vòng Đời Dự Án (4 Master Phases)
+    </div>
+
+    <div class="pipeline-tabs">
+      <div class="pipeline-tab active" onclick="filterPhase('all', this)">
+        <div class="tab-step">TẤT CẢ</div>
+        <div class="tab-title">Toàn Bộ 15 Skills</div>
+        <div class="tab-desc">Xem toàn bộ kho skill AI4BA</div>
+      </div>
+      <div class="pipeline-tab" onclick="filterPhase('phase1', this)">
+        <div class="tab-step">GIAI ĐOẠN 1</div>
+        <div class="tab-title">Brainstorm & SRS</div>
+        <div class="tab-desc">Khám phá ý tưởng, BRD, SRS 12 mục, User Story</div>
+      </div>
+      <div class="pipeline-tab" onclick="filterPhase('phase2', this)">
+        <div class="tab-step">GIAI ĐOẠN 2</div>
+        <div class="tab-title">Diagram & Modeling</div>
+        <div class="tab-desc">User Flow, BPMN 2.0, Sequence, ERD, State</div>
+      </div>
+      <div class="pipeline-tab" onclick="filterPhase('phase3', this)">
+        <div class="tab-step">GIAI ĐOẠN 3 & 4</div>
+        <div class="tab-title">Wireframe & User Guide</div>
+        <div class="tab-desc">Wireframe HTML Interactive & Interactive User Manual</div>
+      </div>
+    </div>
+
+    <!-- Search Input -->
+    <div class="search-container">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm skill (ví dụ: brainstorm, bpmn, wireframe, sequence, story, erd)..." onkeyup="searchSkills()">
+    </div>
+
+    <!-- Skills Grid -->
+    <div class="skills-grid" id="skillsGrid">
+
+      <!-- Brainstorm -->
+      <div class="skill-card" data-phase="phase1" data-tags="brainstorm brd srs idea story">
+        <div>
+          <div class="skill-header">
+            <div class="skill-title-group">
+              <div class="skill-icon"><i class="fa-solid fa-lightbulb"></i></div>
+              <div class="skill-name">/brainstorm</div>
+            </div>
+            <span class="skill-badge">Phase 1</span>
+          </div>
+          <p class="skill-desc">Biến ý tưởng thô thành Board đặc tả 12 mục tiêu chuẩn (Luồng chính, Decision Points, Interrupted Tx, Metrics & Wording) qua phỏng vấn nghiệp vụ sâu.</p>
+          <div class="prompt-box">/brainstorm Tính năng đăng ký OTP WhatsApp cho App Bán Hàng</div>
+        </div>
+        <button class="copy-btn" onclick="copyText('/brainstorm Tính năng đăng ký và đăng nhập OTP WhatsApp cho ứng dụng')">
+          <i class="fa-regular fa-copy"></i> Copy Prompt Sample
+        </button>
+      </div>
+
+      <!-- User Flow -->
+      <div class="skill-card" data-phase="phase2" data-tags="user-flow diagram mermaid flowchart">
+        <div>
+          <div class="skill-header">
+            <div class="skill-title-group">
+              <div class="skill-icon"><i class="fa-solid fa-route"></i></div>
+              <div class="skill-name">/user-flow</div>
+            </div>
+            <span class="skill-badge">Phase 2</span>
+          </div>
+          <p class="skill-desc">Vẽ sơ đồ luồng người dùng (User Flow) qua từng màn hình bằng Mermaid / PlantUML dựa trên tài liệu SRS/Brainstorm.</p>
+          <div class="prompt-box">/user-flow @docs/brainstorm/checkout.md</div>
+        </div>
+        <button class="copy-btn" onclick="copyText('/user-flow Tạo sơ đồ luồng người dùng cho tính năng Đặt hàng và Thanh toán')">
+          <i class="fa-regular fa-copy"></i> Copy Prompt Sample
+        </button>
+      </div>
+
+      <!-- BPMN -->
+      <div class="skill-card" data-phase="phase2" data-tags="bpmn process diagram workflow">
+        <div>
+          <div class="skill-header">
+            <div class="skill-title-group">
+              <div class="skill-icon"><i class="fa-solid fa-gears"></i></div>
+              <div class="skill-name">/bpmn</div>
+            </div>
+            <span class="skill-badge">Phase 2</span>
+          </div>
+          <p class="skill-desc">Tạo sơ đồ quy trình nghiệp vụ chuẩn quốc tế BPMN 2.0 kèm Auto Layout Engine và HTML Interactive Viewer.</p>
+          <div class="prompt-box">/bpmn Quy trình duyệt vay tín chấp doanh nghiệp</div>
+        </div>
+        <button class="copy-btn" onclick="copyText('/bpmn Tạo sơ đồ BPMN 2.0 cho Quy trình Xử lý Đơn hàng và Hoàn tiền')">
+          <i class="fa-regular fa-copy"></i> Copy Prompt Sample
+        </button>
+      </div>
+
+      <!-- Sequence Diagram -->
+      <div class="skill-card" data-phase="phase2" data-tags="sequence diagram interaction api">
+        <div>
+          <div class="skill-header">
+            <div class="skill-title-group">
+              <div class="skill-icon"><i class="fa-solid fa-list-check"></i></div>
+              <div class="skill-name">/sequence</div>
+            </div>
+            <span class="skill-badge">Phase 2</span>
+          </div>
+          <p class="skill-desc">Vẽ sơ đồ tuần tự tương tác theo thời gian giữa User, Web App, Backend API, Gateway và Payment Webhook.</p>
+          <div class="prompt-box">/sequence Luồng tích hợp cổng thanh toán VnPay</div>
+        </div>
+        <button class="copy-btn" onclick="copyText('/sequence Vẽ sơ đồ Sequence Diagram cho luồng Đăng nhập OAuth Google')">
+          <i class="fa-regular fa-copy"></i> Copy Prompt Sample
+        </button>
+      </div>
+
+      <!-- Activity Swimlane -->
+      <div class="skill-card" data-phase="phase2" data-tags="activity swimlane plantuml department">
+        <div>
+          <div class="skill-header">
+            <div class="skill-title-group">
+              <div class="skill-icon"><i class="fa-solid fa-water"></i></div>
+              <div class="skill-name">/activity-swimlane</div>
+            </div>
+            <span class="skill-badge">Phase 2</span>
+          </div>
+          <p class="skill-desc">Vẽ sơ đồ hoạt động phân luồng theo vị trí phòng ban (Swimlane Activity Diagram) bằng PlantUML.</p>
+          <div class="prompt-box">/activity-swimlane Luồng xử lý đơn hàng giữa Khách, Kho và Giao vận</div>
+        </div>
+        <button class="copy-btn" onclick="copyText('/activity-swimlane Phân luồng trách nhiệm giữa Khách hàng, CSKH và Đội Kỹ thuật')">
+          <i class="fa-regular fa-copy"></i> Copy Prompt Sample
+        </button>
+      </div>
+
+      <!-- ERD / DBML -->
+      <div class="skill-card" data-phase="phase2" data-tags="erd dbdiagram dbml data database">
+        <div>
+          <div class="skill-header">
+            <div class="skill-title-group">
+              <div class="skill-icon"><i class="fa-solid fa-database"></i></div>
+              <div class="skill-name">/erd & /dbdiagram</div>
+            </div>
+            <span class="skill-badge">Phase 2</span>
+          </div>
+          <p class="skill-desc">Thiết kế mô hình dữ liệu quan hệ (Entity Relationship Diagram) dạng Mermaid hoặc DBML chuẩn hóa cho Dev.</p>
+          <div class="prompt-box">/erd Mô hình dữ liệu Quản lý Đơn hàng & Kho hàng</div>
+        </div>
+        <button class="copy-btn" onclick="copyText('/erd Thiết kế sơ đồ ERD cho Hệ thống Quản lý Khách hàng VIP và Điểm thưởng')">
+          <i class="fa-regular fa-copy"></i> Copy Prompt Sample
+        </button>
+      </div>
+
+      <!-- Wireframe HTML -->
+      <div class="skill-card" data-phase="phase3" data-tags="wireframe html UI prototype mockups">
+        <div>
+          <div class="skill-header">
+            <div class="skill-title-group">
+              <div class="skill-icon"><i class="fa-solid fa-desktop"></i></div>
+              <div class="skill-name">/wireframe-html</div>
+            </div>
+            <span class="skill-badge">Phase 3</span>
+          </div>
+          <p class="skill-desc">Sinh Wireframe HTML tương tác sống động, chạy trực tiếp trên trình duyệt, có thanh menu điều hướng và Dev/QA Annotations.</p>
+          <div class="prompt-box">/wireframe-html @docs/brainstorm/auth-otp.md</div>
+        </div>
+        <button class="copy-btn" onclick="copyText('/wireframe-html Tạo Wireframe HTML tương tác cho màn hình Checkout & Payment')">
+          <i class="fa-regular fa-copy"></i> Copy Prompt Sample
+        </button>
+      </div>
+
+      <!-- User Guide -->
+      <div class="skill-card" data-phase="phase3" data-tags="userguide manual document export">
+        <div>
+          <div class="skill-header">
+            <div class="skill-title-group">
+              <div class="skill-icon"><i class="fa-solid fa-book-open"></i></div>
+              <div class="skill-name">/userguide</div>
+            </div>
+            <span class="skill-badge">Phase 4</span>
+          </div>
+          <p class="skill-desc">Tự động tổng hợp bộ Hướng dẫn Sử dụng Sản phẩm (User Manual) đầy đủ hình ảnh, trực quan cho end-user đóng gói HTML Bundle.</p>
+          <div class="prompt-box">/userguide @wireframes/checkout/index.html</div>
+        </div>
+        <button class="copy-btn" onclick="copyText('/userguide Xây dựng bộ tài liệu Hướng dẫn sử dụng cho Ứng dụng Bán hàng')">
+          <i class="fa-regular fa-copy"></i> Copy Prompt Sample
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Governance Rules Section -->
+    <div class="section-title">
+      <i class="fa-solid fa-shield-halved" style="color: var(--secondary);"></i>
+      Bộ Quy Tắc Chuẩn Hóa Nghiệp Vụ (BA Governance Rules)
+    </div>
+
+    <div class="rules-card">
+      <p style="color: var(--text-muted); font-size: 14px;">Mọi skill AI4BA đều được kiểm soát bởi 12 rule files định hình tư duy chuẩn mực của Senior Business Analyst:</p>
+      <div class="rules-grid">
+        <div class="rule-item">
+          <h4><i class="fa-solid fa-user-check"></i> Human-In-The-Loop (HITL)</h4>
+          <p>Yêu cầu xác nhận (Approval Gate) từ BA trước khi thực hiện ghi file hay thay đổi thiết kế quan trọng.</p>
+        </div>
+        <div class="rule-item">
+          <h4><i class="fa-solid fa-comments"></i> Business Language First</h4>
+          <p>Cấm tuyệt đối sử dụng thuật ngữ DB column (`tbl_order`), API endpoints (`/v1/checkout`) trong tài liệu nghiệp vụ.</p>
+        </div>
+        <div class="rule-item">
+          <h4><i class="fa-solid fa-circle-question"></i> Quản lý Open Questions (OQs)</h4>
+          <p>Mọi thắc mắc chưa làm rõ được đánh ID duy nhất và tự động chuyển giao qua các bước tiếp theo.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <i class="fa-solid fa-circle-check"></i> Đã sao chép prompt mẫu vào bộ nhớ tạm!
+  </div>
+
+  <script>
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2500);
+      });
+    }
+
+    function filterPhase(phase, element) {
+      document.querySelectorAll('.pipeline-tab').forEach(tab => tab.classList.remove('active'));
+      element.classList.add('active');
+
+      const cards = document.querySelectorAll('.skill-card');
+      cards.forEach(card => {
+        if (phase === 'all' || card.getAttribute('data-phase') === phase) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function searchSkills() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.skill-card');
+
+      cards.forEach(card => {
+        const tags = card.getAttribute('data-tags').toLowerCase();
+        const text = card.innerText.toLowerCase();
+        if (tags.includes(query) || text.includes(query)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
