@@ -1,35 +1,54 @@
 # ĐẶC TẢ GIAO DIỆN & MA TRẬN PHÂN QUYỀN (RBAC)
-## TÍNH NĂNG QUẢN LÝ TRA SOÁT (DISPUTE MANAGEMENT)
+## TÍNH NĂNG QUẢN LÝ TRA SOÁT (DISPUTE MANAGEMENT V2.1)
 
 ---
 
-## 1. MA TRẬN PHÂN QUYỀN RBAC (ROLE-BASED ACCESS CONTROL)
+## 1. MA TRẬN PHÂN QUYỀN THEO VAI TRÒ CHUẨN EPAY (RBAC MATRIX)
 
-| Chức năng / Màn hình | Maker (Chuyên viên Tra soát / Thu ngân) | Checker (Trưởng nhóm / Quản lý cửa hàng) | Operator / Viewer (Vận hành / Tra cứu) |
-|---|:---:|:---:|:---:|
-| **Tra cứu & Xem danh sách Tra soát (`BF29.1-UC01`)** | ✅ Xem tất cả YCTS thuộc đơn vị | ✅ Xem tất cả YCTS thuộc đơn vị | ✅ Xem danh sách/xuất Excel |
-| **Lập Yêu cầu Tra soát mới (`BF29.1-UC02`)** | ✅ Khởi tạo & Gửi phê duyệt | ❌ (Không tự tạo & duyệt) | ❌ Chỉ xem |
-| **Chỉnh sửa YCTS chủ động TCYCTS (`BF29.1-UC06`)** | ✅ Sửa khi `ApprovePending` | ❌ | ❌ Chỉ xem |
-| **Phê duyệt Nội bộ TCYCTS (`BF29.1-UC03`)** | ❌ Kiểm soát 4 mắt | ✅ Duyệt / Từ chối phát hành | ❌ |
-| **Trả lời Tra soát Thụ động TCTLTS (`BF29.1-UC04`)** | ✅ Tạo câu trả lời (Sinh YCPD) | ❌ | ❌ Chỉ xem |
-| **Cập nhật lại Trả lời TCTLTS (`BF29.1-UC04 / UC06`)** | ✅ Sửa khi YCPD `ApprovePending` | ❌ | ❌ Chỉ xem |
-| **Phê duyệt Phản hồi TCTLTS - YCPD (`BF29.1-UC03 / UC04`)** | ❌ | ✅ **[Đồng ý Phê duyệt]** / **[Từ chối Phê duyệt]** (Gọi Service QR sang Napas) | ❌ |
-| **Xem chi tiết & Lịch sử xử lý (`BF29.1-UC05`)** | ✅ Xem chi tiết & Tải file | ✅ Xem chi tiết & Tải file | ✅ Xem chi tiết & Tải file |
+| Vai trò / Thao tác | Tạo yêu cầu | Hủy yêu cầu | Xác nhận (Kỹ thuật / Kế toán) | Gửi phê duyệt | Phê duyệt (Lãnh đạo) | Từ chối (Lãnh đạo) | Hoàn tất | Xem chi tiết |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Đối soát** (Maker) | **X** | **x** | | **x** | | | **x** | **x** |
+| **Kỹ thuật** (IT Inspector) | | | **x** | | | | | **x** |
+| **Kế toán** (Accounting) | | | **x** | | | | | **x** |
+| **Lãnh đạo** (Checker / Manager) | | | | | **x** | **x** | | **x** |
 
 ---
 
-## 2. QUY TẮC HIỂN THỊ NÚT THAO TÁC THEO VAI TRÒ VÀ TRẠNG THÁI
+## 2. MA TRẬN CÁC USE CASE TRA SOÁT ĐÃ GỬI (TCYCTS — CHIỀU ĐI)
 
-### 2.1. Đối với Màn hình Phản hồi Tra soát thụ động (TCTLTS)
+- **`BF29.1-UC-SENT-01`**: Tra cứu và xem danh sách YCTS đã gửi
+- **`BF29.1-UC-SENT-02`**: Tạo mới yêu cầu tra soát chủ động (TCYCTS)
+- **`BF29.1-UC-SENT-03`**: Xem chi tiết YCTS đã gửi (Khối 1 Tiến trình, Khối 2 GD gốc, Khối 3 Thông tin tra soát 11 trường, Khối 4 RBAC, Khối 5 Báo nợ 6 trường, Khối 6 Audit Trail Timeline)
+- **`BF29.1-UC-SENT-04`**: Xác nhận kiểm tra YCTS (Chức năng chỉ dành cho yêu cầu có trạng thái = *"Chờ xử lý"* và trong luồng tiến trình CÓ kiểm tra, vai trò Kỹ thuật / Kế toán nhấp `[🔍 Xác nhận Đã kiểm tra]`)
+- **`BF29.1-UC-SENT-05`**: Gửi phê duyệt YCTS (Dành cho Chuyên viên Đối soát trình Lãnh đạo duyệt)
+- **`BF29.1-UC-SENT-06`**: Phê duyệt / Từ chối YCTS (Role Lãnh đạo / Checker duyệt & Kích hoạt Service QR phát hành sang Napas)
+- **`BF29.1-UC-SENT-07`**: Chờ xử lý đối tác (Theo dõi bản ghi ở mốc *Chờ phản hồi* khi Service QR Gateway status `OPEN`)
+- **`BF29.1-UC-SENT-08`**: Hoàn tất YCTS đã gửi (Đóng quy trình & hạch toán đối soát số liệu hoàn tiền)
 
-#### A. Khi YCPD ở trạng thái `ApprovePending` (Đang chờ Quản lý duyệt):
-- **Role Chuyên viên (Maker - Người tạo ban đầu):**
-  - Hiển thị Nút **`[Cập nhật lại trả lời]`**: Cho phép chỉnh sửa lại thông tin Đồng ý/Từ chối, Lý do từ chối chuẩn Napas, Nội dung giải trình & Tệp đính kèm.
-  - Ẩn nút Phê duyệt / Từ chối duyệt.
-- **Role Quản lý / Checker (Người phê duyệt):**
-  - Hiển thị Nút **`[Đồng ý Phê duyệt]`** *(Approved)*: Chấp thuận câu trả lời ➔ Hệ thống tự động kích hoạt **Service QR** gửi thông điệp tương ứng (Đồng ý Hoàn tiền / Từ chối) sang Napas.
-  - Hiển thị Nút **`[Từ chối Phê duyệt]`** *(Cancel)*: Từ chối câu trả lời của Chuyên viên ➔ Đóng bản ghi và ghi nhận Từ chối tra soát.
-  - Ẩn nút Cập nhật lại trả lời.
+---
 
-#### B. Khi YCPD ở trạng thái `Approved` hoặc `Cancel`:
-- Tất cả các nút thao tác chuyển về trạng thái ẩn/vô hiệu hóa, chỉ cho phép xem chi tiết Lịch sử xử lý và Nhật ký truyền sang Napas (Service QR Log).
+## 3. CẤU TRÚC MÀN HÌNH CHI TIẾT & KHỐI THÔNG TIN BÁO NỢ (DETAIL SCREEN & DEBIT BLOCK SPECIFICATION)
+
+### 3.1. Khối 3: Thông tin tra soát tiêu chuẩn (11 Trường dữ liệu)
+1. **Mã tra soát** (VD: `TS-003`, `TS-016`)
+2. **Trạng thái YCTS** (Badge Tiến trình, VD: `● Chờ phê duyệt`, `● Đã phản hồi`)
+3. **Mã loại tra soát** (`RQRN` / `RQNF` / `RQSP`)
+4. **Số tiền tra soát** (VD: `1,500,000 VND`)
+5. **Chiều tra soát** (`TCYCTS` / `TCTLTS`)
+6. **Trạng thái hết hạn** (Badge `Chưa hết hạn` / `Đã hết hạn`)
+7. **Thời gian tạo YCTS** (`DD/MM/YYYY HH:mm:ss`)
+8. **Thời gian xử lý YCTS** (`DD/MM/YYYY HH:mm:ss` hoặc `—`)
+9. **Trạng thái xử lý tại Epay** (`PRCD` / `RJCD` / `—`)
+10. **Trạng thái xử lý tại đối tác** (`PRCD` / `RJCD` / `—`)
+11. **Tệp minh chứng đính kèm & Ghi chú tra soát**
+
+### 3.2. Khối 5/6: Khối Thông tin Báo nợ (Debit Information Block - 6 Trường tiêu chuẩn)
+Hiển thị trên màn hình chi tiết đối với các giao dịch có phát sinh hạch toán báo nợ hoặc báo nợ thu hồi sai sót (như `TS-019`, `TS-027`):
+- **Tên khối Header:** `💳 KHỐI THÔNG TIN BÁO NỢ (DEBIT TRANSACTION DETAILS)`
+- **6 Trường dữ liệu:**
+  1. **`Mã GD báo nợ`**: Mã hạch toán báo nợ nội bộ (VD: `DR-10019`)
+  2. **`Mã GD báo nợ đối tác`**: Mã tham chiếu báo nợ từ phía Napas/Đối tác (VD: `NPS-DR-019`)
+  3. **`Thời gian tiếp nhận`**: Thời điểm hệ thống tiếp nhận điện báo nợ (`DD/MM/YYYY HH:mm:ss`)
+  4. **`Số tiền báo nợ`**: Số tiền hạch toán báo nợ (`#,##0 VND`)
+  5. **`Loại báo nợ`**: Phân loại hạch toán (VD: `Báo nợ thu hồi sai sót`)
+  6. **`Trạng thái báo nợ`**: Trạng thái hạch toán (Badge 🟢 **`● Thành công`** hoặc Badge 🔴 **`❌ Thất bại`**)
