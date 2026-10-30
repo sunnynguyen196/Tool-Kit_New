@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPAY Portal - Email Templates Interactive Preview & Spec</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #025BBD;
+      --primary-bright: #2563EB;
+      --primary-light: #EFF6FF;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1;
+      --slate-400: #94A3B8;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+      --success: #16A34A;
+      --warning: #D97706;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP HEADER BAR */
+    .top-header {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-pill {
+      background: var(--primary);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .top-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* CONTROLS & TABS */
+    .controls-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid #475569;
+      color: #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border-color: #64748b;
+    }
+    .nav-btn.active {
+      background: var(--primary-bright);
+      color: #fff;
+      border-color: var(--primary-bright);
+      font-weight: 600;
+    }
+
+    .device-switcher {
+      display: flex;
+      background: #0f172a;
+      border-radius: 6px;
+      padding: 2px;
+      border: 1px solid #334155;
+    }
+    .device-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .device-btn.active {
+      background: #334155;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* MAIN SPLIT WORKSPACE */
+    .workspace {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 65px);
+      overflow: hidden;
+    }
+
+    /* LEFT SIDEBAR: EMAIL INFO & DATA TESTER */
+    .side-panel {
+      width: 360px;
+      background: #1e293b;
+      border-right: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .panel-section {
+      padding: 16px;
+      border-bottom: 1px solid #334155;
+    }
+    .panel-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .meta-row {
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .meta-label {
+      color: #94a3b8;
+      margin-bottom: 2px;
+    }
+    .meta-val {
+      color: #f1f5f9;
+      font-weight: 600;
+      background: #0f172a;
+      padding: 5px 8px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+      word-break: break-all;
+    }
+
+    .var-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .var-item {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 5px;
+      padding: 8px;
+      font-size: 11.5px;
+    }
+    .var-key {
+      color: #60a5fa;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .var-val {
+      color: #cbd5e1;
+    }
+
+    /* RIGHT PREVIEW CANVAS */
+    .preview-canvas {
+      flex: 1;
+      background: #090d16;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 24px;
+      overflow-y: auto;
+      transition: all 0.2s ease;
+    }
+
+    .client-window {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .client-window.desktop {
+      width: 660px;
+      max-width: 100%;
+    }
+    .client-window.mobile {
+      width: 380px;
+      max-width: 100%;
+      border: 10px solid #1e293b;
+      border-radius: 36px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    }
+
+    .client-header-bar {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .client-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.red { background: #ef4444; }
+    .dot.yellow { background: #f59e0b; }
+    .dot.green { background: #10b981; }
+
+    .client-inbox-meta {
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 12px 18px;
+      font-size: 11.5px;
+      color: #475569;
+    }
+    .meta-line {
+      margin-bottom: 4px;
+      display: flex;
+      gap: 8px;
+    }
+    .meta-line:last-child { margin-bottom: 0; }
+    .meta-tag {
+      font-weight: 600;
+      color: #64748b;
+      width: 65px;
+      flex-shrink: 0;
+    }
+    .meta-text {
+      color: #0f172a;
+      font-weight: 500;
+    }
+
+    .iframe-wrapper {
+      width: 100%;
+      background: #f1f5f9;
+      display: flex;
+      justify-content: center;
+    }
+    iframe {
+      width: 100%;
+      border: none;
+      min-height: 820px;
+      background: transparent;
+    }
+
+    .btn-action-pill {
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: inherit;
+    }
+    .btn-action-pill:hover { background: #2563eb; }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10b981;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 1000;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <div class="top-header">
+    <div class="logo-badge-group">
+      <span class="brand-pill">EPAY Portal 2.0</span>
+      <div class="top-title">Email Templates - Payment Link Notification</div>
+    </div>
+
+    <!-- TABS -->
+    <div class="controls-group">
+      <button class="nav-btn active" onclick="switchTemplate('vi', this)">🇻🇳 Bản Tiếng Việt (Mặc định)</button>
+      <button class="nav-btn" onclick="switchTemplate('en', this)">🇬🇧 Bản Tiếng Anh (English)</button>
+      <button class="nav-btn" onclick="openSpecFile()">📄 File Đặc tả .md</button>
+      
+      <!-- DEVICE PREVIEW -->
+      <div class="device-switcher">
+        <button class="device-btn active" id="btn-desktop" onclick="setDevice('desktop')">
+          💻 Desktop (660px)
+        </button>
+        <button class="device-btn" id="btn-mobile" onclick="setDevice('mobile')">
+          📱 Mobile (380px)
+        </button>
+      </div>
+
+      <button class="btn-action-pill" onclick="copyCurrentHTML()">
+        📋 Sao chép Raw HTML
+      </button>
+    </div>
+  </div>
+
+  <!-- WORKSPACE -->
+  <div class="workspace">
+    
+    <!-- LEFT PANEL: METADATA & DATA DICTIONARY -->
+    <div class="side-panel">
+      <div class="panel-section">
+        <div class="panel-title">
+          <span>Thông tin Gửi Thư (Header)</span>
+          <span style="color: #10b981;">SMTP Valid</span>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Người gửi (From Name):</div>
+          <div class="meta-val" id="disp-from-name">Công ty TNHH Cà phê Sơn La via EPAY</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Địa chỉ gửi (From Address):</div>
+          <div class="meta-val">no-reply@pay.epay.vn</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Phản hồi về (Reply-To):</div>
+          <div class="meta-val">support@sonlacoffee.vn</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Tiêu đề (Subject):</div>
+          <div class="meta-val" id="disp-subject">[Thông báo thanh toán] Yêu cầu thanh toán đơn hàng #ORD-20261015-089 - Công ty TNHH Cà phê Sơn La</div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-title">
+          <span>Biến Động Demo (Placeholders)</span>
+          <span style="font-size: 10px; color: #60a5fa;">Handlebars</span>
+        </div>
+        <div class="var-list">
+          <div class="var-item">
+            <div class="var-key">{{order_code}}</div>
+            <div class="var-val">ORD-20261015-089</div>
+          </div>
+          <div class="var-item">
+            <div class="var-key">{{service_name}}</div>
+            <div class="var-val">Cà phê Arabica Cầu Đất Thượng Hạng (Thùng 12 gói)</div>
+          </div>
+          <div class="var-item">
+            <div class="var-key">{{amount}} {{currency}}</div>
+            <div class="var-val" style="color: #10b981; font-weight: 700;">5,000,000 VND</div>
+          </div>
+          <div class="var-item">
+            <div class="var-key">{{customer_name}}</div>
+            <div class="var-val">Nguyễn Văn An</div>
+          </div>
+          <div class="var-item">
+            <div class="var-key">{{customer_email}}</div>
+            <div class="var-val">an.nguyen@example.com</div>
+          </div>
+          <div class="var-item">
+            <div class="var-key">{{expire_time}}</div>
+            <div class="var-val" style="color: #f59e0b;">20/10/2026 23:59:00</div>
+          </div>
+          <div class="var-item">
+            <div class="var-key">{{payment_url}}</div>
+            <div class="var-val" style="color: #60a5fa;">https://pay.epay.vn/pl/8a7b9c2d1e</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-title">Quy chuẩn Hiển thị Email</div>
+        <div style="font-size: 11.5px; color: #94a3b8; line-height: 1.5;">
+          ✓ Tối ưu 100% cho <strong>Gmail (App & Web)</strong>, <strong>Outlook (2016-365)</strong> và <strong>Apple Mail</strong>.<br/>
+          ✓ Tự động xếp chồng cột (Mobile responsive stack) khi xem trên điện thoại.<br/>
+          ✓ Mã QR link thanh toán tải trực tiếp và có link dự phòng văn bản.<br/>
+          ✓ Bố cục 3 khối chuẩn theo mẫu EPAY: Cấp hàng, Khách hàng, Đơn hàng.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT CANVAS PREVIEW -->
+    <div class="preview-canvas">
+      
+      <div class="client-window desktop" id="client-window">
+        <!-- Client Titlebar -->
+        <div class="client-header-bar">
+          <div class="client-dots">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+          </div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #64748b;" id="inbox-title">
+            Hộp thư đến - [Thông báo thanh toán] Yêu cầu thanh toán đơn hàng #ORD-20261015-089
+          </div>
+          <div></div>
+        </div>
+
+        <!-- Inbox Metadata Header -->
+        <div class="client-inbox-meta">
+          <div class="meta-line">
+            <div class="meta-tag">Từ:</div>
+            <div class="meta-text" id="inbox-from">Công ty TNHH Cà phê Sơn La via Cổng thanh toán EPAY &lt;no-reply@pay.epay.vn&gt;</div>
+          </div>
+          <div class="meta-line">
+            <div class="meta-tag">Đến:</div>
+            <div class="meta-text" id="inbox-to">Nguyễn Văn An &lt;an.nguyen@example.com&gt;</div>
+          </div>
+          <div class="meta-line">
+            <div class="meta-tag">Tiêu đề:</div>
+            <div class="meta-text" id="inbox-subject" style="font-weight: 700; color: #025BBD;">[Thông báo thanh toán] Yêu cầu thanh toán đơn hàng #ORD-20261015-089 - Công ty TNHH Cà phê Sơn La</div>
+          </div>
+        </div>
+
+        <!-- Email Body in Iframe -->
+        <div class="iframe-wrapper">
+          <iframe id="email-frame" src="payment-request-email-vi.html" onload="adjustIframeHeight()"></iframe>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">✓ Đã sao chép toàn bộ mã HTML Email vào bộ nhớ tạm!</div>
+
+  <script>
+    let currentLang = 'vi';
+
+    function setDevice(device) {
+      const windowEl = document.getElementById('client-window');
+      const btnDesk = document.getElementById('btn-desktop');
+      const btnMob = document.getElementById('btn-mobile');
+
+      if (device === 'mobile') {
+        windowEl.classList.remove('desktop');
+        windowEl.classList.add('mobile');
+        btnMob.classList.add('active');
+        btnDesk.classList.remove('active');
+      } else {
+        windowEl.classList.remove('mobile');
+        windowEl.classList.add('desktop');
+        btnDesk.classList.add('active');
+        btnMob.classList.remove('active');
+      }
+      setTimeout(adjustIframeHeight, 200);
+    }
+
+    function switchTemplate(lang, btn) {
+      currentLang = lang;
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const frame = document.getElementById('email-frame');
+      const dispFrom = document.getElementById('disp-from-name');
+      const dispSub = document.getElementById('disp-subject');
+      const inFrom = document.getElementById('inbox-from');
+      const inSub = document.getElementById('inbox-subject');
+      const inTitle = document.getElementById('inbox-title');
+
+      if (lang === 'vi') {
+        frame.src = 'payment-request-email-vi.html';
+        dispFrom.innerText = 'Công ty TNHH Cà phê Sơn La via EPAY';
+        dispSub.innerText = '[Thông báo thanh toán] Yêu cầu thanh toán đơn hàng #ORD-20261015-089 - Công ty TNHH Cà phê Sơn La';
+        inFrom.innerText = 'Công ty TNHH Cà phê Sơn La via Cổng thanh toán EPAY <no-reply@pay.epay.vn>';
+        inSub.innerText = '[Thông báo thanh toán] Yêu cầu thanh toán đơn hàng #ORD-20261015-089 - Công ty TNHH Cà phê Sơn La';
+        inTitle.innerText = 'Hộp thư đến - [Thông báo thanh toán] Yêu cầu thanh toán đơn hàng #ORD-20261015-089';
+      } else {
+        frame.src = 'payment-request-email-en.html';
+        dispFrom.innerText = 'Son La Coffee Co., Ltd via EPAY Gateway';
+        dispSub.innerText = '[Payment Notice] Payment request for order #ORD-20261015-089 - Son La Coffee';
+        inFrom.innerText = 'Son La Coffee Co., Ltd via EPAY Payment Gateway <no-reply@pay.epay.vn>';
+        inSub.innerText = '[Payment Notice] Payment request for order #ORD-20261015-089 - Son La Coffee';
+        inTitle.innerText = 'Inbox - [Payment Notice] Payment request for order #ORD-20261015-089';
+      }
+    }
+
+    function adjustIframeHeight() {
+      const frame = document.getElementById('email-frame');
+      try {
+        if (frame.contentWindow && frame.contentWindow.document.body) {
+          frame.style.height = (frame.contentWindow.document.body.scrollHeight + 30) + 'px';
+        }
+      } catch (e) {
+        frame.style.height = '850px';
+      }
+    }
+
+    async function copyCurrentHTML() {
+      const file = currentLang === 'vi' ? 'payment-request-email-vi.html' : 'payment-request-email-en.html';
+      try {
+        const response = await fetch(file);
+        const text = await response.text();
+        await navigator.clipboard.writeText(text);
+        showToast();
+      } catch (err) {
+        // Fallback fetch fail
+        alert('Vui lòng mở file ' + file + ' trực tiếp trong thư mục docs/payment-link/email-templates/ để sao chép code.');
+      }
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 2500);
+    }
+
+    function openSpecFile() {
+      window.open('email-template-specification.md', '_blank');
+    }
+  </script>
+</body>
+</html>

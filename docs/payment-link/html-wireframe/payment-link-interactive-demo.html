@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPAY Portal - Payment Link Interactive Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3B82F6;
+      --primary-hover: #2563EB;
+      --primary-dark: #025BBD;
+      --primary-light: #EFF6FF;
+      --success: #16A34A;
+      --success-light: #F0FDF4;
+      --success-border: #BBF7D0;
+      --danger: #DC2626;
+      --danger-light: #FEF2F2;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+      --border: #E2E8F0;
+      --radius: 6px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--slate-50);
+      color: var(--slate-900);
+      font-size: 12.5px;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ── TOP DEMO CONTROLS ── */
+    .demo-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #fff;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--primary);
+      font-size: 11.5px;
+    }
+    .demo-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .demo-bar-badge {
+      background: var(--primary);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+    }
+    .demo-nav-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .demo-btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #e2e8f0;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .demo-btn:hover, .demo-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* ── PORTAL SHELL LAYOUT ── */
+    .portal-layout {
+      display: flex;
+      min-height: calc(100vh - 35px);
+    }
+
+    /* ── SIDEBAR (220px CHUẨN FIGMA) ── */
+    .sidebar {
+      width: 220px;
+      background: var(--primary);
+      color: #ffffff;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.06);
+    }
+    .sb-logo-area {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .sb-logo-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+    }
+    .sb-logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .sb-menu {
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 6px;
+      color: rgba(255,255,255,0.9);
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+    .sb-item:hover {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+    }
+    .sb-parent {
+      margin-bottom: 4px;
+    }
+    .sb-parent-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 12px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #ffffff;
+      cursor: pointer;
+    }
+    .sb-submenu-list {
+      padding: 4px 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sb-sub-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      border-radius: 16px;
+      font-size: 12px;
+      cursor: pointer;
+      color: rgba(255,255,255,0.9);
+      transition: all 0.15s;
+    }
+    .sb-sub-item:hover {
+      background: rgba(255,255,255,0.15);
+      color: #ffffff;
+    }
+    /* Thẻ bo tròn trắng nổi bật cho menu active */
+    .sb-sub-item.active {
+      background: #ffffff;
+      color: var(--primary);
+      font-weight: 700;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .sb-sub-item.active::before {
+      content: "•";
+      font-size: 14px;
+      color: var(--primary);
+    }
+    .sb-sub-item:not(.active)::before {
+      content: "•";
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* ── MAIN CONTENT AREA ── */
+    .main-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: calc(100vh - 35px);
+    }
+
+    /* ── TOPBAR (64px) ── */
+    .topbar {
+      height: 64px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .topbar-search {
+      position: relative;
+    }
+    .topbar-search input {
+      width: 280px;
+      height: 32px;
+      padding: 0 14px 0 32px;
+      border-radius: 16px;
+      border: 1px solid var(--slate-200);
+      background: var(--slate-50);
+      font-size: 12px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .topbar-search input:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+    .topbar-search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--slate-400);
+      font-size: 12px;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .topbar-link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--slate-700);
+      cursor: pointer;
+    }
+    .topbar-link.help {
+      color: var(--danger);
+      font-weight: 600;
+    }
+    .topbar-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .user-avatar-m {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--danger);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .user-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate-800);
+    }
+
+    /* ── PAGE HEADER & BREADCRUMB ── */
+    .page-header {
+      padding: 16px 24px 8px;
+    }
+    .breadcrumb {
+      font-size: 11px;
+      color: var(--slate-400);
+      margin-bottom: 6px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .breadcrumb a {
+      color: var(--slate-400);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .breadcrumb a:hover { color: var(--primary); }
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--slate-900);
+    }
+
+    /* ── CONTENT CONTAINER ── */
+    .page-content {
+      padding: 8px 24px 32px;
+    }
+
+    /* ── CARD STYLES CHUẨN ẢNH FIGMA ── */
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      padding: 20px 24px 28px;
+    }
+    .card-title-main {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--slate-800);
+      margin-bottom: 20px;
+    }
+
+    /* ── GRID FORM 2 CỘT CHUẨN ẢNH TRÊN ── */
+    .form-two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px 48px;
+    }
+    .col-section-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin-bottom: 14px;
+    }
+    .form-group-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    .field-lbl {
+      font-size: 12px;
+      color: var(--slate-700);
+      font-weight: 400;
+    }
+    .field-input {
+      width: 100%;
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--slate-300);
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--slate-800);
+      outline: none;
+      background: #ffffff;
+      transition: border-color 0.15s;
+    }
+    .field-input:focus {
+      border-color: var(--primary);
+    }
+    .field-select {
+      width: 100%;
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--slate-300);
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--slate-800);
+      outline: none;
+      background: #ffffff;
+      cursor: pointer;
+    }
+    .field-select:focus {
+      border-color: var(--primary);
+    }
+    .field-input.is-invalid {
+      border-color: var(--danger) !important;
+      background-color: var(--danger-light) !important;
+      color: var(--danger) !important;
+    }
+    .field-error-msg {
+      font-size: 11px;
+      color: var(--danger);
+      margin-top: 3px;
+      display: none;
+      line-height: 1.3;
+    }
+    .field-error-msg.show {
+      display: block;
+    }
+    .validation-alert-banner {
+      background: #FEF2F2;
+      border: 1px solid #FCA5A5;
+      border-radius: 4px;
+      padding: 9px 14px;
+      font-size: 12px;
+      color: #DC2626;
+      margin: 0 0 16px 0;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      animation: fadeIn 0.2s ease;
+    }
+    .validation-alert-banner.show {
+      display: flex;
+    }
+
+    /* ── LƯU Ý DƯỚI FORM ── */
+    .hint-center {
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--slate-600);
+      margin: 22px 0 14px;
+    }
+
+    /* ── NÚT TẠO LINK CHÍNH GIỮA ── */
+    .btn-create-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .btn-create-link {
+      background: var(--primary-dark);
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 0 26px;
+      height: 34px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+    }
+    .btn-create-link:hover {
+      background: #01438a;
+    }
+
+    /* ── TIÊU ĐỀ PHÂN ĐOẠN DƯỚI: | LINK THANH TOÁN ── */
+    .section-bar-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--slate-800);
+      margin: 20px 0 12px;
+    }
+    .blue-pipe {
+      width: 3.5px;
+      height: 15px;
+      background: var(--primary-dark);
+      border-radius: 1px;
+    }
+
+    /* ── STATE 1 (ẢNH 1): KHUNG TRẮNG CHƯA TẠO LINK ── */
+    .empty-result-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .empty-icon-link {
+      font-size: 24px;
+      color: var(--slate-400);
+      margin-bottom: 8px;
+    }
+    .empty-text-desc {
+      font-size: 11.5px;
+      color: var(--slate-400);
+    }
+    .disabled-action-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .btn-disabled-copy {
+      background: #ffffff;
+      border: 1px solid var(--slate-300);
+      color: var(--slate-400);
+      padding: 0 20px;
+      height: 30px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-family: inherit;
+      cursor: not-allowed;
+    }
+    .btn-disabled-email {
+      background: #93C5FD;
+      border: none;
+      color: #ffffff;
+      padding: 0 20px;
+      height: 30px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: not-allowed;
+    }
+
+    /* ── STATE 2 (ẢNH 2): KHUNG XANH ĐÃ TẠO THÀNH CÔNG ── */
+    .success-result-box {
+      background: var(--success-light);
+      border: 1px solid var(--success-border);
+      border-radius: 6px;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .success-left-content {
+      flex: 1;
+      padding-right: 28px;
+    }
+    .success-alert-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--success);
+      font-weight: 700;
+      font-size: 12.5px;
+      margin-bottom: 8px;
+    }
+    .url-input-label {
+      font-size: 11.5px;
+      color: var(--slate-600);
+      margin-bottom: 6px;
+    }
+    .url-input-container {
+      background: #ffffff;
+      border: 1.5px solid #60A5FA;
+      border-radius: 4px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6px 0 12px;
+    }
+    .url-content-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      font-size: 12.5px;
+      text-decoration: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .btn-copy-mini {
+      background: #ffffff;
+      border: 1px solid var(--slate-300);
+      border-radius: 4px;
+      padding: 0 10px;
+      height: 26px;
+      font-size: 11.5px;
+      color: var(--slate-700);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .btn-copy-mini:hover {
+      background: var(--slate-100);
+      border-color: var(--slate-400);
+    }
+
+    .success-right-qr {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-left: 20px;
+      border-left: 1px solid #DCFCE7;
+    }
+    .qr-card-white {
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 4px;
+      padding: 8px;
+      width: 124px;
+      height: 124px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qr-info-right {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .qr-title-bold {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate-800);
+    }
+    .qr-desc-small {
+      font-size: 11px;
+      color: var(--slate-500);
+      line-height: 1.4;
+      max-width: 150px;
+    }
+    .qr-download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 6px;
+    }
+    .qr-download-link:hover { text-decoration: underline; }
+
+    .btn-active-email-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 22px;
+    }
+    .btn-active-email {
+      background: var(--primary-dark);
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 0 24px;
+      height: 32px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .btn-active-email:hover {
+      background: #01438a;
+    }
+
+    /* ── BUTTON CHUNG ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 16px;
+      height: 32px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-family: inherit;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary-dark); color: #fff; }
+    .btn-primary:hover { background: #01438a; }
+    .btn-outline { background: #fff; border-color: var(--slate-300); color: var(--slate-600); }
+    .btn-outline:hover { background: var(--slate-100); color: var(--slate-800); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-success:hover { background: #15803d; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { background: #b91c1c; }
+
+    /* ── TABLE STYLES ── */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+    }
+    .portal-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .portal-table th {
+      background: var(--slate-50);
+      padding: 10px 12px;
+      font-weight: 600;
+      color: var(--slate-600);
+      border-bottom: 1px solid var(--border);
+      font-size: 11.5px;
+    }
+    .portal-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--slate-100);
+      color: var(--slate-800);
+      background: #ffffff; /* Luôn giữ nền trắng sạch sẽ */
+    }
+    .portal-table tr:hover td {
+      background: #ffffff; /* Không hover đỏ */
+    }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .text-danger { color: var(--danger) !important; font-weight: 600; }
+    .text-muted { color: var(--slate-400); }
+    .action-link-blue { color: var(--primary); font-weight: 600; cursor: pointer; }
+    .action-link-blue:hover { text-decoration: underline; }
+    .action-link-green { color: var(--success); font-weight: 600; cursor: pointer; }
+    .action-link-green:hover { text-decoration: underline; }
+
+    .badge-error-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      background: #FEE2E2;
+      border: 1px solid #FCA5A5;
+      color: var(--danger);
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 3px;
+    }
+    .badge-success-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      background: #DCFCE7;
+      border: 1px solid #86EFAC;
+      color: var(--success);
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 3px;
+    }
+
+    /* ── PAGINATION BAR ── */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--slate-500);
+    }
+    .pagination-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .page-select {
+      height: 32px;
+      padding: 0 8px;
+      border: 1px solid var(--slate-300);
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--slate-800);
+      outline: none;
+      background: #fff;
+    }
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--slate-300);
+      border-radius: 4px;
+      background: #fff;
+      color: var(--slate-700);
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .page-btn.active {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .page-btn:disabled {
+      background: var(--slate-50);
+      color: var(--slate-300);
+      cursor: not-allowed;
+    }
+    .jump-input {
+      width: 38px;
+      height: 32px;
+      text-align: center;
+      border: 1px solid var(--slate-300);
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    /* ── MODAL POPUP ── */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease-out; }
+    .modal-box {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 540px;
+      overflow: hidden;
+    }
+    .modal-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-800);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-close {
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--slate-400);
+    }
+    .modal-close:hover { color: var(--danger); }
+    .modal-body { padding: 20px; }
+    .modal-footer {
+      padding: 12px 20px;
+      background: var(--slate-50);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* ── HOSTED CHECKOUT FORM ── */
+    .checkout-screen {
+      max-width: 500px;
+      margin: 20px auto 40px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .checkout-top {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .checkout-box {
+      background: var(--slate-50);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .box-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--slate-400);
+      margin-bottom: 6px;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+    .btn-pay-submit {
+      width: 100%;
+      height: 44px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-hover);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-pay-submit:disabled {
+      background: var(--slate-300);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 12px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      z-index: 3000;
+      box-shadow: var(--shadow-lg);
+    }
+    .toast.show { display: flex; animation: fadeIn 0.2s; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .screen-view { display: none; }
+    .screen-view.active { display: block; animation: fadeIn 0.15s ease-out; }
+  </style>
+</head>
+<body>
+
+  <!-- DEMO BAR TRÊN CÙNG -->
+  <div class="demo-bar">
+    <div class="demo-bar-left">
+      <span class="demo-bar-badge">Interactive Demo</span>
+      <span>EPAY Payment Link — Chuẩn 100% Ảnh Giao Diện Figma</span>
+    </div>
+    <div class="demo-nav-btns">
+      <button class="demo-btn active" id="btnNavSingle1" onclick="showSingleState('uncreated')">1. Tạo Link Đơn (Chưa tạo - Ảnh 1)</button>
+      <button class="demo-btn" id="btnNavSingleError" style="border-color: #F87171; color: #FCA5A5;" onclick="showSingleState('validation-error')">1B. Tạo Link Đơn (Báo Lỗi Validate)</button>
+      <button class="demo-btn" id="btnNavSingle2" onclick="showSingleState('created')">2. Tạo Link Đơn (Đã tạo - Ảnh 2)</button>
+      <button class="demo-btn" id="btnNavBatchUpload" onclick="switchMainView('batch-upload')">3. Upload File Lô</button>
+      <button class="demo-btn" id="btnNavBatchSuccess" onclick="switchMainView('batch-success')">4. Lô Thành Công (Phân trang)</button>
+      <button class="demo-btn" id="btnNavBatchError" onclick="switchMainView('batch-error')">5. Lô Có Lỗi (Nền trắng)</button>
+      <button class="demo-btn" onclick="openQrModal('ORD-20261015-089', 'Combo Cà phê Đậm vị', '450,000 VND', 'Nguyễn Văn An (an.nguyen@example.com)', '16/10/2026 14:30:00')">6. Popup QR</button>
+      <button class="demo-btn" id="btnNavCheckout" onclick="switchMainView('checkout')">7. Trang Khách Hàng (Hosted Form)</button>
+      <button class="demo-btn" style="background: #025BBD; font-weight: 700; color: #fff; border-color: #60A5FA;" onclick="window.open('../email-templates/email-templates-preview.html', '_blank')">📧 Mẫu Email KH</button>
+    </div>
+  </div>
+
+  <div class="portal-layout">
+
+    <!-- ── SIDEBAR CHUẨN FIGMA ── -->
+    <div class="sidebar">
+      <div class="sb-logo-area">
+        <div class="sb-logo-circle">e</div>
+        <div class="sb-logo-text">epay Portal</div>
+      </div>
+      <div class="sb-menu">
+        <div class="sb-item" onclick="showToast('Tổng quan')">📊 Tổng quan</div>
+        <div class="sb-item" onclick="showToast('Đơn hàng & Giao dịch')">📦 Đơn hàng & Giao dịch</div>
+
+        <div class="sb-parent">
+          <div class="sb-parent-title">
+            <span>🔗 Tạo link thanh toán</span>
+            <span style="font-size:10px;">▾</span>
+          </div>
+          <div class="sb-submenu-list">
+            <!-- Thẻ bo tròn trắng nổi bật cho mục con đang chọn -->
+            <div class="sb-sub-item active" id="sbItemSingle" onclick="switchMainView('single')">
+              Tạo link thanh toán
+            </div>
+            <div class="sb-sub-item" id="sbItemBatch" onclick="switchMainView('batch-upload')">
+              Tạo link thanh toán lô
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-item" onclick="showToast('Màn hình danh sách: Không tạo trực tiếp từ đây')">📋 Danh sách link TT</div>
+        <div class="sb-item" onclick="showToast('Quản lý Tra soát')">⚖ Quản lý Tra soát</div>
+        <div class="sb-item" onclick="showToast('Báo cáo đối soát')">📈 Báo cáo đối soát</div>
+        <div class="sb-item" onclick="showToast('Cấu hình Merchant')">⚙ Cấu hình Merchant</div>
+      </div>
+    </div>
+
+    <!-- ── MAIN CONTENT ── -->
+    <div class="main-wrap">
+
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="topbar-search">
+          <span class="topbar-search-icon">🔍</span>
+          <input type="text" placeholder="Tìm kiếm...">
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-link help">? Trợ giúp</div>
+          <div class="topbar-link">🔔 Thông báo (0)</div>
+          <div class="topbar-user">
+            <div class="user-avatar-m">M</div>
+            <div class="user-name">Merchant Admin ▼</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════
+           SCREEN 2 & SCREEN 3: TẠO LINK ĐƠN (CHUẨN 100% ẢNH 1 VÀ ẢNH 2)
+      ════════════════════════════════════════════════════════════ -->
+      <div class="screen-view active" id="view-single">
+        <div class="page-header">
+          <div class="breadcrumb">
+            <a onclick="switchMainView('single')">Tạo link thanh toán</a>
+            <span>&gt;</span>
+            <span>Tạo link thanh toán</span>
+          </div>
+          <h2 class="page-title">Tạo link thanh toán</h2>
+        </div>
+
+        <div class="page-content">
+          <div class="card">
+            <div class="card-title-main">Tạo link thanh toán</div>
+
+            <!-- BANNER THÔNG BÁO LỖI VALIDATION (KHI BỊ LỖI) -->
+            <div class="validation-alert-banner" id="formAlertBanner">
+              <span style="font-size:14px;">⚠️</span>
+              <span>Phát hiện thông tin đơn hàng không hợp lệ. Vui lòng kiểm tra và sửa lại các trường báo đỏ bên dưới.</span>
+            </div>
+
+            <!-- FORM 2 CỘT CHUẨN XÁC THEO ẢNH TRÊN -->
+            <form id="formSingleExact" onsubmit="event.preventDefault(); submitCreateSingle();">
+              <div class="form-two-col-grid">
+
+                <!-- CỘT 1: 1. THÔNG TIN ĐƠN HÀNG -->
+                <div>
+                  <div class="col-section-title">1. Thông tin đơn hàng</div>
+
+                  <div class="form-group-row">
+                    <label class="field-lbl">Tên dịch vụ*</label>
+                    <div style="flex:1;">
+                      <input type="text" class="field-input" id="inpServiceName" value="Combo Cà phê Đậm vị" placeholder="Nhập tên dịch vụ...">
+                      <div class="field-error-msg" id="errServiceName">* Vui lòng nhập tên dịch vụ</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group-row">
+                    <label class="field-lbl">Mã đơn hàng*</label>
+                    <div style="flex:1;">
+                      <input type="text" class="field-input" id="inpOrderCode" value="ORD-20261015-089">
+                      <div class="field-error-msg" id="errOrderCode">* Mã đơn hàng đã tồn tại trên hệ thống, vui lòng nhập mã khác</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group-row">
+                    <label class="field-lbl">Số tiền thanh toán*</label>
+                    <div style="flex:1;">
+                      <input type="text" class="field-input" id="inpAmount" value="450,000">
+                      <div class="field-error-msg" id="errAmount">* Số tiền thanh toán phải từ 1,000đ đến 200,000,000đ</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group-row">
+                    <label class="field-lbl">Loại tiền</label>
+                    <div style="flex:1;">
+                      <select class="field-select" id="inpCurrency">
+                        <option value="VND" selected>VND</option>
+                        <option value="USD">USD</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group-row">
+                    <label class="field-lbl">Ngày hết hạn đơn hàng*</label>
+                    <div style="flex:1;">
+                      <input type="text" class="field-input" id="inpExpire" value="16-10-2026 15:13:38">
+                      <div class="field-error-msg" id="errExpire">* Hạn thanh toán ở thời gian quá khứ. Tối đa 15 ngày so với hiện tại</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CỘT 2: 2. THÔNG TIN KHÁCH HÀNG & 3. NGÔN NGỮ -->
+                <div>
+                  <div class="col-section-title">2. Thông tin khách hàng</div>
+
+                  <div class="form-group-row">
+                    <label class="field-lbl">Họ tên*</label>
+                    <div style="flex:1;">
+                      <input type="text" class="field-input" id="inpCustName" value="Nguyễn Văn An">
+                      <div class="field-error-msg" id="errCustName">* Vui lòng nhập họ tên khách hàng</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group-row">
+                    <label class="field-lbl">Email</label>
+                    <div style="flex:1;">
+                      <input type="text" class="field-input" id="inpCustEmail" value="an.nguyen@example.com">
+                      <div class="field-error-msg" id="errCustEmail">* Định dạng email không hợp lệ (ví dụ: name@domain.com)</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group-row">
+                    <label class="field-lbl">Số điện thoại*</label>
+                    <div style="flex:1;">
+                      <input type="text" class="field-input" id="inpCustPhone" value="0987654321">
+                      <div class="field-error-msg" id="errCustPhone">* Số điện thoại phải gồm 10 chữ số hợp lệ</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group-row">
+                    <label class="field-lbl">Địa chỉ</label>
+                    <div style="flex:1;">
+                      <input type="text" class="field-input" id="inpCustAddress" value="Landmark 81, P.22, Bình Thạnh, TP.HCM">
+                    </div>
+                  </div>
+
+                  <!-- 3. NGÔN NGỮ -->
+                  <div class="col-section-title" style="margin-top:16px;">3. Ngôn ngữ</div>
+                  <div class="form-group-row">
+                    <label class="field-lbl">Gửi Link thanh toán bằng*</label>
+                    <select class="field-select" id="inpLang">
+                      <option value="vi" selected>Tiếng Việt</option>
+                      <option value="en">Tiếng Anh (English)</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- DÒNG LƯU Ý Ở GIỮA -->
+              <div class="hint-center">
+                *Lưu ý: Nếu bạn đang tạo Link thanh toán cho Khách hàng nước ngoài, vui lòng điền Thông tin bằng Tiếng Anh.
+              </div>
+
+              <!-- NÚT TẠO LINK CHÍNH GIỮA -->
+              <div class="btn-create-wrap">
+                <button type="submit" class="btn-create-link" id="btnMainCreate">Tạo link</button>
+              </div>
+            </form>
+
+            <!-- PHÂN ĐOẠN: | LINK THANH TOÁN -->
+            <div class="section-bar-title">
+              <span class="blue-pipe"></span>
+              <span>Link thanh toán</span>
+            </div>
+
+            <!-- ── KHỐI CHƯA TẠO LINK (CHUẨN ẢNH 1 - STATE 1) ── -->
+            <div id="stateUncreatedBox" style="display:block;">
+              <div class="empty-result-box">
+                <div class="empty-icon-link">
+                  <!-- SVG Chain link icon chuẩn figma -->
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                  </svg>
+                </div>
+                <div class="empty-text-desc">
+                  Vui lòng nhập thông tin đơn hàng và nhấn 'Tiếp tục' để tạo link thanh toán & mã QR.
+                </div>
+              </div>
+
+              <div class="disabled-action-row">
+                <button class="btn-disabled-copy" disabled>Copy</button>
+                <button class="btn-disabled-email" disabled>Gửi email</button>
+              </div>
+            </div>
+
+            <!-- ── KHỐI ĐÃ TẠO LINK THÀNH CÔNG (CHUẨN ẢNH 2 - STATE 2) ── -->
+            <div id="stateCreatedBox" style="display:none;">
+              <div class="success-result-box">
+                <div class="success-left-content">
+                  <div class="success-alert-line">
+                    <span>✓</span>
+                    <span>Đã tạo Link thanh toán thành công cho đơn hàng #ORD-20261015-089!</span>
+                  </div>
+                  <div class="url-input-label">Đường dẫn thanh toán (Payment URL):</div>
+
+                  <div class="url-input-container">
+                    <div class="url-content-left">
+                      <span style="font-size:13px;">🔗</span>
+                      <span id="txtGeneratedUrl">https://pay.epay.vn/pl/8a7b9c2d1e</span>
+                    </div>
+                    <button type="button" class="btn-copy-mini" onclick="copyPaymentUrl(document.getElementById('txtGeneratedUrl').innerText)">
+                      <span>📋</span>
+                      <span>Sao chép</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="success-right-qr">
+                  <div class="qr-card-white">
+                    <!-- Mã QR sắc nét chuẩn hình ảnh 2 -->
+                    <svg width="108" height="108" viewBox="0 0 100 100" fill="#0F172A">
+                      <!-- 3 Marker corners -->
+                      <path d="M0,0 h30 v30 h-30 z M5,5 v20 h20 v-20 z M10,10 h10 v10 h-10 z" />
+                      <path d="M70,0 h30 v30 h-30 z M75,5 v20 h20 v-20 z M80,10 h10 v10 h-10 z" />
+                      <path d="M0,70 h30 v30 h-30 z M5,75 v20 h20 v-20 z M10,80 h10 v10 h-10 z" />
+                      <!-- Pattern data -->
+                      <rect x="38" y="5" width="8" height="8"/>
+                      <rect x="52" y="5" width="8" height="16"/>
+                      <rect x="5" y="38" width="16" height="8"/>
+                      <rect x="26" y="38" width="8" height="14"/>
+                      <rect x="38" y="26" width="12" height="8"/>
+                      <rect x="42" y="42" width="16" height="16" fill="#3B82F6"/>
+                      <circle cx="50" cy="50" r="4" fill="#ffffff"/>
+                      <rect x="66" y="38" width="14" height="8"/>
+                      <rect x="85" y="38" width="10" height="12"/>
+                      <rect x="38" y="68" width="8" height="14"/>
+                      <rect x="52" y="68" width="16" height="8"/>
+                      <rect x="52" y="82" width="8" height="14"/>
+                      <rect x="70" y="70" width="12" height="8"/>
+                      <rect x="86" y="70" width="8" height="12"/>
+                      <rect x="74" y="86" width="14" height="8"/>
+                    </svg>
+                  </div>
+                  <div class="qr-info-right">
+                    <div class="qr-title-bold">Mã QR link thanh toán</div>
+                    <div class="qr-desc-small">Quét bằng Camera/Zalo để mở link thanh toán</div>
+                    <a class="qr-download-link" onclick="showToast('Đang tải ảnh mã QR: qr-link-ORD-20261015-089.png')">
+                      <span>⬇</span>
+                      <span>Tải mã QR link</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- NÚT GỬI EMAIL CHÍNH GIỮA (ACTIVE XANH ĐẬM) -->
+              <div class="btn-active-email-wrap">
+                <button type="button" class="btn-active-email" onclick="showToast('Đã gửi email thanh toán thành công cho an.nguyen@example.com!')">
+                  Gửi email
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════
+           SCREEN 5: TẠO LINK LÔ - UPLOAD FILE
+      ════════════════════════════════════════════════════════════ -->
+      <div class="screen-view" id="view-batch-upload">
+        <div class="page-header">
+          <div class="breadcrumb">
+            <a onclick="switchMainView('single')">Tạo link thanh toán</a>
+            <span>&gt;</span>
+            <span>Tạo link thanh toán theo lô</span>
+          </div>
+          <h2 class="page-title">Tạo link thanh toán theo lô</h2>
+        </div>
+
+        <div class="page-content">
+          <div class="card">
+            <div class="card-title-main">Tạo link thanh toán theo lô</div>
+
+            <div style="display:flex;align-items:center;gap:16px;margin:24px 0 12px 140px;">
+              <span style="font-size:12px;color:var(--slate-700);width:100px;">File đơn hàng</span>
+              <div style="display:flex;align-items:center;gap:12px;width:480px;">
+                <input type="text" class="field-input" id="batchFileInput" placeholder="Chọn file từ máy tính..." readonly style="background:#f8fafc;cursor:pointer;" onclick="selectDemoBatch('valid')">
+                <a class="action-link-blue" style="font-size:12px;white-space:nowrap;" onclick="showToast('Đã tải xuống file template mẫu')">Tải file mẫu (.xlsx)</a>
+              </div>
+            </div>
+
+            <div class="hint-center">
+              *Lưu ý: Nếu bạn đang tạo Link thanh toán cho Khách hàng nước ngoài, vui lòng điền Thông tin bằng Tiếng Anh.
+            </div>
+
+            <!-- TIỆN ÍCH CHỌN FILE DEMO -->
+            <div style="margin: 16px auto; width:520px; background:#f1f5f9; padding:12px 16px; border-radius:6px; border:1px dashed var(--slate-300);">
+              <div style="font-weight:700;font-size:11px;color:var(--slate-700);margin-bottom:8px;">💡 CHỌN NHANH DỮ LIỆU ĐỂ DEMO:</div>
+              <div style="display:flex;gap:10px;">
+                <button type="button" class="btn btn-outline" style="font-size:11.5px;height:28px;" onclick="selectDemoBatch('valid')">
+                  📁 File Hợp Lệ (48 đơn)
+                </button>
+                <button type="button" class="btn btn-outline" style="font-size:11.5px;height:28px;" onclick="selectDemoBatch('error')">
+                  📁 File Có Lỗi (4 dòng lỗi)
+                </button>
+              </div>
+            </div>
+
+            <div class="form-actions" style="display:flex;justify-content:center;gap:10px;margin-top:20px;">
+              <button type="button" class="btn btn-outline" onclick="clearBatchInput()">Hủy</button>
+              <button type="button" class="btn btn-primary" onclick="executeProcessBatch()">Tạo link</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════
+           SCREEN 6: LÔ THÀNH CÔNG 100% (CÓ PHÂN TRANG HOÀN CHỈNH)
+      ════════════════════════════════════════════════════════════ -->
+      <div class="screen-view" id="view-batch-success">
+        <div class="page-header">
+          <div class="breadcrumb">
+            <a onclick="switchMainView('single')">Tạo link thanh toán</a>
+            <span>&gt;</span>
+            <span>Tạo link thanh toán theo lô</span>
+          </div>
+          <h2 class="page-title">Tạo link thanh toán theo lô</h2>
+        </div>
+
+        <div class="page-content">
+          <div class="card">
+            <div class="card-title-main">Tạo link thanh toán theo lô</div>
+
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;">
+              <span style="font-size:12px;color:var(--slate-700);width:90px;">File đơn hàng</span>
+              <div style="display:flex;align-items:center;gap:12px;width:440px;">
+                <input type="text" class="field-input" value="File mẫu.xlsx" readonly style="background:#f8fafc;">
+                <a class="action-link-blue" style="font-size:12px;white-space:nowrap;" onclick="showToast('Đã tải xuống file template mẫu')">Tải file mẫu (.xlsx)</a>
+              </div>
+            </div>
+
+            <div style="font-size:11.5px;color:var(--slate-500);font-style:italic;margin-left:106px;margin-bottom:16px;">
+              *Lưu ý: Nếu bạn đang tạo Link thanh toán cho Khách hàng nước ngoài, vui lòng điền Thông tin bằng Tiếng Anh.
+            </div>
+
+            <div style="display:flex;gap:10px;margin-left:106px;margin-bottom:24px;">
+              <button class="btn btn-outline" onclick="switchMainView('batch-upload')">Hủy</button>
+              <button class="btn btn-primary" onclick="switchMainView('batch-upload')">Tạo link</button>
+            </div>
+
+            <!-- Thống kê -->
+            <div style="font-size:12px;line-height:1.7;margin-bottom:16px;">
+              <div>Tổng số đơn hàng: <b>48</b></div>
+              <div style="color:var(--success);">Tổng số đơn hàng hợp lệ: <b>48</b></div>
+              <div>Tổng số đơn hàng không hợp lệ: <b>0</b></div>
+            </div>
+
+            <!-- Bảng 13 cột chuẩn Figma -->
+            <div class="table-container">
+              <table class="portal-table">
+                <thead>
+                  <tr>
+                    <th class="text-center">STT</th>
+                    <th>Tên dịch vụ</th>
+                    <th>Mã đơn hàng</th>
+                    <th class="text-right">Số tiền TT</th>
+                    <th>Ngày tạo đơn</th>
+                    <th>Ngày hết hạn</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th class="text-center">Ngôn ngữ</th>
+                    <th class="text-center">Link thanh toán</th>
+                    <th class="text-center">Mã QR Link</th>
+                  </tr>
+                </thead>
+                <tbody id="tblBatchSuccessBody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+
+              <!-- Thanh phân trang chuẩn ảnh Screen 6 -->
+              <div class="pagination-bar">
+                <div id="txtPagRange">Hiển thị 1 - 10 trong tổng số 48 đơn hàng</div>
+                <div class="pagination-right">
+                  <select class="page-select" id="selBatchSize" onchange="changeBatchSize(this.value)">
+                    <option value="10">10 / trang</option>
+                    <option value="20">20 / trang</option>
+                  </select>
+
+                  <button class="page-btn" id="btnBatchPrev" onclick="navBatchPage(curBatchPage - 1)">‹</button>
+                  <button class="page-btn active" id="btnBP1" onclick="navBatchPage(1)">1</button>
+                  <button class="page-btn" id="btnBP2" onclick="navBatchPage(2)">2</button>
+                  <button class="page-btn" id="btnBP3" onclick="navBatchPage(3)">3</button>
+                  <span style="padding:0 4px;color:var(--slate-400);">•••</span>
+                  <button class="page-btn" id="btnBP5" onclick="navBatchPage(5)">5</button>
+                  <button class="page-btn" id="btnBatchNext" onclick="navBatchPage(curBatchPage + 1)">›</button>
+
+                  <div style="display:flex;align-items:center;gap:6px;margin-left:6px;">
+                    <span>Đến trang</span>
+                    <input type="text" class="jump-input" id="inpJumpPage" value="1" onkeydown="if(event.key==='Enter') navBatchPage(parseInt(this.value,10))">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nút hành động cuối -->
+            <div style="display:flex;justify-content:center;gap:14px;margin-top:24px;">
+              <button class="btn btn-success" style="padding:0 22px;" onclick="showToast('Đang tải file Excel danh sách 48 link...')">⬇ Tải file link</button>
+              <button class="btn btn-primary" style="padding:0 22px;" onclick="showToast('Đã gửi email thanh toán đồng loạt cho 48 khách hàng!')">Gửi email</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════
+           SCREEN 6B: LÔ CÓ LỖI (NỀN TRẮNG SẠCH SẼ, KHÔNG HOVER ĐỎ)
+      ════════════════════════════════════════════════════════════ -->
+      <div class="screen-view" id="view-batch-error">
+        <div class="page-header">
+          <div class="breadcrumb">
+            <a onclick="switchMainView('single')">Tạo link thanh toán</a>
+            <span>&gt;</span>
+            <span>Tạo link thanh toán theo lô</span>
+          </div>
+          <h2 class="page-title">Tạo link thanh toán theo lô</h2>
+        </div>
+
+        <div class="page-content">
+          <div class="card">
+            <div class="card-title-main">Tạo link thanh toán theo lô</div>
+
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;">
+              <span style="font-size:12px;color:var(--slate-700);width:90px;">File đơn hàng</span>
+              <div style="display:flex;align-items:center;gap:12px;width:440px;">
+                <input type="text" class="field-input" value="File mẫu.xlsx" readonly style="background:#f8fafc;">
+                <a class="action-link-blue" style="font-size:12px;white-space:nowrap;" onclick="showToast('Đã tải xuống file template mẫu')">Tải file mẫu (.xlsx)</a>
+              </div>
+            </div>
+
+            <div style="font-size:11.5px;color:var(--slate-500);font-style:italic;margin-left:106px;margin-bottom:16px;">
+              *Lưu ý: Nếu bạn đang tạo Link thanh toán cho Khách hàng nước ngoài, vui lòng điền Thông tin bằng Tiếng Anh.
+            </div>
+
+            <div style="display:flex;gap:10px;margin-left:106px;margin-bottom:24px;">
+              <button class="btn btn-outline" onclick="switchMainView('batch-upload')">Hủy</button>
+              <button class="btn btn-primary" onclick="switchMainView('batch-upload')">Tạo link</button>
+            </div>
+
+            <!-- Thống kê lỗi (KHÔNG có banner đỏ to) -->
+            <div style="font-size:12px;line-height:1.7;margin-bottom:16px;">
+              <div>Tổng số đơn hàng: <b>6</b></div>
+              <div style="color:var(--success);">Tổng số đơn hàng hợp lệ: <b>2</b></div>
+              <div style="color:var(--danger);font-weight:600;">Tổng số đơn hàng không hợp lệ: 4 (Vui lòng kiểm tra mã lỗi)</div>
+            </div>
+
+            <!-- Bảng lỗi: Nền trắng sạch sẽ 100%, không hover đỏ -->
+            <div class="table-container">
+              <table class="portal-table">
+                <thead>
+                  <tr>
+                    <th class="text-center">STT</th>
+                    <th>Tên dịch vụ</th>
+                    <th>Mã đơn hàng</th>
+                    <th class="text-right">Số tiền TT</th>
+                    <th>Họ tên KH</th>
+                    <th>Email</th>
+                    <th>Số ĐT</th>
+                    <th>Hạn thanh toán</th>
+                    <th>MÃ LỖI / CHI TIẾT LỖI</th>
+                    <th class="text-center">Link thanh toán</th>
+                    <th class="text-center">Mã QR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-center">1</td>
+                    <td>Topup</td>
+                    <td><b>ABC12345</b></td>
+                    <td class="text-right">10.000</td>
+                    <td>Dương</td>
+                    <td>abc@gmail.com</td>
+                    <td>0985263431</td>
+                    <td>16/10/2026 20:00</td>
+                    <td><span class="badge-success-tag">✓ Hợp lệ</span></td>
+                    <td class="text-center text-muted">-</td>
+                    <td class="text-center text-muted">-</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">2</td>
+                    <td>Topup</td>
+                    <td><b>ABC12346</b></td>
+                    <td class="text-right text-danger">0</td>
+                    <td>Dương</td>
+                    <td>abc@gmail.com</td>
+                    <td>0985263431</td>
+                    <td>16/10/2026 20:00</td>
+                    <td><span class="badge-error-tag">ERR_01: Số tiền thanh toán phải >= 10.000đ</span></td>
+                    <td class="text-center text-muted">Chưa tạo</td>
+                    <td class="text-center text-muted">-</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">3</td>
+                    <td>Topup</td>
+                    <td><b>ABC12347</b></td>
+                    <td class="text-right">10.000</td>
+                    <td>Dương</td>
+                    <td class="text-danger">abc@invalid</td>
+                    <td>0985263431</td>
+                    <td>16/10/2026 20:00</td>
+                    <td><span class="badge-error-tag">ERR_02: Định dạng email không hợp lệ</span></td>
+                    <td class="text-center text-muted">Chưa tạo</td>
+                    <td class="text-center text-muted">-</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">4</td>
+                    <td>Topup</td>
+                    <td><b>ABC12348</b></td>
+                    <td class="text-right">10.000</td>
+                    <td>Dương</td>
+                    <td>abc@gmail.com</td>
+                    <td>0985263431</td>
+                    <td class="text-danger">15/10/2026 12:00</td>
+                    <td><span class="badge-error-tag">ERR_03: Hạn thanh toán ở thời gian quá khứ</span></td>
+                    <td class="text-center text-muted">Chưa tạo</td>
+                    <td class="text-center text-muted">-</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">5</td>
+                    <td>Topup</td>
+                    <td class="text-danger"><b>ABC12345</b></td>
+                    <td class="text-right">10.000</td>
+                    <td>Dương</td>
+                    <td>abc@gmail.com</td>
+                    <td>0985263431</td>
+                    <td>16/10/2026 20:00</td>
+                    <td><span class="badge-error-tag">ERR_04: Trùng lặp mã đơn hàng trong file</span></td>
+                    <td class="text-center text-muted">Chưa tạo</td>
+                    <td class="text-center text-muted">-</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">6</td>
+                    <td>Topup</td>
+                    <td><b>ABC12350</b></td>
+                    <td class="text-right">10.000</td>
+                    <td>Dương</td>
+                    <td>abc@gmail.com</td>
+                    <td>0985263431</td>
+                    <td>16/10/2026 20:00</td>
+                    <td><span class="badge-success-tag">✓ Hợp lệ</span></td>
+                    <td class="text-center text-muted">-</td>
+                    <td class="text-center text-muted">-</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="pagination-bar">
+                <div>Hiển thị 1 - 6 trong tổng số 6 đơn hàng</div>
+                <div class="pagination-right">
+                  <select class="page-select"><option>10 / trang</option></select>
+                  <button class="page-btn" disabled>‹</button>
+                  <button class="page-btn active">1</button>
+                  <button class="page-btn" disabled>›</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cặp nút thao tác -->
+            <div style="display:flex;justify-content:center;gap:14px;margin-top:24px;">
+              <button class="btn btn-danger" style="padding:0 22px;" onclick="showToast('Đang tải file lỗi: File_loi_chi_tiet_kem_ma_loi.xlsx')">
+                ⬇ Tải file lỗi (.xlsx)
+              </button>
+              <button class="btn btn-primary" style="padding:0 22px;" onclick="switchMainView('batch-upload')">
+                Chọn lại file
+              </button>
+            </div>
+
+            <div style="text-align:center;font-size:11.5px;color:var(--slate-500);margin-top:10px;">
+              💡 File lỗi sẽ xuất kèm lý do lỗi chi tiết ở từng dòng để bạn chỉnh sửa và tải lên lại.
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════
+           SCREEN 26:4 / 64:4: TRANG KHÁCH HÀNG (HOSTED FORM)
+      ════════════════════════════════════════════════════════════ -->
+      <div class="screen-view" id="view-checkout">
+        <div class="checkout-screen">
+          <div class="checkout-top">
+            <div style="display:flex;align-items:center;gap:6px;font-size:18px;font-weight:800;color:var(--primary);">
+              <span style="display:inline-block;width:24px;height:24px;background:var(--primary);color:#fff;border-radius:50%;text-align:center;line-height:24px;font-size:14px;">e</span>
+              <span>epay</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-size:11.5px;color:var(--slate-500);" id="lblChkHeaderCode">Mã đơn: ORD-20261015-089</span>
+              <div style="display:flex;align-items:center;gap:6px;background:var(--slate-100);padding:3px 8px;border-radius:16px;font-size:11.5px;cursor:pointer;" onclick="toggleCheckoutLanguage()">
+                <span id="chkFlagIcon">🇻🇳</span>
+                <span id="chkLangLabel" style="font-weight:600;">VI</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:20px;">
+            <!-- KHỐI 1: ĐƠN VỊ CẤP HÀNG HÓA -->
+            <div class="checkout-box">
+              <div class="box-label" id="lblHdrMerchant">THÔNG TIN ĐƠN VỊ CẤP HÀNG HÓA</div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:40px;height:40px;border-radius:6px;background:#EFF6FF;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;">☕</div>
+                <div>
+                  <h4 style="font-size:13px;font-weight:700;color:var(--slate-900);" id="valMerchantName">Công ty Cổ phần Cà phê Việt Nam</h4>
+                  <p style="font-size:11px;color:var(--slate-500);" id="valMerchantTax">MST: 0102030405 &nbsp;|&nbsp; Hotline: 1900 6475</p>
+                  <span style="display:inline-block;background:#DBEAFE;color:#1E40AF;font-size:10px;font-weight:700;padding:1px 6px;border-radius:3px;margin-top:3px;" id="valBadgeOfficial">Đại lý phân phối chính thức</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- KHỐI 2: THÔNG TIN KHÁCH HÀNG -->
+            <div class="checkout-box">
+              <div class="box-label" id="lblHdrCustomer">THÔNG TIN KHÁCH HÀNG</div>
+              <div class="detail-row">
+                <span class="text-muted" id="lblRowCustName">Họ và tên:</span>
+                <span style="font-weight:600;" id="valCustName">Nguyễn Văn An</span>
+              </div>
+              <div class="detail-row">
+                <span class="text-muted" id="lblRowCustPhone">Số điện thoại:</span>
+                <span style="font-weight:600;" id="valCustPhone">0987 654 321</span>
+              </div>
+              <div class="detail-row">
+                <span class="text-muted" id="lblRowCustEmail">Email nhận biên lai:</span>
+                <span style="font-weight:600;" id="valCustEmail">an.nguyen@example.com</span>
+              </div>
+            </div>
+
+            <!-- KHỐI 3: THÔNG TIN ĐƠN HÀNG (MÃ ĐƠN NẰM TRONG KHỐI NÀY) -->
+            <div class="checkout-box">
+              <div class="box-label" id="lblHdrOrder">THÔNG TIN ĐƠN HÀNG</div>
+              <div class="detail-row">
+                <span class="text-muted" id="lblRowOrderCode">Mã đơn hàng:</span>
+                <span style="color:var(--primary);font-weight:700;" id="valOrderCode">ORD-20261015-089</span>
+              </div>
+              <div class="detail-row">
+                <span class="text-muted" id="lblRowProduct">Sản phẩm / Dịch vụ:</span>
+                <span style="font-weight:600;" id="valProductName">Combo Cà phê Đậm vị</span>
+              </div>
+              <div class="detail-row" style="margin:6px 0;">
+                <span class="text-muted" id="lblRowAmount">Số tiền thanh toán:</span>
+                <span style="font-size:20px;font-weight:800;color:var(--primary);" id="valAmount">450,000 VND</span>
+              </div>
+              <div class="detail-row">
+                <span class="text-muted" id="lblRowExpiry">Hạn thanh toán:</span>
+                <span style="color:var(--success);font-weight:600;" id="valExpiry">16/10/2026 20:00:00</span>
+              </div>
+              <div class="detail-row">
+                <span class="text-muted" id="lblRowDesc">Nội dung đơn hàng:</span>
+                <span style="color:var(--slate-700);" id="valDesc">Thanh toán đơn hàng Combo Cà phê Đậm vị</span>
+              </div>
+            </div>
+
+            <!-- ĐIỀU KHOẢN -->
+            <div style="display:flex;align-items:flex-start;gap:8px;margin:16px 0;font-size:12px;color:var(--slate-700);">
+              <input type="checkbox" id="chkAgreement" style="margin-top:3px;cursor:pointer;" onchange="document.getElementById('btnSubmitPay').disabled = !this.checked">
+              <label for="chkAgreement" id="lblTermsPrompt">
+                Tôi đã đọc và đồng ý với 
+                <span style="color:var(--primary);font-weight:600;text-decoration:underline;cursor:pointer;" onclick="openTermsModal()">Điều khoản & Điều kiện</span> 
+                sử dụng dịch vụ thanh toán.
+              </label>
+            </div>
+
+            <button type="button" class="btn-pay-submit" id="btnSubmitPay" disabled onclick="executeFakePay()">
+              <span id="txtBtnPay">Tiếp tục thanh toán</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── POPUP QR MODAL (SCREEN 1B) ── -->
+  <div class="modal-overlay" id="modalQrView">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🔗 Mã QR link thanh toán</span>
+          <span style="background:#eff6ff;color:var(--primary);font-size:11px;padding:2px 8px;border-radius:12px;" id="modalQrCodePill">ORD-20261015-089</span>
+        </div>
+        <div class="modal-close" onclick="closeQrModal()">✕</div>
+      </div>
+      <div class="modal-body">
+        <h4 style="font-size:13.5px;font-weight:700;" id="modalQrTitle">Combo Cà phê Đậm vị</h4>
+        <div style="font-size:20px;font-weight:800;color:var(--primary);margin:4px 0;" id="modalQrAmount">450,000 VND</div>
+        <div style="font-size:11px;color:var(--slate-500);" id="modalQrCust">Khách hàng: Nguyễn Văn An (an.nguyen@example.com)</div>
+        <div style="font-size:11px;color:var(--success);margin-bottom:12px;" id="modalQrExpiry">Hạn thanh toán: 16/10/2026 14:30:00</div>
+
+        <div style="background:#f8fafc;border:1px solid var(--border);border-radius:4px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <span style="font-size:12px;color:var(--primary);" id="modalQrUrlText">https://pay.epay.vn/pl/8a7b9c2d1e</span>
+          <button class="btn btn-outline" style="height:26px;font-size:11px;" onclick="copyPaymentUrl(document.getElementById('modalQrUrlText').innerText)">Sao chép</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;background:#f8fafc;padding:12px;border-radius:6px;border:1px solid var(--border);">
+          <div style="background:#fff;padding:6px;border:1px solid var(--slate-200);border-radius:4px;">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="#0F172A">
+              <path d="M0,0 h30 v30 h-30 z M5,5 v20 h20 v-20 z M10,10 h10 v10 h-10 z" />
+              <path d="M70,0 h30 v30 h-30 z M75,5 v20 h20 v-20 z M80,10 h10 v10 h-10 z" />
+              <path d="M0,70 h30 v30 h-30 z M5,75 v20 h20 v-20 z M10,80 h10 v10 h-10 z" />
+              <rect x="40" y="10" width="10" height="20"/>
+              <rect x="15" y="40" width="20" height="10"/>
+              <rect x="45" y="45" width="15" height="15" fill="#3B82F6"/>
+              <rect x="70" y="45" width="20" height="10"/>
+              <rect x="40" y="70" width="15" height="20"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-weight:600;font-size:12px;">Mã QR của link thanh toán</div>
+            <div style="font-size:11px;color:var(--slate-500);margin:3px 0 8px;">Quét QR bằng Camera hoặc Zalo để mở link thanh toán.</div>
+            <button class="btn btn-primary" style="height:26px;font-size:11px;" onclick="showToast('Đang tải ảnh mã QR...')">⬇ Tải mã QR link</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeQrModal()">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── POPUP ĐIỀU KHOẢN (SCREEN 26:147) ── -->
+  <div class="modal-overlay" id="modalTerms">
+    <div class="modal-box" style="max-width:560px;">
+      <div class="modal-header">
+        <div class="modal-title">Điều khoản & Điều kiện sử dụng dịch vụ thanh toán</div>
+        <div class="modal-close" onclick="closeTermsModal()">✕</div>
+      </div>
+      <div class="modal-body" style="max-height:360px;overflow-y:auto;font-size:12px;line-height:1.6;color:var(--slate-700);">
+        <p><b>1. Quy định sử dụng:</b> Payment Link do Cổng thanh toán EPAY cung cấp giúp khách hàng thực hiện nghĩa vụ thanh toán đơn hàng an toàn, bảo mật theo chuẩn PCI-DSS Level 1.</p>
+        <p style="margin-top:8px;"><b>2. Quyền lợi khách hàng:</b> Khách hàng kiểm tra thông tin đơn hàng, số tiền và nội dung thanh toán trước khi tiến hành thanh toán. Mọi giao dịch được ghi nhận biên lai điện tử qua email.</p>
+        <p style="margin-top:8px;"><b>3. Hỗ trợ đối soát:</b> Liên hệ hotline 1900 6475 hoặc email support@epay.vn để được hỗ trợ trong vòng 24 giờ làm việc.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeTermsModal()">Đóng</button>
+        <button class="btn btn-primary" onclick="agreeTermsFromModal()">Tôi đồng ý</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toastBox">
+    <span>ℹ️</span>
+    <span id="toastMsg">Nội dung thông báo</span>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Dữ liệu mockup 48 đơn hàng cho Screen 6
+    const batchData = [];
+    const sNames = ["Topup", "Data 4G", "Khóa học", "Vé máy bay", "Điện máy", "Gia dụng"];
+    for (let i = 1; i <= 48; i++) {
+      const c = 12344 + i;
+      batchData.push({
+        stt: i,
+        service: sNames[i % sNames.length],
+        code: "ABC" + c,
+        amount: (10000 + (i * 2000)).toLocaleString('vi-VN'),
+        created: "15/10/2026 16:00:" + String(i % 60).padStart(2, '0'),
+        expire: "16/10/2026 20:00:00",
+        name: i % 2 === 0 ? "Nguyễn Văn " + String.fromCharCode(65 + (i % 26)) : "Trần Thị " + String.fromCharCode(65 + (i % 26)),
+        email: "khachhang" + i + "@example.com",
+        phone: "098526" + String(1000 + i).slice(1),
+        address: "Hà Nội",
+        lang: i % 4 === 0 ? "en" : "vi",
+        url: "https://pay.epay.vn/pl/token" + c
+      });
+    }
+
+    let curBatchPage = 1;
+    let curBatchSize = 10;
+
+    // Chuyển view
+    function switchMainView(viewKey) {
+      document.querySelectorAll('.screen-view').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.demo-btn').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.sb-sub-item').forEach(el => el.classList.remove('active'));
+
+      if (viewKey === 'single') {
+        document.getElementById('view-single').classList.add('active');
+        document.getElementById('btnNavSingle1').classList.add('active');
+        document.getElementById('sbItemSingle').classList.add('active');
+      } else if (viewKey === 'batch-upload') {
+        document.getElementById('view-batch-upload').classList.add('active');
+        document.getElementById('btnNavBatchUpload').classList.add('active');
+        document.getElementById('sbItemBatch').classList.add('active');
+      } else if (viewKey === 'batch-success') {
+        document.getElementById('view-batch-success').classList.add('active');
+        document.getElementById('btnNavBatchSuccess').classList.add('active');
+        document.getElementById('sbItemBatch').classList.add('active');
+        renderBatchSuccessTable(curBatchPage);
+      } else if (viewKey === 'batch-error') {
+        document.getElementById('view-batch-error').classList.add('active');
+        document.getElementById('btnNavBatchError').classList.add('active');
+        document.getElementById('sbItemBatch').classList.add('active');
+      } else if (viewKey === 'checkout') {
+        document.getElementById('view-checkout').classList.add('active');
+        document.getElementById('btnNavCheckout').classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function clearSingleValidationErrors() {
+      const banner = document.getElementById('formAlertBanner');
+      if (banner) banner.classList.remove('show');
+      
+      const inputs = ['inpServiceName', 'inpOrderCode', 'inpAmount', 'inpExpire', 'inpCustName', 'inpCustEmail', 'inpCustPhone'];
+      inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('is-invalid');
+      });
+
+      const errs = ['errServiceName', 'errOrderCode', 'errAmount', 'errExpire', 'errCustName', 'errCustEmail', 'errCustPhone'];
+      errs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('show');
+      });
+    }
+
+    function applySingleValidationErrors() {
+      const banner = document.getElementById('formAlertBanner');
+      if (banner) banner.classList.add('show');
+
+      // Tên dịch vụ: trống
+      const inpService = document.getElementById('inpServiceName');
+      inpService.value = '';
+      inpService.classList.add('is-invalid');
+      document.getElementById('errServiceName').classList.add('show');
+
+      // Mã đơn hàng: trùng
+      const inpCode = document.getElementById('inpOrderCode');
+      inpCode.value = 'ORD-20261015-089';
+      inpCode.classList.add('is-invalid');
+      document.getElementById('errOrderCode').classList.add('show');
+
+      // Số tiền: 500 (dưới min 1000)
+      const inpAmt = document.getElementById('inpAmount');
+      inpAmt.value = '500';
+      inpAmt.classList.add('is-invalid');
+      document.getElementById('errAmount').classList.add('show');
+
+      // Ngày hết hạn: quá khứ
+      const inpExp = document.getElementById('inpExpire');
+      inpExp.value = '10-10-2026 15:13:38';
+      inpExp.classList.add('is-invalid');
+      document.getElementById('errExpire').classList.add('show');
+
+      // Họ tên: trống
+      const inpName = document.getElementById('inpCustName');
+      inpName.value = '';
+      inpName.classList.add('is-invalid');
+      document.getElementById('errCustName').classList.add('show');
+
+      // Email: sai định dạng
+      const inpMail = document.getElementById('inpCustEmail');
+      inpMail.value = 'an.nguyen@invalid';
+      inpMail.classList.add('is-invalid');
+      document.getElementById('errCustEmail').classList.add('show');
+
+      // SĐT: thiếu số
+      const inpPhone = document.getElementById('inpCustPhone');
+      inpPhone.value = '012345';
+      inpPhone.classList.add('is-invalid');
+      document.getElementById('errCustPhone').classList.add('show');
+    }
+
+    function restoreSingleValidData() {
+      document.getElementById('inpServiceName').value = 'Combo Cà phê Đậm vị';
+      document.getElementById('inpOrderCode').value = 'ORD-20261015-089';
+      document.getElementById('inpAmount').value = '450,000';
+      document.getElementById('inpCurrency').value = 'VND';
+      document.getElementById('inpExpire').value = '16-10-2026 15:13:38';
+      document.getElementById('inpCustName').value = 'Nguyễn Văn An';
+      document.getElementById('inpCustEmail').value = 'an.nguyen@example.com';
+      document.getElementById('inpCustPhone').value = '0987654321';
+      document.getElementById('inpCustAddress').value = 'Landmark 81, P.22, Bình Thạnh, TP.HCM';
+      document.getElementById('inpLang').value = 'vi';
+    }
+
+    // Hiển thị State 1 (Chưa tạo - Ảnh 1), State 1B (Báo lỗi Validate), State 2 (Đã tạo - Ảnh 2)
+    function showSingleState(state) {
+      switchMainView('single');
+      document.querySelectorAll('.demo-btn').forEach(el => el.classList.remove('active'));
+
+      if (state === 'uncreated') {
+        clearSingleValidationErrors();
+        restoreSingleValidData();
+        document.getElementById('stateUncreatedBox').style.display = 'block';
+        document.getElementById('stateCreatedBox').style.display = 'none';
+        document.getElementById('btnNavSingle1').classList.add('active');
+      } else if (state === 'validation-error') {
+        clearSingleValidationErrors();
+        applySingleValidationErrors();
+        document.getElementById('stateUncreatedBox').style.display = 'block';
+        document.getElementById('stateCreatedBox').style.display = 'none';
+        document.getElementById('btnNavSingleError').classList.add('active');
+        showToast('⚠️ Màn hình validate: Phát hiện các trường dữ liệu không hợp lệ!');
+      } else {
+        clearSingleValidationErrors();
+        restoreSingleValidData();
+        document.getElementById('stateUncreatedBox').style.display = 'none';
+        document.getElementById('stateCreatedBox').style.display = 'block';
+        document.getElementById('btnNavSingle2').classList.add('active');
+      }
+    }
+
+    // Submit form tạo link đơn
+    function submitCreateSingle() {
+      showSingleState('created');
+      showToast("✓ Đã tạo Link thanh toán thành công cho đơn hàng #ORD-20261015-089!");
+      document.getElementById('stateCreatedBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Demo Batch
+    function selectDemoBatch(type) {
+      const inp = document.getElementById('batchFileInput');
+      if (type === 'valid') {
+        inp.value = "File mẫu.xlsx";
+        inp.dataset.mode = "valid";
+        showToast("Đã chọn File mẫu hợp lệ: 48 đơn hàng");
+      } else {
+        inp.value = "File mẫu_co_loi.xlsx";
+        inp.dataset.mode = "error";
+        showToast("Đã chọn File mẫu có lỗi: 4 dòng lỗi");
+      }
+    }
+
+    function clearBatchInput() {
+      const inp = document.getElementById('batchFileInput');
+      inp.value = '';
+      delete inp.dataset.mode;
+      showToast("Đã hủy file");
+    }
+
+    function executeProcessBatch() {
+      const inp = document.getElementById('batchFileInput');
+      if (!inp.value) {
+        showToast("Vui lòng chọn file đơn hàng trước!");
+        return;
+      }
+      if (inp.dataset.mode === 'error') {
+        switchMainView('batch-error');
+      } else {
+        switchMainView('batch-success');
+      }
+    }
+
+    // Render bảng lô thành công
+    function renderBatchSuccessTable(page) {
+      curBatchPage = page;
+      const tbody = document.getElementById('tblBatchSuccessBody');
+      tbody.innerHTML = '';
+
+      const start = (page - 1) * curBatchSize;
+      const end = Math.min(start + curBatchSize, batchData.length);
+      const rows = batchData.slice(start, end);
+
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="text-center">${r.stt}</td>
+          <td>${r.service}</td>
+          <td><b>${r.code}</b></td>
+          <td class="text-right">${r.amount}</td>
+          <td>${r.created}</td>
+          <td>${r.expire}</td>
+          <td>${r.name}</td>
+          <td>${r.email}</td>
+          <td>${r.phone}</td>
+          <td>${r.address}</td>
+          <td class="text-center">${r.lang}</td>
+          <td class="text-center"><a class="action-link-blue" onclick="copyPaymentUrl('${r.url}')">Copy</a></td>
+          <td class="text-center"><a class="action-link-green" onclick="openQrModal('${r.code}', '${r.service}', '${r.amount} VND', '${r.name} (${r.email})', '${r.expire}')">Xem QR</a></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('txtPagRange').innerText = 
+        `Hiển thị ${start + 1} - ${end} trong tổng số ${batchData.length} đơn hàng`;
+
+      // Cập nhật nút phân trang active
+      document.querySelectorAll('#view-batch-success .page-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById('btnBP' + page);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById('btnBatchPrev').disabled = (page === 1);
+      const totalPages = Math.ceil(batchData.length / curBatchSize);
+      document.getElementById('btnBatchNext').disabled = (page === totalPages);
+      document.getElementById('inpJumpPage').value = page;
+    }
+
+    function navBatchPage(p) {
+      const totalPages = Math.ceil(batchData.length / curBatchSize);
+      if (p >= 1 && p <= totalPages) {
+        renderBatchSuccessTable(p);
+      }
+    }
+
+    function changeBatchSize(sz) {
+      curBatchSize = parseInt(sz, 10);
+      renderBatchSuccessTable(1);
+    }
+
+    // Modal QR
+    function openQrModal(code, service, amount, cust, expire) {
+      document.getElementById('modalQrCodePill').innerText = code;
+      document.getElementById('modalQrTitle').innerText = service;
+      document.getElementById('modalQrAmount').innerText = amount;
+      document.getElementById('modalQrCust').innerText = "Khách hàng: " + cust;
+      document.getElementById('modalQrExpiry').innerText = "Hạn thanh toán: " + expire;
+      document.getElementById('modalQrUrlText').innerText = "https://pay.epay.vn/pl/" + code.toLowerCase();
+      document.getElementById('modalQrView').classList.add('show');
+    }
+    function closeQrModal() {
+      document.getElementById('modalQrView').classList.remove('show');
+    }
+
+    // Modal Terms
+    function openTermsModal() {
+      document.getElementById('modalTerms').classList.add('show');
+    }
+    function closeTermsModal() {
+      document.getElementById('modalTerms').classList.remove('show');
+    }
+    function agreeTermsFromModal() {
+      closeTermsModal();
+      const chk = document.getElementById('chkAgreement');
+      chk.checked = true;
+      document.getElementById('btnSubmitPay').disabled = false;
+      showToast("Đã đồng ý điều khoản! Nút thanh toán đã kích hoạt.");
+    }
+
+    // Đổi ngôn ngữ Hosted Form
+    let chkLang = 'vi';
+    function toggleCheckoutLanguage() {
+      if (chkLang === 'vi') {
+        chkLang = 'en';
+        document.getElementById('chkFlagIcon').innerText = "🇬🇧";
+        document.getElementById('chkLangLabel').innerText = "EN";
+        document.getElementById('lblChkHeaderCode').innerText = "Order Code: ORD-20261015-089";
+        document.getElementById('lblHdrMerchant').innerText = "MERCHANT INFORMATION";
+        document.getElementById('valMerchantName').innerText = "Vietnam Coffee Joint Stock Company";
+        document.getElementById('valMerchantTax').innerText = "Tax ID: 0102030405 | Hotline: 1900 6475";
+        document.getElementById('valBadgeOfficial').innerText = "Official Distributor";
+        document.getElementById('lblHdrCustomer').innerText = "CUSTOMER INFORMATION";
+        document.getElementById('lblRowCustName').innerText = "Full Name:";
+        document.getElementById('lblRowCustPhone').innerText = "Phone Number:";
+        document.getElementById('lblRowCustEmail').innerText = "Receipt Email:";
+        document.getElementById('lblHdrOrder').innerText = "ORDER DETAILS";
+        document.getElementById('lblRowOrderCode').innerText = "Order ID:";
+        document.getElementById('lblRowProduct').innerText = "Product / Service:";
+        document.getElementById('valProductName').innerText = "Rich Coffee Combo Pack";
+        document.getElementById('lblRowAmount').innerText = "Payment Amount:";
+        document.getElementById('valAmount').innerText = "$19.99 USD";
+        document.getElementById('lblRowExpiry').innerText = "Expiry Time:";
+        document.getElementById('lblRowDesc').innerText = "Order Description:";
+        document.getElementById('valDesc').innerText = "Payment for Rich Coffee Combo Pack";
+        document.getElementById('lblTermsPrompt').innerHTML = 'I have read and agree to the <span style="color:var(--primary);font-weight:600;text-decoration:underline;cursor:pointer;" onclick="openTermsModal()">Terms & Conditions</span> of the payment service.';
+        document.getElementById('txtBtnPay').innerText = "Continue to Payment";
+        showToast("Switched checkout interface to English version (Screen 64:4)");
+      } else {
+        chkLang = 'vi';
+        document.getElementById('chkFlagIcon').innerText = "🇻🇳";
+        document.getElementById('chkLangLabel').innerText = "VI";
+        document.getElementById('lblChkHeaderCode').innerText = "Mã đơn: ORD-20261015-089";
+        document.getElementById('lblHdrMerchant').innerText = "THÔNG TIN ĐƠN VỊ CẤP HÀNG HÓA";
+        document.getElementById('valMerchantName').innerText = "Công ty Cổ phần Cà phê Việt Nam";
+        document.getElementById('valMerchantTax').innerText = "MST: 0102030405 | Hotline: 1900 6475";
+        document.getElementById('valBadgeOfficial').innerText = "Đại lý phân phối chính thức";
+        document.getElementById('lblHdrCustomer').innerText = "THÔNG TIN KHÁCH HÀNG";
+        document.getElementById('lblRowCustName').innerText = "Họ và tên:";
+        document.getElementById('lblRowCustPhone').innerText = "Số điện thoại:";
+        document.getElementById('lblRowCustEmail').innerText = "Email nhận biên lai:";
+        document.getElementById('lblHdrOrder').innerText = "THÔNG TIN ĐƠN HÀNG";
+        document.getElementById('lblRowOrderCode').innerText = "Mã đơn hàng:";
+        document.getElementById('lblRowProduct').innerText = "Sản phẩm / Dịch vụ:";
+        document.getElementById('valProductName').innerText = "Combo Cà phê Đậm vị";
+        document.getElementById('lblRowAmount').innerText = "Số tiền thanh toán:";
+        document.getElementById('valAmount').innerText = "450,000 VND";
+        document.getElementById('lblRowExpiry').innerText = "Hạn thanh toán:";
+        document.getElementById('lblRowDesc').innerText = "Nội dung đơn hàng:";
+        document.getElementById('valDesc').innerText = "Thanh toán đơn hàng Combo Cà phê Đậm vị";
+        document.getElementById('lblTermsPrompt').innerHTML = 'Tôi đã đọc và đồng ý với <span style="color:var(--primary);font-weight:600;text-decoration:underline;cursor:pointer;" onclick="openTermsModal()">Điều khoản & Điều kiện</span> sử dụng dịch vụ thanh toán.';
+        document.getElementById('txtBtnPay').innerText = "Tiếp tục thanh toán";
+        showToast("Đã chuyển giao diện sang Tiếng Việt (Screen 26:4)");
+      }
+    }
+
+    function executeFakePay() {
+      showToast("Khách hàng xác nhận thành công! Đang chuyển cổng thanh toán...");
+      setTimeout(() => {
+        alert("✅ THANH TOÁN THÀNH CÔNG!\n\nĐơn hàng: ORD-20261015-089\nSố tiền: 450,000 VND\nTrạng thái: Hoàn tất giao dịch.");
+      }, 400);
+    }
+
+    function copyPaymentUrl(u) {
+      navigator.clipboard.writeText(u).then(() => {
+        showToast("📋 Đã sao chép link thanh toán: " + u);
+      }).catch(() => {
+        showToast("Đã sao chép: " + u);
+      });
+    }
+
+    let tTimer = null;
+    function showToast(m) {
+      const b = document.getElementById('toastBox');
+      document.getElementById('toastMsg').innerText = m;
+      b.classList.add('show');
+      clearTimeout(tTimer);
+      tTimer = setTimeout(() => b.classList.remove('show'), 3000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderBatchSuccessTable(1);
+    });
+  </script>
+</body>
+</html>

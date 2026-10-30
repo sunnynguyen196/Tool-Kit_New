@@ -158,12 +158,12 @@ const wordDocHtml = `
 <body>
 
   <h1>TÀI LIỆU MÔ TẢ USE CASE & GIAO DIỆN CHI TIẾT</h1>
-  <h2>TÍNH NĂNG QUẢN LÝ TRA SOÁT (BỔ SUNG KHỐI THÔNG TIN BÁO CÓ CHO CHIỀU TRA SOÁT ĐÃ GỬI TCYCTS)</h2>
+  <h2>TÍNH NĂNG QUẢN LÝ TRA SOÁT (TỔNG HỢP LUỒNG TCYCTS VÀ TCTLTS / TLTS CHUẨN EPAY)</h2>
 
   <div class="doc-info">
     <strong>Mã tài liệu:</strong> EPAY-QT.CG.02_BM33 &nbsp;|&nbsp; 
     <strong>Dự án:</strong> Hệ thống Quản lý Tra soát Epay - Petrolimex 2.0 &nbsp;|&nbsp; 
-    <strong>Phiên bản:</strong> v2.9 (Cập nhật Chiều YCTS bao gồm Khối Thông tin Hoàn trả &amp; Khối Thông tin Báo có. Khối Báo nợ thuộc Phân hệ TCTLTS)
+    <strong>Phiên bản:</strong> v3.0 (Cập nhật Luồng TLTS / TCTLTS Trả lời Tra soát thụ động và Khối Hạch toán Báo nợ &amp; Báo có theo BR-GENERAL-05)
   </div>
 
   <!-- ================= MỤC 1: MÔ TẢ BỘ TRẠNG THÁI HỆ THỐNG & MA TRẬN CHUYỂN ĐỔI ================= -->
@@ -419,6 +419,139 @@ const wordDocHtml = `
         <td><code>PRCD</code> / <code>RJCD</code> / <code>—</code></td>
         <td>🟠 <code>EXPI</code> (Expired - Quá hạn 72h SLA Napas)</td>
       </tr>
+    </tbody>
+  </table>
+
+  <!-- BẢNG MÔ TẢ CHI TIẾT TRẠNG THÁI TIẾN TRÌNH TCTLTS -->
+  <div style="font-weight:bold; color:#002D62; margin-top:14pt; margin-bottom:4pt;">1.7. Bảng Mô tả Chi tiết các Trạng thái Tiến trình Tra soát (PCTS) Luồng Tra soát đã nhận (TCTLTS / TLTS)</div>
+  <table class="transition-table">
+    <thead>
+      <tr>
+        <th style="width:20%;">Mã Trạng thái Tiến trình (PCTS)</th>
+        <th style="width:16%;">Tên hiển thị</th>
+        <th style="width:36%;">Diễn giải Chi tiết Nghiệp vụ tại Luồng TCTLTS</th>
+        <th style="width:14%;">Trạng thái Xử lý</th>
+        <th style="width:14%;">Trạng thái Hết hạn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Chờ xử lý</strong> (Pending)</td>
+        <td>Chờ xử lý / Cần xử lý</td>
+        <td>Bản ghi YCTS điện TS-014 thụ động vừa được Napas truyền sang Service QR và tự động đồng bộ insert vào MM DB.</td>
+        <td><code>—</code> (Chưa chọn câu trả lời)</td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Chờ phê duyệt</strong> (ApprovePending)</td>
+        <td>Chờ phê duyệt</td>
+        <td>Maker chọn câu trả lời (PRCD/RJCD) và bấm <strong>[📤 Gửi yêu cầu phê duyệt]</strong>, sinh bản ghi YCPD trình Lãnh đạo.</td>
+        <td><code>PRCD</code> / <code>RJCD</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Đã phê duyệt</strong> (Approved)</td>
+        <td>Đã phê duyệt</td>
+        <td>Checker bấm duyệt YCPD (<code>Approved</code>). Hệ thống chuẩn bị gọi Service QR API phát hành câu trả lời sang Napas.</td>
+        <td><code>PRCD</code> / <code>RJCD</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Xử lý thất bại</strong> (Failure)</td>
+        <td>Xử lý thất bại</td>
+        <td>Phát sinh lỗi validation định dạng dữ liệu hoặc lỗi kết nối API Service QR Gateway khi phát hành câu trả lời.</td>
+        <td><code>—</code> / <code>OPEN</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Chờ phản hồi</strong> (Waiting Response)</td>
+        <td>Chờ phản hồi</td>
+        <td>Cổng Service QR phát hành thông điệp câu trả lời sang Napas thành công (<code>OPEN</code>), chờ callback IPN từ Napas.</td>
+        <td><code>OPEN</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Đã phản hồi</strong> (Responded)</td>
+        <td>Đã phản hồi</td>
+        <td>Napas gửi callback IPN xác nhận câu trả lời (<code>PRCD</code> / <code>RJCD</code>) hoặc thông báo quá hạn SLA.</td>
+        <td><code>PRCD</code> / <code>RJCD</code></td>
+        <td><code>Chưa hết hạn</code> / 🟠 <code>Đã hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Hoàn tất</strong> (Completed)</td>
+        <td>Hoàn tất</td>
+        <td>Quy trình phản hồi tra soát và hạch toán Báo nợ / Báo có đối soát đã kết thúc thành công.</td>
+        <td><code>PRCD</code> / <code>RJCD</code></td>
+        <td><code>Chưa hết hạn</code> / <code>Đã hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Đã hủy</strong> (Cancelled)</td>
+        <td>Đã hủy</td>
+        <td>YCPD bị Checker từ chối hoặc Maker hủy câu trả lời đề xuất (bản ghi YCTS quay về <em>Chờ xử lý</em> để Maker lập lại).</td>
+        <td><code>—</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- BẢNG MA TRẬN HIỂN THỊ KHỐI THÔNG TIN CỦA LUỒNG TCYCTS / TRA SOÁT ĐÃ GỬI -->
+  <div style="font-weight:bold; color:#002D62; margin-top:14pt; margin-bottom:4pt;">1.8. Bảng Ma trận Hiển thị Khối thông tin trên Màn hình Chi tiết YCTS Luồng Tra soát đã gửi (TCYCTS)</div>
+  <table class="transition-table">
+    <thead>
+      <tr>
+        <th style="width:4%;">STT</th>
+        <th style="width:28%;">Khối thông tin trên Màn hình Chi tiết (Luồng TCYCTS)</th>
+        <th style="width:9%;">1. Chờ xử lý</th>
+        <th style="width:9%;">2. Chờ kiểm tra</th>
+        <th style="width:9%;">3. Chờ phê duyệt</th>
+        <th style="width:13%;">4. Đã phê duyệt / Chờ phản hồi</th>
+        <th style="width:10%;">5. Xử lý thất bại</th>
+        <th style="width:9%;">6. Đã phản hồi</th>
+        <th style="width:7%;">7. Hoàn tất</th>
+        <th style="width:6%;">8. Đã hủy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="text-align:center;">1</td><td><strong>Khối Tiến trình &amp; SLA</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">2</td><td><strong>Khối Thông tin Giao dịch Gốc</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">3</td><td><strong>Khối Thông tin Tra soát (YCTS)</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">4</td><td><strong>Khối Đề xuất Phản hồi / Kết quả xử lý</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">5</td><td><strong>Khối Phê duyệt RBAC (Thông tin YCPD)</strong></td><td style="text-align:center;"></td><td style="text-align:center;"></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">6</td><td><strong>Khối Thông tin Giao dịch Hoàn tiền</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;"></td></tr>
+      <tr><td style="text-align:center;">7</td><td><strong>Khối Thông tin Giao dịch Báo có</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;"></td></tr>
+      <tr><td style="text-align:center;">8</td><td><strong>Khối Thông tin Giao dịch Báo nợ</strong></td><td style="text-align:center;"></td><td style="text-align:center;"></td><td style="text-align:center;"></td><td style="text-align:center;"></td><td style="text-align:center;"></td><td style="text-align:center;"></td><td style="text-align:center;"></td><td style="text-align:center;"></td></tr>
+      <tr><td style="text-align:center;">9</td><td><strong>Khối Nhật ký Audit Trail Timeline</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">10</td><td><strong>Vùng Nút bấm Thao tác (Action Bar)</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;"></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;"></td><td style="text-align:center;"></td></tr>
+    </tbody>
+  </table>
+
+  <!-- BẢNG MA TRẬN HIỂN THỊ KHỐI THÔNG TIN CỦA LUỒNG TCTLTS / TRA SOÁT ĐÃ NHẬN -->
+  <div style="font-weight:bold; color:#002D62; margin-top:14pt; margin-bottom:4pt;">1.9. Bảng Ma trận Hiển thị Khối thông tin trên Màn hình Chi tiết YCTS Luồng Tra soát đã nhận (TCTLTS / TLTS)</div>
+  <table class="transition-table">
+    <thead>
+      <tr>
+        <th style="width:4%;">STT</th>
+        <th style="width:28%;">Khối thông tin trên Màn hình Chi tiết (Luồng TLTS)</th>
+        <th style="width:10%;">1. Chờ xử lý</th>
+        <th style="width:10%;">2. Chờ phê duyệt</th>
+        <th style="width:14%;">3. Đã phê duyệt / Chờ phản hồi</th>
+        <th style="width:11%;">4. Xử lý thất bại</th>
+        <th style="width:10%;">5. Đã phản hồi</th>
+        <th style="width:7%;">6. Hoàn tất</th>
+        <th style="width:6%;">7. Đã hủy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="text-align:center;">1</td><td><strong>Khối Tiến trình &amp; SLA</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">2</td><td><strong>Khối Thông tin Giao dịch Gốc</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">3</td><td><strong>Khối Thông tin Tra soát đã nhận (YCTS)</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">4</td><td><strong>Khối Đề xuất Phản hồi / Kết quả xử lý</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">5</td><td><strong>Khối Phê duyệt RBAC (Thông tin YCPD)</strong></td><td style="text-align:center;"></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">6</td><td><strong>Khối Thông tin Giao dịch Hoàn tiền</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;"></td></tr>
+      <tr><td style="text-align:center;">7</td><td><strong>Khối Thông tin Giao dịch Báo có</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;"></td></tr>
+      <tr><td style="text-align:center;">8</td><td><strong>Khối Thông tin Giao dịch Báo nợ</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;"></td></tr>
+      <tr><td style="text-align:center;">9</td><td><strong>Khối Nhật ký Audit Trail Timeline</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;">x</td></tr>
+      <tr><td style="text-align:center;">10</td><td><strong>Vùng Nút bấm Thao tác (Action Bar)</strong></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;"></td><td style="text-align:center;">x</td><td style="text-align:center;">x</td><td style="text-align:center;"></td><td style="text-align:center;"></td></tr>
     </tbody>
   </table>
 
@@ -1066,6 +1199,193 @@ const wordDocHtml = `
     </tbody>
   </table>
 
+  <!-- ================= MỤC 5: CHI TIẾT CÁC USE CASE TRA SOÁT ĐÃ NHẬN (TCTLTS) ================= -->
+  <div class="sec-title" style="page-break-before:always;">5. CHI TIẾT CÁC USE CASE TRA SOÁT ĐÃ NHẬN (TCTLTS / TLTS — TRA SOÁT THỤ ĐỘNG / CHIỀU ĐẾN)</div>
+
+  <!-- BẢNG TỔNG QUAN 5.0 -->
+  <div style="font-weight:bold; color:#002D62; margin-top:10pt; margin-bottom:4pt;">5.0. Bảng Tổng quan Mô tả Trạng thái Tiến trình (PCTS) Luồng Tra soát đã nhận (TCTLTS / TLTS)</div>
+  <table class="transition-table">
+    <thead>
+      <tr>
+        <th style="width:20%;">Mã Trạng thái Tiến trình (PCTS)</th>
+        <th style="width:16%;">Tên hiển thị</th>
+        <th style="width:36%;">Diễn giải Chi tiết Nghiệp vụ tại Luồng TCTLTS</th>
+        <th style="width:14%;">Trạng thái Xử lý</th>
+        <th style="width:14%;">Trạng thái Hết hạn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Chờ xử lý</strong> (Pending)</td>
+        <td>Chờ xử lý / Cần xử lý</td>
+        <td>Bản ghi YCTS điện TS-014 thụ động vừa được Napas truyền sang Service QR và tự động đồng bộ insert vào MM DB.</td>
+        <td><code>—</code> (Chưa chọn câu trả lời)</td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Chờ phê duyệt</strong> (ApprovePending)</td>
+        <td>Chờ phê duyệt</td>
+        <td>Maker chọn câu trả lời (PRCD/RJCD) và bấm <strong>[📤 Gửi yêu cầu phê duyệt]</strong>, sinh bản ghi YCPD trình Lãnh đạo.</td>
+        <td><code>PRCD</code> / <code>RJCD</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Đã phê duyệt</strong> (Approved)</td>
+        <td>Đã phê duyệt</td>
+        <td>Checker bấm duyệt YCPD (<code>Approved</code>). Hệ thống chuẩn bị gọi Service QR API phát hành câu trả lời sang Napas.</td>
+        <td><code>PRCD</code> / <code>RJCD</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Xử lý thất bại</strong> (Failure)</td>
+        <td>Xử lý thất bại</td>
+        <td>Phát sinh lỗi validation định dạng dữ liệu hoặc lỗi kết nối API Service QR Gateway khi phát hành câu trả lời.</td>
+        <td><code>—</code> / <code>OPEN</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Chờ phản hồi</strong> (Waiting Response)</td>
+        <td>Chờ phản hồi</td>
+        <td>Cổng Service QR phát hành thông điệp câu trả lời sang Napas thành công (<code>OPEN</code>), chờ callback IPN từ Napas.</td>
+        <td><code>OPEN</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Đã phản hồi</strong> (Responded)</td>
+        <td>Đã phản hồi</td>
+        <td>Napas gửi callback IPN xác nhận câu trả lời (<code>PRCD</code> / <code>RJCD</code>) hoặc thông báo quá hạn SLA.</td>
+        <td><code>PRCD</code> / <code>RJCD</code></td>
+        <td><code>Chưa hết hạn</code> / 🟠 <code>Đã hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Hoàn tất</strong> (Completed)</td>
+        <td>Hoàn tất</td>
+        <td>Quy trình phản hồi tra soát và hạch toán Báo nợ / Báo có đối soát đã kết thúc thành công.</td>
+        <td><code>PRCD</code> / <code>RJCD</code></td>
+        <td><code>Chưa hết hạn</code> / <code>Đã hết hạn</code></td>
+      </tr>
+      <tr>
+        <td><strong>Đã hủy</strong> (Cancelled)</td>
+        <td>Đã hủy</td>
+        <td>YCPD bị Checker từ chối hoặc Maker hủy câu trả lời đề xuất (bản ghi YCTS quay về <em>Chờ xử lý</em> để Maker lập lại).</td>
+        <td><code>—</code></td>
+        <td><code>Chưa hết hạn</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- USE CASE RECV 1 -->
+  <div class="uc-title" style="page-break-before:always;">5.1. Use case 1: Tra cứu và xem danh sách YCTS đã nhận (BF29.1-UC-RECV-01)</div>
+  <table class="uc-table">
+    <tr><td class="field-name">Use Case</td><td class="field-value"><strong>Tra cứu và xem danh sách YCTS đã nhận (TCTLTS)</strong></td></tr>
+    <tr><td class="field-name">ID</td><td class="field-value"><strong>BF29.1-UC-RECV-01</strong></td></tr>
+    <tr><td class="field-name">Description</td><td class="field-value">Tra cứu kết quả và quản lý các yêu cầu tra soát thụ động do Napas/Đối tác gửi đến Epay theo Cấu trúc Trạng thái 3 Nhóm và phân loại theo tab.</td></tr>
+    <tr><td class="field-name">Actor</td><td class="field-value">Đối soát, Kỹ thuật, Kế toán, Lãnh đạo, Hệ thống MM</td></tr>
+    <tr><td class="field-name">Trigger</td><td class="field-value">Người dùng chọn menu <strong>[Quản lý tra soát]</strong> &gt; <strong>[Tra soát đã nhận]</strong>.</td></tr>
+    <tr><td class="field-name">Pre-Condition</td><td class="field-value">Tài khoản có quyền truy cập tab Tra soát đã nhận.</td></tr>
+    <tr><td class="field-name">Post-Condition</td><td class="field-value">Hiển thị danh sách YCTS đã nhận thỏa mãn điều kiện lọc trên Table Grid.</td></tr>
+    <tr><td class="field-name">Basic flow</td><td class="field-value">1. Mở màn hình Tra soát đã nhận.<br/>2. Hệ thống hiển thị các tab ('Tất cả', 'Chờ xử lý', 'Chờ phê duyệt', 'Quá hạn', 'Chờ phản hồi', 'Đã phản hồi', 'Hoàn tất', 'Đã hủy').<br/>3. Người dùng chọn điều kiện lọc và bấm <strong>[Tìm kiếm]</strong>.<br/>4. Nhấp nút <strong>[Tùy chỉnh]</strong> để ẩn/hiện và sắp xếp danh sách cột hiển thị (lưu theo tài khoản và theo tab).</td></tr>
+    <tr><td class="field-name">Non-functional requirement</td><td class="field-value">Hiển thị kết quả tra cứu &lt; 2.0 giây cho 1,000 bản ghi.</td></tr>
+  </table>
+
+  <!-- USE CASE RECV 2 -->
+  <div class="uc-title" style="page-break-before:always;">5.2. Use case 2: Tiếp nhận điện tra soát thụ động TS-014 (BF29.1-UC-RECV-02)</div>
+  <table class="uc-table">
+    <tr><td class="field-name">Use Case</td><td class="field-value"><strong>Tiếp nhận điện tra soát thụ động TS-014 từ Napas</strong></td></tr>
+    <tr><td class="field-name">ID</td><td class="field-value"><strong>BF29.1-UC-RECV-02</strong></td></tr>
+    <tr><td class="field-name">Description</td><td class="field-value">Cổng Service QR tiếp nhận thông điệp điện YCTS TS-014 từ Napas, validate dữ liệu và tự động gọi API đồng bộ khởi tạo bản ghi trên DB MM.</td></tr>
+    <tr><td class="field-name">Actor</td><td class="field-value">Cổng Napas / Partner, Service QR Gateway, Hệ thống MM</td></tr>
+    <tr><td class="field-name">Trigger</td><td class="field-value">Napas phát hành thông điệp điện TS-014 sang Service QR Gateway.</td></tr>
+    <tr><td class="field-name">Pre-Condition</td><td class="field-value">Kết nối API Gateway hoạt động bình thường, thông điệp đúng chuẩn Napas.</td></tr>
+    <tr><td class="field-name">Post-Condition</td><td class="field-value">DB MM bắt buộc insert 01 bản ghi YCTS mới ở Tiến trình <code>Chờ xử lý</code>, TT Xử lý = <code>—</code>, TT Hết hạn = <code>Chưa hết hạn</code> (BR-GENERAL-03).</td></tr>
+    <tr><td class="field-name">Basic flow</td><td class="field-value">1. Service QR tiếp nhận payload TS-014.<br/>2. Validate mã GD gốc và định dạng.<br/>3. Lưu DB QR status OPEN.<br/>4. Gọi API đồng bộ nội bộ sang MM.<br/>5. MM insert 01 bản ghi YCTS mới ở Tiến trình Chờ xử lý.<br/>6. Phát thông báo cảnh báo YCTS mới cho Chuyên viên Đối soát.</td></tr>
+    <tr><td class="field-name">Non-functional requirement</td><td class="field-value">Đồng bộ API thời gian thực &lt; 500ms.</td></tr>
+  </table>
+
+  <!-- USE CASE RECV 3 -->
+  <div class="uc-title" style="page-break-before:always;">5.3. Use case 3: Xem chi tiết YCTS đã nhận (BF29.1-UC-RECV-03)</div>
+  <table class="uc-table">
+    <tr><td class="field-name">Use Case</td><td class="field-value"><strong>Xem chi tiết YCTS đã nhận (Bao gồm Khối Báo nợ &amp; Khối Báo có theo BR-GENERAL-05)</strong></td></tr>
+    <tr><td class="field-name">ID</td><td class="field-value"><strong>BF29.1-UC-RECV-03</strong></td></tr>
+    <tr><td class="field-name">Description</td><td class="field-value">Xem đầy đủ hồ sơ chi tiết bản ghi tra soát thụ động bao gồm Khối 1 Tiến trình, Khối 2 GD gốc, Khối 3 Thông tin tra soát 11 trường, Khối 4 Phê duyệt RBAC, Khối 5 Khối Thông tin Báo nợ (6 trường tiêu chuẩn khi thu hồi sai sót) và Khối 6 Khối Thông tin Báo có (6 trường tiêu chuẩn khi hạch toán cộng tiền).</td></tr>
+    <tr><td class="field-name">Actor</td><td class="field-value">Đối soát, Kỹ thuật, Kế toán, Lãnh đạo</td></tr>
+    <tr><td class="field-name">Trigger</td><td class="field-value">Nhấp vào Mã tra soát (Hyperlink Mã YCTS) hoặc bấm biểu tượng <strong>[👁️ Xem chi tiết]</strong> tại màn hình Tra soát đã nhận.</td></tr>
+    <tr><td class="field-name">Pre-Condition</td><td class="field-value">Tài khoản có quyền xem chi tiết bản ghi tra soát đã nhận.</td></tr>
+    <tr><td class="field-name">Post-Condition</td><td class="field-value">Hiển thị giao diện chi tiết đầy đủ các khối thông tin read-only kèm Khối Báo nợ &amp; Khối Báo có.</td></tr>
+    <tr><td class="field-name">Basic flow</td><td class="field-value">1. Chọn bản ghi và bấm [👁️ Xem chi tiết].<br/>2. Tải dữ liệu từ MM &amp; QR DB.<br/>3. Render Khối Tiến trình 3 Nhóm.<br/>4. Render Khối GD gốc &amp; Thông tin tra soát 11 trường.<br/>5. <strong>Kiểm tra BR-GENERAL-05:</strong> Render Khối Báo nợ (6 trường) khi có hạch toán thu hồi &amp; Khối Báo có (6 trường) khi cộng tiền.<br/>6. Render Audit Trail Timeline.</td></tr>
+    <tr><td class="field-name">Non-functional requirement</td><td class="field-value">Thời gian tải và hiển thị &lt; 1.5 giây.</td></tr>
+  </table>
+
+  <!-- USE CASE RECV 4 -->
+  <div class="uc-title" style="page-break-before:always;">5.4. Use case 4: Lập câu trả lời tra soát TLTS (BF29.1-UC-RECV-04)</div>
+  <table class="uc-table">
+    <tr><td class="field-name">Use Case</td><td class="field-value"><strong>Lập câu trả lời tra soát TLTS (Maker chọn PRCD / RJCD)</strong></td></tr>
+    <tr><td class="field-name">ID</td><td class="field-value"><strong>BF29.1-UC-RECV-04</strong></td></tr>
+    <tr><td class="field-name">Description</td><td class="field-value">Chuyên viên Đối soát (Maker) kiểm tra điện thụ động TS-014 và lập phương án trả lời: Đồng ý (<code>PRCD</code>) hoặc Từ chối (<code>RJCD</code>), nhập diễn giải và đính kèm file chứng từ.</td></tr>
+    <tr><td class="field-name">Actor</td><td class="field-value">Đối soát (Maker)</td></tr>
+    <tr><td class="field-name">Trigger</td><td class="field-value">Maker chọn nút <strong>[💬 Trả lời tra soát]</strong> tại màn hình Chi tiết YCTS đã nhận ở mốc Chờ xử lý.</td></tr>
+    <tr><td class="field-name">Pre-Condition</td><td class="field-value">Bản ghi YCTS ở trạng thái Tiến trình Chờ xử lý thuộc Tab Tra soát đã nhận.</td></tr>
+    <tr><td class="field-name">Post-Condition</td><td class="field-value">Lưu thông tin phác thảo câu trả lời (PRCD/RJCD) sẵn sàng trình phê duyệt.</td></tr>
+    <tr><td class="field-name">Basic flow</td><td class="field-value">1. Bấm [💬 Trả lời tra soát].<br/>2. Mở Form Lập câu trả lời TLTS.<br/>3. Chọn Trạng thái xử lý đề xuất (<code>PRCD</code> — Đồng ý / <code>RJCD</code> — Từ chối).<br/>4. Nhập Lý do / Diễn giải chi tiết.<br/>5. Tải tệp đính kèm (Tối đa 1 file 5MB).<br/>6. Bấm [Lưu tạm] hoặc chuyển bước trình duyệt.</td></tr>
+    <tr><td class="field-name">Non-functional requirement</td><td class="field-value">Phản hồi giao diện lập form &lt; 500ms.</td></tr>
+  </table>
+
+  <!-- USE CASE RECV 5 -->
+  <div class="uc-title" style="page-break-before:always;">5.5. Use case 5: Gửi phê duyệt câu trả lời TLTS (BF29.1-UC-RECV-05)</div>
+  <table class="uc-table">
+    <tr><td class="field-name">Use Case</td><td class="field-value"><strong>Gửi phê duyệt câu trả lời TLTS (Trình Lãnh đạo duyệt YCPD)</strong></td></tr>
+    <tr><td class="field-name">ID</td><td class="field-value"><strong>BF29.1-UC-RECV-05</strong></td></tr>
+    <tr><td class="field-name">Description</td><td class="field-value">Chuyên viên Đối soát trình Lãnh đạo duyệt câu trả lời tra soát. YCTS chuyển sang Tiến trình Chờ phê duyệt và sinh 01 bản ghi YCPD mới (<code>ApprovePending</code>).</td></tr>
+    <tr><td class="field-name">Actor</td><td class="field-value">Đối soát (Maker)</td></tr>
+    <tr><td class="field-name">Trigger</td><td class="field-value">Maker nhấp nút <strong>[📤 Gửi yêu cầu phê duyệt]</strong> sau khi lập xong câu trả lời.</td></tr>
+    <tr><td class="field-name">Pre-Condition</td><td class="field-value">Bản ghi YCTS ở mốc Chờ xử lý và đã điền đầy đủ câu trả lời đề xuất (PRCD/RJCD).</td></tr>
+    <tr><td class="field-name">Post-Condition</td><td class="field-value">YCTS status = Chờ phê duyệt, sinh 01 bản ghi YCPD ApprovePending trên DB MM.</td></tr>
+    <tr><td class="field-name">Basic flow</td><td class="field-value">1. Bấm [📤 Gửi yêu cầu phê duyệt].<br/>2. Kiểm tra dữ liệu bắt buộc.<br/>3. Sinh bản ghi YCPD mới (<code>ApprovePending</code>).<br/>4. Cập nhật YCTS sang Chờ phê duyệt.<br/>5. Gửi thông báo Push Notification/Email cho Lãnh đạo (Checker).</td></tr>
+    <tr><td class="field-name">Non-functional requirement</td><td class="field-value">Thời gian sinh bản ghi YCPD &lt; 1.0s.</td></tr>
+  </table>
+
+  <!-- USE CASE RECV 6 -->
+  <div class="uc-title" style="page-break-before:always;">5.6. Use case 6: Phê duyệt / Từ chối câu trả lời TLTS (BF29.1-UC-RECV-06)</div>
+  <table class="uc-table">
+    <tr><td class="field-name">Use Case</td><td class="field-value"><strong>Phê duyệt / Từ chối câu trả lời TLTS (Role Lãnh đạo / Checker)</strong></td></tr>
+    <tr><td class="field-name">ID</td><td class="field-value"><strong>BF29.1-UC-RECV-06</strong></td></tr>
+    <tr><td class="field-name">Description</td><td class="field-value">Role Lãnh đạo (Checker) kiểm tra đề xuất câu trả lời và nhấp [✅ Đồng ý Phê duyệt] hoặc [❌ Từ chối Phê duyệt]. Nếu duyệt, kích hoạt Service QR phát hành thông điệp trả lời sang Napas.</td></tr>
+    <tr><td class="field-name">Actor</td><td class="field-value">Lãnh đạo (Checker / Manager)</td></tr>
+    <tr><td class="field-name">Trigger</td><td class="field-value">Checker mở bản ghi YCPD ở mốc Chờ phê duyệt và bấm chọn nút Duyệt hoặc Từ chối.</td></tr>
+    <tr><td class="field-name">Pre-Condition</td><td class="field-value">Bản ghi YCPD ở trạng thái ApprovePending và tài khoản Checker khác tài khoản Maker khởi tạo (BR-GENERAL-02).</td></tr>
+    <tr><td class="field-name">Post-Condition</td><td class="field-value">Nếu Đồng ý: YCPD = Approved, YCTS = Đã phê duyệt ➔ Chờ phản hồi &amp; phát hành sang Napas. Nếu Từ chối: YCPD = Cancel, YCTS quay lại Chờ xử lý.</td></tr>
+    <tr><td class="field-name">Basic flow</td><td class="field-value">1. Xem hồ sơ câu trả lời đề xuất.<br/>2. (Từ chối): Nhập lý do từ chối ➔ Bấm [❌ Từ chối Phê duyệt] ➔ YCPD = Cancel, YCTS về Chờ xử lý.<br/>3. (Đồng ý): Bấm [✅ Đồng ý Phê duyệt] ➔ YCPD = Approved, YCTS = Đã phê duyệt ➔ Phát hành API Service QR sang Napas.<br/>4. Ghi log Audit Trail.</td></tr>
+    <tr><td class="field-name">Non-functional requirement</td><td class="field-value">Phê duyệt &amp; kích hoạt API Service QR Gateway &lt; 2.0s.</td></tr>
+  </table>
+
+  <!-- USE CASE RECV 7 -->
+  <div class="uc-title" style="page-break-before:always;">5.7. Use case 7: Chờ Napas xác nhận kết quả TLTS &amp; Quản lý SLA Hết hạn (BF29.1-UC-RECV-07)</div>
+  <table class="uc-table">
+    <tr><td class="field-name">Use Case</td><td class="field-value"><strong>Chờ Napas xác nhận kết quả TLTS &amp; Quản lý SLA Hết hạn</strong></td></tr>
+    <tr><td class="field-name">ID</td><td class="field-value"><strong>BF29.1-UC-RECV-07</strong></td></tr>
+    <tr><td class="field-name">Description</td><td class="field-value">Theo dõi kết quả xác nhận từ phía Napas khi Service QR phát hành câu trả lời. Quản lý trạng thái SLA quá hạn (<code>EXPI</code>) và ghi nhận trường hợp Trả lời sau hết hạn.</td></tr>
+    <tr><td class="field-name">Actor</td><td class="field-value">Service QR Gateway, Cổng Napas, Hệ thống MM</td></tr>
+    <tr><td class="field-name">Trigger</td><td class="field-value">Napas gửi callback IPN phản hồi hoặc quá mốc thời gian SLA (72h).</td></tr>
+    <tr><td class="field-name">Pre-Condition</td><td class="field-value">Cổng Service QR đã truyền thông điệp câu trả lời sang Napas thành công.</td></tr>
+    <tr><td class="field-name">Post-Condition</td><td class="field-value">Tự động gán Tiến trình = Đã phản hồi, Trạng thái hết hạn = Đã hết hạn (nếu quá SLA) và gán kết quả cuối PRCD/RJCD.</td></tr>
+    <tr><td class="field-name">Basic flow</td><td class="field-value">1. Bản ghi ở mốc Chờ phản hồi.<br/>2. (Bình thường): Napas gửi IPN ➔ MM gán Tiến trình = Đã phản hồi, TT xử lý = PRCD/RJCD.<br/>3. (Quá hạn SLA): Napas gửi IPN <code>EXPI</code> ➔ MM cập nhật Trạng thái hết hạn = Đã hết hạn, chuyển sang Tab Quá hạn.<br/>4. (Trả lời sau hết hạn): Nếu gửi phản hồi sau mốc <code>EXPI</code>, MM ghi nhận kết quả PRCD/RJCD kèm dấu hiệu Trả lời sau hết hạn.<br/>5. Ghi log Audit Trail.</td></tr>
+    <tr><td class="field-name">Non-functional requirement</td><td class="field-value">Cập nhật dữ liệu tự động &lt; 500ms.</td></tr>
+  </table>
+
+  <!-- USE CASE RECV 8 -->
+  <div class="uc-title" style="page-break-before:always;">5.8. Use case 8: Hoàn tất YCTS đã nhận (BF29.1-UC-RECV-08)</div>
+  <table class="uc-table">
+    <tr><td class="field-name">Use Case</td><td class="field-value"><strong>Hoàn tất YCTS đã nhận (Completion &amp; Financial Posting)</strong></td></tr>
+    <tr><td class="field-name">ID</td><td class="field-value"><strong>BF29.1-UC-RECV-08</strong></td></tr>
+    <tr><td class="field-name">Description</td><td class="field-value">Xác nhận hoàn tất quy trình xử lý tra soát thụ động và hạch toán kế toán (Báo nợ thu hồi sai sót / Báo có). Bản ghi YCTS chuyển sang Tiến trình Hoàn tất và bị khóa read-only.</td></tr>
+    <tr><td class="field-name">Actor</td><td class="field-value">Đối soát, Kế toán, Hệ thống MM</td></tr>
+    <tr><td class="field-name">Trigger</td><td class="field-value">Kế toán / Đối soát hoàn tất chứng từ hạch toán tài chính và bấm [Hoàn tất tra soát].</td></tr>
+    <tr><td class="field-name">Pre-Condition</td><td class="field-value">Bản ghi YCTS ở mốc Tiến trình Đã phản hồi và thông tin hạch toán Báo nợ/Báo có đã hoàn thành.</td></tr>
+    <tr><td class="field-name">Post-Condition</td><td class="field-value">Tiến trình YCTS chuyển sang Hoàn tất (Completed), khóa toàn bộ thao tác chỉnh sửa.</td></tr>
+    <tr><td class="field-name">Basic flow</td><td class="field-value">1. Mở bản ghi YCTS ở mốc Đã phản hồi.<br/>2. Hiển thị Khối Báo nợ (6 trường) / Khối Báo có (6 trường) đã hạch toán.<br/>3. Kiểm tra Mã hạch toán và Số tiền đối soát.<br/>4. Bấm [Hoàn tất tra soát].<br/>5. Chuyển Tiến trình sang Hoàn tất và khóa hồ sơ read-only.<br/>6. Xuất biên bản đối soát PDF &amp; lưu log Audit Trail.</td></tr>
+    <tr><td class="field-name">Non-functional requirement</td><td class="field-value">Đóng và khóa bản ghi an toàn 100%, chống sửa đổi trùng lặp.</td></tr>
+  </table>
+
   <!-- FOOTER DYNAMIC ISO -->
   <table class="footer-table">
     <tr>
@@ -1278,16 +1598,16 @@ const buildPreviewDoc = (title, bodyContent) => `<!DOCTYPE html>
 </html>`;
 
 // Write Master Preview Files
-const masterDoc = buildPreviewDoc('Microsoft Word Layout Preview - Bổ sung Khối Báo có cho Chiều YCTS đã gửi tại UC3', htmlPreviewBody);
+const masterDoc = buildPreviewDoc('Microsoft Word Layout Preview - Tổng hợp Luồng Tra soát đã gửi (TCYCTS) và Tra soát đã nhận (TCTLTS / TLTS)', htmlPreviewBody);
 fs.writeFileSync(path.join(srsDir, 'dispute-management-usecases-word-preview.html'), masterDoc, 'utf-8');
 fs.writeFileSync(path.join(srsDir, 'preview2.html'), masterDoc, 'utf-8');
 
 // Build Part 1: Sections 1, 2, 3 + UC-SENT-01 đến UC-SENT-04
 const part1Body = htmlPreviewBody.substring(0, htmlPreviewBody.indexOf('<!-- USE CASE SENT 5 -->'));
-fs.writeFileSync(path.join(srsDir, 'preview-part1.html'), buildPreviewDoc('Preview Part 1: Bộ Trạng Thái, Business Rules, RBAC & UC-SENT-01 đến 04 (kèm Khối Hoàn trả & Khối Báo có UC3)', part1Body), 'utf-8');
+fs.writeFileSync(path.join(srsDir, 'preview-part1.html'), buildPreviewDoc('Preview Part 1: Bộ Trạng Thái, Business Rules, RBAC & UC-SENT-01 đến 04', part1Body), 'utf-8');
 
-// Build Part 2: UC-SENT-05 đến UC-SENT-08
+// Build Part 2: UC-SENT-05 đến UC-SENT-08 & Mục 5 TCTLTS
 const part2Body = htmlPreviewBody.substring(htmlPreviewBody.indexOf('<!-- USE CASE SENT 5 -->'));
-fs.writeFileSync(path.join(srsDir, 'preview-part2.html'), buildPreviewDoc('Preview Part 2: UC-SENT-05 đến UC-SENT-08', part2Body), 'utf-8');
+fs.writeFileSync(path.join(srsDir, 'preview-part2.html'), buildPreviewDoc('Preview Part 2: UC-SENT-05 đến UC-SENT-08 & Mục 5 Tra soát đã nhận (TCTLTS)', part2Body), 'utf-8');
 
-console.log('🎉 ĐÃ CẬP NHẬT THÀNH CÔNG: CHIỀU TRA SOÁT ĐÃ GỬI (TCYCTS / UC-SENT-03) BAO GỒM CẢ KHỐI HOÀN TRẢ VÀ KHỐI BÁO CÓ!');
+console.log('🎉 ĐÃ CẬP NHẬT THÀNH CÔNG: TỔNG HỢP CẢ 2 CHIỀU TRA SOÁT ĐÃ GỬI (TCYCTS) VÀ TRA SOÁT ĐÃ NHẬN (TCTLTS / TLTS)!');

@@ -1,0 +1,3159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EPAY Portal – Quản lý cấu hình phí trả đối tác</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   GLOBAL RESET & BASE
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Inter', sans-serif; font-size: 13px; background: #f1f5f9; color: #334155; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: 'Inter', sans-serif; }
+input, select, textarea { font-family: 'Inter', sans-serif; font-size: 13px; }
+
+/* =========================================================
+   DEMO NAV BAR
+   ========================================================= */
+#demo-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  background: #0f172a; color: #cbd5e1; padding: 6px 12px;
+  display: flex; align-items: flex-start; flex-wrap: wrap; gap: 6px;
+  border-bottom: 2px solid #1e40af; font-size: 11px; min-height: 40px;
+}
+.demo-group { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.demo-group-label {
+  color: #64748b; font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.5px; padding: 0 4px; white-space: nowrap;
+}
+.demo-btn {
+  background: #1e293b; border: 1px solid #334155; color: #94a3b8;
+  padding: 3px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;
+  transition: all .15s; white-space: nowrap;
+}
+.demo-btn:hover { background: #2563eb; border-color: #2563eb; color: #fff; }
+.demo-btn.active { background: #2563eb; border-color: #3b82f6; color: #fff; }
+.demo-sep { width: 1px; height: 20px; background: #334155; margin: 0 4px; }
+.role-switch {
+  display: flex; align-items: center; gap: 4px; background: #1e293b;
+  border: 1px solid #334155; border-radius: 4px; padding: 2px; margin-left: auto;
+}
+.role-btn {
+  padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 600;
+  border: none; cursor: pointer; transition: all .15s;
+  background: transparent; color: #64748b;
+}
+.role-btn.active { background: #2563eb; color: #fff; }
+
+/* =========================================================
+   PORTAL SHELL
+   ========================================================= */
+#app {
+  display: flex; height: 100vh; padding-top: 40px; /* demo nav height */
+}
+
+/* ---- Sidebar ---- */
+#sidebar {
+  width: 200px; min-width: 200px; background: #0f172a;
+  display: flex; flex-direction: column; overflow-y: auto;
+  position: fixed; top: 40px; left: 0; bottom: 0; z-index: 100;
+}
+.sidebar-logo {
+  padding: 16px; border-bottom: 1px solid #1e293b;
+  font-size: 20px; font-weight: 700; color: #2563eb; letter-spacing: -0.5px;
+}
+.sidebar-logo span { color: #fff; }
+.sidebar-menu { flex: 1; padding: 8px 0; }
+.menu-item {
+  display: flex; align-items: center; gap: 8px; padding: 9px 16px;
+  color: #94a3b8; font-size: 12.5px; cursor: pointer; transition: all .15s;
+  border-left: 3px solid transparent;
+}
+.menu-item:hover { background: #1e293b; color: #e2e8f0; }
+.menu-item.active { background: #1e3a6e; color: #fff; border-left-color: #2563eb; }
+.menu-item-icon { font-size: 14px; width: 16px; text-align: center; flex-shrink: 0; }
+.menu-sub { padding: 0; }
+.menu-sub-item {
+  display: flex; align-items: center; gap: 6px; padding: 7px 16px 7px 36px;
+  color: #64748b; font-size: 12px; cursor: pointer; transition: all .15s;
+  border-left: 3px solid transparent;
+}
+.menu-sub-item:hover { background: #1e293b; color: #cbd5e1; }
+.menu-sub-item.active { color: #60a5fa; background: #172554; border-left-color: #60a5fa; }
+.menu-parent {
+  display: flex; align-items: center; gap: 8px; padding: 9px 16px;
+  color: #94a3b8; font-size: 12.5px; cursor: pointer; transition: all .15s;
+  justify-content: space-between;
+}
+.menu-parent:hover { background: #1e293b; color: #e2e8f0; }
+.menu-parent-left { display: flex; align-items: center; gap: 8px; }
+.menu-chevron { font-size: 10px; transition: transform .2s; }
+.menu-chevron.open { transform: rotate(90deg); }
+
+/* ---- Main Area ---- */
+#main {
+  margin-left: 200px; flex: 1; display: flex; flex-direction: column; min-height: 0;
+}
+
+/* ---- Top Bar ---- */
+#topbar {
+  background: #fff; border-bottom: 1px solid #e2e8f0;
+  display: flex; align-items: center; padding: 0 20px; height: 52px;
+  gap: 12px; flex-shrink: 0; position: sticky; top: 0; z-index: 50;
+}
+.topbar-search {
+  flex: 1; max-width: 320px; display: flex; align-items: center;
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;
+  padding: 0 10px; gap: 6px;
+}
+.topbar-search input {
+  border: none; background: transparent; outline: none; width: 100%;
+  font-size: 12.5px; color: #475569; padding: 7px 0;
+}
+.topbar-search-icon { color: #94a3b8; font-size: 13px; }
+.topbar-spacer { flex: 1; }
+.topbar-notif {
+  width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #475569; font-size: 15px; position: relative;
+}
+.notif-dot {
+  position: absolute; top: 4px; right: 4px; width: 7px; height: 7px;
+  background: #ef4444; border-radius: 50%; border: 1.5px solid #fff;
+}
+.topbar-user { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: #2563eb;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; font-weight: 600;
+}
+.avatar.checker { background: #7c3aed; }
+.user-info { display: flex; flex-direction: column; }
+.user-name { font-size: 12.5px; font-weight: 600; color: #334155; }
+.user-role { font-size: 11px; color: #94a3b8; }
+
+/* ---- Screen Body ---- */
+#screen-container {
+  flex: 1; overflow-y: auto; padding: 20px; background: #f1f5f9;
+}
+
+/* =========================================================
+   SCREEN SECTIONS
+   ========================================================= */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ---- Page Header ---- */
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; gap: 12px; flex-wrap: wrap;
+}
+.page-header-left { display: flex; flex-direction: column; gap: 2px; }
+.page-breadcrumb {
+  font-size: 11.5px; color: #94a3b8; display: flex; align-items: center; gap: 4px;
+}
+.page-breadcrumb span { cursor: pointer; }
+.page-breadcrumb span:hover { color: #2563eb; }
+.page-title { font-size: 17px; font-weight: 700; color: #0f172a; }
+.page-header-right { display: flex; align-items: center; gap: 8px; }
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 14px; border-radius: 6px; font-size: 12.5px; font-weight: 500;
+  border: 1px solid transparent; cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.btn-primary { background: #2563eb; color: #fff; border-color: #2563eb; }
+.btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+.btn-outline { background: #fff; color: #475569; border-color: #e2e8f0; }
+.btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
+.btn-success { background: #10b981; color: #fff; border-color: #10b981; }
+.btn-success:hover { background: #059669; }
+.btn-danger { background: #ef4444; color: #fff; border-color: #ef4444; }
+.btn-danger:hover { background: #dc2626; }
+.btn-warning { background: #f59e0b; color: #fff; border-color: #f59e0b; }
+.btn-warning:hover { background: #d97706; }
+.btn-ghost { background: transparent; color: #475569; border-color: transparent; }
+.btn-ghost:hover { background: #f1f5f9; }
+.btn-sm { padding: 4px 10px; font-size: 11.5px; }
+.btn-lg { padding: 9px 20px; font-size: 13.5px; }
+.btn-icon { padding: 6px; border-radius: 6px; }
+
+/* ---- Cards ---- */
+.card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;
+  overflow: hidden;
+}
+.card-header {
+  padding: 12px 16px; border-bottom: 1px solid #e2e8f0;
+  display: flex; align-items: center; justify-content: space-between;
+  background: #f8fafc;
+}
+.card-title { font-size: 13px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 6px; }
+.card-body { padding: 16px; }
+
+/* ---- Status Badges ---- */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.badge-active { background: #d1fae5; color: #065f46; }
+.badge-active .badge-dot { background: #10b981; }
+.badge-pending { background: #fef3c7; color: #92400e; }
+.badge-pending .badge-dot { background: #f59e0b; }
+.badge-draft { background: #f1f5f9; color: #475569; }
+.badge-draft .badge-dot { background: #94a3b8; }
+.badge-new { background: #dbeafe; color: #1e40af; }
+.badge-new .badge-dot { background: #3b82f6; }
+.badge-ready { background: #e0e7ff; color: #3730a3; }
+.badge-ready .badge-dot { background: #6366f1; }
+.badge-inactive { background: #fee2e2; color: #991b1b; }
+.badge-inactive .badge-dot { background: #ef4444; }
+
+/* ---- Filter Panel ---- */
+.filter-panel {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;
+  margin-bottom: 14px; overflow: hidden;
+}
+.filter-header {
+  padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none; background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+.filter-header:hover { background: #f1f5f9; }
+.filter-header-left { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #334155; }
+.filter-body { padding: 14px 16px; display: none; }
+.filter-body.open { display: block; }
+.filter-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+}
+.filter-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0; }
+
+/* ---- Status Tabs ---- */
+.status-tabs {
+  display: flex; border-bottom: 1px solid #e2e8f0; margin-bottom: 0;
+  background: #fff; border-radius: 6px 6px 0 0; border: 1px solid #e2e8f0;
+  border-bottom: none;
+}
+.status-tab {
+  padding: 9px 16px; font-size: 12.5px; cursor: pointer; border-bottom: 2px solid transparent;
+  color: #64748b; transition: all .15s; display: flex; align-items: center; gap: 6px;
+  margin-bottom: -1px;
+}
+.status-tab:hover { color: #2563eb; }
+.status-tab.active { color: #2563eb; border-bottom-color: #2563eb; font-weight: 600; }
+.tab-count {
+  background: #f1f5f9; color: #64748b; padding: 1px 6px; border-radius: 10px;
+  font-size: 10.5px; font-weight: 600;
+}
+.status-tab.active .tab-count { background: #dbeafe; color: #1d4ed8; }
+
+/* ---- Table ---- */
+.table-wrapper {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 0 6px 6px 6px; overflow: hidden;
+}
+.table-toolbar {
+  padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #e2e8f0; background: #fff;
+}
+.quicksearch {
+  display: flex; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 6px; padding: 0 10px; gap: 6px; width: 260px;
+}
+.quicksearch input { border: none; background: transparent; outline: none; width: 100%; padding: 6px 0; font-size: 12.5px; color: #334155; }
+.table-info { font-size: 11.5px; color: #94a3b8; }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: #f8fafc; }
+th {
+  padding: 9px 12px; text-align: left; font-size: 11.5px; font-weight: 600;
+  color: #475569; border-bottom: 1px solid #e2e8f0; white-space: nowrap;
+}
+td {
+  padding: 10px 12px; font-size: 12.5px; color: #334155; border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8fafc; }
+.col-stt { width: 40px; text-align: center; }
+.col-ma { width: 140px; }
+.col-ten { min-width: 200px; }
+.col-loai { width: 160px; }
+.col-dt { width: 120px; }
+.col-ky { width: 110px; }
+.col-ngay { width: 100px; }
+.col-tt { width: 110px; }
+.col-action { width: 60px; text-align: center; }
+.ma-code { font-family: monospace; font-size: 12px; color: #2563eb; font-weight: 600; }
+.ten-name { font-weight: 500; color: #1e293b; }
+.ten-name small { font-weight: 400; color: #94a3b8; font-size: 11.5px; display: block; }
+
+/* ---- Action Dropdown ---- */
+.action-cell { position: relative; text-align: center; }
+.action-btn {
+  background: none; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 3px 7px; cursor: pointer; color: #64748b; font-size: 15px;
+  transition: all .15s;
+}
+.action-btn:hover { background: #f1f5f9; color: #334155; }
+.dropdown-menu {
+  position: absolute; right: 0; top: 100%; z-index: 200;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12); min-width: 180px;
+  display: none; overflow: hidden;
+}
+.dropdown-menu.open { display: block; }
+.dropdown-item {
+  display: flex; align-items: center; gap: 8px; padding: 8px 14px;
+  font-size: 12.5px; color: #334155; cursor: pointer; transition: background .1s;
+}
+.dropdown-item:hover { background: #f8fafc; }
+.dropdown-item.danger { color: #ef4444; }
+.dropdown-item.danger:hover { background: #fff5f5; }
+.dropdown-sep { border: none; border-top: 1px solid #f1f5f9; margin: 2px 0; }
+
+/* ---- Pagination ---- */
+.pagination {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-top: 1px solid #f1f5f9;
+  background: #fff;
+}
+.page-info { font-size: 11.5px; color: #64748b; }
+.page-nav { display: flex; align-items: center; gap: 4px; }
+.page-btn {
+  width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid #e2e8f0; border-radius: 4px; cursor: pointer; font-size: 12px;
+  color: #475569; background: #fff; transition: all .15s;
+}
+.page-btn:hover { background: #f1f5f9; }
+.page-btn.active { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; }
+.page-btn.disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* =========================================================
+   DETAIL SCREENS
+   ========================================================= */
+.detail-layout { display: flex; gap: 16px; align-items: flex-start; }
+.detail-main { flex: 1; min-width: 0; }
+.detail-sidebar { width: 300px; flex-shrink: 0; }
+
+/* Floating Toolbar */
+.floating-toolbar {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;
+  padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  justify-content: space-between;
+}
+.floating-toolbar-left { display: flex; align-items: center; gap: 8px; }
+.floating-toolbar-right { display: flex; align-items: center; gap: 8px; }
+
+/* Section Card */
+.section-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 14px; overflow: hidden; }
+.section-header {
+  padding: 10px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.section-title { font-size: 12.5px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.3px; display: flex; align-items: center; gap: 6px; }
+.section-body { padding: 16px; }
+
+/* Info Grid */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.info-group { display: flex; flex-direction: column; gap: 3px; }
+.info-group.full { grid-column: span 2; }
+.info-label { font-size: 11px; color: #94a3b8; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
+.info-value { font-size: 13px; color: #1e293b; font-weight: 500; }
+.info-value.mono { font-family: monospace; font-size: 12.5px; }
+
+/* Fee Table in Detail */
+.fee-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.fee-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11.5px; color: #475569; font-weight: 600; border: 1px solid #e2e8f0; }
+.fee-table td { padding: 8px 12px; font-size: 12.5px; border: 1px solid #e2e8f0; }
+.fee-table tr:nth-child(even) td { background: #f8fafc; }
+
+/* MID table panel */
+.fee-panel {
+  border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-top: 8px;
+}
+.fee-panel-header {
+  background: #f8fafc; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #475569;
+  border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 6px;
+}
+
+/* YCPD Panel */
+.ycpd-panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
+.ycpd-header { background: #1e40af; padding: 10px 16px; color: #fff; font-size: 12.5px; font-weight: 700; letter-spacing: 0.3px; }
+.ycpd-sub-header { background: #fef3c7; padding: 8px 16px; border-bottom: 1px solid #e2e8f0; font-size: 12px; font-weight: 600; color: #92400e; display: flex; align-items: center; gap: 6px; }
+.ycpd-meta { padding: 12px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-bottom: 1px solid #e2e8f0; }
+.ycpd-meta-item { display: flex; flex-direction: column; gap: 2px; }
+.ycpd-meta-label { font-size: 10.5px; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
+.ycpd-meta-value { font-size: 12.5px; color: #334155; font-weight: 500; }
+.ycpd-diff { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; }
+.ycpd-diff-title { font-size: 11.5px; font-weight: 700; color: #475569; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px; }
+.diff-table { width: 100%; border-collapse: collapse; }
+.diff-table th { padding: 7px 12px; font-size: 11px; font-weight: 600; color: #475569; background: #f8fafc; border: 1px solid #e2e8f0; text-align: left; }
+.diff-table td { padding: 7px 12px; font-size: 12px; border: 1px solid #e2e8f0; }
+.diff-old { color: #ef4444; background: #fff5f5; text-decoration: line-through; }
+.diff-new { color: #10b981; background: #f0fdf4; font-weight: 600; }
+.ycpd-actions { padding: 12px 16px; display: flex; justify-content: flex-end; gap: 8px; }
+
+/* ---- Timeline ---- */
+.timeline { position: relative; padding: 4px 0; }
+.timeline::before {
+  content: ''; position: absolute; left: 16px; top: 0; bottom: 0;
+  width: 2px; background: #e2e8f0;
+}
+.timeline-item { display: flex; gap: 12px; margin-bottom: 16px; position: relative; }
+.timeline-dot {
+  width: 32px; height: 32px; border-radius: 50%; background: #fff;
+  border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; z-index: 1; font-size: 14px; margin-top: 2px;
+}
+.timeline-dot.create { border-color: #10b981; background: #d1fae5; }
+.timeline-dot.edit { border-color: #3b82f6; background: #dbeafe; }
+.timeline-dot.send { border-color: #f59e0b; background: #fef3c7; }
+.timeline-dot.approve { border-color: #10b981; background: #d1fae5; }
+.timeline-dot.system { border-color: #94a3b8; background: #f1f5f9; }
+.timeline-content { flex: 1; min-width: 0; }
+.timeline-header { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.timeline-action { font-size: 13px; font-weight: 600; color: #1e293b; }
+.timeline-user { font-size: 11.5px; color: #2563eb; font-weight: 500; }
+.timeline-time { font-size: 11px; color: #94a3b8; margin-left: auto; white-space: nowrap; }
+.timeline-detail { font-size: 12px; color: #64748b; margin-top: 3px; }
+.timeline-chip {
+  display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px;
+  border-radius: 10px; font-size: 11px; font-weight: 500;
+  background: #f1f5f9; color: #475569; margin-top: 4px;
+}
+
+/* =========================================================
+   FORM SCREENS (Create / Edit)
+   ========================================================= */
+.fee-type-tabs {
+  display: flex; background: #fff; border: 1px solid #e2e8f0;
+  border-radius: 6px 6px 0 0; border-bottom: none; overflow: hidden;
+}
+.fee-type-tab {
+  flex: 1; padding: 10px 14px; text-align: center; font-size: 12.5px; font-weight: 500;
+  color: #64748b; cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all .15s; white-space: nowrap; background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+}
+.fee-type-tab:last-child { border-right: none; }
+.fee-type-tab:hover { color: #2563eb; background: #f1f5f9; }
+.fee-type-tab.active {
+  color: #2563eb; font-weight: 700; border-bottom-color: #2563eb;
+  background: #fff;
+}
+.fee-type-tab.done { color: #10b981; }
+
+/* Form card */
+.form-card {
+  background: #fff; border: 1px solid #e2e8f0;
+  border-radius: 0 0 6px 6px; margin-bottom: 14px; overflow: hidden;
+}
+.form-card-inner { padding: 16px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group.full { grid-column: span 2; }
+.form-label { font-size: 11.5px; color: #475569; font-weight: 500; }
+.form-label .req { color: #ef4444; margin-left: 2px; }
+.form-control {
+  border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 10px;
+  font-size: 13px; color: #334155; outline: none; width: 100%;
+  transition: border-color .15s; background: #fff;
+}
+.form-control:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
+.form-control:disabled { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
+.form-select {
+  border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 10px;
+  font-size: 13px; color: #334155; outline: none; width: 100%;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E") no-repeat right 10px center;
+  appearance: none; cursor: pointer; transition: border-color .15s;
+}
+.form-select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
+.form-textarea { resize: vertical; min-height: 64px; }
+.input-with-unit {
+  display: flex; align-items: stretch; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden;
+}
+.input-with-unit input { border: none; outline: none; flex: 1; padding: 7px 10px; font-size: 13px; }
+.input-unit {
+  background: #f8fafc; border-left: 1px solid #e2e8f0; padding: 7px 10px;
+  font-size: 12.5px; color: #64748b; display: flex; align-items: center; white-space: nowrap;
+}
+
+/* Dual Listbox */
+.dual-listbox {
+  display: flex; gap: 8px; align-items: center;
+}
+.listbox-container { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.listbox-label { font-size: 11px; color: #94a3b8; font-weight: 500; }
+.listbox {
+  border: 1px solid #e2e8f0; border-radius: 6px; height: 120px;
+  overflow-y: auto; background: #fff; padding: 4px;
+}
+.listbox-item {
+  display: flex; align-items: center; gap: 6px; padding: 5px 6px;
+  cursor: pointer; border-radius: 4px; transition: background .1s; font-size: 12.5px;
+}
+.listbox-item:hover { background: #f1f5f9; }
+.listbox-item.selected { background: #dbeafe; color: #1d4ed8; }
+.listbox-arrows { display: flex; flex-direction: column; gap: 4px; }
+.arrow-btn {
+  width: 28px; height: 28px; background: #fff; border: 1px solid #e2e8f0;
+  border-radius: 4px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 12px; color: #64748b; transition: all .15s;
+}
+.arrow-btn:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+/* Radio group */
+.radio-group { display: flex; flex-direction: column; gap: 8px; }
+.radio-option { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.radio-circle {
+  width: 16px; height: 16px; border: 2px solid #e2e8f0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: all .15s;
+}
+.radio-circle.checked { border-color: #2563eb; background: #2563eb; }
+.radio-circle.checked::after {
+  content: ''; width: 5px; height: 5px; border-radius: 50%; background: #fff;
+}
+.radio-label { font-size: 13px; color: #334155; }
+
+/* Fee Sub-sections */
+.fee-subsection { border: 1px solid #e2e8f0; border-radius: 6px; margin-top: 12px; overflow: hidden; }
+.fee-sub-header {
+  background: #f8fafc; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #475569;
+  border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;
+}
+.fee-sub-body { padding: 12px; }
+.fee-sub-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.fee-sub-grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+/* Bậc thang rows */
+.bac-thang-row {
+  display: flex; align-items: center; gap: 6px; padding: 6px 0; border-bottom: 1px solid #f1f5f9;
+}
+.bac-thang-row:last-child { border-bottom: none; }
+.bac-thang-label { font-size: 11.5px; color: #64748b; width: 80px; flex-shrink: 0; }
+.bac-thang-actions { display: flex; gap: 4px; margin-left: auto; }
+.bac-btn { width: 24px; height: 24px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #64748b; transition: all .15s; }
+.bac-btn.add:hover { background: #10b981; color: #fff; border-color: #10b981; }
+.bac-btn.remove:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
+
+/* Form Footer */
+.form-footer {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;
+  padding: 12px 16px; display: flex; align-items: center; justify-content: flex-end;
+  gap: 8px; position: sticky; bottom: 16px; box-shadow: 0 -2px 8px rgba(0,0,0,.06);
+}
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(15,23,42,.5); z-index: 9000;
+  display: none; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,.2);
+  min-width: 380px; max-width: 560px; width: 90%; overflow: hidden;
+  animation: modalIn .2s ease;
+}
+.modal-lg { max-width: 680px; }
+@keyframes modalIn { from { opacity: 0; transform: scale(.95) translateY(-10px); } to { opacity: 1; transform: none; } }
+.modal-header {
+  padding: 16px 20px; border-bottom: 1px solid #e2e8f0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-size: 14.5px; font-weight: 700; color: #0f172a; }
+.modal-close { background: none; border: none; font-size: 18px; color: #94a3b8; cursor: pointer; padding: 0; line-height: 1; }
+.modal-close:hover { color: #334155; }
+.modal-body { padding: 20px; }
+.modal-footer { padding: 12px 20px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; justify-content: flex-end; }
+.calc-result {
+  margin-top: 16px; padding: 14px; background: #f0fdf4; border: 1px solid #bbf7d0;
+  border-radius: 6px;
+}
+.calc-result-label { font-size: 11.5px; color: #064e3b; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; }
+.calc-result-value { font-size: 22px; font-weight: 700; color: #065f46; }
+.calc-formula { font-size: 11px; color: #6b7280; margin-top: 6px; font-style: italic; }
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+#toast-container {
+  position: fixed; bottom: 20px; right: 20px; z-index: 99999;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  background: #1e293b; color: #fff; padding: 10px 16px; border-radius: 6px;
+  font-size: 12.5px; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.2); animation: toastIn .3s ease;
+  min-width: 220px;
+}
+.toast.success { background: #065f46; border-left: 3px solid #10b981; }
+.toast.warning { background: #78350f; border-left: 3px solid #f59e0b; }
+.toast.error { background: #7f1d1d; border-left: 3px solid #ef4444; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: none; } }
+
+/* =========================================================
+   UTILITY
+   ========================================================= */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 12px; }
+.text-sm { font-size: 11.5px; }
+.text-muted { color: #94a3b8; }
+.text-blue { color: #2563eb; }
+.fw-600 { font-weight: 600; }
+.hidden { display: none !important; }
+.w-full { width: 100%; }
+.divider { border: none; border-top: 1px solid #e2e8f0; margin: 12px 0; }
+
+/* Pending indicator */
+.pending-indicator { color: #f59e0b; }
+
+/* Role indicator */
+.role-indicator {
+  padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  background: #e0e7ff; color: #3730a3;
+}
+.role-indicator.checker { background: #f3e8ff; color: #6b21a8; }
+
+/* Collapsible section */
+.collapsible-toggle { cursor: pointer; user-select: none; }
+.collapsible-content { overflow: hidden; transition: all .2s; }
+.collapsible-content.collapsed { display: none; }
+
+/* Multiselect chips */
+.chip-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px;
+  background: #dbeafe; color: #1d4ed8; border-radius: 20px; font-size: 11.5px; font-weight: 500;
+}
+
+/* Empty state */
+.empty-state {
+  padding: 48px 24px; text-align: center; color: #94a3b8;
+}
+.empty-icon { font-size: 36px; margin-bottom: 8px; }
+.empty-text { font-size: 13px; }
+
+/* Diff highlight */
+.diff-arrow { color: #94a3b8; font-size: 14px; }
+
+/* Checker badge in topbar */
+.checker-badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
+  background: #f3e8ff; color: #6b21a8; border-radius: 20px; font-size: 11px; font-weight: 600;
+  margin-left: 8px;
+}
+
+/* Scroll fade */
+.scroll-fade { overflow-y: auto; }
+
+/* Info box */
+.info-box {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px 14px;
+  font-size: 12.5px; color: #1d4ed8; display: flex; align-items: flex-start; gap: 6px;
+}
+.info-box-icon { flex-shrink: 0; margin-top: 1px; }
+.warning-box {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 10px 14px;
+  font-size: 12.5px; color: #92400e; display: flex; align-items: flex-start; gap: 6px;
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== DEMO NAV ===================== -->
+<div id="demo-nav">
+  <div class="demo-group">
+    <span class="demo-group-label">Danh sách</span>
+    <button class="demo-btn" onclick="showScreen('list-all')">📋 Tất cả</button>
+    <button class="demo-btn" onclick="showScreen('list-active')">🟢 Đang hoạt động</button>
+    <button class="demo-btn" onclick="showScreen('list-pending')">⏳ Chờ phê duyệt</button>
+  </div>
+  <div class="demo-sep"></div>
+  <div class="demo-group">
+    <span class="demo-group-label">Chi tiết</span>
+    <button class="demo-btn" onclick="showScreen('detail-maker-duyTri-new')">Maker: Duy trì NEW</button>
+    <button class="demo-btn" onclick="showScreen('detail-maker-xuLy-pending')">Maker: Xử lý PENDING</button>
+    <button class="demo-btn" onclick="showScreen('detail-maker-thanhToan-active')">Maker: Thanh toán ACTIVE</button>
+    <button class="demo-btn" onclick="showScreen('detail-maker-qlyDVGT-draft')">Maker: QLGT DRAFT</button>
+    <button class="demo-btn" onclick="showScreen('detail-checker-pending')">Checker: Phê duyệt</button>
+  </div>
+  <div class="demo-sep"></div>
+  <div class="demo-group">
+    <span class="demo-group-label">Lịch sử</span>
+    <button class="demo-btn" onclick="showScreen('screen-history')">🕒 Lịch sử</button>
+  </div>
+  <div class="demo-sep"></div>
+  <div class="demo-group">
+    <span class="demo-group-label">Thêm mới</span>
+    <button class="demo-btn" onclick="showScreen('create-duyTri-chung')">Duy trì: Chung</button>
+    <button class="demo-btn" onclick="showScreen('create-duyTri-khongApDung')">Duy trì: Không AD (ảnh 3)</button>
+    <button class="demo-btn" onclick="showScreen('create-xuLy-chung-1bac')">Xử lý GD: Chung (ảnh 2)</button>
+    <button class="demo-btn" onclick="showScreen('create-xuLy-khongApDung')">Xử lý GD: Không AD</button>
+    <button class="demo-btn" onclick="showScreen('create-thanhToan-chung')">Thanh toán: Chung</button>
+    <button class="demo-btn" onclick="showScreen('create-thanhToan-bacThang')">Thanh toán: Không AD Bậc thang (ảnh 1)</button>
+    <button class="demo-btn" onclick="showScreen('create-thanhToan-1bac')">Thanh toán: Không AD 1 bậc</button>
+    <button class="demo-btn" onclick="showScreen('create-qlyDVGT')">QLGT</button>
+  </div>
+  <div class="demo-sep"></div>
+  <div class="demo-group">
+    <span class="demo-group-label">Cập nhật</span>
+    <button class="demo-btn" onclick="showScreen('edit-duyTri')">Sửa Duy trì</button>
+    <button class="demo-btn" onclick="showScreen('edit-xuLy')">Sửa Xử lý</button>
+    <button class="demo-btn" onclick="showScreen('edit-thanhToan')">Sửa Thanh toán</button>
+    <button class="demo-btn" onclick="showScreen('edit-qlyDVGT')">Sửa QLGT</button>
+  </div>
+  <div class="role-switch">
+    <button class="role-btn active" id="btn-role-maker" onclick="changeRole('maker')">👤 Maker</button>
+    <button class="role-btn" id="btn-role-checker" onclick="changeRole('checker')">✅ Checker</button>
+  </div>
+</div>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="sidebar-logo">e<span>PAY</span></div>
+    <div class="sidebar-menu">
+      <div class="menu-item" onclick="toast('Trang chủ')">
+        <span class="menu-item-icon">🏠</span> Trang chủ
+      </div>
+      <div class="menu-parent">
+        <div class="menu-parent-left">
+          <span class="menu-item-icon">⚙️</span> Quản lý cấu hình phí
+        </div>
+        <span class="menu-chevron open">▶</span>
+      </div>
+      <div class="menu-sub">
+        <div class="menu-sub-item active" onclick="showScreen('list-all')">
+          <span>◆</span> Phí trả đối tác
+        </div>
+        <div class="menu-sub-item" onclick="toast('Phí thu ĐVCNTT')">
+          <span>◇</span> Phí thu ĐVCNTT
+        </div>
+        <div class="menu-sub-item" onclick="toast('Phí thu Khách hàng')">
+          <span>◇</span> Phí thu Khách hàng
+        </div>
+      </div>
+      <div class="menu-item" onclick="toast('Quản lý Yêu cầu phê duyệt')">
+        <span class="menu-item-icon">📋</span> Quản lý YC phê duyệt
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- TOPBAR -->
+    <div id="topbar">
+      <div class="topbar-search">
+        <span class="topbar-search-icon">🔍</span>
+        <input type="text" placeholder="Tìm kiếm...">
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-notif" onclick="toast('Thông báo')">
+        🔔
+        <span class="notif-dot"></span>
+      </div>
+      <div class="topbar-user" id="topbar-user">
+        <div class="avatar" id="user-avatar">L</div>
+        <div class="user-info">
+          <span class="user-name" id="user-name">Lisa</span>
+          <span class="user-role" id="user-role">Maker</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN CONTAINER -->
+    <div id="screen-container">
+
+<!-- ============================================================
+     SCREEN GROUP A: DANH SÁCH
+     ============================================================ -->
+
+<!-- A1: Tất cả -->
+<div class="screen active" id="screen-list-all">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb">
+        <span>Quản lý cấu hình phí</span> <span>›</span> <span>Phí trả đối tác</span>
+      </div>
+      <h1 class="page-title">Quản lý cấu hình phí trả đối tác</h1>
+    </div>
+    <div class="page-header-right">
+      <button class="btn btn-outline" onclick="toggleFilter('filter-all')">🔍 Tra cứu</button>
+      <button class="btn btn-outline" onclick="toast('Đang xuất tệp...','success')">📥 Xuất tệp</button>
+      <button class="btn btn-primary" onclick="showScreen('create-duyTri-chung')">＋ Thêm mới</button>
+    </div>
+  </div>
+
+  <!-- Filter Panel -->
+  <div class="filter-panel" id="filter-all">
+    <div class="filter-header" onclick="toggleFilter('filter-all')">
+      <div class="filter-header-left">🔽 Bộ lọc tra cứu nâng cao</div>
+      <span id="filter-all-chevron">▲</span>
+    </div>
+    <div class="filter-body open" id="filter-all-body">
+      <div class="filter-grid">
+        <div class="form-group"><label class="form-label">Loại phí</label>
+          <select class="form-select"><option value="">-- Tất cả --</option><option>Phí duy trì dịch vụ</option><option>Phí xử lý giao dịch</option><option>Phí thanh toán</option><option>Phí quản lý DVGT</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu cấu hình</label>
+          <select class="form-select"><option value="">-- Tất cả --</option><option>CTT</option><option>Hệ thống</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Đối tác / Ngân hàng</label>
+          <select class="form-select"><option value="">-- Tất cả --</option><option>VietcomBank</option><option>MBBank</option><option>KBank</option><option>BIDV</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Cổng TGTT</label>
+          <select class="form-select"><option value="">-- Tất cả --</option><option>CYBS/KBANK</option><option>NAPAS</option><option>BIDV</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Phương thức thanh toán</label>
+          <select class="form-select"><option value="">-- Tất cả --</option><option>Thẻ quốc tế</option><option>Thẻ nội địa</option><option>QR Code</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí</label>
+          <select class="form-select"><option value="">-- Tất cả --</option><option>Theo tháng</option><option>Theo quý</option><option>Theo năm</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng từ</label>
+          <input type="date" class="form-control" value="2026-01-01">
+        </div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng đến</label>
+          <input type="date" class="form-control" value="2026-12-31">
+        </div>
+        <div class="form-group"><label class="form-label">Đồng tiền</label>
+          <select class="form-select"><option>VND</option><option>USD</option></select>
+        </div>
+      </div>
+      <div class="filter-footer">
+        <button class="btn btn-outline btn-sm" onclick="toast('Đã xóa bộ lọc')">Xóa bộ lọc</button>
+        <button class="btn btn-primary btn-sm" onclick="toast('Đang tìm kiếm...','success')">🔍 Tìm kiếm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status tabs -->
+  <div class="status-tabs">
+    <div class="status-tab active" onclick="showScreen('list-all')">Tất cả <span class="tab-count">10</span></div>
+    <div class="status-tab" onclick="showScreen('list-active')">Đang hoạt động <span class="tab-count">4</span></div>
+    <div class="status-tab" onclick="showScreen('list-pending')">Chờ phê duyệt <span class="tab-count">2</span></div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <div class="table-toolbar">
+      <div class="quicksearch">
+        <span>🔍</span>
+        <input type="text" placeholder="Tìm theo mã, tên cấu hình...">
+      </div>
+      <div class="table-info">Hiển thị 1–10 / 10 bản ghi</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th class="col-stt">STT</th>
+          <th class="col-ma">Mã cấu hình</th>
+          <th class="col-ten">Tên cấu hình</th>
+          <th class="col-loai">Loại phí</th>
+          <th class="col-dt">Đối tác</th>
+          <th class="col-ky">Kỳ trả phí</th>
+          <th class="col-ngay">Ngày áp dụng</th>
+          <th class="col-tt">Trạng thái</th>
+          <th class="col-action">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="table-all-body">
+      </tbody>
+    </table>
+    <div class="pagination">
+      <div class="page-info">Hiển thị 1 - 10 trên tổng 10 bản ghi</div>
+      <div class="page-nav">
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A2: Đang hoạt động -->
+<div class="screen" id="screen-list-active">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span>Quản lý cấu hình phí</span> <span>›</span> <span>Phí trả đối tác</span></div>
+      <h1 class="page-title">Quản lý cấu hình phí trả đối tác</h1>
+    </div>
+    <div class="page-header-right">
+      <button class="btn btn-outline" onclick="toggleFilter('filter-active')">🔍 Tra cứu</button>
+      <button class="btn btn-outline" onclick="toast('Đang xuất tệp...','success')">📥 Xuất tệp</button>
+      <button class="btn btn-primary" onclick="showScreen('create-duyTri-chung')">＋ Thêm mới</button>
+    </div>
+  </div>
+  <div class="filter-panel" id="filter-active">
+    <div class="filter-header" onclick="toggleFilter('filter-active')">
+      <div class="filter-header-left">🔽 Bộ lọc tra cứu nâng cao</div>
+      <span id="filter-active-chevron">▼</span>
+    </div>
+    <div class="filter-body" id="filter-active-body">
+      <div class="filter-grid">
+        <div class="form-group"><label class="form-label">Loại phí</label><select class="form-select"><option value="">-- Tất cả --</option><option>Phí duy trì dịch vụ</option><option>Phí xử lý giao dịch</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác / NH</label><select class="form-select"><option value="">-- Tất cả --</option><option>VietcomBank</option><option>KBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí</label><select class="form-select"><option value="">-- Tất cả --</option><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Đồng tiền</label><select class="form-select"><option>VND</option></select></div>
+      </div>
+      <div class="filter-footer">
+        <button class="btn btn-outline btn-sm">Xóa bộ lọc</button>
+        <button class="btn btn-primary btn-sm">🔍 Tìm kiếm</button>
+      </div>
+    </div>
+  </div>
+  <div class="status-tabs">
+    <div class="status-tab" onclick="showScreen('list-all')">Tất cả <span class="tab-count">10</span></div>
+    <div class="status-tab active" onclick="showScreen('list-active')">Đang hoạt động <span class="tab-count">4</span></div>
+    <div class="status-tab" onclick="showScreen('list-pending')">Chờ phê duyệt <span class="tab-count">2</span></div>
+  </div>
+  <div class="table-wrapper">
+    <div class="table-toolbar">
+      <div class="quicksearch"><span>🔍</span><input type="text" placeholder="Tìm theo mã, tên cấu hình..."></div>
+      <div class="table-info">Hiển thị 1–4 / 4 bản ghi</div>
+    </div>
+    <table><thead><tr><th class="col-stt">STT</th><th class="col-ma">Mã cấu hình</th><th class="col-ten">Tên cấu hình</th><th class="col-loai">Loại phí</th><th class="col-dt">Đối tác</th><th class="col-ky">Kỳ trả phí</th><th class="col-ngay">Ngày áp dụng</th><th class="col-tt">Trạng thái</th><th class="col-action">Thao tác</th></tr></thead>
+    <tbody id="table-active-body"></tbody></table>
+    <div class="pagination">
+      <div class="page-info">Hiển thị 1 - 4 trên tổng 4 bản ghi</div>
+      <div class="page-nav"><div class="page-btn disabled">‹</div><div class="page-btn active">1</div><div class="page-btn disabled">›</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- A3: Chờ phê duyệt -->
+<div class="screen" id="screen-list-pending">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span>Quản lý cấu hình phí</span> <span>›</span> <span>Phí trả đối tác</span></div>
+      <h1 class="page-title">Quản lý cấu hình phí trả đối tác</h1>
+    </div>
+    <div class="page-header-right">
+      <button class="btn btn-outline" onclick="toggleFilter('filter-pending')">🔍 Tra cứu</button>
+      <button class="btn btn-outline" onclick="toast('Đang xuất tệp...','success')">📥 Xuất tệp</button>
+      <button class="btn btn-primary" onclick="showScreen('create-duyTri-chung')">＋ Thêm mới</button>
+    </div>
+  </div>
+  <div class="filter-panel" id="filter-pending">
+    <div class="filter-header" onclick="toggleFilter('filter-pending')">
+      <div class="filter-header-left">🔽 Bộ lọc tra cứu nâng cao</div>
+      <span id="filter-pending-chevron">▼</span>
+    </div>
+    <div class="filter-body" id="filter-pending-body">
+      <div class="filter-grid">
+        <div class="form-group"><label class="form-label">Loại phí</label><select class="form-select"><option value="">-- Tất cả --</option><option>Phí xử lý giao dịch</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác / NH</label><select class="form-select"><option value="">-- Tất cả --</option><option>KBank</option><option>BIDV</option></select></div>
+      </div>
+      <div class="filter-footer">
+        <button class="btn btn-outline btn-sm">Xóa bộ lọc</button>
+        <button class="btn btn-primary btn-sm">🔍 Tìm kiếm</button>
+      </div>
+    </div>
+  </div>
+  <div class="status-tabs">
+    <div class="status-tab" onclick="showScreen('list-all')">Tất cả <span class="tab-count">10</span></div>
+    <div class="status-tab" onclick="showScreen('list-active')">Đang hoạt động <span class="tab-count">4</span></div>
+    <div class="status-tab active" onclick="showScreen('list-pending')">Chờ phê duyệt <span class="tab-count">2</span></div>
+  </div>
+  <div class="table-wrapper">
+    <div class="table-toolbar">
+      <div class="quicksearch"><span>🔍</span><input type="text" placeholder="Tìm theo mã, tên cấu hình..."></div>
+      <div class="table-info">Hiển thị 1–2 / 2 bản ghi</div>
+    </div>
+    <table><thead><tr><th class="col-stt">STT</th><th class="col-ma">Mã cấu hình</th><th class="col-ten">Tên cấu hình</th><th class="col-loai">Loại phí</th><th class="col-dt">Đối tác</th><th class="col-ky">Kỳ trả phí</th><th class="col-ngay">Ngày áp dụng</th><th class="col-tt">Trạng thái</th><th class="col-action">Thao tác</th></tr></thead>
+    <tbody id="table-pending-body"></tbody></table>
+    <div class="pagination">
+      <div class="page-info">Hiển thị 1 - 2 trên tổng 2 bản ghi</div>
+      <div class="page-nav"><div class="page-btn disabled">‹</div><div class="page-btn active">1</div><div class="page-btn disabled">›</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN GROUP B: CHI TIẾT
+     ============================================================ -->
+
+<!-- B1: Detail Maker - Phí duy trì NEW -->
+<div class="screen" id="screen-detail-maker-duyTri-new">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Chi tiết cấu hình</span></div>
+      <h1 class="page-title">SM_PN_DC_009 – Phí duy trì – KBank Ready</h1>
+    </div>
+    <div class="page-header-right">
+      <span class="badge badge-new"><span class="badge-dot"></span>NEW</span>
+    </div>
+  </div>
+
+  <!-- Floating toolbar - Maker + NEW -->
+  <div class="floating-toolbar">
+    <div class="floating-toolbar-left">
+      <span style="font-size:11px;color:#94a3b8;">Thao tác:</span>
+    </div>
+    <div class="floating-toolbar-right">
+      <button class="btn btn-outline" onclick="showScreen('edit-duyTri')">✏️ Sửa</button>
+      <button class="btn btn-warning" onclick="openModal('modal-send-ycpd')">📤 Gửi YCPD</button>
+      <button class="btn btn-danger" onclick="toast('Đã xóa cấu hình','error')">🗑 Xoá</button>
+    </div>
+  </div>
+
+  <div class="detail-layout">
+    <div class="detail-main">
+
+      <!-- Thông tin chung -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📋 Thông tin chung</div>
+        </div>
+        <div class="section-body">
+          <div class="info-grid">
+            <div class="info-group"><span class="info-label">Loại phí</span><span class="info-value">Phí duy trì dịch vụ</span></div>
+            <div class="info-group"><span class="info-label">Nguồn dữ liệu cấu hình</span><span class="info-value">CTT</span></div>
+            <div class="info-group"><span class="info-label">Đối tác / NH hưởng phí</span><span class="info-value">KBank</span></div>
+            <div class="info-group"><span class="info-label">Kỳ trả phí</span><span class="info-value">Theo tháng</span></div>
+            <div class="info-group"><span class="info-label">Thời gian áp dụng phí</span><span class="info-value">01/06/2026</span></div>
+            <div class="info-group"><span class="info-label">Hình thức thu phí</span><span class="info-value">Theo MID đối tác cung cấp</span></div>
+            <div class="info-group"><span class="info-label">Loại giao dịch</span><span class="info-value">Tất cả</span></div>
+            <div class="info-group"><span class="info-label">Phương thức thanh toán</span><span class="info-value">Thẻ quốc tế</span></div>
+            <div class="info-group"><span class="info-label">Thuế VAT</span><span class="info-value">8%</span></div>
+            <div class="info-group"><span class="info-label">Đơn vị tiền tệ</span><span class="info-value">VND</span></div>
+            <div class="info-group full"><span class="info-label">Mô tả</span><span class="info-value">Phí duy trì dịch vụ KBank tháng 6/2026</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thông tin phí -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">💰 Thông tin phí</div>
+        </div>
+        <div class="section-body">
+          <div class="info-box mb-2" style="margin-bottom:10px;">
+            <span class="info-box-icon">ℹ️</span>
+            <span>Không áp dụng phí chung — Cấu hình phí theo từng MID đối tác</span>
+          </div>
+          <div class="fee-panel">
+            <div class="fee-panel-header">📊 Danh sách MID và mức phí</div>
+            <table class="fee-table">
+              <thead><tr><th>MID</th><th>Mô tả MID</th><th>Mức phí (đ/tháng)</th><th>Trạng thái</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">MID_001</td><td>Terminal chính – KBank HN</td><td><strong>1.800.000</strong></td><td><span class="badge badge-active"><span class="badge-dot"></span>Active</span></td></tr>
+                <tr><td class="mono">MID_002</td><td>Terminal phụ – KBank HCM</td><td><strong>1.800.000</strong></td><td><span class="badge badge-active"><span class="badge-dot"></span>Active</span></td></tr>
+                <tr><td class="mono">MID_003</td><td>Terminal dự phòng</td><td><strong>1.800.000</strong></td><td><span class="badge badge-active"><span class="badge-dot"></span>Active</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- History timeline -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">🕒 Lịch sử thay đổi</div>
+          <button class="btn btn-ghost btn-sm" onclick="showScreen('screen-history')">Xem đầy đủ →</button>
+        </div>
+        <div class="section-body">
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot create">✨</div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <span class="timeline-action">Tạo mới cấu hình</span>
+                  <span class="timeline-user">Lisa</span>
+                  <span class="timeline-time">10/06/2026 09:00</span>
+                </div>
+                <div class="timeline-detail">Khởi tạo phí duy trì dịch vụ KBank</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot system">⚙️</div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <span class="timeline-action">Khởi tạo bản ghi</span>
+                  <span class="timeline-user">SYSTEM</span>
+                  <span class="timeline-time">10/06/2026 08:58</span>
+                </div>
+                <div class="timeline-detail">Hệ thống tạo mã SM_PN_DC_009</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /detail-main -->
+  </div><!-- /detail-layout -->
+</div>
+
+<!-- B2: Detail Maker - Phí xử lý PENDING -->
+<div class="screen" id="screen-detail-maker-xuLy-pending">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Chi tiết cấu hình</span></div>
+      <h1 class="page-title">SM_PN_DC_005 – Phí thanh toán – KBank Visa</h1>
+    </div>
+    <div class="page-header-right">
+      <span class="badge badge-pending"><span class="badge-dot"></span>PENDING</span>
+    </div>
+  </div>
+
+  <div class="floating-toolbar">
+    <div class="floating-toolbar-left">
+      <div class="info-box" style="padding:6px 12px;">
+        <span>⏳</span> <span style="font-size:12px;">Đang chờ phê duyệt – Maker chỉ có thể huỷ yêu cầu</span>
+      </div>
+    </div>
+    <div class="floating-toolbar-right">
+      <button class="btn btn-danger" onclick="toast('Đã huỷ yêu cầu phê duyệt','warning')">✖ Huỷ YCPD</button>
+    </div>
+  </div>
+
+  <div class="detail-layout">
+    <div class="detail-main">
+
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+        <div class="section-body">
+          <div class="info-grid">
+            <div class="info-group"><span class="info-label">Loại phí</span><span class="info-value">Phí xử lý giao dịch</span></div>
+            <div class="info-group"><span class="info-label">Nguồn dữ liệu</span><span class="info-value">CTT</span></div>
+            <div class="info-group"><span class="info-label">Đối tác</span><span class="info-value">KBank</span></div>
+            <div class="info-group"><span class="info-label">Kỳ trả phí</span><span class="info-value">Theo tháng</span></div>
+            <div class="info-group"><span class="info-label">Thời gian áp dụng</span><span class="info-value">01/02/2026</span></div>
+            <div class="info-group"><span class="info-label">Mã MCC</span><span class="info-value">4784, 5411, 4900</span></div>
+            <div class="info-group"><span class="info-label">Trạng thái GD</span><span class="info-value">Tất cả</span></div>
+            <div class="info-group"><span class="info-label">Thuế VAT</span><span class="info-value">8%</span></div>
+            <div class="info-group"><span class="info-label">Đơn vị tiền tệ</span><span class="info-value">VND</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">💰 Thông tin phí</div></div>
+        <div class="section-body">
+          <div class="info-box" style="margin-bottom:10px;"><span>ℹ️</span><span>Áp dụng phí chung cho toàn bộ loại giao dịch</span></div>
+          <div class="fee-panel">
+            <div class="fee-panel-header">📊 Chi tiết mức phí</div>
+            <table class="fee-table">
+              <thead><tr><th>Loại giao dịch</th><th>Hình thức thu phí</th><th>Mức phí</th></tr></thead>
+              <tbody>
+                <tr><td>Thanh toán</td><td>1 bậc phí</td><td><strong>1.800đ / GD</strong></td></tr>
+                <tr><td>Hoàn trả</td><td>1 bậc phí</td><td><strong>1.800đ / GD</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- YCPD Panel - Maker view (read-only info) -->
+      <div class="ycpd-panel">
+        <div class="ycpd-header">📋 YÊU CẦU PHÊ DUYỆT</div>
+        <div class="ycpd-sub-header">⏳ ĐANG CHỜ PHÊ DUYỆT</div>
+        <div class="ycpd-meta">
+          <div class="ycpd-meta-item"><span class="ycpd-meta-label">Mã YCPD</span><span class="ycpd-meta-value mono">YCPD_2026_0042</span></div>
+          <div class="ycpd-meta-item"><span class="ycpd-meta-label">Người gửi</span><span class="ycpd-meta-value">Lisa</span></div>
+          <div class="ycpd-meta-item"><span class="ycpd-meta-label">Ngày gửi</span><span class="ycpd-meta-value">28/10/2026 15:30</span></div>
+          <div class="ycpd-meta-item"><span class="ycpd-meta-label">Lý do</span><span class="ycpd-meta-value">Cập nhật mức phí theo hợp đồng mới</span></div>
+        </div>
+        <div class="ycpd-diff">
+          <div class="ycpd-diff-title">📊 Chi tiết thay đổi</div>
+          <table class="diff-table">
+            <thead><tr><th>Trường thay đổi</th><th>Giá trị cũ</th><th></th><th>Giá trị mới</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Mức phí (Thanh toán)</td>
+                <td class="diff-old">1.500đ / GD</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-new">1.800đ / GD</td>
+              </tr>
+              <tr>
+                <td>Mức phí (Hoàn trả)</td>
+                <td class="diff-old">1.500đ / GD</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-new">1.800đ / GD</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ycpd-actions">
+          <div style="font-size:11.5px;color:#94a3b8;flex:1;">ℹ️ Maker không thể phê duyệt. Chỉ Checker mới có quyền xử lý YCPD này.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- B3: Detail Maker - Phí thanh toán ACTIVE -->
+<div class="screen" id="screen-detail-maker-thanhToan-active">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Chi tiết cấu hình</span></div>
+      <h1 class="page-title">SM_PN_DC_006 – Phí thanh toán – MB Master</h1>
+    </div>
+    <div class="page-header-right">
+      <span class="badge badge-active"><span class="badge-dot"></span>ACTIVE</span>
+    </div>
+  </div>
+
+  <div class="floating-toolbar">
+    <div class="floating-toolbar-left"><span style="font-size:11px;color:#94a3b8;">Thao tác:</span></div>
+    <div class="floating-toolbar-right">
+      <button class="btn btn-outline" onclick="showScreen('edit-thanhToan')">✏️ Sửa</button>
+      <button class="btn btn-warning" onclick="toast('Đã tạm dừng cấu hình','warning')">⏸ Tạm dừng</button>
+      <button class="btn btn-primary" onclick="openModal('modal-send-ycpd')">📤 Gửi YCPD</button>
+    </div>
+  </div>
+
+  <div class="detail-layout">
+    <div class="detail-main">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+        <div class="section-body">
+          <div class="info-grid">
+            <div class="info-group"><span class="info-label">Loại phí</span><span class="info-value">Phí thanh toán</span></div>
+            <div class="info-group"><span class="info-label">Nguồn dữ liệu</span><span class="info-value">CTT</span></div>
+            <div class="info-group"><span class="info-label">Đối tác</span><span class="info-value">MBBank</span></div>
+            <div class="info-group"><span class="info-label">Kỳ trả phí</span><span class="info-value">Theo tháng</span></div>
+            <div class="info-group"><span class="info-label">Thời gian áp dụng</span><span class="info-value">01/03/2026</span></div>
+            <div class="info-group"><span class="info-label">Loại giao dịch</span><span class="info-value">Thanh toán</span></div>
+            <div class="info-group"><span class="info-label">Trạng thái GD</span><span class="info-value">Thành công</span></div>
+            <div class="info-group"><span class="info-label">Phương thức TT</span><span class="info-value">Thẻ quốc tế</span></div>
+            <div class="info-group"><span class="info-label">Cổng TGTT</span><span class="info-value">CYBS/KBANK</span></div>
+            <div class="info-group"><span class="info-label">Loại NH phát hành</span><span class="info-value">NHPH trong nước</span></div>
+            <div class="info-group"><span class="info-label">Thuế VAT</span><span class="info-value">8%</span></div>
+            <div class="info-group"><span class="info-label">Đơn vị tiền tệ</span><span class="info-value">VND</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">💰 Thông tin phí</div></div>
+        <div class="section-body">
+          <div class="info-box" style="margin-bottom:10px;"><span>ℹ️</span><span>Áp dụng phí chung cho toàn bộ thương hiệu thẻ</span></div>
+          <div class="fee-panel">
+            <div class="fee-panel-header">📊 Phí theo thương hiệu thẻ</div>
+            <table class="fee-table">
+              <thead><tr><th>Thương hiệu thẻ</th><th>Hình thức thu phí</th><th>Mức phí tỷ lệ</th><th>Phí tối thiểu</th><th>Phí tối đa</th></tr></thead>
+              <tbody>
+                <tr><td>🔵 Visa</td><td>1 bậc phí</td><td><strong>0.74%</strong></td><td>—</td><td>—</td></tr>
+                <tr><td>🔴 MasterCard</td><td>1 bậc phí</td><td><strong>0.82%</strong></td><td>—</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- B4: Detail Maker - Phí quản lý dịch vụ gia tăng DRAFT -->
+<div class="screen" id="screen-detail-maker-qlyDVGT-draft">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Chi tiết cấu hình</span></div>
+      <h1 class="page-title">SM_PN_DC_008 – Phí QLGT – VCB Draft</h1>
+    </div>
+    <div class="page-header-right">
+      <span class="badge badge-draft"><span class="badge-dot"></span>DRAFT</span>
+    </div>
+  </div>
+
+  <div class="floating-toolbar">
+    <div class="floating-toolbar-left"><span style="font-size:11px;color:#94a3b8;">Thao tác:</span></div>
+    <div class="floating-toolbar-right">
+      <button class="btn btn-outline" onclick="showScreen('edit-qlyDVGT')">✏️ Sửa</button>
+      <button class="btn btn-primary" onclick="openModal('modal-send-ycpd')">📤 Gửi YCPD</button>
+      <button class="btn btn-danger" onclick="toast('Đã xóa cấu hình DRAFT','error')">🗑 Xoá</button>
+    </div>
+  </div>
+
+  <div class="detail-layout">
+    <div class="detail-main">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+        <div class="section-body">
+          <div class="info-grid">
+            <div class="info-group"><span class="info-label">Loại phí</span><span class="info-value">Phí quản lý dịch vụ gia tăng</span></div>
+            <div class="info-group"><span class="info-label">Nguồn dữ liệu</span><span class="info-value">CTT</span></div>
+            <div class="info-group"><span class="info-label">Đối tác</span><span class="info-value">VietcomBank</span></div>
+            <div class="info-group"><span class="info-label">Kỳ trả phí</span><span class="info-value">Theo quý</span></div>
+            <div class="info-group"><span class="info-label">Thời gian áp dụng</span><span class="info-value">01/07/2026</span></div>
+            <div class="info-group"><span class="info-label">Loại dịch vụ GT</span><span class="info-value">Biến động số dư, Phân tích dữ liệu, Tokenization</span></div>
+            <div class="info-group"><span class="info-label">Thuế VAT</span><span class="info-value">8%</span></div>
+            <div class="info-group"><span class="info-label">Đơn vị tiền tệ</span><span class="info-value">VND</span></div>
+            <div class="info-group full"><span class="info-label">Mô tả</span><span class="info-value">Phí quản lý dịch vụ gia tăng VietcomBank Q3/2026 – Bản nháp cấu hình</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">💰 Thông tin Phí từng dịch vụ gia tăng</div></div>
+        <div class="section-body">
+          <table class="fee-table">
+            <thead>
+              <tr><th>STT</th><th>Loại dịch vụ gia tăng</th><th>Hình thức thu phí</th><th>Mức phí (VND)</th><th>Kỳ tính phí</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Dịch vụ thông báo biến động số dư (SMS/OTT)</td><td>Cố định theo tháng</td><td>500.000 đ</td><td>Theo tháng</td></tr>
+              <tr><td>2</td><td>Dịch vụ báo cáo & phân tích dữ liệu chuyên sâu</td><td>Cố định theo tháng</td><td>300.000 đ</td><td>Theo tháng</td></tr>
+              <tr><td>3</td><td>Dịch vụ bảo mật Tokenization thẻ quốc tế</td><td>Cố định theo tháng</td><td>200.000 đ</td><td>Theo tháng</td></tr>
+            </tbody>
+          </table>
+          <div class="warning-box" style="margin-top:12px;"><span>⚠️</span><span>Cấu hình đang ở trạng thái DRAFT – Maker có thể chỉnh sửa hoặc bấm "Gửi YCPD" để trình duyệt.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- B5: Detail Checker - PENDING -->
+<div class="screen" id="screen-detail-checker-pending">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-pending')">Phí trả đối tác</span> <span>›</span> <span>Chi tiết cấu hình</span></div>
+      <h1 class="page-title">SM_PN_DC_005 – Phí thanh toán – KBank Visa <span class="checker-badge">👁 Checker</span></h1>
+    </div>
+    <div class="page-header-right">
+      <span class="badge badge-pending"><span class="badge-dot"></span>PENDING</span>
+    </div>
+  </div>
+
+  <div class="floating-toolbar">
+    <div class="floating-toolbar-left">
+      <div class="info-box" style="padding:6px 12px;">
+        <span>✅</span><span style="font-size:12px;">Checker – Có quyền phê duyệt hoặc từ chối yêu cầu này</span>
+      </div>
+    </div>
+    <div class="floating-toolbar-right">
+      <button class="btn btn-danger" onclick="openModal('modal-reject')">✖ Từ chối</button>
+      <button class="btn btn-success" onclick="openModal('modal-approve')">✔ Phê duyệt</button>
+    </div>
+  </div>
+
+  <div class="detail-layout">
+    <div class="detail-main">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+        <div class="section-body">
+          <div class="info-grid">
+            <div class="info-group"><span class="info-label">Loại phí</span><span class="info-value">Phí xử lý giao dịch</span></div>
+            <div class="info-group"><span class="info-label">Nguồn dữ liệu</span><span class="info-value">CTT</span></div>
+            <div class="info-group"><span class="info-label">Đối tác</span><span class="info-value">KBank</span></div>
+            <div class="info-group"><span class="info-label">Kỳ trả phí</span><span class="info-value">Theo tháng</span></div>
+            <div class="info-group"><span class="info-label">Thời gian áp dụng</span><span class="info-value">01/02/2026</span></div>
+            <div class="info-group"><span class="info-label">Mã MCC</span><span class="info-value">4784, 5411, 4900</span></div>
+            <div class="info-group"><span class="info-label">Trạng thái GD</span><span class="info-value">Tất cả</span></div>
+            <div class="info-group"><span class="info-label">Thuế VAT</span><span class="info-value">8%</span></div>
+            <div class="info-group"><span class="info-label">Đơn vị tiền tệ</span><span class="info-value">VND</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">💰 Thông tin phí</div></div>
+        <div class="section-body">
+          <div class="info-box" style="margin-bottom:10px;"><span>ℹ️</span><span>Áp dụng phí chung cho toàn bộ loại giao dịch</span></div>
+          <div class="fee-panel">
+            <div class="fee-panel-header">📊 Chi tiết mức phí</div>
+            <table class="fee-table">
+              <thead><tr><th>Loại giao dịch</th><th>Hình thức thu phí</th><th>Mức phí</th></tr></thead>
+              <tbody>
+                <tr><td>Thanh toán</td><td>1 bậc phí</td><td><strong>1.800đ / GD</strong></td></tr>
+                <tr><td>Hoàn trả</td><td>1 bậc phí</td><td><strong>1.800đ / GD</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- YCPD Panel - Checker view (with action buttons) -->
+      <div class="ycpd-panel">
+        <div class="ycpd-header">📋 YÊU CẦU PHÊ DUYỆT</div>
+        <div class="ycpd-sub-header">⏳ ĐANG CHỜ PHÊ DUYỆT – Cần xử lý</div>
+        <div class="ycpd-meta">
+          <div class="ycpd-meta-item"><span class="ycpd-meta-label">Mã YCPD</span><span class="ycpd-meta-value mono">YCPD_2026_0042</span></div>
+          <div class="ycpd-meta-item"><span class="ycpd-meta-label">Người gửi</span><span class="ycpd-meta-value">Lisa</span></div>
+          <div class="ycpd-meta-item"><span class="ycpd-meta-label">Ngày gửi</span><span class="ycpd-meta-value">28/10/2026 15:30</span></div>
+          <div class="ycpd-meta-item"><span class="ycpd-meta-label">Lý do gửi</span><span class="ycpd-meta-value">Cập nhật mức phí theo hợp đồng mới Q4/2026</span></div>
+        </div>
+        <div class="ycpd-diff">
+          <div class="ycpd-diff-title">📊 Chi tiết thay đổi cần phê duyệt</div>
+          <table class="diff-table">
+            <thead><tr><th>Trường thay đổi</th><th>Giá trị cũ</th><th></th><th>Giá trị mới</th></tr></thead>
+            <tbody>
+              <tr><td>Mức phí (Thanh toán)</td><td class="diff-old">1.500đ / GD</td><td class="diff-arrow">→</td><td class="diff-new">1.800đ / GD</td></tr>
+              <tr><td>Mức phí (Hoàn trả)</td><td class="diff-old">1.500đ / GD</td><td class="diff-arrow">→</td><td class="diff-new">1.800đ / GD</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ycpd-actions">
+          <button class="btn btn-danger" onclick="openModal('modal-reject')">✖ Từ chối</button>
+          <button class="btn btn-success" onclick="openModal('modal-approve')">✔ Phê duyệt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN GROUP C: LỊCH SỬ THAY ĐỔI
+     ============================================================ -->
+
+<div class="screen" id="screen-screen-history">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span onclick="showScreen('detail-maker-xuLy-pending')">SM_PN_DC_005</span> <span>›</span> <span>Lịch sử thay đổi</span></div>
+      <h1 class="page-title">Lịch sử thay đổi – SM_PN_DC_005</h1>
+    </div>
+    <div class="page-header-right">
+      <button class="btn btn-outline" onclick="toast('Đang xuất lịch sử...','success')">📥 Xuất tệp</button>
+      <button class="btn btn-ghost" onclick="showScreen('detail-maker-xuLy-pending')">← Quay lại</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-dot send">📤</div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-action">Gửi yêu cầu phê duyệt</span>
+              <span class="timeline-user">Lisa</span>
+              <span class="timeline-time">28/10/2026 15:30</span>
+            </div>
+            <div class="timeline-detail">Gửi YCPD_2026_0042 – Lý do: Cập nhật mức phí theo hợp đồng mới Q4/2026</div>
+            <div class="chip-list">
+              <span class="timeline-chip">Mức phí: 1.500đ → 1.800đ</span>
+              <span class="timeline-chip" style="background:#fef3c7;color:#92400e;">Trạng thái: Active → Pending</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot edit">✏️</div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-action">Chỉnh sửa cấu hình</span>
+              <span class="timeline-user">Lisa</span>
+              <span class="timeline-time">27/10/2026 09:15</span>
+            </div>
+            <div class="timeline-detail">Cập nhật mức phí Thanh toán và Hoàn trả</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot approve">✔️</div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-action">Phê duyệt</span>
+              <span class="timeline-user">Trần Văn A</span>
+              <span class="timeline-time">20/10/2026 14:00</span>
+            </div>
+            <div class="timeline-detail">Phê duyệt YCPD_2026_0038</div>
+            <div class="chip-list">
+              <span class="timeline-chip" style="background:#d1fae5;color:#065f46;">Trạng thái: New → Active</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot send">📤</div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-action">Gửi yêu cầu phê duyệt</span>
+              <span class="timeline-user">Lisa</span>
+              <span class="timeline-time">15/10/2026 10:30</span>
+            </div>
+            <div class="timeline-detail">Gửi YCPD_2026_0038 – Yêu cầu kích hoạt cấu hình</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot create">✨</div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-action">Tạo mới cấu hình</span>
+              <span class="timeline-user">Lisa</span>
+              <span class="timeline-time">10/10/2026 08:00</span>
+            </div>
+            <div class="timeline-detail">Khởi tạo Phí thanh toán KBank Visa mã SM_PN_DC_005</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot system">⚙️</div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-action">Khởi tạo bản ghi</span>
+              <span class="timeline-user">SYSTEM</span>
+              <span class="timeline-time">10/10/2026 08:00</span>
+            </div>
+            <div class="timeline-detail">Hệ thống tự động tạo mã SM_PN_DC_005</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN GROUP D: THÊM MỚI
+     ============================================================ -->
+
+<!-- D1: Phí duy trì - Áp dụng chung -->
+<div class="screen" id="screen-create-duyTri-chung">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Thêm mới</span></div>
+      <h1 class="page-title">Thêm mới – Phí trả đối tác</h1>
+    </div>
+  </div>
+
+  <!-- Fee type tabs -->
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab done active" onclick="showScreen('create-duyTri-chung')">✔ Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab" onclick="showScreen('create-xuLy-chung-1bac')">Phí xử lý giao dịch</div>
+    <div class="fee-type-tab" onclick="showScreen('create-thanhToan-chung')">Phí thanh toán</div>
+    <div class="fee-type-tab" onclick="showScreen('create-qlyDVGT')">Phí quản lý DVGT</div>
+  </div>
+
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nguồn dữ liệu cấu hình <span class="req">*</span></label>
+          <select class="form-select"><option>CTT</option><option>Hệ thống</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Đối tác / NH hưởng phí <span class="req">*</span></label>
+          <select class="form-select"><option>KBank</option><option>VietcomBank</option><option>MBBank</option><option>BIDV</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kỳ trả phí <span class="req">*</span></label>
+          <select class="form-select"><option>Theo tháng</option><option>Theo quý</option><option>Theo năm</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Thời gian áp dụng phí <span class="req">*</span></label>
+          <input type="date" class="form-control" value="2026-01-01">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hình thức thu phí <span class="req">*</span></label>
+          <select class="form-select"><option>Theo MID đối tác cung cấp</option><option>Theo tháng cố định</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Loại giao dịch <span class="req">*</span></label>
+          <select class="form-select"><option>Tất cả</option><option>Thanh toán</option><option>Hoàn trả</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phương thức thanh toán <span class="req">*</span></label>
+          <select class="form-select"><option>Thẻ quốc tế</option><option>Thẻ nội địa</option><option>QR Code</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Thuế VAT <span class="req">*</span></label>
+          <div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label>
+          <select class="form-select"><option>VND</option><option>USD</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mô tả</label>
+          <textarea class="form-control form-textarea" placeholder="Nhập mô tả cấu hình phí..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho MID đối tác cung cấp</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option" onclick="showScreen('create-duyTri-chung')">
+          <div class="radio-circle checked" id="radio-duyTri-chung-chung"></div>
+          <span class="radio-label">● Áp dụng phí chung cho toàn bộ MID</span>
+        </div>
+        <div class="radio-option" onclick="showScreen('create-duyTri-khongApDung')">
+          <div class="radio-circle" id="radio-duyTri-chung-khong"></div>
+          <span class="radio-label">○ Không áp dụng (cấu hình từng MID - ảnh 3)</span>
+        </div>
+      </div>
+
+      <!-- Chung subsection -->
+      <div id="duyTri-chung-panel" class="fee-subsection">
+        <div class="fee-sub-header">Mức phí chung cho tất cả MID</div>
+        <div class="fee-sub-body">
+          <div class="form-group" style="max-width:300px;">
+            <label class="form-label">Mức phí <span class="req">*</span></label>
+            <div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ / tháng</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Khong ap dung panel (hidden) -->
+      <div id="duyTri-khong-panel" class="fee-subsection hidden">
+        <div class="fee-sub-header">Cấu hình phí từng MID</div>
+        <div class="fee-sub-body">
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">Danh sách MID <span class="req">*</span></label>
+            <select class="form-select" multiple style="height:80px;">
+              <option selected>MID 1</option><option selected>MID 2</option><option selected>MID 3</option>
+            </select>
+          </div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Mức phí MID 1 <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí MID 2 <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí MID 3 <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã tạo mới cấu hình','success')">＋ Tạo mới</button>
+  </div>
+</div>
+
+<!-- D2: Phí duy trì - Không áp dụng -->
+<div class="screen" id="screen-create-duyTri-khongApDung">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Thêm mới</span></div>
+      <h1 class="page-title">Thêm mới – Phí duy trì dịch vụ (Từng MID)</h1>
+    </div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab active">✔ Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab" onclick="showScreen('create-xuLy-chung-1bac')">Phí xử lý giao dịch</div>
+    <div class="fee-type-tab" onclick="showScreen('create-thanhToan-chung')">Phí thanh toán</div>
+    <div class="fee-type-tab" onclick="showScreen('create-qlyDVGT')">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu cấu hình <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác / NH hưởng phí <span class="req">*</span></label><select class="form-select"><option>KBank</option><option>VietcomBank</option><option>MBBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng phí <span class="req">*</span></label><input type="date" class="form-control" value="2026-01-01"></div>
+        <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>Theo MID đối tác cung cấp</option></select></div>
+        <div class="form-group"><label class="form-label">Loại giao dịch <span class="req">*</span></label><select class="form-select"><option>Tất cả</option></select></div>
+        <div class="form-group"><label class="form-label">Phương thức thanh toán <span class="req">*</span></label><select class="form-select"><option>Thẻ quốc tế</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+        <div class="form-group"><label class="form-label">Mô tả</label><textarea class="form-control form-textarea"></textarea></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho MID đối tác cung cấp</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option" onclick="showScreen('create-duyTri-chung')"><div class="radio-circle"></div><span class="radio-label">○ Áp dụng phí chung cho toàn bộ MID</span></div>
+        <div class="radio-option" onclick="showScreen('create-duyTri-khongApDung')"><div class="radio-circle checked"></div><span class="radio-label">● Không áp dụng</span></div>
+      </div>
+      <div class="fee-subsection">
+        <div class="fee-sub-header">Cấu hình phí từng MID</div>
+        <div class="fee-sub-body">
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">Danh sách MID <span class="req">*</span></label>
+            <select class="form-select" multiple style="height:72px;"><option selected>MID 1</option><option selected>MID 2</option><option selected>MID 3</option></select>
+          </div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Mức phí MID 1 <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí MID 2 <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí MID 3 <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã tạo mới cấu hình','success')">＋ Tạo mới</button>
+  </div>
+</div>
+
+<!-- D3: Phí xử lý - Chung 1 bậc -->
+<div class="screen" id="screen-create-xuLy-chung-1bac">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Thêm mới</span></div>
+      <h1 class="page-title">Thêm mới – Phí xử lý giao dịch</h1>
+    </div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" onclick="showScreen('create-duyTri-chung')">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab active">✔ Phí xử lý giao dịch</div>
+    <div class="fee-type-tab" onclick="showScreen('create-thanhToan-chung')">Phí thanh toán</div>
+    <div class="fee-type-tab" onclick="showScreen('create-qlyDVGT')">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu cấu hình <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác / NH hưởng phí <span class="req">*</span></label><select class="form-select"><option>KBank</option><option>VietcomBank</option><option>MBBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng phí <span class="req">*</span></label><input type="date" class="form-control" value="2026-01-01"></div>
+
+        <!-- MCC dual listbox - spans full width -->
+        <div class="form-group full">
+          <label class="form-label">Mã MCC <span class="req">*</span></label>
+          <div class="dual-listbox">
+            <div class="listbox-container">
+              <div class="listbox-label">Danh sách MCC có sẵn</div>
+              <div class="listbox" id="mcc-available">
+                <div class="listbox-item"><input type="checkbox" id="mcc-4784"><label for="mcc-4784">4784 – Cầu phà & đường bộ</label></div>
+                <div class="listbox-item"><input type="checkbox" id="mcc-5411"><label for="mcc-5411">5411 – Cửa hàng tạp hóa</label></div>
+                <div class="listbox-item"><input type="checkbox" id="mcc-4900"><label for="mcc-4900">4900 – Điện nước khí đốt</label></div>
+                <div class="listbox-item"><input type="checkbox" id="mcc-5732"><label for="mcc-5732">5732 – Điện tử tiêu dùng</label></div>
+                <div class="listbox-item"><input type="checkbox" id="mcc-5814"><label for="mcc-5814">5814 – Nhà hàng ăn uống</label></div>
+                <div class="listbox-item"><input type="checkbox" id="mcc-6300"><label for="mcc-6300">6300 – Bảo hiểm</label></div>
+              </div>
+            </div>
+            <div class="listbox-arrows">
+              <button class="arrow-btn" onclick="moveMCC('right')" title="Thêm vào danh sách">›</button>
+              <button class="arrow-btn" onclick="moveMCC('left')" title="Gỡ khỏi danh sách">‹</button>
+            </div>
+            <div class="listbox-container">
+              <div class="listbox-label">MCC đã chọn</div>
+              <div class="listbox" id="mcc-selected">
+                <div class="listbox-item selected">4784 – Cầu phà & đường bộ</div>
+                <div class="listbox-item selected">5411 – Cửa hàng tạp hóa</div>
+                <div class="listbox-item selected">4900 – Điện nước khí đốt</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group"><label class="form-label">Trạng thái giao dịch <span class="req">*</span></label><select class="form-select"><option>Tất cả</option><option>Thành công</option><option>Thất bại</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+        <div class="form-group"><label class="form-label">Mô tả</label><textarea class="form-control form-textarea"></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho từng loại giao dịch</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option" onclick="showScreen('create-xuLy-chung-1bac')"><div class="radio-circle checked"></div><span class="radio-label">● Áp dụng phí chung cho toàn bộ loại giao dịch</span></div>
+        <div class="radio-option" onclick="showScreen('create-xuLy-khongApDung')"><div class="radio-circle"></div><span class="radio-label">○ Không áp dụng</span></div>
+      </div>
+      <div class="form-group" style="margin-top:12px;max-width:400px;">
+        <label class="form-label">Loại giao dịch <span class="req">*</span></label>
+        <select class="form-select" multiple style="height:64px;"><option selected>Thanh toán</option><option selected>Hoàn trả</option></select>
+      </div>
+
+      <!-- Thanh toán subsection -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">📌 Loại giao dịch: Thanh toán</div>
+        <div class="fee-sub-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Hình thức thu phí <span class="req">*</span></label>
+              <select class="form-select"><option>1 bậc phí</option><option>Bậc thang Tổng SLGD</option><option>Bậc thang Tổng GTGD</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mức phí <span class="req">*</span></label>
+              <div class="input-with-unit"><input type="number" value="1800"><span class="input-unit">đ / GD</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hoàn trả subsection -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">📌 Loại giao dịch: Hoàn trả</div>
+        <div class="fee-sub-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Hình thức thu phí <span class="req">*</span></label>
+              <select class="form-select"><option>1 bậc phí</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mức phí <span class="req">*</span></label>
+              <div class="input-with-unit"><input type="number" value="1800"><span class="input-unit">đ / GD</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="openModal('modal-calc-1bac')">🧮 Tính thử</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã tạo mới cấu hình','success')">＋ Tạo mới</button>
+  </div>
+</div>
+
+<!-- D3b: Phí xử lý giao dịch - Áp dụng chung - Bậc thang Tổng SLGD -->
+<div class="screen" id="screen-create-xuLy-chung-bacThang">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Thêm mới</span></div>
+      <h1 class="page-title">Thêm mới – Phí xử lý giao dịch (Bậc thang Tổng SLGD)</h1>
+    </div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" onclick="showScreen('create-duyTri-chung')">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab active">✔ Phí xử lý giao dịch</div>
+    <div class="fee-type-tab" onclick="showScreen('create-thanhToan-chung')">Phí thanh toán</div>
+    <div class="fee-type-tab" onclick="showScreen('create-qlyDVGT')">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu cấu hình <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác / NH hưởng phí <span class="req">*</span></label><select class="form-select"><option>KBank</option><option>VietcomBank</option><option>MBBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng phí <span class="req">*</span></label><input type="date" class="form-control" value="2026-01-01"></div>
+
+        <!-- MCC dual listbox -->
+        <div class="form-group full">
+          <label class="form-label">Mã MCC <span class="req">*</span></label>
+          <div class="dual-listbox">
+            <div class="listbox-container">
+              <div class="listbox-label">Danh sách MCC có sẵn</div>
+              <div class="listbox">
+                <div class="listbox-item"><input type="checkbox">4784 – Cầu phà & đường bộ</div>
+                <div class="listbox-item"><input type="checkbox">5411 – Cửa hàng tạp hóa</div>
+                <div class="listbox-item"><input type="checkbox">4900 – Điện nước khí đốt</div>
+                <div class="listbox-item"><input type="checkbox">5732 – Điện tử tiêu dùng</div>
+                <div class="listbox-item"><input type="checkbox">5814 – Nhà hàng ăn uống</div>
+                <div class="listbox-item"><input type="checkbox">6300 – Bảo hiểm</div>
+              </div>
+            </div>
+            <div class="listbox-arrows">
+              <button class="arrow-btn" onclick="moveMCC('right')" title="Thêm vào danh sách">›</button>
+              <button class="arrow-btn" onclick="moveMCC('left')" title="Gỡ khỏi danh sách">‹</button>
+            </div>
+            <div class="listbox-container">
+              <div class="listbox-label">MCC đã chọn</div>
+              <div class="listbox">
+                <div class="listbox-item selected">4784 – Cầu phà & đường bộ</div>
+                <div class="listbox-item selected">5411 – Cửa hàng tạp hóa</div>
+                <div class="listbox-item selected">4900 – Điện nước khí đốt</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group"><label class="form-label">Trạng thái giao dịch <span class="req">*</span></label><select class="form-select"><option>Tất cả (Thành công và Thất bại)</option><option>Thành công</option><option>Thất bại</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+        <div class="form-group"><label class="form-label">Mô tả</label><textarea class="form-control form-textarea"></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho từng loại giao dịch</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option"><div class="radio-circle checked"></div><span class="radio-label">● Áp dụng phí chung cho toàn bộ loại giao dịch</span></div>
+        <div class="radio-option"><div class="radio-circle"></div><span class="radio-label">○ Không áp dụng phí chung</span></div>
+      </div>
+      <div class="form-group" style="margin-top:12px;max-width:400px;">
+        <label class="form-label">Loại giao dịch <span class="req">*</span></label>
+        <select class="form-select" multiple style="height:64px;"><option selected>Thanh toán</option><option selected>Hoàn trả</option></select>
+      </div>
+
+      <!-- Thanh toán subsection - BẬC THANG TỔNG SLGD -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">📌 Loại giao dịch: Thanh toán (Bậc thang Tổng SLGD)</div>
+        <div class="fee-sub-body">
+          <div class="form-group" style="max-width:320px;margin-bottom:10px;">
+            <label class="form-label">Hình thức thu phí <span class="req">*</span></label>
+            <select class="form-select"><option selected>Bậc thang Tổng SLGD</option><option>1 bậc phí</option></select>
+          </div>
+          <div style="font-size:11.5px;color:#64748b;margin-bottom:6px;font-weight:600;">Cấu hình các bậc phí:</div>
+          <div id="xuly-slgd-bac-list">
+            <div class="bac-thang-row">
+              <span class="bac-thang-label">Bậc 1</span>
+              <div class="input-with-unit" style="flex:1"><input type="text" value="0 - 10.000 GD" placeholder="SLGD từ - đến"><span class="input-unit">GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" value="1800"><span class="input-unit">đ/GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+              <div class="bac-thang-actions"><button class="bac-btn add" onclick="addBacRow('xuly-slgd-bac-list','xuly')">+</button></div>
+            </div>
+            <div class="bac-thang-row">
+              <span class="bac-thang-label">Bậc 2</span>
+              <div class="input-with-unit" style="flex:1"><input type="text" value="10.001 - 50.000 GD" placeholder="SLGD từ - đến"><span class="input-unit">GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" value="1500"><span class="input-unit">đ/GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+              <div class="bac-thang-actions"><button class="bac-btn remove" onclick="removeBacRow(this)">−</button></div>
+            </div>
+            <div class="bac-thang-row">
+              <span class="bac-thang-label">Bậc 3</span>
+              <div class="input-with-unit" style="flex:1"><input type="text" value="> 50.000 GD" placeholder="SLGD từ - đến"><span class="input-unit">GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" value="1200"><span class="input-unit">đ/GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+              <div class="bac-thang-actions"><button class="bac-btn remove" onclick="removeBacRow(this)">−</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hoàn trả subsection -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">📌 Loại giao dịch: Hoàn trả</div>
+        <div class="fee-sub-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Hình thức thu phí <span class="req">*</span></label>
+              <select class="form-select"><option>1 bậc phí</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mức phí <span class="req">*</span></label>
+              <div class="input-with-unit"><input type="number" value="1800"><span class="input-unit">đ / GD</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="openModal('modal-calc-bacthang')">🧮 Tính thử bậc thang</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã tạo mới cấu hình','success')">＋ Tạo mới</button>
+  </div>
+</div>
+
+<!-- D4: Phí xử lý - Không áp dụng -->
+<div class="screen" id="screen-create-xuLy-khongApDung">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Thêm mới</span></div>
+      <h1 class="page-title">Thêm mới – Phí xử lý giao dịch (Không áp dụng chung)</h1>
+    </div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" onclick="showScreen('create-duyTri-chung')">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab active">✔ Phí xử lý giao dịch</div>
+    <div class="fee-type-tab" onclick="showScreen('create-thanhToan-chung')">Phí thanh toán</div>
+    <div class="fee-type-tab" onclick="showScreen('create-qlyDVGT')">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu cấu hình <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác / NH hưởng phí <span class="req">*</span></label><select class="form-select"><option>KBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng <span class="req">*</span></label><input type="date" class="form-control" value="2026-01-01"></div>
+        <div class="form-group full">
+          <label class="form-label">Mã MCC <span class="req">*</span></label>
+          <div class="dual-listbox">
+            <div class="listbox-container"><div class="listbox-label">Có sẵn</div><div class="listbox"><div class="listbox-item"><input type="checkbox">4784</div><div class="listbox-item"><input type="checkbox">5411</div><div class="listbox-item"><input type="checkbox">4900</div></div></div>
+            <div class="listbox-arrows"><button class="arrow-btn">›</button><button class="arrow-btn">‹</button></div>
+            <div class="listbox-container"><div class="listbox-label">Đã chọn</div><div class="listbox"></div></div>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Trạng thái GD <span class="req">*</span></label><select class="form-select"><option>Tất cả</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho từng loại giao dịch</div></div>
+      <div class="radio-group">
+        <div class="radio-option" onclick="showScreen('create-xuLy-chung-1bac')"><div class="radio-circle"></div><span class="radio-label">○ Áp dụng phí chung cho toàn bộ loại giao dịch</span></div>
+        <div class="radio-option" onclick="showScreen('create-xuLy-khongApDung')"><div class="radio-circle checked"></div><span class="radio-label">● Không áp dụng</span></div>
+      </div>
+      <div class="form-group" style="margin-top:12px;max-width:400px;">
+        <label class="form-label">Loại giao dịch <span class="req">*</span></label>
+        <select class="form-select" multiple style="height:64px;"><option selected>Thanh toán</option><option selected>Hoàn trả</option></select>
+      </div>
+
+      <!-- CARD 1: THANH TOÁN - BẬC THANG -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">📌 Loại giao dịch: Thanh toán (Bậc thang Tổng SLGD)</div>
+        <div class="fee-sub-body">
+          <div class="form-group" style="max-width:320px;margin-bottom:10px;">
+            <label class="form-label">Hình thức thu phí <span class="req">*</span></label>
+            <select class="form-select"><option selected>Bậc thang Tổng SLGD</option><option>1 bậc phí</option></select>
+          </div>
+          <div style="font-size:11.5px;color:#64748b;margin-bottom:6px;font-weight:600;">Cấu hình các bậc phí:</div>
+          <div id="xuly-khong-bac-list">
+            <div class="bac-thang-row">
+              <span class="bac-thang-label">Bậc 1</span>
+              <div class="input-with-unit" style="flex:1"><input type="text" value="0 - 10.000 GD"><span class="input-unit">GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" value="1800"><span class="input-unit">đ/GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+              <div class="bac-thang-actions"><button class="bac-btn add" onclick="addBacRow('xuly-khong-bac-list','xuly')">+</button></div>
+            </div>
+            <div class="bac-thang-row">
+              <span class="bac-thang-label">Bậc 2</span>
+              <div class="input-with-unit" style="flex:1"><input type="text" value="10.001 - 50.000 GD"><span class="input-unit">GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" value="1500"><span class="input-unit">đ/GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+              <div class="bac-thang-actions"><button class="bac-btn remove" onclick="removeBacRow(this)">−</button></div>
+            </div>
+            <div class="bac-thang-row">
+              <span class="bac-thang-label">Bậc 3</span>
+              <div class="input-with-unit" style="flex:1"><input type="text" value="> 50.000 GD"><span class="input-unit">GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" value="1200"><span class="input-unit">đ/GD</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+              <div class="bac-thang-actions"><button class="bac-btn remove" onclick="removeBacRow(this)">−</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: HOÀN TRẢ - 1 BẬC -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">📌 Loại giao dịch: Hoàn trả</div>
+        <div class="fee-sub-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Hình thức thu phí <span class="req">*</span></label>
+              <select class="form-select"><option>1 bậc phí</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mức phí <span class="req">*</span></label>
+              <div class="input-with-unit"><input type="number" value="1800"><span class="input-unit">đ / GD</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã tạo mới cấu hình','success')">＋ Tạo mới</button>
+  </div>
+</div>
+
+<!-- D5: Phí thanh toán - Chung -->
+<div class="screen" id="screen-create-thanhToan-chung">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Thêm mới</span></div>
+      <h1 class="page-title">Thêm mới – Phí thanh toán</h1>
+    </div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" onclick="showScreen('create-duyTri-chung')">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab" onclick="showScreen('create-xuLy-chung-1bac')">Phí xử lý giao dịch</div>
+    <div class="fee-type-tab active">✔ Phí thanh toán</div>
+    <div class="fee-type-tab" onclick="showScreen('create-qlyDVGT')">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu cấu hình <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác / NH hưởng phí <span class="req">*</span></label><select class="form-select"><option>KBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng <span class="req">*</span></label><input type="date" class="form-control" value="2026-01-01"></div>
+
+        <div class="form-group full">
+          <label class="form-label">Mã MCC <span class="req">*</span></label>
+          <div class="dual-listbox">
+            <div class="listbox-container"><div class="listbox-label">Danh sách MCC có sẵn</div>
+              <div class="listbox"><div class="listbox-item"><input type="checkbox">4784</div><div class="listbox-item"><input type="checkbox">5411</div><div class="listbox-item"><input type="checkbox">4900</div><div class="listbox-item"><input type="checkbox">5732</div></div>
+            </div>
+            <div class="listbox-arrows"><button class="arrow-btn">›</button><button class="arrow-btn">‹</button></div>
+            <div class="listbox-container"><div class="listbox-label">MCC đã chọn</div>
+              <div class="listbox"><div class="listbox-item selected">5814</div><div class="listbox-item selected">6300</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group"><label class="form-label">Loại giao dịch <span class="req">*</span></label><select class="form-select"><option>Thanh toán</option></select></div>
+        <div class="form-group"><label class="form-label">Trạng thái GD <span class="req">*</span></label><select class="form-select"><option>Thành công</option></select></div>
+        <div class="form-group"><label class="form-label">Phương thức TT <span class="req">*</span></label><select class="form-select"><option>Thẻ quốc tế</option></select></div>
+        <div class="form-group"><label class="form-label">Cổng trung gian TT</label><select class="form-select"><option>CYBS/KBANK</option><option>NAPAS</option></select></div>
+        <div class="form-group"><label class="form-label">Loại NH phát hành <span class="req">*</span></label><select class="form-select"><option>NHPH trong nước</option><option>NHPH nước ngoài</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+        <div class="form-group"><label class="form-label">Mô tả</label><textarea class="form-control form-textarea"></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho từng thương hiệu thẻ</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option" onclick="showScreen('create-thanhToan-chung')"><div class="radio-circle checked"></div><span class="radio-label">● Áp dụng phí chung cho toàn bộ thương hiệu thẻ</span></div>
+        <div class="radio-option" onclick="showScreen('create-thanhToan-bacThang')"><div class="radio-circle"></div><span class="radio-label">○ Không áp dụng (Bậc thang theo Cổng TGTT - ảnh 1)</span></div>
+        <div class="radio-option" onclick="showScreen('create-thanhToan-1bac')"><div class="radio-circle"></div><span class="radio-label">○ Không áp dụng (1 bậc - ảnh 3)</span></div>
+      </div>
+      <div class="form-group" style="margin-top:12px;max-width:400px;">
+        <label class="form-label">Thương hiệu thẻ <span class="req">*</span></label>
+        <select class="form-select" multiple style="height:72px;"><option selected>Visa</option><option selected>MasterCard</option><option selected>JCB</option></select>
+      </div>
+
+      <!-- Visa -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">🔵 Thương hiệu thẻ: Visa</div>
+        <div class="fee-sub-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div>
+          </div>
+          <div class="form-grid" style="margin-top:10px;">
+            <div class="form-group"><label class="form-label">Mức phí tỷ lệ <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="0.74" step="0.01"><span class="input-unit">%</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí tối thiểu</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí tối đa</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MasterCard -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">🔴 Thương hiệu thẻ: MasterCard</div>
+        <div class="fee-sub-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div>
+          </div>
+          <div class="form-grid" style="margin-top:10px;">
+            <div class="form-group"><label class="form-label">Mức phí tỷ lệ <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="0.82" step="0.01"><span class="input-unit">%</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí tối thiểu</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí tối đa</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JCB - Bậc thang -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">🟡 Thương hiệu thẻ: JCB</div>
+        <div class="fee-sub-body">
+          <div class="form-grid" style="margin-bottom:10px;">
+            <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>Bậc thang Tổng GTGD</option><option>1 bậc phí</option></select></div>
+          </div>
+          <div style="font-size:11.5px;color:#64748b;margin-bottom:6px;font-weight:600;">Cấu hình bậc thang:</div>
+          <div id="jcb-bac-list">
+            <div class="bac-thang-row">
+              <span class="bac-thang-label">Bậc 1</span>
+              <div class="input-with-unit" style="flex:1"><input type="text" placeholder="GTGD từ (đ)"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" value="0.74" step="0.01"><span class="input-unit">%</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+              <div class="bac-thang-actions"><button class="bac-btn add" onclick="addBacRow('jcb-bac-list','jcb')">+</button></div>
+            </div>
+            <div class="bac-thang-row">
+              <span class="bac-thang-label">Bậc 2</span>
+              <div class="input-with-unit" style="flex:1"><input type="text" placeholder="GTGD từ (đ)"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" value="0.73" step="0.01"><span class="input-unit">%</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+              <div class="bac-thang-actions"><button class="bac-btn remove" onclick="removeBacRow(this)">−</button></div>
+            </div>
+            <div class="bac-thang-row">
+              <span class="bac-thang-label">Bậc 3</span>
+              <div class="input-with-unit" style="flex:1"><input type="text" placeholder="GTGD từ (đ)"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" value="0.70" step="0.01"><span class="input-unit">%</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+              <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+              <div class="bac-thang-actions"><button class="bac-btn remove" onclick="removeBacRow(this)">−</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="openModal('modal-calc-1bac')">🧮 Tính thử</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã tạo mới cấu hình','success')">＋ Tạo mới</button>
+  </div>
+</div>
+
+<!-- D6: Phí thanh toán - 1 bậc từng thương hiệu -->
+<div class="screen" id="screen-create-thanhToan-1bac">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Thêm mới</span></div>
+      <h1 class="page-title">Thêm mới – Phí thanh toán (1 bậc, từng thương hiệu)</h1>
+    </div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" onclick="showScreen('create-duyTri-chung')">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab" onclick="showScreen('create-xuLy-chung-1bac')">Phí xử lý giao dịch</div>
+    <div class="fee-type-tab active">✔ Phí thanh toán</div>
+    <div class="fee-type-tab" onclick="showScreen('create-qlyDVGT')">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác <span class="req">*</span></label><select class="form-select"><option>KBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng <span class="req">*</span></label><input type="date" class="form-control" value="2026-01-01"></div>
+        <div class="form-group"><label class="form-label">Loại GD <span class="req">*</span></label><select class="form-select"><option>Thanh toán</option></select></div>
+        <div class="form-group"><label class="form-label">Phương thức TT <span class="req">*</span></label><select class="form-select"><option>Thẻ quốc tế</option></select></div>
+        <div class="form-group"><label class="form-label">Cổng TGTT</label><select class="form-select"><option>CYBS/KBANK</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho từng thương hiệu thẻ</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option"><div class="radio-circle"></div><span class="radio-label">○ Áp dụng phí chung</span></div>
+        <div class="radio-option"><div class="radio-circle checked"></div><span class="radio-label">● Không áp dụng phí chung</span></div>
+      </div>
+      <div class="form-group" style="margin-top:12px;max-width:400px;"><label class="form-label">Thương hiệu thẻ <span class="req">*</span></label><select class="form-select" multiple style="height:56px;"><option selected>Visa</option><option selected>JCB</option></select></div>
+      <div class="fee-subsection"><div class="fee-sub-header">🔵 Visa</div><div class="fee-sub-body">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div>
+          <div class="form-group"><label class="form-label">Mức phí tỷ lệ <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="0.74" step="0.01"><span class="input-unit">%</span></div></div>
+          <div class="form-group"><label class="form-label">Phí tối thiểu</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+          <div class="form-group"><label class="form-label">Phí tối đa</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+        </div>
+      </div></div>
+      <div class="fee-subsection"><div class="fee-sub-header">🟡 JCB</div><div class="fee-sub-body">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div>
+          <div class="form-group"><label class="form-label">Mức phí tỷ lệ <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="0.75" step="0.01"><span class="input-unit">%</span></div></div>
+          <div class="form-group"><label class="form-label">Phí tối thiểu</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+          <div class="form-group"><label class="form-label">Phí tối đa</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="openModal('modal-calc-1bac')">🧮 Tính thử</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã tạo mới cấu hình','success')">＋ Tạo mới</button>
+  </div>
+</div>
+
+<!-- D7: Phí thanh toán - Bậc thang (từng cổng) -->
+<div class="screen" id="screen-create-thanhToan-bacThang">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Thêm mới</span></div>
+      <h1 class="page-title">Thêm mới – Phí thanh toán (Bậc thang từng cổng)</h1>
+    </div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" onclick="showScreen('create-duyTri-chung')">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab" onclick="showScreen('create-xuLy-chung-1bac')">Phí xử lý giao dịch</div>
+    <div class="fee-type-tab active">✔ Phí thanh toán</div>
+    <div class="fee-type-tab" onclick="showScreen('create-qlyDVGT')">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác <span class="req">*</span></label><select class="form-select"><option>KBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng <span class="req">*</span></label><input type="date" class="form-control" value="2026-01-01"></div>
+        <div class="form-group"><label class="form-label">Loại GD <span class="req">*</span></label><select class="form-select"><option>Thanh toán</option></select></div>
+        <div class="form-group"><label class="form-label">Phương thức TT <span class="req">*</span></label><select class="form-select"><option>Thẻ quốc tế</option></select></div>
+        <div class="form-group"><label class="form-label">Loại NH phát hành <span class="req">*</span></label><select class="form-select"><option>NHPH trong nước</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho từng Cổng TGTT</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option" onclick="showScreen('create-thanhToan-chung')"><div class="radio-circle"></div><span class="radio-label">○ Áp dụng phí chung cho toàn bộ Cổng trung gian thanh toán</span></div>
+        <div class="radio-option" onclick="showScreen('create-thanhToan-bacThang')"><div class="radio-circle checked"></div><span class="radio-label">● Không áp dụng</span></div>
+      </div>
+      <div class="form-group" style="margin-top:12px;max-width:400px;"><label class="form-label">Cổng trung gian TT <span class="req">*</span></label><select class="form-select" multiple style="height:64px;"><option selected>NAPAS</option><option selected>BIDV</option><option selected>MB</option></select></div>
+
+      <!-- NAPAS - Bậc thang -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">🔷 Cổng TGTT: NAPAS</div>
+        <div class="fee-sub-body">
+          <div class="form-group" style="max-width:300px;margin-bottom:10px;"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>Bậc thang Tổng GTGD</option></select></div>
+          <div style="font-size:11.5px;color:#64748b;margin-bottom:6px;font-weight:600;">Cấu hình bậc thang:</div>
+          <div id="napas-bac-list">
+            <div class="bac-thang-row"><span class="bac-thang-label">Bậc 1</span><div class="input-with-unit" style="flex:1"><input type="text" placeholder="GTGD (đ)"><span class="input-unit">đ</span></div><div class="input-with-unit" style="flex:1"><input type="number" value="0.74" step="0.01"><span class="input-unit">%</span></div><div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div><div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div><div class="bac-thang-actions"><button class="bac-btn add" onclick="addBacRow('napas-bac-list','napas')">+</button></div></div>
+            <div class="bac-thang-row"><span class="bac-thang-label">Bậc 2</span><div class="input-with-unit" style="flex:1"><input type="text" placeholder="GTGD (đ)"><span class="input-unit">đ</span></div><div class="input-with-unit" style="flex:1"><input type="number" value="0.73" step="0.01"><span class="input-unit">%</span></div><div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div><div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div><div class="bac-thang-actions"><button class="bac-btn remove" onclick="removeBacRow(this)">−</button></div></div>
+            <div class="bac-thang-row"><span class="bac-thang-label">Bậc 3</span><div class="input-with-unit" style="flex:1"><input type="text" placeholder="GTGD (đ)"><span class="input-unit">đ</span></div><div class="input-with-unit" style="flex:1"><input type="number" value="0.70" step="0.01"><span class="input-unit">%</span></div><div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div><div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div><div class="bac-thang-actions"><button class="bac-btn remove" onclick="removeBacRow(this)">−</button></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIDV - 1 bậc -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">🔶 Cổng TGTT: BIDV</div>
+        <div class="fee-sub-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div>
+            <div class="form-group"><label class="form-label">Mức phí tỷ lệ <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="0.74" step="0.01"><span class="input-unit">%</span></div></div>
+            <div class="form-group"><label class="form-label">Phí tối thiểu</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Phí tối đa</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MB - 1 bậc -->
+      <div class="fee-subsection">
+        <div class="fee-sub-header">🟢 Cổng TGTT: MB</div>
+        <div class="fee-sub-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div>
+            <div class="form-group"><label class="form-label">Mức phí tỷ lệ <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="0.74" step="0.01"><span class="input-unit">%</span></div></div>
+            <div class="form-group"><label class="form-label">Phí tối thiểu</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Phí tối đa</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="openModal('modal-calc-bacthang')">🧮 Tính thử bậc thang</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã tạo mới cấu hình','success')">＋ Tạo mới</button>
+  </div>
+</div>
+
+<!-- D8: Phí quản lý DVGT -->
+<div class="screen" id="screen-create-qlyDVGT">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>Thêm mới</span></div>
+      <h1 class="page-title">Thêm mới – Phí quản lý dịch vụ gia tăng</h1>
+    </div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" onclick="showScreen('create-duyTri-chung')">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab" onclick="showScreen('create-xuLy-chung-1bac')">Phí xử lý giao dịch</div>
+    <div class="fee-type-tab" onclick="showScreen('create-thanhToan-chung')">Phí thanh toán</div>
+    <div class="fee-type-tab active">✔ Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác / NH hưởng phí <span class="req">*</span></label><select class="form-select"><option>KBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng <span class="req">*</span></label><input type="date" class="form-control" value="2026-01-01"></div>
+        <div class="form-group full"><label class="form-label">Loại dịch vụ gia tăng <span class="req">*</span></label>
+          <select class="form-select" multiple style="height:72px;"><option selected>Dịch vụ BĐCC</option><option selected>Dịch vụ phân tích</option><option>Dịch vụ bảo mật</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>Định kỳ theo tháng</option><option>Theo giao dịch</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+        <div class="form-group"><label class="form-label">Mô tả</label><textarea class="form-control form-textarea"></textarea></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho từng Dịch vụ gia tăng</div></div>
+    <div class="form-card-inner">
+      <div class="fee-subsection"><div class="fee-sub-header">🛡 Dịch vụ BĐCC</div><div class="fee-sub-body">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Mức phí <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="500000"><span class="input-unit">đ / tháng</span></div></div>
+          <div class="form-group"><label class="form-label">Mô tả mức phí</label><input type="text" class="form-control" placeholder="Ví dụ: Phí bảo đảm chất lượng..."></div>
+        </div>
+      </div></div>
+      <div class="fee-subsection"><div class="fee-sub-header">📊 Dịch vụ phân tích</div><div class="fee-sub-body">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Mức phí <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="300000"><span class="input-unit">đ / tháng</span></div></div>
+          <div class="form-group"><label class="form-label">Mô tả mức phí</label><input type="text" class="form-control" placeholder="Ví dụ: Phí dịch vụ phân tích..."></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã tạo mới cấu hình','success')">＋ Tạo mới</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN GROUP E: CẬP NHẬT
+     ============================================================ -->
+
+<!-- E1: Edit Phí duy trì -->
+<div class="screen" id="screen-edit-duyTri">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span onclick="showScreen('detail-maker-duyTri-new')">SM_PN_DC_009</span> <span>›</span> <span>Chỉnh sửa</span></div>
+      <h1 class="page-title">Chỉnh sửa – SM_PN_DC_009 – Phí duy trì – KBank</h1>
+    </div>
+    <div class="page-header-right"><span class="badge badge-new"><span class="badge-dot"></span>NEW</span></div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab active">✔ Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí xử lý giao dịch</div>
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí thanh toán</div>
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu cấu hình <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác / NH hưởng phí <span class="req">*</span></label><select class="form-select"><option selected>KBank</option><option>VietcomBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option selected>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng phí <span class="req">*</span></label><input type="date" class="form-control" value="2026-06-01"></div>
+        <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option selected>Theo MID đối tác cung cấp</option></select></div>
+        <div class="form-group"><label class="form-label">Loại giao dịch <span class="req">*</span></label><select class="form-select"><option>Tất cả</option></select></div>
+        <div class="form-group"><label class="form-label">Phương thức thanh toán <span class="req">*</span></label><select class="form-select"><option>Thẻ quốc tế</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+        <div class="form-group"><label class="form-label">Mô tả</label><textarea class="form-control form-textarea">Phí duy trì dịch vụ KBank tháng 6/2026</textarea></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí cho MID đối tác cung cấp</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option"><div class="radio-circle"></div><span class="radio-label">○ Áp dụng phí chung</span></div>
+        <div class="radio-option"><div class="radio-circle checked"></div><span class="radio-label">● Không áp dụng phí chung (cấu hình từng MID)</span></div>
+      </div>
+      <div class="fee-subsection">
+        <div class="fee-sub-header">Cấu hình phí từng MID</div>
+        <div class="fee-sub-body">
+          <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Danh sách MID <span class="req">*</span></label><select class="form-select" multiple style="height:72px;"><option selected>MID_001</option><option selected>MID_002</option><option selected>MID_003</option></select></div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Mức phí MID_001 <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí MID_002 <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ</span></div></div>
+            <div class="form-group"><label class="form-label">Mức phí MID_003 <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800000"><span class="input-unit">đ</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('detail-maker-duyTri-new')">Huỷ</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã cập nhật cấu hình','success')">💾 Cập nhật</button>
+  </div>
+</div>
+
+<!-- E2: Edit Phí xử lý -->
+<div class="screen" id="screen-edit-xuLy">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>SM_PN_DC_005</span> <span>›</span> <span>Chỉnh sửa</span></div>
+      <h1 class="page-title">Chỉnh sửa – SM_PN_DC_005 – Phí xử lý giao dịch</h1>
+    </div>
+    <div class="page-header-right"><span class="badge badge-pending"><span class="badge-dot"></span>PENDING</span></div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab active">✔ Phí xử lý giao dịch</div>
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí thanh toán</div>
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác <span class="req">*</span></label><select class="form-select"><option>KBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng <span class="req">*</span></label><input type="date" class="form-control" value="2026-02-01"></div>
+        <div class="form-group full"><label class="form-label">Mã MCC <span class="req">*</span></label>
+          <div class="dual-listbox">
+            <div class="listbox-container"><div class="listbox-label">Có sẵn</div><div class="listbox"><div class="listbox-item"><input type="checkbox">5732</div><div class="listbox-item"><input type="checkbox">5814</div><div class="listbox-item"><input type="checkbox">6300</div></div></div>
+            <div class="listbox-arrows"><button class="arrow-btn">›</button><button class="arrow-btn">‹</button></div>
+            <div class="listbox-container"><div class="listbox-label">Đã chọn</div><div class="listbox"><div class="listbox-item selected">4784</div><div class="listbox-item selected">5411</div><div class="listbox-item selected">4900</div></div></div>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Trạng thái GD <span class="req">*</span></label><select class="form-select"><option>Tất cả</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option"><div class="radio-circle checked"></div><span class="radio-label">● Áp dụng phí chung cho toàn bộ loại giao dịch</span></div>
+        <div class="radio-option"><div class="radio-circle"></div><span class="radio-label">○ Không áp dụng phí chung</span></div>
+      </div>
+      <div class="fee-subsection" style="margin-top:12px;">
+        <div class="fee-sub-header">📌 Loại giao dịch: Thanh toán</div>
+        <div class="fee-sub-body"><div class="form-grid"><div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div><div class="form-group"><label class="form-label">Mức phí <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800"><span class="input-unit">đ / GD</span></div></div></div></div>
+      </div>
+      <div class="fee-subsection">
+        <div class="fee-sub-header">📌 Loại giao dịch: Hoàn trả</div>
+        <div class="fee-sub-body"><div class="form-grid"><div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div><div class="form-group"><label class="form-label">Mức phí <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="1800"><span class="input-unit">đ / GD</span></div></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('detail-maker-xuLy-pending')">Huỷ</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã cập nhật cấu hình','success')">💾 Cập nhật</button>
+  </div>
+</div>
+
+<!-- E3: Edit Phí thanh toán -->
+<div class="screen" id="screen-edit-thanhToan">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>SM_PN_DC_006</span> <span>›</span> <span>Chỉnh sửa</span></div>
+      <h1 class="page-title">Chỉnh sửa – SM_PN_DC_006 – Phí thanh toán</h1>
+    </div>
+    <div class="page-header-right"><span class="badge badge-active"><span class="badge-dot"></span>ACTIVE</span></div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí xử lý giao dịch</div>
+    <div class="fee-type-tab active">✔ Phí thanh toán</div>
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác <span class="req">*</span></label><select class="form-select"><option>MBBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng <span class="req">*</span></label><input type="date" class="form-control" value="2026-03-01"></div>
+        <div class="form-group"><label class="form-label">Loại GD <span class="req">*</span></label><select class="form-select"><option>Thanh toán</option></select></div>
+        <div class="form-group"><label class="form-label">Trạng thái GD <span class="req">*</span></label><select class="form-select"><option>Thành công</option></select></div>
+        <div class="form-group"><label class="form-label">Phương thức TT <span class="req">*</span></label><select class="form-select"><option>Thẻ quốc tế</option></select></div>
+        <div class="form-group"><label class="form-label">Cổng TGTT</label><select class="form-select"><option>CYBS/KBANK</option></select></div>
+        <div class="form-group"><label class="form-label">Loại NH phát hành <span class="req">*</span></label><select class="form-select"><option>NHPH trong nước</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí theo thương hiệu thẻ</div></div>
+    <div class="form-card-inner">
+      <div class="radio-group">
+        <div class="radio-option"><div class="radio-circle checked"></div><span class="radio-label">● Áp dụng phí chung cho toàn bộ thương hiệu thẻ</span></div>
+        <div class="radio-option"><div class="radio-circle"></div><span class="radio-label">○ Không áp dụng phí chung</span></div>
+      </div>
+      <div class="fee-subsection" style="margin-top:12px;">
+        <div class="fee-sub-header">🔵 Visa</div>
+        <div class="fee-sub-body"><div class="form-grid"><div class="form-group"><label class="form-label">Hình thức <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div><div class="form-group"><label class="form-label">Mức phí tỷ lệ <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="0.74" step="0.01"><span class="input-unit">%</span></div></div><div class="form-group"><label class="form-label">Phí tối thiểu</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div><div class="form-group"><label class="form-label">Phí tối đa</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div></div></div>
+      </div>
+      <div class="fee-subsection">
+        <div class="fee-sub-header">🔴 MasterCard</div>
+        <div class="fee-sub-body"><div class="form-grid"><div class="form-group"><label class="form-label">Hình thức <span class="req">*</span></label><select class="form-select"><option>1 bậc phí</option></select></div><div class="form-group"><label class="form-label">Mức phí tỷ lệ <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="0.82" step="0.01"><span class="input-unit">%</span></div></div><div class="form-group"><label class="form-label">Phí tối thiểu</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div><div class="form-group"><label class="form-label">Phí tối đa</label><div class="input-with-unit"><input type="number" placeholder="0"><span class="input-unit">đ</span></div></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('detail-maker-thanhToan-active')">Huỷ</button>
+    <button class="btn btn-outline" onclick="openModal('modal-calc-1bac')">🧮 Tính thử</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã cập nhật cấu hình','success')">💾 Cập nhật</button>
+  </div>
+</div>
+
+<!-- E4: Edit Phí QLGT -->
+<div class="screen" id="screen-edit-qlyDVGT">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-breadcrumb"><span onclick="showScreen('list-all')">Phí trả đối tác</span> <span>›</span> <span>SM_PN_DC_008</span> <span>›</span> <span>Chỉnh sửa</span></div>
+      <h1 class="page-title">Chỉnh sửa – SM_PN_DC_008 – Phí quản lý DVGT</h1>
+    </div>
+    <div class="page-header-right"><span class="badge badge-active"><span class="badge-dot"></span>ACTIVE</span></div>
+  </div>
+  <div class="fee-type-tabs">
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí duy trì dịch vụ</div>
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí xử lý giao dịch</div>
+    <div class="fee-type-tab" style="opacity:.5;cursor:not-allowed;">Phí thanh toán</div>
+    <div class="fee-type-tab active">✔ Phí quản lý DVGT</div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">📋 Thông tin chung</div></div>
+    <div class="form-card-inner">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nguồn dữ liệu <span class="req">*</span></label><select class="form-select"><option>CTT</option></select></div>
+        <div class="form-group"><label class="form-label">Đối tác <span class="req">*</span></label><select class="form-select"><option>VietcomBank</option></select></div>
+        <div class="form-group"><label class="form-label">Kỳ trả phí <span class="req">*</span></label><select class="form-select"><option>Theo quý</option></select></div>
+        <div class="form-group"><label class="form-label">Thời gian áp dụng <span class="req">*</span></label><input type="date" class="form-control" value="2026-01-01"></div>
+        <div class="form-group full"><label class="form-label">Loại DVGT <span class="req">*</span></label><select class="form-select" multiple style="height:72px;"><option selected>Dịch vụ BĐCC</option><option selected>Dịch vụ phân tích</option><option>Dịch vụ bảo mật</option></select></div>
+        <div class="form-group"><label class="form-label">Hình thức thu phí <span class="req">*</span></label><select class="form-select"><option>Định kỳ theo tháng</option></select></div>
+        <div class="form-group"><label class="form-label">Thuế VAT <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="8"><span class="input-unit">%</span></div></div>
+        <div class="form-group"><label class="form-label">Đơn vị tiền tệ <span class="req">*</span></label><select class="form-select"><option>VND</option></select></div>
+        <div class="form-group"><label class="form-label">Mô tả</label><textarea class="form-control form-textarea">Phí quản lý dịch vụ gia tăng VCB Q1/2026</textarea></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="section-header"><div class="section-title">💰 Thông tin Phí từng DVGT</div></div>
+    <div class="form-card-inner">
+      <div class="fee-subsection"><div class="fee-sub-header">🛡 Dịch vụ BĐCC</div><div class="fee-sub-body"><div class="form-grid"><div class="form-group"><label class="form-label">Mức phí <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="500000"><span class="input-unit">đ / tháng</span></div></div></div></div></div>
+      <div class="fee-subsection"><div class="fee-sub-header">📊 Dịch vụ phân tích</div><div class="fee-sub-body"><div class="form-grid"><div class="form-group"><label class="form-label">Mức phí <span class="req">*</span></label><div class="input-with-unit"><input type="number" value="300000"><span class="input-unit">đ / tháng</span></div></div></div></div></div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="showScreen('list-all')">Huỷ</button>
+    <button class="btn btn-outline" onclick="toast('Đã lưu nháp','success')">💾 Lưu nháp</button>
+    <button class="btn btn-primary" onclick="toast('Đã cập nhật cấu hình','success')">💾 Cập nhật</button>
+  </div>
+</div>
+
+    </div><!-- /screen-container -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ============================================================
+     MODALS
+     ============================================================ -->
+
+<!-- Modal: Approve -->
+<div class="modal-overlay" id="modal-approve">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✔ Xác nhận Phê duyệt</div>
+      <button class="modal-close" onclick="closeModal('modal-approve')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="info-box"><span>✅</span><span>Bạn sắp phê duyệt yêu cầu <strong>YCPD_2026_0042</strong>. Sau khi phê duyệt, cấu hình phí sẽ được kích hoạt với mức phí mới <strong>1.800đ/GD</strong>.</span></div>
+      <div style="margin-top:14px;">
+        <label class="form-label">Ghi chú phê duyệt (tuỳ chọn)</label>
+        <textarea class="form-control form-textarea" placeholder="Nhập ghi chú..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-approve')">Huỷ bỏ</button>
+      <button class="btn btn-success" onclick="closeModal('modal-approve');toast('✔ Đã phê duyệt YCPD_2026_0042 thành công','success')">✔ Xác nhận Phê duyệt</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Reject -->
+<div class="modal-overlay" id="modal-reject">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✖ Từ chối Yêu cầu</div>
+      <button class="modal-close" onclick="closeModal('modal-reject')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="warning-box"><span>⚠️</span><span>Bạn sắp từ chối yêu cầu <strong>YCPD_2026_0042</strong>. Vui lòng nhập lý do từ chối để thông báo cho Maker.</span></div>
+      <div style="margin-top:14px;">
+        <label class="form-label">Lý do từ chối <span style="color:#ef4444">*</span></label>
+        <textarea class="form-control form-textarea" placeholder="Nhập lý do từ chối yêu cầu phê duyệt..." style="min-height:100px;" id="reject-reason"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-reject')">Huỷ bỏ</button>
+      <button class="btn btn-danger" onclick="handleReject()">✖ Xác nhận Từ chối</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Gửi YCPD -->
+<div class="modal-overlay" id="modal-send-ycpd">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📤 Gửi Yêu cầu Phê duyệt</div>
+      <button class="modal-close" onclick="closeModal('modal-send-ycpd')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="info-box"><span>ℹ️</span><span>Sau khi gửi YCPD, cấu hình sẽ chuyển sang trạng thái <strong>PENDING</strong> và không thể chỉnh sửa cho đến khi Checker xử lý.</span></div>
+      <div style="margin-top:14px;">
+        <label class="form-label">Lý do gửi yêu cầu <span style="color:#ef4444">*</span></label>
+        <textarea class="form-control form-textarea" placeholder="Nhập lý do gửi yêu cầu phê duyệt..." style="min-height:80px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-send-ycpd')">Huỷ bỏ</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-send-ycpd');toast('📤 Đã gửi yêu cầu phê duyệt thành công','success')">📤 Gửi YCPD</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Tính thử 1 bậc -->
+<div class="modal-overlay" id="modal-calc-1bac">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">🧮 Tính thử phí – 1 bậc phí</div>
+      <button class="modal-close" onclick="closeModal('modal-calc-1bac')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Giá trị giao dịch (đ) <span class="req">*</span></label>
+          <input type="number" class="form-control" id="calc-gtgd" value="1000000" placeholder="Nhập giá trị giao dịch">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Loại thẻ</label>
+          <select class="form-select" id="calc-loaithe">
+            <option value="0.0074">Visa (0.74%)</option>
+            <option value="0.0082">MasterCard (0.82%)</option>
+            <option value="0.0075">JCB (0.75%)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cổng thanh toán</label>
+          <select class="form-select"><option>CYBS/KBANK</option><option>NAPAS</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Thuế VAT</label>
+          <div class="input-with-unit"><input type="number" id="calc-vat" value="8"><span class="input-unit">%</span></div>
+        </div>
+      </div>
+      <div id="calc-result-1bac" class="calc-result" style="display:none;">
+        <div class="calc-result-label">💰 Kết quả tính phí</div>
+        <div class="calc-result-value" id="calc-result-value">0 đ</div>
+        <div class="calc-formula" id="calc-formula"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-calc-1bac')">Đóng</button>
+      <button class="btn btn-primary" onclick="calcFee1Bac()">🧮 Tính phí</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Tính thử bậc thang -->
+<div class="modal-overlay" id="modal-calc-bacthang">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">🧮 Tính thử phí – Bậc thang</div>
+      <button class="modal-close" onclick="closeModal('modal-calc-bacthang')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Số lượng giao dịch <span class="req">*</span></label>
+          <input type="number" class="form-control" id="calc-slgd" value="500" placeholder="Nhập số lượng GD">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tổng giá trị GD (đ) <span class="req">*</span></label>
+          <input type="number" class="form-control" id="calc-tgtgd" value="500000000" placeholder="Nhập tổng GTGD">
+        </div>
+      </div>
+      <div id="calc-result-bacthang" class="calc-result" style="display:none;">
+        <div class="calc-result-label">💰 Kết quả tính phí bậc thang</div>
+        <table class="fee-table" style="margin-bottom:10px;">
+          <thead><tr><th>Bậc áp dụng</th><th>Điều kiện</th><th>Tỷ lệ phí</th><th>Phí thực thu</th></tr></thead>
+          <tbody id="calc-bacthang-rows"></tbody>
+        </table>
+        <div class="calc-result-value" id="calc-result-bt">0 đ</div>
+        <div class="calc-formula" id="calc-formula-bt"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-calc-bacthang')">Đóng</button>
+      <button class="btn btn-primary" onclick="calcFeeBacThang()">🧮 Tính phí bậc thang</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// =========================================================
+// DATA
+// =========================================================
+const ALL_DATA = [
+  { id: 1, ma: 'SM_PN_DC_001', ten: 'Phí duy trì dịch vụ - VCB Q1 2026', loai: 'Phí duy trì dịch vụ', dt: 'VietcomBank', ky: 'Theo tháng', ngay: '01/01/2026', tt: 'ACTIVE', screen: 'detail-maker-thanhToan-active' },
+  { id: 2, ma: 'SM_PN_DC_002', ten: 'Phí QLGT - VCB Draft', loai: 'Phí quản lý DVGT', dt: 'VietcomBank', ky: 'Theo quý', ngay: '01/07/2026', tt: 'DRAFT', screen: 'detail-maker-qlyDVGT-draft' },
+  { id: 3, ma: 'SM_PN_DC_003', ten: 'Phí xử lý GD - KBank Thẻ QT', loai: 'Phí xử lý giao dịch', dt: 'KBank', ky: 'Theo tháng', ngay: '01/01/2026', tt: 'ACTIVE', screen: 'detail-maker-thanhToan-active' },
+  { id: 4, ma: 'SM_PN_DC_004', ten: 'Phí xử lý GD - VCB New', loai: 'Phí xử lý giao dịch', dt: 'VietcomBank', ky: 'Theo quý', ngay: '01/04/2026', tt: 'NEW', screen: 'detail-maker-duyTri-new' },
+  { id: 5, ma: 'SM_PN_DC_005', ten: 'Phí thanh toán - KBank Visa', loai: 'Phí thanh toán', dt: 'KBank', ky: 'Theo tháng', ngay: '01/02/2026', tt: 'PENDING', screen: 'detail-maker-xuLy-pending' },
+  { id: 6, ma: 'SM_PN_DC_006', ten: 'Phí thanh toán - MB Master', loai: 'Phí thanh toán', dt: 'MBBank', ky: 'Theo tháng', ngay: '01/03/2026', tt: 'ACTIVE', screen: 'detail-maker-thanhToan-active' },
+  { id: 7, ma: 'SM_PN_DC_007', ten: 'Phí thanh toán - BIDV Nội địa', loai: 'Phí thanh toán', dt: 'BIDV', ky: 'Theo tháng', ngay: '01/03/2026', tt: 'PENDING', screen: 'detail-checker-pending' },
+  { id: 8, ma: 'SM_PN_DC_008', ten: 'Phí QLGT - VCB Active', loai: 'Phí quản lý DVGT', dt: 'VietcomBank', ky: 'Theo quý', ngay: '01/01/2026', tt: 'ACTIVE', screen: 'detail-maker-thanhToan-active' },
+  { id: 9, ma: 'SM_PN_DC_009', ten: 'Phí duy trì - KBank Ready', loai: 'Phí duy trì dịch vụ', dt: 'KBank', ky: 'Theo tháng', ngay: '01/06/2026', tt: 'NEW', screen: 'detail-maker-duyTri-new' },
+  { id: 10, ma: 'SM_PN_DC_010', ten: 'Phí xử lý GD - MB Inactive', loai: 'Phí xử lý giao dịch', dt: 'MBBank', ky: 'Theo tháng', ngay: '01/01/2026', tt: 'INACTIVE', screen: 'detail-maker-duyTri-new' }
+];
+
+// Status → badge class mapping
+const BADGE_MAP = {
+  ACTIVE: 'badge-active',
+  DRAFT: 'badge-draft',
+  NEW: 'badge-new',
+  PENDING: 'badge-pending',
+  READY: 'badge-ready',
+  INACTIVE: 'badge-inactive'
+};
+
+// Current role
+let currentRole = 'maker';
+// Track open dropdown
+let openDropdownRow = null;
+
+// =========================================================
+// SCREEN NAVIGATION
+// =========================================================
+function showScreen(id) {
+  // Hide all screens
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  // Show target
+  const target = document.getElementById('screen-' + id);
+  if (target) {
+    target.classList.add('active');
+  }
+  // Update demo buttons
+  document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
+  // Try to find matching button by onclick
+  document.querySelectorAll('.demo-btn').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) {
+      b.classList.add('active');
+    }
+  });
+  // Scroll to top
+  const sc = document.getElementById('screen-container');
+  if (sc) sc.scrollTop = 0;
+  // Close any open dropdowns
+  closeAllDropdowns();
+}
+
+// =========================================================
+// ROLE SWITCHING
+// =========================================================
+function changeRole(role) {
+  currentRole = role;
+  const isMaker = role === 'maker';
+
+  // Update role buttons
+  document.getElementById('btn-role-maker').classList.toggle('active', isMaker);
+  document.getElementById('btn-role-checker').classList.toggle('active', !isMaker);
+
+  // Update user info
+  const nameEl = document.getElementById('user-name');
+  const roleEl = document.getElementById('user-role');
+  const avatarEl = document.getElementById('user-avatar');
+
+  if (isMaker) {
+    nameEl.textContent = 'Lisa';
+    roleEl.textContent = 'Maker';
+    avatarEl.textContent = 'L';
+    avatarEl.className = 'avatar';
+  } else {
+    nameEl.textContent = 'Trần Văn A';
+    roleEl.textContent = 'Checker';
+    avatarEl.textContent = 'A';
+    avatarEl.className = 'avatar checker';
+  }
+
+  toast(isMaker ? '👤 Đã chuyển sang vai trò Maker' : '✅ Đã chuyển sang vai trò Checker', 'success');
+}
+
+// =========================================================
+// TABLE RENDERING
+// =========================================================
+function renderTable(tbodyId, filterFn) {
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  const filtered = ALL_DATA.filter(filterFn);
+  tbody.innerHTML = filtered.map((row, i) => buildRow(row, i, tbodyId)).join('');
+}
+
+function buildRow(row, i, tbodyId) {
+  const badgeClass = BADGE_MAP[row.tt] || 'badge-draft';
+  return `
+  <tr>
+    <td class="col-stt" style="text-align:center;color:#94a3b8;">${i + 1}</td>
+    <td class="col-ma"><span class="ma-code" style="cursor:pointer;" onclick="showScreen('${row.screen}')">${row.ma}</span></td>
+    <td class="col-ten"><span class="ten-name" style="cursor:pointer;" onclick="showScreen('${row.screen}')">${row.ten}</span></td>
+    <td class="col-loai" style="font-size:12px;color:#475569;">${row.loai}</td>
+    <td class="col-dt" style="font-size:12px;">${row.dt}</td>
+    <td class="col-ky" style="font-size:12px;color:#64748b;">${row.ky}</td>
+    <td class="col-ngay" style="font-size:12px;color:#64748b;">${row.ngay}</td>
+    <td class="col-tt"><span class="badge ${badgeClass}"><span class="badge-dot"></span>${row.tt}</span></td>
+    <td class="action-cell">
+      <button class="action-btn" onclick="toggleDropdown(event, 'drop-${tbodyId}-${row.id}')">⋯</button>
+      <div class="dropdown-menu" id="drop-${tbodyId}-${row.id}">
+        <div class="dropdown-item" onclick="showScreen('${row.screen}');closeAllDropdowns()">👁 Xem chi tiết</div>
+        <div class="dropdown-item" onclick="openEditScreen('${row.tt}');closeAllDropdowns()">✏️ Chỉnh sửa</div>
+        <hr class="dropdown-sep">
+        ${row.tt !== 'PENDING' ? `<div class="dropdown-item" onclick="closeAllDropdowns();openModal('modal-send-ycpd')">📤 Gửi yêu cầu phê duyệt</div>` : ''}
+        ${row.tt === 'ACTIVE' ? `<div class="dropdown-item" onclick="closeAllDropdowns();toast('Đã tạm dừng ' + '${row.ma}', 'warning')">⏸ Tạm dừng</div>` : ''}
+        ${row.tt === 'INACTIVE' || row.tt === 'DRAFT' ? `<div class="dropdown-item" onclick="closeAllDropdowns();toast('Đã kích hoạt ' + '${row.ma}', 'success')">▶ Kích hoạt</div>` : ''}
+        <hr class="dropdown-sep">
+        <div class="dropdown-item danger" onclick="closeAllDropdowns();toast('Đã xoá ' + '${row.ma}', 'error')">🗑 Xoá</div>
+      </div>
+    </td>
+  </tr>`;
+}
+
+function openEditScreen(status) {
+  if (status === 'ACTIVE') showScreen('edit-thanhToan');
+  else if (status === 'PENDING') showScreen('edit-xuLy');
+  else if (status === 'DRAFT') showScreen('edit-duyTri');
+  else showScreen('edit-duyTri');
+}
+
+// =========================================================
+// DROPDOWN
+// =========================================================
+function toggleDropdown(e, id) {
+  e.stopPropagation();
+  const menu = document.getElementById(id);
+  const isOpen = menu.classList.contains('open');
+  closeAllDropdowns();
+  if (!isOpen) {
+    menu.classList.add('open');
+    openDropdownRow = id;
+  }
+}
+
+function closeAllDropdowns() {
+  document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+  openDropdownRow = null;
+}
+
+document.addEventListener('click', () => closeAllDropdowns());
+
+// =========================================================
+// FILTER PANEL TOGGLE
+// =========================================================
+function toggleFilter(id) {
+  const body = document.getElementById(id + '-body');
+  const chevron = document.getElementById(id + '-chevron');
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (chevron) chevron.textContent = isOpen ? '▼' : '▲';
+}
+
+// =========================================================
+// RADIO SELECTION
+// =========================================================
+function selectRadio(group, val) {
+  // Update circles
+  const chung = document.getElementById('radio-' + group + '-chung');
+  const khong = document.getElementById('radio-' + group + '-khong');
+  if (chung) chung.className = 'radio-circle' + (val === 'chung' ? ' checked' : '');
+  if (khong) khong.className = 'radio-circle' + (val === 'khong' ? ' checked' : '');
+
+  // Show/hide panels
+  const chungPanel = document.getElementById(group + '-chung-panel');
+  const khongPanel = document.getElementById(group + '-khong-panel');
+  if (chungPanel) chungPanel.classList.toggle('hidden', val !== 'chung');
+  if (khongPanel) khongPanel.classList.toggle('hidden', val !== 'khong');
+}
+
+// =========================================================
+// MODAL
+// =========================================================
+function openModal(id) {
+  const overlay = document.getElementById(id);
+  if (overlay) overlay.classList.add('open');
+}
+
+function closeModal(id) {
+  const overlay = document.getElementById(id);
+  if (overlay) overlay.classList.remove('open');
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('open');
+    }
+  });
+});
+
+// =========================================================
+// REJECT HANDLER
+// =========================================================
+function handleReject() {
+  const reason = document.getElementById('reject-reason');
+  if (reason && reason.value.trim() === '') {
+    reason.style.borderColor = '#ef4444';
+    reason.placeholder = 'Vui lòng nhập lý do từ chối!';
+    toast('Vui lòng nhập lý do từ chối', 'error');
+    return;
+  }
+  closeModal('modal-reject');
+  toast('✖ Đã từ chối YCPD_2026_0042', 'warning');
+}
+
+// =========================================================
+// BẬC THANG ROWS
+// =========================================================
+let bacCounters = {};
+
+function addBacRow(containerId, prefix) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  if (!bacCounters[containerId]) bacCounters[containerId] = container.querySelectorAll('.bac-thang-row').length;
+  bacCounters[containerId]++;
+  const n = bacCounters[containerId];
+  const div = document.createElement('div');
+  div.className = 'bac-thang-row';
+  div.innerHTML = `
+    <span class="bac-thang-label">Bậc ${n}</span>
+    <div class="input-with-unit" style="flex:1"><input type="text" placeholder="GTGD (đ)"><span class="input-unit">đ</span></div>
+    <div class="input-with-unit" style="flex:1"><input type="number" placeholder="0.00" step="0.01"><span class="input-unit">%</span></div>
+    <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối thiểu"><span class="input-unit">đ</span></div>
+    <div class="input-with-unit" style="flex:1"><input type="number" placeholder="Tối đa"><span class="input-unit">đ</span></div>
+    <div class="bac-thang-actions"><button class="bac-btn remove" onclick="removeBacRow(this)">−</button></div>`;
+  container.appendChild(div);
+  // Re-number
+  renumberBacRows(containerId);
+}
+
+function removeBacRow(btn) {
+  const row = btn.closest('.bac-thang-row');
+  const container = row.parentElement;
+  if (container.querySelectorAll('.bac-thang-row').length <= 1) {
+    toast('Cần ít nhất 1 bậc phí', 'error');
+    return;
+  }
+  row.remove();
+  renumberBacRows(container.id);
+}
+
+function renumberBacRows(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.bac-thang-row').forEach((row, i) => {
+    const label = row.querySelector('.bac-thang-label');
+    if (label) label.textContent = 'Bậc ' + (i + 1);
+  });
+}
+
+// =========================================================
+// MCC DUAL LISTBOX
+// =========================================================
+function moveMCC(direction) {
+  // Simplified demo: show toast
+  toast('Đã cập nhật danh sách MCC', 'success');
+}
+
+// =========================================================
+// CALCULATE FEES
+// =========================================================
+function calcFee1Bac() {
+  const gtgd = parseFloat(document.getElementById('calc-gtgd').value) || 0;
+  const rate = parseFloat(document.getElementById('calc-loaithe').value) || 0.0074;
+  const vat = parseFloat(document.getElementById('calc-vat').value) || 8;
+
+  const fee = gtgd * rate;
+  const vatAmount = fee * (vat / 100);
+  const total = fee + vatAmount;
+
+  document.getElementById('calc-result-1bac').style.display = 'block';
+  document.getElementById('calc-result-value').textContent = formatCurrency(total) + ' đ';
+  document.getElementById('calc-formula').textContent =
+    `Công thức: ${formatCurrency(gtgd)}đ × ${(rate * 100).toFixed(2)}% = ${formatCurrency(fee)}đ + VAT ${vat}% (${formatCurrency(vatAmount)}đ) = ${formatCurrency(total)}đ`;
+}
+
+function calcFeeBacThang() {
+  const slgd = parseInt(document.getElementById('calc-slgd').value) || 0;
+  const tgtgd = parseFloat(document.getElementById('calc-tgtgd').value) || 0;
+
+  // Demo bậc thang: 3 bậc
+  const bacThang = [
+    { from: 0, to: 100000000, rate: 0.0074, label: '0 – 100M' },
+    { from: 100000000, to: 500000000, rate: 0.0073, label: '100M – 500M' },
+    { from: 500000000, to: Infinity, rate: 0.007, label: '> 500M' }
+  ];
+
+  let appliedBac = bacThang[0];
+  for (const bac of bacThang) {
+    if (tgtgd >= bac.from && tgtgd < bac.to) {
+      appliedBac = bac;
+      break;
+    }
+  }
+
+  const fee = tgtgd * appliedBac.rate;
+  const vat = fee * 0.08;
+  const total = fee + vat;
+
+  document.getElementById('calc-result-bacthang').style.display = 'block';
+  document.getElementById('calc-bacthang-rows').innerHTML = bacThang.map(b => `
+    <tr style="${b === appliedBac ? 'background:#d1fae5;font-weight:600;' : ''}">
+      <td>${b === appliedBac ? '✔ Bậc này áp dụng' : '—'}</td>
+      <td>${b.label} đ</td>
+      <td>${(b.rate * 100).toFixed(2)}%</td>
+      <td>${b === appliedBac ? formatCurrency(fee) + ' đ' : '—'}</td>
+    </tr>`).join('');
+  document.getElementById('calc-result-bt').textContent = formatCurrency(total) + ' đ (đã bao gồm VAT 8%)';
+  document.getElementById('calc-formula-bt').textContent =
+    `Tổng GTGD: ${formatCurrency(tgtgd)}đ × ${(appliedBac.rate * 100).toFixed(2)}% = ${formatCurrency(fee)}đ + VAT 8% = ${formatCurrency(total)}đ`;
+}
+
+function formatCurrency(n) {
+  return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+// =========================================================
+// TOAST
+// =========================================================
+function toast(message, type = 'info') {
+  const container = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast' + (type !== 'info' ? ' ' + type : '');
+  const icons = { success: '✅', warning: '⚠️', error: '❌', info: 'ℹ️' };
+  t.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${message}</span>`;
+  container.appendChild(t);
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(30px)';
+    t.style.transition = 'all .3s';
+    setTimeout(() => t.remove(), 300);
+  }, 3000);
+}
+
+// =========================================================
+// INIT
+// =========================================================
+function init() {
+  // Render all tables
+  renderTable('table-all-body', () => true);
+  renderTable('table-active-body', row => row.tt === 'ACTIVE');
+  renderTable('table-pending-body', row => row.tt === 'PENDING');
+
+  // Show default screen
+  showScreen('list-all');
+}
+
+// Run on load
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

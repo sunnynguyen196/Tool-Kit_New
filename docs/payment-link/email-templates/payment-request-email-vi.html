@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vi">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="x-apple-disable-message-reformatting" />
+  <title>Yêu cầu thanh toán đơn hàng #{{order_code}}</title>
+  <style type="text/css">
+    /* Reset & Client-Specific Styles */
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+    table { border-collapse: collapse !important; }
+    body { margin: 0 !important; padding: 0 !important; width: 100% !important; min-width: 100%; background-color: #F1F5F9; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    
+    /* Mobile Responsive */
+    @media only screen and (max-width: 620px) {
+      .email-container { width: 100% !important; max-width: 100% !important; }
+      .mobile-stack { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+      .mobile-center { text-align: center !important; }
+      .mobile-padding { padding-left: 16px !important; padding-right: 16px !important; }
+      .qr-mobile-wrap { padding-top: 16px !important; border-left: none !important; border-top: 1px dashed #CBD5E1 !important; margin-top: 16px !important; }
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #F1F5F9; color: #1E293B; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+
+  <!-- Preheader Hidden Text for Inbox Preview -->
+  <div style="display: none; font-size: 1px; color: #F1F5F9; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all;">
+    Quý khách có yêu cầu thanh toán {{amount}} {{currency}} cho đơn hàng #{{order_code}} từ {{merchant_name}}. Hạn thanh toán đến {{expire_time}}.
+  </div>
+
+  <!-- Background Wrapper -->
+  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F1F5F9; table-layout: fixed;">
+    <tr>
+      <td align="center" style="padding: 24px 12px;">
+
+        <!-- Main Container (600px Max) -->
+        <table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="max-width: 600px; width: 100%; background-color: #FFFFFF; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08); border: 1px solid #E2E8F0;">
+          
+          <!-- TOP HEADER: LOGO & BRANDING -->
+          <tr>
+            <td style="background-color: #025BBD; padding: 20px 28px;">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="left" valign="middle">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="background-color: #FFFFFF; width: 34px; height: 34px; border-radius: 6px; text-align: center; vertical-align: middle;">
+                          <span style="font-size: 18px; font-weight: 800; color: #025BBD; font-family: Arial, sans-serif; line-height: 34px;">E</span>
+                        </td>
+                        <td style="padding-left: 10px;">
+                          <div style="font-size: 16px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.2px;">EPAY PORTAL</div>
+                          <div style="font-size: 10.5px; color: #BFDBFE; font-weight: 500;">CỔNG THANH TOÁN TRỰC TUYẾN</div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td align="right" valign="middle">
+                    <span style="background-color: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 4px 12px; font-size: 11px; font-weight: 600; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.5px;">
+                      Yêu cầu thanh toán
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- BANNER HERO / ORDER SUMMARY BADGE -->
+          <tr>
+            <td style="padding: 24px 28px 16px 28px; background-color: #FFFFFF;" class="mobile-padding">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td>
+                    <div style="font-size: 15px; color: #334155; line-height: 1.5;">Kính gửi Quý khách <strong style="color: #0F172A;">{{customer_name}}</strong>,</div>
+                    <div style="font-size: 13px; color: #475569; margin-top: 6px; line-height: 1.5;">
+                      Đơn vị cung cấp <strong>{{merchant_name}}</strong> trân trọng gửi thông tin yêu cầu thanh toán cho đơn hàng của Quý khách qua Cổng thanh toán trực tuyến EPAY.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- TOTAL AMOUNT BOX (HIGHLIGHT) -->
+          <tr>
+            <td style="padding: 0 28px 20px 28px;" class="mobile-padding">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border: 1.5px solid #93C5FD; border-radius: 8px; text-align: center;">
+                <tr>
+                  <td style="padding: 18px 16px;">
+                    <div style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; color: #1E40AF;">
+                      TỔNG SỐ TIỀN CẦN THANH TOÁN
+                    </div>
+                    <div style="font-size: 28px; font-weight: 800; color: #025BBD; margin: 4px 0; letter-spacing: -0.5px;">
+                      {{amount}} <span style="font-size: 18px; font-weight: 600;">{{currency}}</span>
+                    </div>
+                    <table border="0" cellpadding="0" cellspacing="0" align="center">
+                      <tr>
+                        <td style="background-color: #FEF3C7; border: 1px solid #FCD34D; border-radius: 4px; padding: 2px 10px; font-size: 11.5px; font-weight: 600; color: #92400E;">
+                          ⏱ Hạn chót thanh toán: {{expire_time}}
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- 3-SECTION ORDER DETAILS CARD -->
+          <tr>
+            <td style="padding: 0 28px 20px 28px;" class="mobile-padding">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; overflow: hidden;">
+                
+                <!-- SECTION 1: MERCHANT INFO -->
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #F1F5F9; border-bottom: 1px solid #E2E8F0;">
+                    <span style="font-size: 12px; font-weight: 700; color: #025BBD; text-transform: uppercase;">
+                      1. THÔNG TIN ĐƠN VỊ CẤP HÀNG HÓA
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; border-bottom: 1px solid #E2E8F0;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td width="130" style="font-size: 12px; color: #64748B; padding: 3px 0;">Đơn vị cung cấp:</td>
+                        <td style="font-size: 12.5px; font-weight: 600; color: #0F172A; padding: 3px 0;">{{merchant_name}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 12px; color: #64748B; padding: 3px 0;">Hotline hỗ trợ:</td>
+                        <td style="font-size: 12px; color: #334155; padding: 3px 0;">{{merchant_hotline}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 12px; color: #64748B; padding: 3px 0;">Email hỗ trợ:</td>
+                        <td style="font-size: 12px; color: #334155; padding: 3px 0;"><a href="mailto:{{merchant_email}}" style="color: #025BBD; text-decoration: none;">{{merchant_email}}</a></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- SECTION 2: CUSTOMER INFO -->
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #F1F5F9; border-bottom: 1px solid #E2E8F0;">
+                    <span style="font-size: 12px; font-weight: 700; color: #025BBD; text-transform: uppercase;">
+                      2. THÔNG TIN KHÁCH HÀNG
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; border-bottom: 1px solid #E2E8F0;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td width="130" style="font-size: 12px; color: #64748B; padding: 3px 0;">Họ và tên:</td>
+                        <td style="font-size: 12.5px; font-weight: 600; color: #0F172A; padding: 3px 0;">{{customer_name}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 12px; color: #64748B; padding: 3px 0;">Email nhận tin:</td>
+                        <td style="font-size: 12px; color: #334155; padding: 3px 0;">{{customer_email}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 12px; color: #64748B; padding: 3px 0;">Số điện thoại:</td>
+                        <td style="font-size: 12px; color: #334155; padding: 3px 0;">{{customer_phone}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 12px; color: #64748B; padding: 3px 0;">Địa chỉ:</td>
+                        <td style="font-size: 12px; color: #334155; padding: 3px 0;">{{customer_address}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- SECTION 3: ORDER INFO -->
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #F1F5F9; border-bottom: 1px solid #E2E8F0;">
+                    <span style="font-size: 12px; font-weight: 700; color: #025BBD; text-transform: uppercase;">
+                      3. THÔNG TIN ĐƠN HÀNG
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td width="130" style="font-size: 12px; color: #64748B; padding: 3px 0;">Mã đơn hàng:</td>
+                        <td style="font-size: 12.5px; font-weight: 700; color: #025BBD; padding: 3px 0;">#{{order_code}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 12px; color: #64748B; padding: 3px 0;">Tên dịch vụ/hàng hóa:</td>
+                        <td style="font-size: 12.5px; font-weight: 600; color: #0F172A; padding: 3px 0;">{{service_name}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 12px; color: #64748B; padding: 3px 0;">Thời gian tạo:</td>
+                        <td style="font-size: 12px; color: #334155; padding: 3px 0;">{{created_time}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 12px; color: #64748B; padding: 3px 0;">Trạng thái đơn:</td>
+                        <td style="padding: 3px 0;">
+                          <span style="background-color: #FEF3C7; color: #B45309; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; display: inline-block;">
+                            ● Chờ thanh toán
+                          </span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+
+          <!-- PRIMARY CTA: PAY NOW BUTTON -->
+          <tr>
+            <td align="center" style="padding: 0 28px 24px 28px;" class="mobile-padding">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="center">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="background-color: #025BBD; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(2, 91, 189, 0.3);">
+                          <a href="{{payment_url}}" target="_blank" style="display: inline-block; padding: 14px 38px; font-size: 14px; font-weight: 700; color: #FFFFFF; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Inter', sans-serif;">
+                            👉 THANH TOÁN NGAY BẰNG LINK
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="padding-top: 10px;">
+                    <div style="font-size: 11.5px; color: #64748B;">
+                      Đường dẫn trực tiếp: <a href="{{payment_url}}" target="_blank" style="color: #025BBD; word-break: break-all; text-decoration: underline;">{{payment_url}}</a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- QR CODE BLOCK (QR CỦA LINK THANH TOÁN THEO YÊU CẦU ĐẶC TẢ) -->
+          <tr>
+            <td style="padding: 0 28px 24px 28px;" class="mobile-padding">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F8FAFC; border: 1.5px dashed #93C5FD; border-radius: 8px; padding: 16px;">
+                <tr>
+                  <td align="center" valign="middle" class="mobile-stack" width="180" style="text-align: center;">
+                    <!-- QR Box -->
+                    <table border="0" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 8px; display: inline-block;">
+                      <tr>
+                        <td align="center">
+                          <!-- Template Engine Variable: {{qr_code_image_url}} -->
+                          <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&amp;data=https%3A%2F%2Fpay.epay.vn%2Fpl%2F8a7b9c2d1e" alt="Mã QR link thanh toán" width="140" height="140" style="display: block; border: 0;" />
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td valign="middle" class="mobile-stack qr-mobile-wrap" style="padding-left: 20px;">
+                    <div style="font-size: 13px; font-weight: 700; color: #025BBD; margin-bottom: 4px;">
+                      MÃ QR LINK THANH TOÁN
+                    </div>
+                    <div style="font-size: 12px; color: #334155; line-height: 1.5; margin-bottom: 8px;">
+                      Quét bằng <strong>Camera điện thoại</strong> hoặc ứng dụng <strong>Zalo</strong> để mở trực tiếp trang thanh toán trên điện thoại.
+                    </div>
+                    <div style="font-size: 11px; color: #64748B; line-height: 1.4; background-color: #FFFFFF; border: 1px solid #E2E8F0; padding: 6px 10px; border-radius: 4px;">
+                      ℹ️ Khi quét QR, hệ thống sẽ mở liên kết thanh toán an toàn để Quý khách xác nhận Điều kiện & Điều khoản trước khi giao dịch.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- SECURITY NOTICE & WARNING -->
+          <tr>
+            <td style="padding: 0 28px 24px 28px;" class="mobile-padding">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFBEB; border-left: 4px solid #F59E0B; border-radius: 4px; padding: 12px 14px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 12px; font-weight: 700; color: #B45309; margin-bottom: 4px;">
+                      🛡️ LƯU Ý BẢO MẬT & HỖ TRỢ GIAO DỊCH
+                    </div>
+                    <div style="font-size: 11.5px; color: #78350F; line-height: 1.5;">
+                      • Link thanh toán có hạn sử dụng đến <strong>{{expire_time}}</strong>. Sau mốc này, đơn hàng sẽ tự động đóng.<br/>
+                      • <strong>Bảo mật:</strong> Cổng thanh toán EPAY và {{merchant_name}} <strong>tuyệt đối không bao giờ</strong> yêu cầu Quý khách cung cấp Mật khẩu ngân hàng, Mã OTP, hay thông tin bảo mật thẻ qua điện thoại/email.<br/>
+                      • Mọi thắc mắc về đơn hàng, vui lòng liên hệ hotline đơn vị bán hàng: <strong>{{merchant_hotline}}</strong>.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- FOOTER / LEGAL INFO -->
+          <tr>
+            <td style="background-color: #0F172A; padding: 24px 28px; color: #94A3B8; text-align: center;" class="mobile-padding">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="center" style="padding-bottom: 12px;">
+                    <span style="font-size: 13px; font-weight: 700; color: #FFFFFF; letter-spacing: 0.5px;">CỔNG THANH TOÁN TRỰC TUYẾN EPAY</span><br/>
+                    <span style="font-size: 11px; color: #94A3B8;">Giấy phép Cung ứng Dịch vụ Trung gian Thanh toán số 22/GP-NHNN do NHNN Việt Nam cấp</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="font-size: 11.5px; line-height: 1.6; border-top: 1px solid #1E293B; padding-top: 12px;">
+                    Tổng đài hỗ trợ Cổng TT: <strong style="color: #60A5FA;">1900 6470</strong> &nbsp;|&nbsp; Email: <a href="mailto:hotro@epay.vn" style="color: #60A5FA; text-decoration: none;">hotro@epay.vn</a> &nbsp;|&nbsp; Website: <a href="https://epay.vn" target="_blank" style="color: #60A5FA; text-decoration: none;">https://epay.vn</a><br/>
+                    Địa chỉ: Tầng 14, Tòa tháp Diamond Flower, 35 Lê Văn Lương, P. Nhân Chính, Q. Thanh Xuân, TP. Hà Nội
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="font-size: 10.5px; color: #64748B; padding-top: 12px;">
+                    <em>Email này được tạo và gửi tự động từ hệ thống Cổng thanh toán EPAY theo yêu cầu của {{merchant_name}}. Quý khách vui lòng không trả lời trực tiếp vào email này.</em>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+        <!-- End Main Container -->
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

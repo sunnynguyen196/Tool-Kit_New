@@ -14,16 +14,27 @@
 
 ---
 
-## 2. MA TRẬN CÁC USE CASE TRA SOÁT ĐÃ GỬI (TCYCTS — CHIỀU ĐI)
+## 2. MA TRẬN CÁC USE CASE TRA SOÁT HỆ THỐNG
 
+### 2.1. Ma trận các Use Case Tra soát đã gửi (TCYCTS — Chiều đi / Chủ động)
 - **`BF29.1-UC-SENT-01`**: Tra cứu và xem danh sách YCTS đã gửi
 - **`BF29.1-UC-SENT-02`**: Tạo mới yêu cầu tra soát chủ động (TCYCTS)
-- **`BF29.1-UC-SENT-03`**: Xem chi tiết YCTS đã gửi (Khối 1 Tiến trình, Khối 2 GD gốc, Khối 3 Thông tin tra soát 11 trường, Khối 4 RBAC, Khối 5 Báo nợ 6 trường, Khối 6 Audit Trail Timeline)
+- **`BF29.1-UC-SENT-03`**: Xem chi tiết YCTS đã gửi (Khối 1 Tiến trình, Khối 2 GD gốc, Khối 3 Thông tin tra soát 11 trường, Khối 4 RBAC, Khối 5A Hoàn trả khi RQRN, Khối 5B Báo có khi RQSP/Báo có theo BR-GENERAL-05, Khối 6 Audit Trail Timeline)
 - **`BF29.1-UC-SENT-04`**: Xác nhận kiểm tra YCTS (Chức năng chỉ dành cho yêu cầu có trạng thái = *"Chờ xử lý"* và trong luồng tiến trình CÓ kiểm tra, vai trò Kỹ thuật / Kế toán nhấp `[🔍 Xác nhận Đã kiểm tra]`)
 - **`BF29.1-UC-SENT-05`**: Gửi phê duyệt YCTS (Dành cho Chuyên viên Đối soát trình Lãnh đạo duyệt)
 - **`BF29.1-UC-SENT-06`**: Phê duyệt / Từ chối YCTS (Role Lãnh đạo / Checker duyệt & Kích hoạt Service QR phát hành sang Napas)
 - **`BF29.1-UC-SENT-07`**: Chờ xử lý đối tác (Theo dõi bản ghi ở mốc *Chờ phản hồi* khi Service QR Gateway status `OPEN`)
 - **`BF29.1-UC-SENT-08`**: Hoàn tất YCTS đã gửi (Đóng quy trình & hạch toán đối soát số liệu hoàn tiền)
+
+### 2.2. Ma trận các Use Case Tra soát đã nhận (TCTLTS / TLTS — Chiều đến / Thụ động)
+- **`BF29.1-UC-RECV-01`**: Tra cứu và xem danh sách YCTS đã nhận (TCTLTS)
+- **`BF29.1-UC-RECV-02`**: Tiếp nhận điện tra soát thụ động TS-014 từ Napas (Tự động đồng bộ API sang MM ở *Chờ xử lý*)
+- **`BF29.1-UC-RECV-03`**: Xem chi tiết YCTS đã nhận (Bao gồm Khối Thông tin Báo nợ 6 trường & Khối Thông tin Báo có 6 trường theo BR-GENERAL-05)
+- **`BF29.1-UC-RECV-04`**: Lập câu trả lời tra soát TLTS (Maker chọn `PRCD` — Đồng ý / `RJCD` — Từ chối)
+- **`BF29.1-UC-RECV-05`**: Gửi phê duyệt câu trả lời TLTS (Chuyển YCTS *Chờ phê duyệt*, sinh YCPD `ApprovePending`)
+- **`BF29.1-UC-RECV-06`**: Phê duyệt / Từ chối câu trả lời TLTS (Role Lãnh đạo / Checker duyệt & Kích hoạt Service QR)
+- **`BF29.1-UC-RECV-07`**: Chờ Napas xác nhận kết quả TLTS & Quản lý SLA Hết hạn (`EXPI` / Trả lời sau hết hạn)
+- **`BF29.1-UC-RECV-08`**: Hoàn tất YCTS đã nhận (Hạch toán Báo nợ/Báo có & Đóng hồ sơ read-only)
 
 ---
 

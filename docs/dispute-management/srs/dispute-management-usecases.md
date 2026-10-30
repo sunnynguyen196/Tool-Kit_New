@@ -216,3 +216,109 @@ Hiển thị các khối hạch toán tài chính tại Màn hình Chi tiết YC
 - **Post-Condition:** Chuyển trạng thái Tiến trình YCTS sang Hoàn tất (Completed) - Khóa bản ghi không cho sửa đổi dữ liệu.
 - **Basic Flow:** 1. Mở bản ghi YCTS ở mốc Đã phản hồi; 2. Hiển thị Khối Hạch toán Kế toán Đối soát & Đóng Bản ghi; 3. Kiểm tra Mã chứng từ hoàn tiền / báo có và số tiền hạch toán hoàn tất đối soát số liệu; 4. Bấm [Hoàn tất tra soát]; 5. Cập nhật Tiến trình YCTS sang Hoàn tất và khóa read-only hồ sơ; 6. Xuất phiếu hoàn tất PDF & lưu log Audit Trail.
 - **Non-functional Requirement:** Đóng và khóa bản ghi an toàn 100%, chống sửa đổi trùng lặp.
+
+---
+
+## 5. CHI TIẾT CÁC USE CASE TRA SOÁT ĐÃ NHẬN (TCTLTS / TLTS — TRA SOÁT THỤ ĐỘNG / CHIỀU ĐẾN)
+
+### 5.0. Bảng Tổng quan Mô tả Trạng thái Tiến trình (PCTS) Luồng Tra soát đã nhận (TCTLTS / TLTS)
+
+| Mã Trạng thái Tiến trình (PCTS) | Tên Trạng thái hiển thị | Diễn giải Chi tiết Nghiệp vụ tại Luồng TCTLTS | Trạng thái Xử lý YCTS tại Epay | Trạng thái Hết hạn | Nút bấm / Thao tác khả dụng |
+|---|---|---|---|---|---|
+| **`Chờ xử lý`** *(Pending)* | Chờ xử lý / Cần xử lý | Bản ghi YCTS điện TS-014 thụ động vừa được Napas truyền sang Service QR và tự động đồng bộ insert vào MM DB. | `—` *(Chưa lập câu trả lời)* | `Chưa hết hạn` | **[💬 Trả lời tra soát]** *(Maker chọn PRCD / RJCD & đính kèm file)* |
+| **`Chờ phê duyệt`** *(ApprovePending)* | Chờ phê duyệt | Maker chọn câu trả lời (PRCD/RJCD) và bấm **[📤 Gửi yêu cầu phê duyệt]**, sinh bản ghi YCPD trình Lãnh đạo. | `PRCD` *(Đề xuất Đồng ý)* / `RJCD` *(Đề xuất Từ chối)* | `Chưa hết hạn` | **[✅ Đồng ý Phê duyệt]** / **[❌ Từ chối Phê duyệt]** *(Role Checker)* |
+| **`Đã phê duyệt`** *(Approved)* | Đã phê duyệt | Checker bấm duyệt YCPD (`Approved`). Hệ thống chuẩn bị gọi Service QR API phát hành câu trả lời sang Napas. | `PRCD` / `RJCD` | `Chưa hết hạn` | Xem chi tiết *(Read-only)* |
+| **`Xử lý thất bại`** *(Process Failure)* | Xử lý thất bại | Phát sinh lỗi validation định dạng dữ liệu hoặc lỗi kết nối API Service QR Gateway khi phát hành câu trả lời. | `—` / `OPEN` | `Chưa hết hạn` | Xem chi tiết / Ghi log Audit Trail |
+| **`Chờ phản hồi`** *(Waiting Response)* | Chờ phản hồi | Cổng Service QR phát hành thông điệp câu trả lời sang Napas thành công (`OPEN`), chờ callback IPN từ Napas. | `OPEN` | `Chưa hết hạn` | Xem chi tiết *(Đếm ngược SLA 72h)* |
+| **`Đã phản hồi`** *(Responded)* | Đã phản hồi | Napas gửi callback IPN xác nhận câu trả lời (`PRCD` / `RJCD`) hoặc thông báo quá hạn SLA. | `PRCD` *(Đồng ý)* / `RJCD` *(Từ chối)* | `Chưa hết hạn` hoặc 🟠 `Đã hết hạn` | **[Hoàn tất tra soát]** *(Kế toán đối soát hạch toán Báo nợ / Báo có)* |
+| **`Hoàn tất`** *(Completed)* | Hoàn tất | Quy trình phản hồi tra soát và hạch toán Báo nợ / Báo có đối soát đã kết thúc thành công. | `PRCD` / `RJCD` | `Chưa hết hạn` hoặc `Đã hết hạn` | Xem chi tiết & In phiếu PDF *(Khóa Read-only 100%)* |
+| **`Đã hủy`** *(Cancelled)* | Đã hủy | YCPD bị Checker từ chối hoặc Maker hủy câu trả lời đề xuất (bản ghi YCTS quay về *Chờ xử lý* để Maker lập lại). | `—` | `Chưa hết hạn` | Xem chi tiết |
+
+### 5.1. Use Case 1: Tra cứu và xem danh sách YCTS đã nhận (`BF29.1-UC-RECV-01`)
+- **Use Case:** Tra cứu và xem danh sách YCTS đã nhận (TCTLTS)
+- **ID:** `BF29.1-UC-RECV-01`
+- **Description:** Tra cứu và quản lý các yêu cầu tra soát thụ động do Napas/Đối tác gửi đến Epay theo Cấu trúc Trạng thái 3 Nhóm và phân loại theo tab.
+- **Actor:** Đối soát, Kỹ thuật, Kế toán, Lãnh đạo, Hệ thống MM
+- **Trigger:** Chọn menu [Quản lý tra soát] > [Tra soát đã nhận].
+- **Pre-Condition:** Tài khoản người dùng có quyền truy cập màn hình Tra soát đã nhận.
+- **Post-Condition:** Hiển thị danh sách YCTS đã nhận thỏa mãn điều kiện lọc trên Table Grid.
+- **Basic Flow:** 1. Mở màn hình Tra soát đã nhận; 2. Hệ thống hiển thị các tab ('Tất cả', 'Chờ xử lý', 'Chờ phê duyệt', 'Quá hạn', 'Chờ phản hồi', 'Đã phản hồi', 'Hoàn tất', 'Đã hủy'); 3. Chọn bộ lọc (MerchantCode, Loại tra soát, Trạng thái hết hạn...); 4. Tùy chỉnh danh sách cột hiển thị (lưu theo tài khoản và theo tab).
+- **Non-functional Requirement:** Tải và hiển thị danh sách < 2.0s cho 1,000 bản ghi.
+
+### 5.2. Use Case 2: Tiếp nhận điện tra soát thụ động TS-014 (`BF29.1-UC-RECV-02`)
+- **Use Case:** Tiếp nhận điện tra soát thụ động TS-014 từ Napas
+- **ID:** `BF29.1-UC-RECV-02`
+- **Description:** Cổng Service QR tiếp nhận thông điệp điện YCTS TS-014 từ Napas, validate dữ liệu và gọi API tự động đồng bộ khởi tạo bản ghi trên DB MM.
+- **Actor:** Cổng Napas / Partner, Service QR Gateway, Hệ thống MM
+- **Trigger:** Napas phát hành thông điệp điện TS-014 sang Service QR Gateway.
+- **Pre-Condition:** Kết nối API Gateway hoạt động bình thường, thông điệp đúng định dạng Napas standard.
+- **Post-Condition:** DB MM bắt buộc insert 01 bản ghi YCTS mới ở Tiến trình Chờ xử lý, TT Xử lý = `—`, TT Hết hạn = `Chưa hết hạn` (Theo BR-GENERAL-03).
+- **Basic Flow:** 1. Service QR tiếp nhận payload TS-014; 2. Validate mã GD gốc và định dạng; 3. Lưu DB QR status `OPEN`; 4. Gọi API đồng bộ nội bộ sang MM; 5. MM insert 01 bản ghi YCTS mới ở Tiến trình Chờ xử lý; 6. Bắn notification cảnh báo YCTS mới cho Chuyên viên Đối soát.
+- **Non-functional Requirement:** Đồng bộ API thời gian thực < 500ms.
+
+### 5.3. Use Case 3: Xem chi tiết YCTS đã nhận (`BF29.1-UC-RECV-03`)
+- **Use Case:** Xem chi tiết YCTS đã nhận (Bao gồm Khối Báo nợ & Khối Báo có theo BR-GENERAL-05)
+- **ID:** `BF29.1-UC-RECV-03`
+- **Description:** Xem đầy đủ hồ sơ bản ghi tra soát thụ động bao gồm Khối 1 Tiến trình, Khối 2 GD gốc, Khối 3 Thông tin tra soát 11 trường, Khối 4 Phê duyệt RBAC, Khối 5 Khối Thông tin Báo nợ (6 trường tiêu chuẩn khi thu hồi sai sót) và Khối 6 Khối Thông tin Báo có (6 trường tiêu chuẩn khi hạch toán cộng tiền).
+- **Actor:** Đối soát, Kỹ thuật, Kế toán, Lãnh đạo
+- **Trigger:** Nhấp vào Mã tra soát (Hyperlink Mã YCTS) hoặc biểu tượng [👁️ Xem chi tiết] tại Tab Tra soát đã nhận.
+- **Pre-Condition:** Người dùng đăng nhập hệ thống và có quyền xem thông tin tra soát đã nhận.
+- **Post-Condition:** Hiển thị giao diện chi tiết đầy đủ các khối thông tin read-only kèm Khối Báo nợ & Khối Báo có.
+- **Basic Flow:** 1. Chọn bản ghi và bấm [👁️ Xem chi tiết]; 2. Hệ thống tải dữ liệu từ MM & QR DB; 3. Render Khối Tiến trình 3 Nhóm; 4. Render Khối GD gốc; 5. Render Khối Thông tin tra soát; 6. **Kiểm tra BR-GENERAL-05:** Render Khối Báo nợ (6 trường) khi có hạch toán thu hồi & Khối Báo có (6 trường) khi cộng tiền; 7. Render Audit Trail Timeline.
+- **Non-functional Requirement:** Tải màn hình chi tiết < 1.5 giây.
+
+### 5.4. Use Case 4: Lập câu trả lời tra soát TLTS (`BF29.1-UC-RECV-04`)
+- **Use Case:** Lập câu trả lời tra soát TLTS (Maker chọn PRCD / RJCD)
+- **ID:** `BF29.1-UC-RECV-04`
+- **Description:** Chuyên viên Đối soát (Maker) kiểm tra thông tin điện thụ động TS-014 và lập phương án trả lời: Đồng ý (`PRCD`) hoặc Từ chối (`RJCD`), nhập diễn giải và tải lên tệp minh chứng.
+- **Actor:** Đối soát (Maker)
+- **Trigger:** Maker chọn nút [💬 Trả lời tra soát] tại màn hình Chi tiết YCTS đã nhận (ở mốc Chờ xử lý).
+- **Pre-Condition:** Bản ghi YCTS đang ở trạng thái Tiến trình Chờ xử lý thuộc Tab Tra soát đã nhận.
+- **Post-Condition:** Lưu thông tin bản phác thảo câu trả lời (PRCD/RJCD) sẵn sàng để trình phê duyệt.
+- **Basic Flow:** 1. Bấm [💬 Trả lời tra soát]; 2. Mở Modal/Form Lập câu trả lời TLTS; 3. Chọn Trạng thái xử lý đề xuất (`PRCD` — Đồng ý / `RJCD` — Từ chối); 4. Nhập Lý do / Diễn giải chi tiết; 5. Tải lên file chứng từ minh chứng (Tối đa 1 file 5MB); 6. Bấm [Lưu tạm] hoặc chuyển sang bước trình duyệt.
+- **Non-functional Requirement:** Phản hồi giao diện lập form < 500ms.
+
+### 5.5. Use Case 5: Gửi phê duyệt câu trả lời TLTS (`BF29.1-UC-RECV-05`)
+- **Use Case:** Gửi phê duyệt câu trả lời TLTS (Trình Lãnh đạo duyệt YCPD)
+- **ID:** `BF29.1-UC-RECV-05`
+- **Description:** Chuyên viên Đối soát trình Lãnh đạo duyệt câu trả lời tra soát. YCTS chuyển sang Tiến trình Chờ phê duyệt và sinh 01 bản ghi YCPD mới (`ApprovePending`).
+- **Actor:** Đối soát (Maker)
+- **Trigger:** Maker nhấp nút [📤 Gửi yêu cầu phê duyệt] sau khi nhập xong câu trả lời.
+- **Pre-Condition:** Bản ghi YCTS ở mốc Chờ xử lý và đã điền đầy đủ câu trả lời đề xuất (PRCD/RJCD).
+- **Post-Condition:** YCTS status = Chờ phê duyệt, Trạng thái xử lý = PRCD/RJCD đề xuất, sinh 01 bản ghi YCPD ApprovePending trên MM DB.
+- **Basic Flow:** 1. Bấm [📤 Gửi yêu cầu phê duyệt]; 2. Hệ thống kiểm tra dữ liệu bắt buộc (Lý do trả lời, định dạng file); 3. Sinh bản ghi YCPD mới (`ApprovePending`); 4. Cập nhật YCTS sang Chờ phê duyệt; 5. Gửi thông báo Push Notification/Email cho Lãnh đạo (Checker).
+- **Non-functional Requirement:** Sinh bản ghi YCPD & cập nhật trạng thái < 1.0s.
+
+### 5.6. Use Case 6: Phê duyệt / Từ chối câu trả lời TLTS (`BF29.1-UC-RECV-06`)
+- **Use Case:** Phê duyệt / Từ chối câu trả lời TLTS (Role Lãnh đạo / Checker)
+- **ID:** `BF29.1-UC-RECV-06`
+- **Description:** Role Lãnh đạo (Checker) kiểm tra đề xuất câu trả lời và nhấp [✅ Đồng ý Phê duyệt] hoặc [❌ Từ chối Phê duyệt]. Nếu duyệt, kích hoạt Service QR phát hành thông điệp trả lời sang Napas.
+- **Actor:** Lãnh đạo (Checker / Manager)
+- **Trigger:** Checker mở bản ghi YCPD câu trả lời TLTS ở mốc Chờ phê duyệt và bấm chọn nút Duyệt hoặc Từ chối.
+- **Pre-Condition:** Bản ghi YCPD ở trạng thái ApprovePending và tài khoản Checker khác tài khoản Maker khởi tạo (BR-GENERAL-02).
+- **Post-Condition:** Nếu Đồng ý: YCPD = Approved, YCTS = Đã phê duyệt ➔ Chờ phản hồi & phát hành câu trả lời sang Napas. Nếu Từ chối: YCPD = Cancel, YCTS quay lại Chờ xử lý.
+- **Basic Flow:** 1. Checker xem hồ sơ câu trả lời đề xuất; 2. (Từ chối): Nhập lý do từ chối ➔ Bấm [❌ Từ chối Phê duyệt] ➔ YCPD status = Cancel, YCTS trả về Chờ xử lý; 3. (Đồng ý): Bấm [✅ Đồng ý Phê duyệt] ➔ YCPD status = Approved, YCTS status = Đã phê duyệt ➔ Gọi Service QR phát hành thông điệp trả lời sang Napas; 4. Ghi log Audit Trail.
+- **Non-functional Requirement:** Phê duyệt & kích hoạt API Service QR Gateway < 2.0s.
+
+### 5.7. Use Case 7: Chờ Napas xác nhận kết quả TLTS & Quản lý SLA Hết hạn (`BF29.1-UC-RECV-07`)
+- **Use Case:** Chờ Napas xác nhận kết quả TLTS & Quản lý SLA Hết hạn
+- **ID:** `BF29.1-UC-RECV-07`
+- **Description:** Theo dõi kết quả xác nhận từ phía Napas khi Service QR phát hành câu trả lời. Quản lý trạng thái SLA quá hạn (`EXPI`) và ghi nhận trường hợp Trả lời sau hết hạn (Đồng ý/Từ chối sau hết hạn).
+- **Actor:** Service QR Gateway, Cổng Napas, MM System
+- **Trigger:** Napas gửi callback IPN phản hồi hoặc quá mốc thời gian SLA (72h).
+- **Pre-Condition:** Cổng Service QR đã truyền thông điệp câu trả lời sang Napas thành công.
+- **Post-Condition:** Tự động gán Tiến trình = Đã phản hồi, gán Trạng thái hết hạn = Đã hết hạn (nếu quá SLA) và gán kết quả cuối PRCD/RJCD.
+- **Basic Flow:** 1. Bản ghi ở mốc Chờ phản hồi; 2. (Trường hợp bình thường): Napas gửi IPN xác nhận ➔ MM gán Tiến trình = Đã phản hồi, TT xử lý = PRCD/RJCD; 3. (Trường hợp Quá hạn SLA): Napas gửi IPN `EXPI` ➔ MM cập nhật Trạng thái hết hạn = Đã hết hạn, chuyển bản ghi sang Tab Quá hạn; 4. (Trả lời sau hết hạn): Nếu Maker gửi trả lời sau mốc `EXPI`, MM ghi nhận kết quả PRCD/RJCD kèm dấu hiệu Trả lời sau hết hạn; 5. Ghi log Audit Trail.
+- **Non-functional Requirement:** Cập nhật dữ liệu tự động < 500ms.
+
+### 5.8. Use Case 8: Hoàn tất YCTS đã nhận (`BF29.1-UC-RECV-08`)
+- **Use Case:** Hoàn tất YCTS đã nhận (Completion & Financial Posting)
+- **ID:** `BF29.1-UC-RECV-08`
+- **Description:** Xác nhận hoàn tất quy trình xử lý tra soát thụ động và hạch toán kế toán (Báo nợ thu hồi sai sót / Báo có). Bản ghi YCTS chuyển sang Tiến trình Hoàn tất và bị khóa read-only.
+- **Actor:** Đối soát, Kế toán, Hệ thống MM
+- **Trigger:** Kế toán / Đối soát hoàn tất chứng từ hạch toán tài chính và bấm [Hoàn tất tra soát].
+- **Pre-Condition:** Bản ghi YCTS ở mốc Tiến trình Đã phản hồi và thông tin hạch toán Báo nợ/Báo có đã hoàn thành.
+- **Post-Condition:** Tiến trình YCTS chuyển sang Hoàn tất (Completed), khóa toàn bộ thao tác chỉnh sửa.
+- **Basic Flow:** 1. Mở bản ghi YCTS ở mốc Đã phản hồi; 2. Hiển thị Khối Báo nợ (6 trường) / Khối Báo có (6 trường) đã hạch toán; 3. Kiểm tra Mã hạch toán và Số tiền đối soát; 4. Bấm [Hoàn tất tra soát]; 5. Hệ thống chuyển Tiến trình sang Hoàn tất và khóa hồ sơ read-only; 6. Xuất biên bản đối soát PDF & lưu log Audit Trail.
+- **Non-functional Requirement:** Đóng và khóa bản ghi an toàn 100%, chống sửa đổi trùng lặp.
+

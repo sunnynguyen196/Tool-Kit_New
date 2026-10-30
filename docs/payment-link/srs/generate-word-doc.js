@@ -1,0 +1,1782 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const wordDocHtml = `
+<html xmlns:o='urn:schemas-microsoft-microsoft-com:office:office' 
+      xmlns:w='urn:schemas-microsoft-microsoft-com:office:word' 
+      xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+  <meta charset='utf-8'>
+  <title>Tài liệu Mô tả Use Case & Giao diện Chi tiết - Phân hệ Link Thanh toán (Payment Link EPAY Portal)</title>
+  <!--[if gte mso 9]>
+  <xml>
+    <w:WordDocument>
+      <w:View>Print</w:View>
+      <w:Zoom>100</w:Zoom>
+      <w:DoNotOptimizeForBrowser/>
+    </w:WordDocument>
+  </xml>
+  <![endif]-->
+  <style>
+    @page {
+      size: 210mm 297mm; /* A4 */
+      margin: 20mm 15mm 20mm 15mm;
+      mso-header-margin: 10mm;
+      mso-footer-margin: 10mm;
+    }
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.35;
+      color: #000000;
+    }
+    h1 {
+      font-size: 18pt;
+      font-weight: bold;
+      color: #002D62;
+      text-align: center;
+      margin-top: 18pt;
+      margin-bottom: 6pt;
+      text-transform: uppercase;
+    }
+    h2 {
+      font-size: 14pt;
+      font-weight: bold;
+      color: #F05A21;
+      text-align: center;
+      margin-top: 0pt;
+      margin-bottom: 18pt;
+    }
+    .doc-info {
+      width: 100%;
+      margin-bottom: 16pt;
+      font-size: 11pt;
+      font-style: italic;
+      color: #444444;
+      border-bottom: 1px solid #CCCCCC;
+      padding-bottom: 6pt;
+    }
+    .sec-title {
+      font-size: 15pt;
+      font-weight: bold;
+      color: #002D62;
+      margin-top: 20pt;
+      margin-bottom: 8pt;
+      border-bottom: 1.5pt solid #002D62;
+      padding-bottom: 4pt;
+    }
+    .uc-title {
+      font-size: 13.5pt;
+      font-weight: bold;
+      color: #002D62;
+      margin-top: 18pt;
+      margin-bottom: 6pt;
+    }
+    .wf-section-title {
+      font-size: 12pt;
+      font-weight: bold;
+      color: #F05A21;
+      margin-top: 12pt;
+      margin-bottom: 6pt;
+    }
+    table.uc-table, table.wf-table, table.status-table, table.rbac-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16pt;
+    }
+    table.uc-table th, table.uc-table td, table.wf-table th, table.wf-table td, table.status-table th, table.status-table td, table.rbac-table th, table.rbac-table td {
+      border: 1px solid #000000;
+      padding: 4pt 5pt;
+      vertical-align: top;
+      font-size: 10pt;
+    }
+    table.uc-table td.field-name {
+      width: 22%;
+      font-weight: bold;
+      background-color: #F2F4F7;
+      color: #000000;
+    }
+    table.uc-table td.field-value {
+      width: 78%;
+      background-color: #FFFFFF;
+    }
+
+    table.status-table th, table.rbac-table th {
+      background-color: #002D62;
+      color: #FFFFFF;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    table.wf-table th {
+      background-color: #7092BE;
+      color: #FFFFFF;
+      font-weight: bold;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .wf-divider-row td {
+      background-color: #F2F4F7;
+      font-weight: bold;
+      color: #002D62;
+      font-size: 10.5pt;
+    }
+    .badge-error {
+      background-color: #FEE2E2;
+      color: #DC2626;
+      padding: 2pt 4pt;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 9pt;
+      border: 1px solid #F87171;
+    }
+    .badge-success {
+      background-color: #DCFCE7;
+      color: #16A34A;
+      padding: 2pt 4pt;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 9pt;
+      border: 1px solid #86EFAC;
+    }
+    .br-box {
+      border: 1px solid #0073C7;
+      background-color: #F0F7FF;
+      padding: 10pt;
+      margin-bottom: 14pt;
+      border-radius: 4px;
+    }
+    .footer-table {
+      width: 100%;
+      border-top: 1px dashed #666666;
+      margin-top: 24pt;
+      font-size: 10pt;
+      font-style: italic;
+      color: #555555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>TÀI LIỆU PHÂN TÍCH YÊU CẦU HỆ THỐNG & ĐẶC TẢ USE CASE CHI TIẾT</h1>
+  <h2>PHÂN HỆ TẠO VÀ QUẢN LÝ LINK THANH TOÁN (PAYMENT LINK — EPAY PORTAL)</h2>
+
+  <div class="doc-info">
+    <b>Mã tài liệu:</b> EPAY-QT.CG.02_BM33 &nbsp;|&nbsp; 
+    <b>Dự án:</b> Hệ thống Cổng Thanh toán Epay Portal 2.0 &nbsp;|&nbsp; 
+    <b>Phiên bản:</b> v2.0 (Chuẩn hóa Version 2 UI) &nbsp;|&nbsp; 
+    <b>Trạng thái:</b> APPROVED / READY FOR IMPLEMENTATION
+  </div>
+
+  <div class="sec-title">1. MÔ TẢ TỔNG QUAN KIẾN TRÚC & MA TRẬN TRẠNG THÁI</div>
+
+  <p>Tính năng <b>Payment Link</b> trên Merchant Admin (MA) phục vụ các đơn vị chấp nhận thanh toán (Merchant) vừa và nhỏ, không có hệ thống quản lý đơn hàng riêng. Hệ thống hỗ trợ 2 phương thức khởi tạo chính: <b>Tạo link thanh toán đơn lẻ</b> và <b>Tạo link thanh toán theo lô</b> (thông qua tệp Excel), đồng thời cung cấp giao diện <b>Hosted Form</b> cho khách hàng xác nhận điều khoản và thanh toán an toàn.</p>
+
+  <div class="wf-section-title">1.1. Bảng Trạng thái Vòng đời Đơn hàng (Order Lifecycle)</div>
+  <table class="status-table">
+    <tr>
+      <th style="width: 25%;">Trạng thái Đơn hàng</th>
+      <th style="width: 15%;">Mã Hệ thống</th>
+      <th style="width: 60%;">Diễn giải Nghiệp vụ Chi tiết</th>
+    </tr>
+    <tr>
+      <td><b>Chờ thanh toán</b></td>
+      <td style="text-align: center;"><code>PENDING</code></td>
+      <td>Đơn hàng vừa được khởi tạo thành công, link thanh toán và mã QR đang có hiệu lực. Khách hàng chưa thanh toán hoặc đang mở trang thanh toán.</td>
+    </tr>
+    <tr>
+      <td><b>Thanh toán thành công</b></td>
+      <td style="text-align: center;"><code>SUCCESS</code></td>
+      <td>Khách hàng đã hoàn tất thanh toán qua cổng thanh toán; Core CTT gửi thông báo IPN cập nhật trạng thái đơn hàng và gửi email hóa đơn điện tử cho KH.</td>
+    </tr>
+    <tr>
+      <td><b>Thanh toán thất bại</b></td>
+      <td style="text-align: center;"><code>FAILED</code></td>
+      <td>Giao dịch thanh toán bị từ chối hoặc lỗi kỹ thuật. Link vẫn còn hiệu lực đến thời điểm hết hạn, khách hàng có thể nhấp lại link để thanh toán lại.</td>
+    </tr>
+    <tr>
+      <td><b>Hết hạn</b></td>
+      <td style="text-align: center;"><code>EXPIRED</code></td>
+      <td>Đơn hàng vượt quá mốc <i>Thời gian hết hạn</i>. Link bị khóa, khách hàng truy cập sẽ nhận thông báo đơn hàng đã hết hiệu lực.</td>
+    </tr>
+  </table>
+
+  <div class="wf-section-title">1.2. Bảng Danh mục Mã lỗi Xử lý Dữ liệu File Lô (Batch Error Codes)</div>
+  <table class="status-table">
+    <tr>
+      <th style="width: 12%;">Mã Lỗi</th>
+      <th style="width: 25%;">Tên Lỗi</th>
+      <th style="width: 35%;">Điều kiện Kích hoạt</th>
+      <th style="width: 28%;">Hành động của Hệ thống</th>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><span class="badge-error">ERR_01</span></td>
+      <td>Số tiền TT không hợp lệ</td>
+      <td>Số tiền không phải kiểu số, hoặc &lt; 1,000đ hoặc &gt; 200,000,000đ.</td>
+      <td>In đỏ số tiền; badge lỗi; Cột Link = <code>Chưa tạo</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><span class="badge-error">ERR_02</span></td>
+      <td>Định dạng email không hợp lệ</td>
+      <td>Thiếu ký tự @, thiếu domain hoặc chứa ký tự đặc biệt sai RFC.</td>
+      <td>In đỏ email; badge lỗi; Cột Link = <code>Chưa tạo</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><span class="badge-error">ERR_03</span></td>
+      <td>Hạn thanh toán không hợp lệ</td>
+      <td>Thời gian hết hạn ở quá khứ hoặc &gt; Ngày hiệu lực + 15 ngày.</td>
+      <td>In đỏ ngày hết hạn; badge lỗi; Cột Link = <code>Chưa tạo</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><span class="badge-error">ERR_04</span></td>
+      <td>Trùng lặp mã đơn hàng</td>
+      <td>Mã đơn hàng bị lặp lại trong file hoặc trùng mã đã tồn tại trên hệ thống.</td>
+      <td>In đỏ mã đơn hàng; badge lỗi; Cột Link = <code>Chưa tạo</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><span class="badge-error">ERR_05</span></td>
+      <td>Thiếu trường bắt buộc</td>
+      <td>Bỏ trống Tên dịch vụ, Mã đơn, Số tiền, Ngày tạo, Hạn TT, Họ tên, Email...</td>
+      <td>In đỏ ô thiếu; badge lỗi; Cột Link = <code>Chưa tạo</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><span class="badge-error">ERR_06</span></td>
+      <td>Ngôn ngữ không hỗ trợ</td>
+      <td>Giá trị cột Ngôn ngữ khác 'vi' hoặc 'en'.</td>
+      <td>Badge lỗi; Cột Link = <code>Chưa tạo</code></td>
+    </tr>
+  </table>
+
+  <div class="sec-title">2. MA TRẬN PHÂN QUYỀN VAI TRÒ (RBAC MATRIX)</div>
+  <table class="rbac-table">
+    <tr>
+      <th style="width: 40%;">Chức năng / Nghiệp vụ</th>
+      <th style="width: 20%;">Mã Use Case</th>
+      <th style="width: 15%;">MC Admin</th>
+      <th style="width: 15%;">MC Staff</th>
+      <th style="width: 10%;">Customer</th>
+    </tr>
+    <tr>
+      <td>Tạo link thanh toán đơn lẻ & Trả kết quả link + QR</td>
+      <td style="text-align: center;"><code>PL-UC-01</code></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+      <td>Tải file template mẫu & Upload file lô từ máy tính</td>
+      <td style="text-align: center;"><code>PL-UC-02</code></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+      <td>Xem kết quả lô thành công, Phân trang, Tải file link, Gửi email</td>
+      <td style="text-align: center;"><code>PL-UC-03</code></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+      <td>Xem kết quả đọc file có lỗi, Tải file đối soát lỗi (.xlsx)</td>
+      <td style="text-align: center;"><code>PL-UC-04</code></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+      <td>Xem popup Modal chi tiết Mã QR của link thanh toán & Tải ảnh QR</td>
+      <td style="text-align: center;"><code>PL-UC-05</code></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;"><b>X</b></td>
+      <td style="text-align: center;">-</td>
+    </tr>
+    <tr>
+      <td>Khách hàng mở link, xem 3 khối thông tin & Xác nhận Điều khoản</td>
+      <td style="text-align: center;"><code>PL-UC-06</code></td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;"><b>X</b></td>
+    </tr>
+    <tr>
+      <td>Khách hàng xem Modal chi tiết Điều khoản & Điều kiện thanh toán</td>
+      <td style="text-align: center;"><code>PL-UC-07</code></td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;"><b>X</b></td>
+    </tr>
+  </table>
+
+  <div class="sec-title">3. CHI TIẾT CÁC USE CASE NGHIỆP VỤ & ĐẶC TẢ GIAO DIỆN</div>
+
+  <!-- ==================== USE CASE 01 ==================== -->
+  <div class="uc-title">3.1. USE CASE 01: TẠO LINK THANH TOÁN ĐƠN LẺ (PL-UC-01)</div>
+
+  <div class="wf-section-title">📌 Phần 1: Bảng Đặc tả Use Case Tổng quan (10 Dòng Tiêu chuẩn)</div>
+  <table class="uc-table">
+    <tr>
+      <td class="field-name">Use Case</td>
+      <td class="field-value"><b>Tạo link thanh toán đơn lẻ (Single Payment Link Creation)</b></td>
+    </tr>
+    <tr>
+      <td class="field-name">ID</td>
+      <td class="field-value"><code>PL-UC-01</code></td>
+    </tr>
+    <tr>
+      <td class="field-name">Description</td>
+      <td class="field-value">Cho phép Người dùng Merchant nhập đầy đủ thông tin đơn hàng và thông tin khách hàng trên một giao diện thống nhất, hệ thống tự động kiểm tra tính hợp lệ, gọi Core CTT sinh ra đường dẫn thanh toán (Payment Link) và Mã QR của link thanh toán, đồng thời hiển thị khối kết quả ngay bên dưới màn hình để sao chép link, tải mã QR hoặc kích hoạt gửi email cho khách hàng.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Actor</td>
+      <td class="field-value">Merchant Admin, Merchant Staff</td>
+    </tr>
+    <tr>
+      <td class="field-name">Trigger</td>
+      <td class="field-value">Người dùng nhấp chọn menu con <b>[Tạo link thanh toán]</b> trên Sidebar bên trái.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Pre-Condition</td>
+      <td class="field-value">Tài khoản Merchant đã đăng nhập thành công vào hệ thống EPAY Portal và có quyền tạo link thanh toán.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Post-Condition</td>
+      <td class="field-value">Đơn hàng được lưu vào cơ sở dữ liệu ở trạng thái <code>Chờ thanh toán</code> (<code>PENDING</code>), đường dẫn thanh toán duy nhất được tạo ra kèm theo mã QR tương ứng.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Basic flow</td>
+      <td class="field-value">
+        1. Hệ thống hiển thị Màn hình Tạo mới link thanh toán (Screen 2) gồm 2 khối form: Thông tin đơn hàng và Thông tin khách hàng.<br/>
+        2. Người dùng nhập: Tên dịch vụ, Mã đơn hàng, Số tiền thanh toán, Đồng tiền (VND), Thời gian hiệu lực, Thời gian hết hạn, Nội dung đơn hàng, Ngôn ngữ hiển thị (Tiếng Việt / Tiếng Anh).<br/>
+        3. Người dùng nhập thông tin khách hàng: Họ và tên, Email nhận thông báo, Số điện thoại, Địa chỉ nhận hàng.<br/>
+        4. Người dùng nhấn nút <b>[Tạo payment link]</b>.<br/>
+        5. Hệ thống kiểm tra validation dữ liệu. Toàn bộ hợp lệ, hệ thống gọi Core CTT sinh link và mã QR.<br/>
+        6. Màn hình giữ nguyên thông tin đã nhập và hiển thị mở rộng <b>Khối Kết quả Tạo Link</b> ngay bên dưới form (Screen 3): gồm URL payment link, nút [Sao chép], hình ảnh mã QR của link thanh toán, nút [Tải mã QR] và nút [Gửi email].<br/>
+        7. Người dùng có thể bấm nút <b>[Sao chép]</b> để copy link hoặc bấm nút <b>[Gửi email]</b> để gửi thông báo thanh toán cho khách hàng.
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Alternative flow</td>
+      <td class="field-value">4a. Người dùng bấm nút [Hủy bỏ]: Hệ thống hiển thị hộp thoại xác nhận hủy thao tác; nếu đồng ý, làm trống toàn bộ dữ liệu form và ở lại màn hình tạo link.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Exception flow</td>
+      <td class="field-value">
+        5a. Dữ liệu nhập không hợp lệ: Hệ thống hiển thị thông báo lỗi tại chân từng trường tin vi phạm. Màn hình giữ nguyên thông tin đã nhập.<br/>
+        5b. Trùng mã đơn hàng: Hệ thống báo lỗi "Mã đơn hàng đã tồn tại trên hệ thống, vui lòng nhập mã đơn hàng khác".<br/>
+        5c. Lỗi kết nối Core CTT / QRGW: Hệ thống báo lỗi "Hệ thống tạm thời không tạo được link thanh toán. Vui lòng thử lại sau giây lát".
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Non-functional requirement</td>
+      <td class="field-value">Thời gian xử lý tạo đơn và trả về kết quả link + mã QR &lt; 1.5 giây.</td>
+    </tr>
+  </table>
+
+  <div class="wf-section-title">📌 Phần 2: Bảng Đặc tả Thành phần Giao diện Chi tiết (6 Cột Tiêu chuẩn)</div>
+  <table class="wf-table">
+    <tr>
+      <th style="width: 20%;">Component Name</th>
+      <th style="width: 12%;">Data Type</th>
+      <th style="width: 8%;">M/O/C</th>
+      <th style="width: 8%;">Editable</th>
+      <th style="width: 24%;">Other Validation</th>
+      <th style="width: 28%;">Action rules</th>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Cột Trái: 1. Thông tin Đơn hàng</td></tr>
+    <tr>
+      <td><b>Tên dịch vụ *</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>- Kiểu dữ liệu: Chuỗi ký tự UTF-8.<br/>- Độ dài: Tối đa 255 ký tự.<br/>- Không chứa mã HTML/script độc hại.</td>
+      <td>
+        • <b>Cho phép nhập:</b> Cho phép nhập khi ở màn hình khởi tạo đơn mới. Không cho phép nhập khi hệ thống đang xử lý sinh link hoặc sau khi đã tạo link thành công.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: Trống, hiển thị placeholder <code>Nhập tên dịch vụ</code>. Nếu không nhập mà bấm [Tạo link]: Báo lỗi đỏ viền ô <code>Vui lòng nhập tên dịch vụ</code>.<br/>
+        • <b>Quy định khi nhập:</b> Tên loại hình sản phẩm, dịch vụ hoặc gói hàng hóa cung ứng cho khách hàng.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Mã đơn hàng *</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>- Kiểu dữ liệu: Ký tự chữ (a-z, A-Z), chữ số (0-9), '-', '_'.<br/>- Độ dài: Tối đa 50 ký tự.<br/>- Duy nhất (Unique) theo từng Merchant.</td>
+      <td>
+        • <b>Cho phép nhập:</b> Cho phép nhập khi ở màn hình khởi tạo đơn mới. Không cho phép nhập/sửa sau khi link đã được tạo thành công.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: Trống, hiển thị placeholder <code>Nhập mã đơn hàng</code> (hoặc gợi ý mã <code>#ORD-YYYYMMDD-xxx</code>). Nếu không nhập: Báo lỗi đỏ <code>Vui lòng nhập mã đơn hàng</code>.<br/>
+        • <b>Quy định khi nhập:</b> Mã định danh đơn hàng do Merchant tự quản lý; không được trùng lặp với bất kỳ mã đơn hàng nào đã tồn tại trên hệ thống của Merchant.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Số tiền thanh toán *</b></td>
+      <td style="text-align: center;">Number / Text</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>- Kiểu dữ liệu: Số nguyên dương.<br/>- Giá trị: Từ <code>1,000</code> đến <code>200,000,000</code> VNĐ.<br/>- Không cho phép nhập ký tự chữ hoặc số âm.</td>
+      <td>
+        • <b>Cho phép nhập:</b> Cho phép nhập khi khởi tạo đơn mới. Không cho phép nhập/sửa khi link đã được tạo.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: Trống, hiển thị placeholder <code>Nhập số tiền</code>. Nếu không nhập mà bấm [Tạo link]: Báo lỗi đỏ <code>Vui lòng nhập số tiền thanh toán</code>.<br/>
+        • <b>Quy định khi nhập:</b> Tự động định dạng dấu chấm phân cách hàng nghìn khi gõ (ví dụ: gõ <code>5000000</code> -&gt; hiển thị <code>5.000.000</code>). Báo lỗi nếu ngoài khoảng 1,000đ - 200,000,000đ.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Loại tiền *</b></td>
+      <td style="text-align: center;">Dropdown list</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">N</td>
+      <td>Giá trị hợp lệ: <code>VND</code> (hoặc <code>USD</code> theo hợp đồng MC).</td>
+      <td>
+        • <b>Cho phép nhập:</b> Không cho phép nhập tự do; chỉ hiển thị chọn từ danh mục đồng tiền thanh toán hợp lệ do hệ thống cung cấp.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: <code>VND</code>. Luôn luôn có giá trị hiển thị, không thể để trống.<br/>
+        • <b>Quy định khi nhập:</b> Đơn vị tiền tệ hạch toán của đơn hàng.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Ngày hết hạn đơn hàng *</b></td>
+      <td style="text-align: center;">Date Picker</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>- Định dạng: <code>DD/MM/YYYY HH:mm</code>.<br/>- Thời gian: &gt; Ngày giờ hiện tại và &lt;= Ngày hiện tại + 15 ngày.</td>
+      <td>
+        • <b>Cho phép nhập:</b> Cho phép nhập ngày hiệu lực / ngày hết hạn đơn hàng khi tạo mới.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: Ngày hiện tại (23:59:59 của ngày hiện tại). Nếu người dùng không nhập: Tự động lấy giá trị mặc định là 23:59:59 của ngày hiện tại.<br/>
+        • <b>Quy định khi nhập:</b> Chỉ cho phép nhập tối đa 15 ngày so với ngày hiện tại (hoặc ngày hiệu lực). Không cho phép chọn ngày giờ trong quá khứ so với thời điểm tạo đơn. Sau thời điểm này, link tự động hết hạn (<code>EXPIRED</code>).
+      </td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Cột Phải: 2. Thông tin Khách hàng</td></tr>
+    <tr>
+      <td><b>Họ tên *</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>- Kiểu dữ liệu: Chuỗi ký tự chữ có dấu và khoảng trắng.<br/>- Độ dài: Tối đa 100 ký tự.<br/>- Không chứa chữ số hoặc ký tự đặc biệt.</td>
+      <td>
+        • <b>Cho phép nhập:</b> Cho phép nhập khi khởi tạo đơn mới. Không cho phép nhập sau khi link đã tạo.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: Trống, hiển thị placeholder <code>Nhập họ và tên</code>. Nếu không nhập mà bấm [Tạo link]: Báo lỗi đỏ <code>Vui lòng nhập họ tên khách hàng</code>.<br/>
+        • <b>Quy định khi nhập:</b> Nếu tạo link cho khách hàng quốc tế, người dùng cần nhập bằng tiếng Anh không dấu theo đúng dòng lưu ý.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Email</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>- Định dạng: Chuẩn Email RFC 5322 (<code>user@domain.com</code>).<br/>- Độ dài: Tối đa 100 ký tự.<br/>- Không chứa khoảng trắng.</td>
+      <td>
+        • <b>Cho phép nhập:</b> Cho phép nhập khi khởi tạo đơn mới.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: Trống, hiển thị placeholder <code>Nhập email</code>. Nếu không nhập: Chấp nhận để trống (trường tùy chọn O), hệ thống vẫn tạo link thành công. Nút [Gửi email] sẽ hiển thị thông báo yêu cầu nhập email trước khi gửi.<br/>
+        • <b>Quy định khi nhập:</b> Nếu có nhập dữ liệu thì bắt buộc phải kiểm tra đúng định dạng email; nếu sai cú pháp báo lỗi <code>Định dạng email không hợp lệ</code>.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Số điện thoại *</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>- Kiểu dữ liệu: Chuỗi 10 chữ số hợp lệ Việt Nam hoặc E.164.<br/>- Đầu số hợp lệ: <code>03</code>, <code>05</code>, <code>07</code>, <code>08</code>, <code>09</code>.</td>
+      <td>
+        • <b>Cho phép nhập:</b> Cho phép nhập khi khởi tạo đơn mới. Không cho phép nhập sau khi đã sinh link.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: Trống, hiển thị placeholder <code>Nhập số điện thoại</code>. Nếu không nhập: Báo lỗi đỏ <code>Vui lòng nhập số điện thoại</code>.<br/>
+        • <b>Quy định khi nhập:</b> Chỉ cho phép nhập ký tự số (0-9), không chứa chữ cái hay ký tự đặc biệt. Số điện thoại dùng để liên hệ đối soát và tra cứu đơn hàng.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Địa chỉ</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>- Kiểu dữ liệu: Chuỗi ký tự UTF-8.<br/>- Độ dài: Tối đa 255 ký tự.</td>
+      <td>
+        • <b>Cho phép nhập:</b> Cho phép nhập khi khởi tạo đơn mới.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: Trống, hiển thị placeholder <code>Nhập địa chỉ</code>. Nếu không nhập: Chấp nhận để trống, hệ thống lưu giá trị null/rỗng.<br/>
+        • <b>Quy định khi nhập:</b> Cho phép chữ cái, chữ số và các dấu phân cách thông dụng.
+      </td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Cột Phải: 3. Ngôn ngữ</td></tr>
+    <tr>
+      <td><b>Gửi Link thanh toán bằng *</b></td>
+      <td style="text-align: center;">Dropdown list</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Chọn 1 trong 2 giá trị: <code>Tiếng Việt</code> hoặc <code>Tiếng Anh</code>.</td>
+      <td>
+        • <b>Cho phép nhập:</b> Cho phép chọn từ dropdown danh sách. Không cho phép nhập text tự do.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: <code>Tiếng Việt</code>. Luôn luôn có giá trị lựa chọn, không thể để trống.<br/>
+        • <b>Quy định khi nhập:</b> Quyết định ngôn ngữ giao diện hiển thị trên trang Hosted Checkout Form và ngôn ngữ của mẫu Email gửi tự động cho khách hàng.
+      </td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Dòng Lưu ý & Nút Chức năng Form</td></tr>
+    <tr>
+      <td><b>Dòng lưu ý</b></td>
+      <td style="text-align: center;">Label (Hint)</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Văn bản tĩnh</td>
+      <td><i>*Lưu ý: Nếu bạn đang tạo Link thanh toán cho Khách hàng nước ngoài, vui lòng điền Thông tin bằng Tiếng Anh.</i></td>
+    </tr>
+    <tr>
+      <td><b>Nút [Tạo link]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền xanh đậm #025BBD, chữ trắng #FFFFFF, 120x34px</td>
+      <td>
+        • <b>Hành động:</b> Khi nhấp chuột, hệ thống validate toàn bộ các trường tin M/O/C theo đúng các quy tắc trên.<br/>
+        • Nếu có trường lỗi: Dừng xử lý, hiển thị lỗi đỏ tại chân trường tin vi phạm.<br/>
+        • Nếu 100% hợp lệ: Gọi Core CTT tạo đơn ở trạng thái <code>PENDING</code>, sinh Payment Link URL duy nhất + Mã QR của link, sau đó hiển thị Khối kết quả (State 2) ngay bên dưới.
+      </td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Phân đoạn: | Link thanh toán</td></tr>
+    <tr>
+      <td><b>Trạng thái 1: Khung chưa tạo (Ảnh 1)</b></td>
+      <td style="text-align: center;">Container Box</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Khung trắng viền xám, icon móc xích 🔗, cao 200px</td>
+      <td>Hiển thị mặc định khi vừa vào màn hình. Chứa text hướng dẫn: <i>"Vui lòng nhập thông tin đơn hàng và nhấn 'Tiếp tục' để tạo link thanh toán & mã QR."</i> Cặp nút [Copy] và [Gửi email] ở trạng thái disabled.</td>
+    </tr>
+    <tr>
+      <td><b>Trạng thái 2: Khung đã tạo thành công (Ảnh 2)</b></td>
+      <td style="text-align: center;">Container Box</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Khung viền và nền xanh lá nhạt (#F0FDF4, viền #BBF7D0)</td>
+      <td>Xuất hiện ngay bên dưới form sau khi bấm [Tạo link] thành công. Dòng thông báo màu xanh lá: <code>✓ Đã tạo Link thanh toán thành công cho đơn hàng #{orderCode}!</code></td>
+    </tr>
+    <tr>
+      <td><b>Ô chứa URL Payment Link (State 2)</b></td>
+      <td style="text-align: center;">Container / Input</td>
+      <td style="text-align: center;">C</td>
+      <td style="text-align: center;">N</td>
+      <td>URL dạng: <code>https://pay.epay.vn/pl/{token}</code></td>
+      <td>Chỉ đọc (Read-only). Hiển thị đường dẫn thanh toán an toàn duy nhất của đơn hàng.</td>
+    </tr>
+    <tr>
+      <td><b>Nút [📋 Sao chép] (State 2)</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">C</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền trắng, viền xám, icon clipboard</td>
+      <td>Nhấp để tự động sao chép toàn bộ đường link thanh toán vào Clipboard; hiển thị tooltip toast "Đã sao chép link thanh toán".</td>
+    </tr>
+    <tr>
+      <td><b>Khối Mã QR link thanh toán (State 2)</b></td>
+      <td style="text-align: center;">QR Block</td>
+      <td style="text-align: center;">C</td>
+      <td style="text-align: center;">N</td>
+      <td>Thẻ trắng 124x124px chứa Mã QR 2D của link thanh toán</td>
+      <td>Mã QR của link thanh toán (không phải QR chuyển khoản ngân hàng tĩnh). Quét bằng Camera/Zalo sẽ mở trang xác nhận điều khoản thanh toán.</td>
+    </tr>
+    <tr>
+      <td><b>Link [⬇ Tải mã QR link] (State 2)</b></td>
+      <td style="text-align: center;">Action Link</td>
+      <td style="text-align: center;">C</td>
+      <td style="text-align: center;">Y</td>
+      <td>Chữ màu xanh #025BBD, icon tải xuống</td>
+      <td>Nhấp để tải file ảnh mã QR độ nét cao (<code>qr-link-{orderCode}.png</code>) về máy tính để in ấn hoặc gửi khách.</td>
+    </tr>
+    <tr>
+      <td><b>Nút [Gửi email] (State 2)</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">C</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền xanh đậm #025BBD, chữ trắng #FFFFFF, 120x34px</td>
+      <td>
+        • <b>Cho phép nhấp:</b> Kích hoạt ở trạng thái Active khi đơn hàng đã tạo thành công.<br/>
+        • <b>Hành động:</b> Tự động gửi email thông báo thanh toán (theo mẫu Tiếng Việt hoặc Tiếng Anh đã chọn) đến email khách hàng; hiển thị thông báo "Đã gửi email thanh toán thành công cho {email}".
+      </td>
+    </tr>
+  </table>
+
+  <!-- ==================== USE CASE 01B ==================== -->
+  <div class="uc-title">3.1B. USE CASE 01B: XỬ LÝ VALIDATE BÁO LỖI CÁC TRƯỜNG TIN KHI TẠO LINK ĐƠN (PL-UC-01B)</div>
+
+  <div class="wf-section-title">📌 Phần 1: Bảng Đặc tả Use Case Tổng quan (10 Dòng Tiêu chuẩn)</div>
+  <table class="uc-table">
+    <tr>
+      <td class="field-name">Use Case</td>
+      <td class="field-value"><b>Xử lý Validate Báo lỗi Các Trường tin khi Tạo Link Đơn (Single Payment Link - Validation Error Handling)</b></td>
+    </tr>
+    <tr>
+      <td class="field-name">ID</td>
+      <td class="field-value"><code>PL-UC-01B</code></td>
+    </tr>
+    <tr>
+      <td class="field-name">Description</td>
+      <td class="field-value">Khi Người dùng Merchant bấm nút [Tạo link] mà dữ liệu nhập trên form vi phạm các quy tắc nghiệp vụ (để trống trường bắt buộc, trùng mã đơn, số tiền ngoài khoảng cho phép, hạn thanh toán ở quá khứ/quá 15 ngày, sai định dạng email/SĐT), hệ thống hiển thị banner cảnh báo trên đầu form, viền đỏ các ô lỗi kèm thông báo lỗi cụ thể ngay dưới từng trường tin, đồng thời giữ nguyên Khối kết quả ở Trạng thái Chưa tạo (State 1) với các nút thao tác disabled.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Actor</td>
+      <td class="field-value">Merchant Admin, Merchant Staff</td>
+    </tr>
+    <tr>
+      <td class="field-name">Trigger</td>
+      <td class="field-value">Người dùng nhấp nút <b>[Tạo link]</b> tại Form Tạo link thanh toán đơn lẻ khi form còn chứa trường tin không hợp lệ.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Pre-Condition</td>
+      <td class="field-value">Người dùng đang ở Màn hình Tạo link thanh toán đơn lẻ (Screen 2).</td>
+    </tr>
+    <tr>
+      <td class="field-name">Post-Condition</td>
+      <td class="field-value">Giao diện hiển thị các cảnh báo lỗi vi phạm; hệ thống <b>KHÔNG tạo đơn hàng</b> vào cơ sở dữ liệu; đường dẫn thanh toán và mã QR chưa được phát hành.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Basic flow</td>
+      <td class="field-value">
+        1. Người dùng nhấp nút <b>[Tạo link]</b>.<br/>
+        2. Hệ thống kiểm tra validation toàn bộ các trường tin phía Client và Server theo đúng các quy tắc quy định tại <code>PL-UC-01</code>.<br/>
+        3. Phát hiện ít nhất 01 trường tin không hợp lệ, hệ thống hiển thị <b>Banner cảnh báo đỏ</b> trên đầu form: <i>"⚠️ Phát hiện thông tin đơn hàng không hợp lệ. Vui lòng kiểm tra và sửa lại các trường báo đỏ bên dưới."</i><br/>
+        4. Hệ thống áp dụng hiệu ứng viền đỏ <code>#DC2626</code> và nền hồng nhạt <code>#FEF2F2</code> cho các ô input vi phạm, đồng thời hiển thị thông báo lỗi cụ thể ngay bên dưới từng ô:<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;- <b>Tên dịch vụ (để trống):</b> Hiển thị <i>"* Vui lòng nhập tên dịch vụ"</i>.<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;- <b>Mã đơn hàng (bị trùng):</b> Hiển thị <i>"* Mã đơn hàng đã tồn tại trên hệ thống, vui lòng nhập mã khác"</i>.<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;- <b>Số tiền thanh toán (&lt; 1,000đ):</b> Hiển thị <i>"* Số tiền thanh toán phải từ 1,000đ đến 200,000,000đ"</i>.<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;- <b>Ngày hết hạn (ở quá khứ / &gt; 15 ngày):</b> Hiển thị <i>"* Hạn thanh toán ở thời gian quá khứ. Tối đa 15 ngày so với hiện tại"</i>.<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;- <b>Họ tên khách hàng (để trống):</b> Hiển thị <i>"* Vui lòng nhập họ tên khách hàng"</i>.<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;- <b>Email (sai cú pháp):</b> Hiển thị <i>"* Định dạng email không hợp lệ (ví dụ: name@domain.com)"</i>.<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;- <b>Số điện thoại (sai độ dài/đầu số):</b> Hiển thị <i>"* Số điện thoại phải gồm 10 chữ số hợp lệ"</i>.<br/>
+        5. Các trường thông tin hợp lệ (Loại tiền <code>VND</code>, Địa chỉ, Ngôn ngữ) giữ nguyên viền xám bình thường.<br/>
+        6. Phân đoạn <b>| Link thanh toán</b> bên dưới tiếp tục giữ nguyên <b>Trạng thái 1 (Khung chưa tạo)</b>: hiển thị icon móc xích xám và 2 nút disabled [Copy] và [Gửi email].<br/>
+        7. Người dùng tương tác chỉnh sửa dữ liệu vi phạm. Khi người dùng nhập đúng cú pháp, viền đỏ và dòng thông báo lỗi tương ứng tự động biến mất.
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Alternative flow</td>
+      <td class="field-value">7a. Người dùng chỉnh sửa và submit lại thành công: Khi toàn bộ các trường lỗi được sửa đúng, người dùng bấm lại [Tạo link] -&gt; Hệ thống tạo link thành công và chuyển sang State 2 (<code>PL-UC-01</code>).</td>
+    </tr>
+    <tr>
+      <td class="field-name">Exception flow</td>
+      <td class="field-value">Không có ngoại lệ hệ thống; xử lý validation client/server đồng bộ.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Non-functional requirement</td>
+      <td class="field-value">Thời gian phản hồi báo lỗi trên giao diện tức thì &lt; 0.2 giây sau khi click nút.</td>
+    </tr>
+  </table>
+
+  <div class="wf-section-title">📌 Phần 2: BẢNG ĐẶC TẢ THÀNH PHẦN GIAO DIỆN CHI TIẾT (SCREEN 2B)</div>
+  <table class="wf-table">
+    <tr>
+      <th style="width: 20%;">Component Name</th>
+      <th style="width: 12%;">Data Type</th>
+      <th style="width: 8%;">M/O/C</th>
+      <th style="width: 8%;">Editable</th>
+      <th style="width: 24%;">Other Validation</th>
+      <th style="width: 28%;">Action rules</th>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Banner Thông báo lỗi chung</td></tr>
+    <tr>
+      <td><b>Banner Cảnh báo Lỗi</b></td>
+      <td style="text-align: center;">Alert Box</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Nền hồng nhạt #FEF2F2, viền đỏ #FCA5A5, chữ đỏ #DC2626</td>
+      <td>Xuất hiện ở đầu Form Card khi có trường lỗi: <i>"⚠️ Phát hiện thông tin đơn hàng không hợp lệ. Vui lòng kiểm tra và sửa lại các trường báo đỏ bên dưới."</i></td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Cột Trái: 1. Thông tin Đơn hàng (Trạng thái Báo lỗi)</td></tr>
+    <tr>
+      <td><b>Ô Tên dịch vụ (Lỗi)</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền #FEF2F2, viền đỏ #DC2626 dày 1.5px</td>
+      <td>Khi để trống: Viền đỏ và hiển thị <i>"* Vui lòng nhập tên dịch vụ"</i>. Khi gõ ký tự: Viền đỏ chuyển về viền xám.</td>
+    </tr>
+    <tr>
+      <td><b>Ô Mã đơn hàng (Lỗi)</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền #FEF2F2, viền đỏ #DC2626</td>
+      <td>Hiển thị <i>"* Mã đơn hàng đã tồn tại trên hệ thống, vui lòng nhập mã khác"</i>. Bắt buộc đổi sang mã chưa có.</td>
+    </tr>
+    <tr>
+      <td><b>Ô Số tiền TT (Lỗi)</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền #FEF2F2, viền đỏ #DC2626</td>
+      <td>Hiển thị <i>"* Số tiền thanh toán phải từ 1,000đ đến 200,000,000đ"</i>. Yêu cầu nhập số tiền từ 1,000đ đến 200,000,000đ.</td>
+    </tr>
+    <tr>
+      <td><b>Ô Ngày hết hạn (Lỗi)</b></td>
+      <td style="text-align: center;">Date Picker</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền #FEF2F2, viền đỏ #DC2626</td>
+      <td>Hiển thị <i>"* Hạn thanh toán ở thời gian quá khứ. Tối đa 15 ngày so với hiện tại"</i>. Yêu cầu chọn ngày trong tương lai và tối đa 15 ngày.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Cột Phải: 2. Thông tin Khách hàng (Trạng thái Báo lỗi)</td></tr>
+    <tr>
+      <td><b>Ô Họ tên (Lỗi)</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền #FEF2F2, viền đỏ #DC2626</td>
+      <td>Khi để trống: Viền đỏ và hiển thị <i>"* Vui lòng nhập họ tên khách hàng"</i>.</td>
+    </tr>
+    <tr>
+      <td><b>Ô Email (Lỗi)</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền #FEF2F2, viền đỏ #DC2626</td>
+      <td>Hiển thị <i>"* Định dạng email không hợp lệ (ví dụ: name@domain.com)"</i>. Yêu cầu sửa đúng chuẩn RFC 5322 hoặc xóa trống.</td>
+    </tr>
+    <tr>
+      <td><b>Ô Số điện thoại (Lỗi)</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền #FEF2F2, viền đỏ #DC2626</td>
+      <td>Hiển thị <i>"* Số điện thoại phải gồm 10 chữ số hợp lệ"</i>. Yêu cầu nhập đủ 10 số đầu số hợp lệ.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối Kết quả: | Link thanh toán</td></tr>
+    <tr>
+      <td><b>Khung Chưa tạo Link (State 1)</b></td>
+      <td style="text-align: center;">Container Box</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Khung trắng viền xám #E2E8F0, icon xích xám 🔗</td>
+      <td>Tiếp tục hiển thị khung rỗng State 1 kèm text hướng dẫn. Nút [Copy] và [Gửi email] ở trạng thái disabled.</td>
+    </tr>
+  </table>
+
+  <!-- ==================== USE CASE 02 ==================== -->
+  <div class="uc-title">3.2. USE CASE 02: TẠO LINK THEO LÔ — TẢI TEMPLATE & UPLOAD FILE (PL-UC-02)</div>
+
+  <div class="wf-section-title">📌 Phần 1: Bảng Đặc tả Use Case Tổng quan (10 Dòng Tiêu chuẩn)</div>
+  <table class="uc-table">
+    <tr>
+      <td class="field-name">Use Case</td>
+      <td class="field-value"><b>Tạo link thanh toán theo lô — Tải template & Upload file (Batch Payment Link - Template & Upload)</b></td>
+    </tr>
+    <tr>
+      <td class="field-name">ID</td>
+      <td class="field-value"><code>PL-UC-02</code></td>
+    </tr>
+    <tr>
+      <td class="field-name">Description</td>
+      <td class="field-value">Cho phép Người dùng Merchant tải tệp biểu mẫu Excel tiêu chuẩn, chuẩn bị danh sách nhiều đơn hàng trên máy tính cá nhân, sau đó chọn tệp và tải lên hệ thống để thực hiện đọc file và xử lý tạo link thanh toán đồng loạt.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Actor</td>
+      <td class="field-value">Merchant Admin, Merchant Staff</td>
+    </tr>
+    <tr>
+      <td class="field-name">Trigger</td>
+      <td class="field-value">Người dùng nhấp chọn menu con <b>[Tạo link thanh toán lô]</b> trên Sidebar bên trái.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Pre-Condition</td>
+      <td class="field-value">Tài khoản Merchant đã đăng nhập vào hệ thống EPAY Portal; thiết bị máy tính có kết nối mạng và có phần mềm bảng tính.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Post-Condition</td>
+      <td class="field-value">Tệp dữ liệu được tải lên máy chủ thành công và chuyển sang quy trình kiểm tra dữ liệu lô.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Basic flow</td>
+      <td class="field-value">
+        1. Hệ thống hiển thị Màn hình Tạo link theo lô — State 1: Chọn file & Tải template (Screen 5).<br/>
+        2. Người dùng nhấp liên kết <b>[Tải file mẫu (.xlsx)]</b> để tải file biểu mẫu về máy tính.<br/>
+        3. Người dùng mở file mẫu và điền thông tin danh sách các đơn hàng theo đúng định dạng các cột quy định.<br/>
+        4. Tại giao diện, người dùng nhấp vào ô nhập <b>File đơn hàng</b> để chọn tệp hoặc kéo thả tệp từ máy tính.<br/>
+        5. Hệ thống hiển thị tên tệp vừa chọn kèm nút [Hủy].<br/>
+        6. Người dùng nhấp nút <b>[Tạo link]</b> (hoặc [Đọc file]).<br/>
+        7. Hệ thống đọc cấu trúc và kiểm tra dữ liệu: nếu 100% dòng hợp lệ chuyển sang <code>PL-UC-03</code>, nếu có dòng lỗi chuyển sang <code>PL-UC-04</code>.
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Alternative flow</td>
+      <td class="field-value">2a. Người dùng đã có file dữ liệu đúng chuẩn: Bỏ qua bước 2 và 3, thực hiện chọn file và đọc file ngay.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Exception flow</td>
+      <td class="field-value">
+        4a. Định dạng file không đúng: Chọn file khác .xlsx, .xls, .csv -&gt; Báo lỗi "Định dạng tệp không được hỗ trợ".<br/>
+        4b. Dung lượng tệp vượt giới hạn: &gt; 10MB -&gt; Báo lỗi "Dung lượng tệp vượt quá 10MB".<br/>
+        4c. Tệp rỗng: File 0 bản ghi -&gt; Báo lỗi "Tệp tải lên không có dữ liệu đơn hàng".
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Non-functional requirement</td>
+      <td class="field-value">Thời gian tải lên và đọc tệp dung lượng 5MB (&lt; 1,000 dòng) &lt; 2.0 giây.</td>
+    </tr>
+  </table>
+
+  <div class="wf-section-title">📌 Phần 2: Bảng Đặc tả Thành phần Giao diện Chi tiết (6 Cột Tiêu chuẩn)</div>
+  <table class="wf-table">
+    <tr>
+      <th style="width: 20%;">Component Name</th>
+      <th style="width: 12%;">Data Type</th>
+      <th style="width: 8%;">M/O/C</th>
+      <th style="width: 8%;">Editable</th>
+      <th style="width: 24%;">Other Validation</th>
+      <th style="width: 28%;">Action rules</th>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối Tải file mẫu</td></tr>
+    <tr>
+      <td><b>Link [Tải file mẫu (.xlsx)]</b></td>
+      <td style="text-align: center;">Hyperlink</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">-</td>
+      <td>Tệp .xlsx chuẩn 11 cột thuộc tính</td>
+      <td>
+        • <b>Cho phép thao tác:</b> Cho phép người dùng nhấp chuột tải về bất kỳ lúc nào.<br/>
+        • <b>Hành động:</b> Trình duyệt tải tệp <code>Template_Payment_Link_Batch.xlsx</code> về máy tính.
+      </td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối Chọn file dữ liệu từ máy tính</td></tr>
+    <tr>
+      <td><b>File đơn hàng *</b></td>
+      <td style="text-align: center;">File Upload</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>
+        - Định dạng tệp cho phép: <code>.xlsx</code>, <code>.xls</code>, <code>.csv</code>.<br/>
+        - Dung lượng tệp tối đa: 10MB.<br/>
+        - Giới hạn bản ghi: Tối đa 1,000 dòng dữ liệu / tệp.<br/>
+        - Bắt buộc đúng cấu trúc 11 cột thuộc tính theo file mẫu.
+      </td>
+      <td>
+        • <b>Cho phép nhập / chọn:</b> Cho phép bấm duyệt file từ máy tính hoặc kéo thả tệp vào ô upload khi ở trạng thái chờ tải file. Không cho phép chọn tệp khi hệ thống đang xử lý đọc dữ liệu.<br/>
+        • <b>Mặc định / Không nhập:</b> Mặc định: Trống, hiển thị placeholder <code>Chọn file từ máy tính hoặc kéo thả file vào đây</code>. Nếu người dùng không chọn file mà bấm [Tạo link] / [Đọc file]: Báo lỗi đỏ viền khung <code>Vui lòng chọn tệp danh sách đơn hàng để tải lên</code>.<br/>
+        • <b>Quy định khi nhập / chọn:</b> Tên file hiển thị kèm dung lượng. Nếu chọn file sai định dạng hoặc &gt; 10MB, hệ thống báo lỗi ngay lập tức.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Dòng ghi chú lưu ý</b></td>
+      <td style="text-align: center;">Label (Hint)</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Văn bản tĩnh</td>
+      <td><i>*Lưu ý: Nếu bạn đang tạo Link cho Khách hàng nước ngoài, vui lòng điền Thông tin bằng Tiếng Anh.</i></td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Button Chức năng</td></tr>
+    <tr>
+      <td><b>Nút [Hủy]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền trắng viền xám, 100x38px</td>
+      <td>
+        • <b>Cho phép nhấp:</b> Được phép nhấp khi đã có tệp được chọn vào ô File đơn hàng.<br/>
+        • <b>Hành động:</b> Bỏ tệp đã chọn, đưa ô nhập File đơn hàng về trạng thái placeholder ban đầu.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Nút [Tạo link] / [Đọc file]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền xanh #2563EB, chữ trắng, 120x38px</td>
+      <td>
+        • <b>Cho phép nhấp:</b> Cho phép nhấp khi đã có tệp được chọn.<br/>
+        • <b>Hành động:</b> Kích hoạt gửi tệp lên máy chủ để phân tích cú pháp và kiểm tra hợp lệ từng dòng: nếu 100% hợp lệ chuyển sang <code>PL-UC-03</code>, nếu có lỗi chuyển sang <code>PL-UC-04</code>.
+      </td>
+    </tr>
+  </table>
+
+  <!-- ==================== USE CASE 03 ==================== -->
+  <div class="uc-title">3.3. USE CASE 03: XỬ LÝ KẾT QUẢ TẠO LINK THEO LÔ — THÀNH CÔNG 100% (PL-UC-03)</div>
+
+  <div class="wf-section-title">📌 Phần 1: Bảng Đặc tả Use Case Tổng quan (10 Dòng Tiêu chuẩn)</div>
+  <table class="uc-table">
+    <tr>
+      <td class="field-name">Use Case</td>
+      <td class="field-value"><b>Xử lý kết quả tạo link theo lô — Thành công (Batch Payment Link - Success Result & List View)</b></td>
+    </tr>
+    <tr>
+      <td class="field-name">ID</td>
+      <td class="field-value"><code>PL-UC-03</code></td>
+    </tr>
+    <tr>
+      <td class="field-name">Description</td>
+      <td class="field-value">Sau khi hệ thống đọc file và xác thực 100% các dòng dữ liệu trong tệp đều hợp lệ, hệ thống tự động sinh link thanh toán và mã QR tương ứng cho từng đơn hàng, hiển thị bảng danh sách kết quả trực quan kèm phân trang chuyên nghiệp, cho phép sao chép từng link, xem mã QR dạng modal popup, xuất tệp Excel danh sách link và gửi email hàng loạt cho khách hàng.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Actor</td>
+      <td class="field-value">Merchant Admin, Merchant Staff</td>
+    </tr>
+    <tr>
+      <td class="field-name">Trigger</td>
+      <td class="field-value">Hệ thống hoàn tất đọc tệp từ <code>PL-UC-02</code> với kết quả 0 dòng lỗi.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Pre-Condition</td>
+      <td class="field-value">Tệp tải lên chứa ít nhất 01 dòng dữ liệu và tất cả các dòng đều vượt qua validation.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Post-Condition</td>
+      <td class="field-value">Toàn bộ danh sách đơn hàng được lưu với trạng thái <code>Chờ thanh toán</code>, mỗi đơn hàng có 01 link và 01 mã QR.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Basic flow</td>
+      <td class="field-value">
+        1. Hệ thống hiển thị Màn hình Kết quả tạo link theo lô — State 2 (Screen 6).<br/>
+        2. Hiển thị khối thống kê: <code>Tổng số đơn hàng: N</code>, <code>Tổng số đơn hàng hợp lệ: N</code>, <code>Tổng số đơn hàng không hợp lệ: 0</code>.<br/>
+        3. Hiển thị Bảng danh sách kết quả gồm 13 cột: STT, Tên dịch vụ, Mã đơn hàng, Số tiền TT, Ngày tạo đơn, Ngày hết hạn, Họ tên, Email, SĐT, Địa chỉ, Ngôn ngữ, Link thanh toán, Mã QR Link.<br/>
+        4. Tại mỗi dòng: Người dùng có thể nhấp <b>[Copy]</b> để sao chép link, hoặc nhấp <b>[Xem QR]</b> để mở popup xem QR (PL-UC-05).<br/>
+        5. Người dùng tương tác thanh Phân trang (Pagination Bar): chuyển trang, chọn số dòng/trang (<code>10 / trang</code>), nhảy trang nhanh.<br/>
+        6. Người dùng nhấp nút <b>[Tải file link]</b> (màu xanh lá) để xuất tệp Excel chứa toàn bộ thông tin đơn kèm link thanh toán.<br/>
+        7. Người dùng nhấp nút <b>[Gửi email]</b> (màu xanh dương) để hệ thống gửi email đồng loạt cho khách hàng trong lô.
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Alternative flow</td>
+      <td class="field-value">7a. Gửi email thành công: Hệ thống báo "Đã gửi email thanh toán thành công cho N khách hàng".</td>
+    </tr>
+    <tr>
+      <td class="field-name">Exception flow</td>
+      <td class="field-value">
+        6a. Lỗi xuất file: Báo lỗi "Không thể tạo file xuất. Vui lòng thử lại sau".<br/>
+        7b. Lỗi gửi mail: Đánh dấu trạng thái gửi mail thất bại và cho phép gửi lại.
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Non-functional requirement</td>
+      <td class="field-value">Hiển thị bảng 1,000 đơn hàng có phân trang &lt; 1.0 giây; xuất file Excel kết quả &lt; 3.0 giây.</td>
+    </tr>
+  </table>
+
+  <div class="wf-section-title">📌 Phần 2: Bảng Đặc tả Thành phần Giao diện Chi tiết (6 Cột Tiêu chuẩn)</div>
+  <table class="wf-table">
+    <tr>
+      <th style="width: 20%;">Component Name</th>
+      <th style="width: 12%;">Data Type</th>
+      <th style="width: 8%;">M/O/C</th>
+      <th style="width: 8%;">Editable</th>
+      <th style="width: 24%;">Other Validation</th>
+      <th style="width: 28%;">Action rules</th>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối Thống kê Số lượng Đơn hàng</td></tr>
+    <tr>
+      <td><b>Tổng số đơn hàng</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Số nguyên dương (ví dụ: <code>Tổng số đơn hàng: 48</code>)</td>
+      <td>Chữ đen đậm #0F172A.</td>
+    </tr>
+    <tr>
+      <td><b>Tổng số đơn hàng hợp lệ</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Bằng tổng số đơn hàng</td>
+      <td>Chữ đen #0F172A.</td>
+    </tr>
+    <tr>
+      <td><b>Tổng đơn hàng không hợp lệ</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Giá trị cố định: <code>0</code></td>
+      <td>Chữ đen #0F172A.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Danh sách Đơn hàng theo Lô (Grid Table)</td></tr>
+    <tr>
+      <td><b>Cột STT</b></td>
+      <td style="text-align: center;">Text</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>1 đến N</td>
+      <td>Căn giữa.</td>
+    </tr>
+    <tr>
+      <td><b>Cột Tên dịch vụ</b></td>
+      <td style="text-align: center;">Text</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Trích xuất từ file</td>
+      <td>Căn trái.</td>
+    </tr>
+    <tr>
+      <td><b>Cột Mã đơn hàng</b></td>
+      <td style="text-align: center;">Text</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Trích xuất từ file</td>
+      <td>Căn trái, font bán đậm.</td>
+    </tr>
+    <tr>
+      <td><b>Cột Số tiền TT</b></td>
+      <td style="text-align: center;">Currency</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Format hàng nghìn (ví dụ: <code>10.000</code>)</td>
+      <td>Căn phải.</td>
+    </tr>
+    <tr>
+      <td><b>Cột Ngày tạo đơn</b></td>
+      <td style="text-align: center;">Datetime</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>DD/MM/YYYY HH:mm:ss</td>
+      <td>Căn giữa.</td>
+    </tr>
+    <tr>
+      <td><b>Cột Ngày hết hạn</b></td>
+      <td style="text-align: center;">Datetime</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>DD/MM/YYYY HH:mm:ss</td>
+      <td>Căn giữa.</td>
+    </tr>
+    <tr>
+      <td><b>Cột Link thanh toán</b></td>
+      <td style="text-align: center;">Action Link</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">Y</td>
+      <td>Chữ <code>Copy</code> màu xanh #2563EB</td>
+      <td>Sao chép URL payment link của dòng vào Clipboard.</td>
+    </tr>
+    <tr>
+      <td><b>Cột Mã QR Link</b></td>
+      <td style="text-align: center;">Action Link</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">Y</td>
+      <td>Chữ <code>Xem QR</code> màu xanh lá #16A34A</td>
+      <td>Mở Modal xem QR code của link thanh toán (<code>PL-UC-05</code>).</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Thanh Phân trang (Pagination Bar)</td></tr>
+    <tr>
+      <td><b>Dòng thông tin bản ghi</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td><code>Hiển thị 1 - 10 trong tổng số 48 đơn hàng</code></td>
+      <td>Màu xám #64748B, căn trái.</td>
+    </tr>
+    <tr>
+      <td><b>Dropdown Số dòng/trang</b></td>
+      <td style="text-align: center;">Dropdown</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>10 / trang, 20 / trang, 50 / trang</td>
+      <td>Đổi số bản ghi hiển thị trên mỗi trang. Mặc định: 10 / trang.</td>
+    </tr>
+    <tr>
+      <td><b>Cụm nút chuyển trang</b></td>
+      <td style="text-align: center;">Button Group</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>[‹], [1], [2], [3], •••, [5], [›]</td>
+      <td>Nút [1] active nền xanh; các nút khác nền trắng viền xám.</td>
+    </tr>
+    <tr>
+      <td><b>Ô Nhảy trang nhanh</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Số nguyên 1..N; kèm nhãn "Đến trang"</td>
+      <td>Gõ số trang và Enter để nhảy đến trang đó.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Nút Thao tác Cuối Trang</td></tr>
+    <tr>
+      <td><b>Nút [Tải file link]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền xanh lá #16A34A, chữ trắng</td>
+      <td>Xuất file Excel chứa toàn bộ thông tin đơn kèm link thanh toán.</td>
+    </tr>
+    <tr>
+      <td><b>Nút [Gửi email]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền xanh dương #2563EB, chữ trắng</td>
+      <td>Kích hoạt gửi email link thanh toán đồng loạt cho cả lô đơn hàng.</td>
+    </tr>
+  </table>
+
+  <!-- ==================== USE CASE 04 ==================== -->
+  <div class="uc-title">3.4. USE CASE 04: XỬ LÝ KẾT QUẢ TẠO LINK THEO LÔ — CÓ DÒNG DỮ LIỆU LỖI (PL-UC-04)</div>
+
+  <div class="wf-section-title">📌 Phần 1: Bảng Đặc tả Use Case Tổng quan (10 Dòng Tiêu chuẩn)</div>
+  <table class="uc-table">
+    <tr>
+      <td class="field-name">Use Case</td>
+      <td class="field-value"><b>Xử lý kết quả tạo link theo lô — Có lỗi (Batch Payment Link - Error Handling & Correction)</b></td>
+    </tr>
+    <tr>
+      <td class="field-name">ID</td>
+      <td class="field-value"><code>PL-UC-04</code></td>
+    </tr>
+    <tr>
+      <td class="field-name">Description</td>
+      <td class="field-value">Khi hệ thống phân tích tệp dữ liệu lô và phát hiện có ít nhất 01 dòng dữ liệu không hợp lệ, hệ thống hiển thị bảng danh sách dữ liệu với nền trắng sạch sẽ (không phủ nền đỏ toàn dòng, không có banner cảnh báo đỏ lớn che khuất), tại cột MÃ LỖI / CHI TIẾT LỖI chỉ rõ nguyên nhân cụ thể của từng dòng lỗi, cột link thanh toán hiển thị trạng thái Chưa tạo, đồng thời cung cấp nút [Tải file lỗi (.xlsx)] để người dùng tải file kèm cột mô tả lỗi về chỉnh sửa và nút [Chọn lại file] để upload lại.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Actor</td>
+      <td class="field-value">Merchant Admin, Merchant Staff</td>
+    </tr>
+    <tr>
+      <td class="field-name">Trigger</td>
+      <td class="field-value">Hệ thống hoàn tất đọc tệp từ <code>PL-UC-02</code> và phát hiện có từ 01 dòng dữ liệu trở lên không hợp lệ.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Pre-Condition</td>
+      <td class="field-value">Tệp tải lên có các dòng vi phạm quy tắc validation (xem Bảng mã lỗi Mục 1.2).</td>
+    </tr>
+    <tr>
+      <td class="field-name">Post-Condition</td>
+      <td class="field-value">Các dòng lỗi được ghi nhận mã lỗi; người dùng được cung cấp tệp Excel chứa dữ liệu lỗi để đối soát và chỉnh sửa.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Basic flow</td>
+      <td class="field-value">
+        1. Hệ thống hiển thị Màn hình Tạo link theo lô — State 3: Đọc file có lỗi (Screen 6B).<br/>
+        2. Hiển thị thống kê: <code>Tổng số đơn hàng: N</code>, <code>Tổng số đơn hàng hợp lệ: X</code> (xanh lá), <code>Tổng số đơn hàng không hợp lệ: Y (Vui lòng kiểm tra mã lỗi)</code> (đỏ).<br/>
+        3. Bảng danh sách hiển thị các dòng dữ liệu với <b>nền trắng sạch sẽ 100%</b> (không có nền đỏ hay hover đỏ trên các hàng).<br/>
+        4. Tại mỗi dòng lỗi: Giá trị vi phạm in màu đỏ; Cột <b>MÃ LỖI / CHI TIẾT LỖI</b> hiển thị badge chi tiết (<code>ERR_01</code>, <code>ERR_02</code>, <code>ERR_03</code>, <code>ERR_04</code>...); Cột Link hiển thị <code>Chưa tạo</code>; Cột QR hiển thị <code>-</code>.<br/>
+        5. Người dùng nhấp nút <b>[Tải file lỗi (.xlsx)]</b> (màu đỏ) để xuất tệp Excel danh sách các dòng lỗi kèm cột phụ <i>LÝ DO LỖI CHI TIẾT</i>.<br/>
+        6. Người dùng mở file lỗi trên máy tính, thực hiện chỉnh sửa các ô sai lệch.<br/>
+        7. Người dùng nhấp nút <b>[Chọn lại file]</b> (màu xanh) để tải lên tệp đã được khắc phục lỗi và đọc lại file.
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Alternative flow</td>
+      <td class="field-value">5a. Người dùng chỉ cần xem trực tiếp trên web để đối chiếu nếu số lượng dòng lỗi ít mà không cần tải file.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Exception flow</td>
+      <td class="field-value">5b. Lỗi xuất file lỗi: Báo lỗi "Không thể tạo file đối soát lỗi. Vui lòng thử lại sau".</td>
+    </tr>
+    <tr>
+      <td class="field-name">Non-functional requirement</td>
+      <td class="field-value">Định vị chính xác dòng lỗi và hiển thị badge lỗi &lt; 1.0 giây; tải file lỗi &lt; 2.0 giây.</td>
+    </tr>
+  </table>
+
+  <div class="wf-section-title">📌 Phần 2: Bảng Đặc tả Thành phần Giao diện Chi tiết (6 Cột Tiêu chuẩn)</div>
+  <table class="wf-table">
+    <tr>
+      <th style="width: 20%;">Component Name</th>
+      <th style="width: 12%;">Data Type</th>
+      <th style="width: 8%;">M/O/C</th>
+      <th style="width: 8%;">Editable</th>
+      <th style="width: 24%;">Other Validation</th>
+      <th style="width: 28%;">Action rules</th>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối Thống kê Trạng thái File Lô</td></tr>
+    <tr>
+      <td><b>Tổng số đơn hàng</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Tổng số dòng trong file</td>
+      <td>Chữ đen #0F172A.</td>
+    </tr>
+    <tr>
+      <td><b>Tổng số đơn hàng hợp lệ</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Số lượng dòng hợp lệ</td>
+      <td>Chữ xanh lá #16A34A (ví dụ: <code>Tổng số đơn hàng hợp lệ: 2</code>).</td>
+    </tr>
+    <tr>
+      <td><b>Tổng đơn hàng không hợp lệ</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Số lượng dòng lỗi</td>
+      <td>Chữ đỏ cảnh báo #DC2626 (ví dụ: <code>... không hợp lệ: 4 (Vui lòng kiểm tra mã lỗi)</code>).</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Danh sách Dữ liệu Lô & Chỉ báo Lỗi</td></tr>
+    <tr>
+      <td><b>Nền các dòng dữ liệu</b></td>
+      <td style="text-align: center;">Container</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">-</td>
+      <td>Nền trắng #FFFFFF cho 100% dòng</td>
+      <td>KHÔNG phủ màu đỏ, KHÔNG hover đỏ trên các hàng.</td>
+    </tr>
+    <tr>
+      <td><b>Giá trị vi phạm</b></td>
+      <td style="text-align: center;">Text</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>In màu đỏ #DC2626</td>
+      <td>Highlight số tiền 0, email sai định dạng, ngày quá khứ, mã trùng.</td>
+    </tr>
+    <tr>
+      <td><b>Cột MÃ LỖI / CHI TIẾT LỖI</b></td>
+      <td style="text-align: center;">Badge / Tag</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Badge hồng chữ đỏ (ERR_01..04) hoặc Badge xanh (✓ Hợp lệ)</td>
+      <td>Chỉ rõ lý do chính xác vì sao dòng bị từ chối tạo link.</td>
+    </tr>
+    <tr>
+      <td><b>Cột Link thanh toán</b></td>
+      <td style="text-align: center;">Text</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Chữ <code>Chưa tạo</code> màu xám</td>
+      <td>Thông báo link chưa được phát hành do tệp có lỗi.</td>
+    </tr>
+    <tr>
+      <td><b>Cột Mã QR Link</b></td>
+      <td style="text-align: center;">Text</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Dấu gạch ngang <code>-</code></td>
+      <td>Chưa phát hành QR khi lô còn lỗi.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Thanh Phân trang (Pagination Bar)</td></tr>
+    <tr>
+      <td><b>Cụm phân trang</b></td>
+      <td style="text-align: center;">Pagination</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Thông tin dòng, Prev, [1], Next, 10/trang</td>
+      <td>Phân trang bình thường khi danh sách lỗi có nhiều bản ghi.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Nút Thao tác Xử lý Lỗi</td></tr>
+    <tr>
+      <td><b>Nút [Tải file lỗi (.xlsx)]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền đỏ #DC2626, chữ trắng</td>
+      <td>Xuất file Excel gồm các dòng lỗi kèm cột <i>LÝ DO LỖI CHI TIẾT</i>.</td>
+    </tr>
+    <tr>
+      <td><b>Nút [Chọn lại file]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền xanh #2563EB, chữ trắng</td>
+      <td>Quay về trạng thái chọn file nguồn để upload lại file đã sửa.</td>
+    </tr>
+    <tr>
+      <td><b>Dòng ghi chú hướng dẫn</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Chữ xám #64748B</td>
+      <td><i>File lỗi sẽ xuất kèm lý do lỗi chi tiết ở từng dòng để bạn chỉnh sửa và tải lên lại.</i></td>
+    </tr>
+  </table>
+
+  <!-- ==================== USE CASE 05 ==================== -->
+  <div class="uc-title">3.5. USE CASE 05: XEM VÀ TẢI MÃ QR LINK THANH TOÁN DẠNG POPUP MODAL (PL-UC-05)</div>
+
+  <div class="wf-section-title">📌 Phần 1: Bảng Đặc tả Use Case Tổng quan (10 Dòng Tiêu chuẩn)</div>
+  <table class="uc-table">
+    <tr>
+      <td class="field-name">Use Case</td>
+      <td class="field-value"><b>Xem và tải mã QR link thanh toán dạng Popup Modal (View & Download Payment Link QR Modal)</b></td>
+    </tr>
+    <tr>
+      <td class="field-name">ID</td>
+      <td class="field-value"><code>PL-UC-05</code></td>
+    </tr>
+    <tr>
+      <td class="field-name">Description</td>
+      <td class="field-value">Cho phép Người dùng Merchant mở cửa sổ hộp thoại Popup (Modal Dialog) để xem chi tiết mã QR của một link thanh toán cụ thể, xem tóm tắt thông tin đơn hàng, sao chép nhanh URL thanh toán và tải file ảnh mã QR có độ phân giải cao về máy tính để in ấn hoặc gửi cho khách hàng.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Actor</td>
+      <td class="field-value">Merchant Admin, Merchant Staff</td>
+    </tr>
+    <tr>
+      <td class="field-name">Trigger</td>
+      <td class="field-value">Người dùng nhấp vào chữ <b>[Xem QR]</b> tại cột Mã QR Link của Màn hình danh sách hoặc kết quả tạo lô (Screen 6).</td>
+    </tr>
+    <tr>
+      <td class="field-name">Pre-Condition</td>
+      <td class="field-value">Đơn hàng đã được tạo thành công và có mã QR hợp lệ trong hệ thống.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Post-Condition</td>
+      <td class="field-value">Cửa sổ modal hiển thị mã QR và đường dẫn; tệp ảnh QR được tải xuống máy tính nếu người dùng yêu cầu.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Basic flow</td>
+      <td class="field-value">
+        1. Người dùng nhấp vào liên kết <b>[Xem QR]</b> tại một dòng đơn hàng.<br/>
+        2. Hệ thống hiển thị cửa sổ Modal Popup QR Dialog (Screen 1B) phủ lên trên màn hình với lớp nền làm mờ.<br/>
+        3. Header Modal: Hiển thị icon liên kết, tiêu đề "Mã QR link thanh toán", badge hiển thị Mã đơn hàng và nút đóng [✕].<br/>
+        4. Khối Thông tin tóm tắt: Hiển thị Tên dịch vụ, Số tiền thanh toán in to đậm màu xanh #2563EB, Tên và Email khách hàng, Thời gian hết hạn in màu xanh lá.<br/>
+        5. Khối Payment Link Box: Hiển thị toàn bộ đường dẫn thanh toán kèm nút <b>[Sao chép]</b>.<br/>
+        6. Khối Mã QR: Hiển thị mã QR Code rõ nét (180x180px), bên cạnh có nút <b>[⬇ Tải mã QR link]</b> để tải file ảnh <code>qr-link-{orderCode}.png</code> về máy tính.<br/>
+        7. Người dùng nhấp nút <b>[Đóng]</b> hoặc nút [✕] để đóng modal và quay lại màn hình trước đó.
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Alternative flow</td>
+      <td class="field-value">7a. Đóng bằng phím ESC hoặc click chuột ra ngoài vùng modal dialog.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Exception flow</td>
+      <td class="field-value">6a. Lỗi tải ảnh: Trình duyệt chặn download -&gt; Hiển thị thông báo "Vui lòng cho phép trình duyệt tải tệp xuống".</td>
+    </tr>
+    <tr>
+      <td class="field-name">Non-functional requirement</td>
+      <td class="field-value">Thời gian mở modal và hiển thị ảnh QR &lt; 0.3 giây.</td>
+    </tr>
+  </table>
+
+  <div class="wf-section-title">📌 Phần 2: Bảng Đặc tả Thành phần Giao diện Chi tiết (6 Cột Tiêu chuẩn)</div>
+  <table class="wf-table">
+    <tr>
+      <th style="width: 20%;">Component Name</th>
+      <th style="width: 12%;">Data Type</th>
+      <th style="width: 8%;">M/O/C</th>
+      <th style="width: 8%;">Editable</th>
+      <th style="width: 24%;">Other Validation</th>
+      <th style="width: 28%;">Action rules</th>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Header Modal Popup</td></tr>
+    <tr>
+      <td><b>Tiêu đề Popup</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Text: <code>Mã QR link thanh toán</code></td>
+      <td>Căn trái, font 14 bold.</td>
+    </tr>
+    <tr>
+      <td><b>Badge Mã đơn hàng</b></td>
+      <td style="text-align: center;">Badge Pill</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Nền xanh nhạt, chữ xanh #2563EB</td>
+      <td>Hiển thị mã đơn hàng của QR tương ứng.</td>
+    </tr>
+    <tr>
+      <td><b>Nút Đóng [✕]</b></td>
+      <td style="text-align: center;">Icon Button</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Ký tự ✕ góc phải</td>
+      <td>Nhấp để đóng cửa sổ modal.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối Tóm tắt Thông tin Đơn hàng</td></tr>
+    <tr>
+      <td><b>Tên sản phẩm / Dịch vụ</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Tên đơn hàng</td>
+      <td>Font 13px, màu #1E293B.</td>
+    </tr>
+    <tr>
+      <td><b>Số tiền thanh toán</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Ví dụ: <code>450,000 VND</code></td>
+      <td>Font 18px bold, màu xanh Brand #2563EB.</td>
+    </tr>
+    <tr>
+      <td><b>Thông tin Khách hàng</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Họ tên và email</td>
+      <td>Font 11px, màu #64748B.</td>
+    </tr>
+    <tr>
+      <td><b>Hạn thanh toán</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Ví dụ: <code>16/10/2026 14:30:00</code></td>
+      <td>Font 11px, màu xanh lá cây #16A34A.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối Link Thanh toán & Sao chép</td></tr>
+    <tr>
+      <td><b>Hộp chứa Link</b></td>
+      <td style="text-align: center;">Textbox</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>URL payment link đầy đủ</td>
+      <td>Chỉ đọc, cho phép bôi đen copy.</td>
+    </tr>
+    <tr>
+      <td><b>Nút [Sao chép]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền trắng viền xám, icon clipboard</td>
+      <td>Copy URL vào Clipboard; hiển thị toast "Đã sao chép".</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối Mã QR Code & Tải ảnh</td></tr>
+    <tr>
+      <td><b>Hình ảnh Mã QR</b></td>
+      <td style="text-align: center;">Image</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Mã QR 2D (180x180px)</td>
+      <td>Quét bằng camera/Zalo sẽ mở link thanh toán.</td>
+    </tr>
+    <tr>
+      <td><b>Nút [⬇ Tải mã QR link]</b></td>
+      <td style="text-align: center;">Button / Link</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Icon tải xuống, chữ xanh #2563EB</td>
+      <td>Tải file ảnh mã QR PNG về máy tính.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Nút Đóng Footer</td></tr>
+    <tr>
+      <td><b>Nút [Đóng]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền trắng viền xám, kích thước 90x38</td>
+      <td>Đóng popup modal, trở lại màn hình danh sách.</td>
+    </tr>
+  </table>
+
+  <!-- ==================== USE CASE 06 ==================== -->
+  <div class="uc-title">3.6. USE CASE 06: KHÁCH HÀNG MỞ LINK & XÁC NHẬN ĐIỀU KHOẢN THANH TOÁN (PL-UC-06)</div>
+
+  <div class="wf-section-title">📌 Phần 1: Bảng Đặc tả Use Case Tổng quan (10 Dòng Tiêu chuẩn)</div>
+  <table class="uc-table">
+    <tr>
+      <td class="field-name">Use Case</td>
+      <td class="field-value"><b>Khách hàng mở link & Xác nhận Điều khoản thanh toán (Customer Payment Link Terms Confirmation)</b></td>
+    </tr>
+    <tr>
+      <td class="field-name">ID</td>
+      <td class="field-value"><code>PL-UC-06</code></td>
+    </tr>
+    <tr>
+      <td class="field-name">Description</td>
+      <td class="field-value">Khi khách hàng nhấp vào Payment Link hoặc quét mã QR, hệ thống hiển thị trang Hosted Form xác nhận thanh toán (Screen 26:4 bản Tiếng Việt hoặc Screen 64:4 bản Tiếng Anh). Giao diện phân tách rõ ràng thành 3 khối thông tin: Đơn vị cung cấp hàng hóa, Khách hàng, Đơn hàng. Khách hàng bắt buộc phải tích chọn đồng ý Điều khoản & Điều kiện dịch vụ thì nút [Tiếp tục thanh toán] mới được kích hoạt để chuyển sang trang chọn phương thức thanh toán.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Actor</td>
+      <td class="field-value">Khách hàng (Customer / Người mua hàng)</td>
+    </tr>
+    <tr>
+      <td class="field-name">Trigger</td>
+      <td class="field-value">Khách hàng nhấp vào link thanh toán hoặc quét mã QR link thanh toán.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Pre-Condition</td>
+      <td class="field-value">Đơn hàng ở trạng thái <code>Chờ thanh toán</code> (<code>PENDING</code>) và chưa vượt quá thời gian hết hạn.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Post-Condition</td>
+      <td class="field-value">Khách hàng xác nhận đồng ý điều khoản dịch vụ và được chuyển hướng sang trang chọn phương thức thanh toán.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Basic flow</td>
+      <td class="field-value">
+        1. Khách hàng mở link thanh toán trên trình duyệt.<br/>
+        2. Hệ thống tải thông tin đơn hàng và hiển thị Màn hình Xác nhận điều khoản thanh toán (Screen 26:4 / Screen 64:4).<br/>
+        3. Khách hàng kiểm tra thông tin tại 3 khối chuyên biệt: Khối 1 - Đơn vị cung cấp hàng hóa; Khối 2 - Khách hàng; Khối 3 - Đơn hàng.<br/>
+        4. Khách hàng tích chọn vào ô Checkbox: <code>Tôi đã đọc và đồng ý với Điều khoản & Điều kiện sử dụng dịch vụ thanh toán</code>. (Nếu nhấp vào chữ "Điều khoản & Điều kiện", hệ thống mở Popup xem chi tiết điều khoản theo PL-UC-07).<br/>
+        5. Ngay khi ô Checkbox được tích chọn, nút <b>[Tiếp tục thanh toán]</b> chuyển sang trạng thái Active (màu xanh #2563EB).<br/>
+        6. Khách hàng nhấp nút <b>[Tiếp tục thanh toán]</b>.<br/>
+        7. Hệ thống chuyển hướng khách hàng sang Trang chọn phương thức thanh toán (Thẻ ATM nội địa, Thẻ quốc tế Visa/Master, Ví điện tử, VietQR).
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Alternative flow</td>
+      <td class="field-value">2a. Chuyển đổi ngôn ngữ: Khách hàng nhấp vào icon cờ [VI / EN] trên header để chuyển đổi giữa Tiếng Việt và Tiếng Anh.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Exception flow</td>
+      <td class="field-value">
+        2b. Đơn hàng hết hạn: Hiển thị trang báo lỗi "Đơn hàng đã hết hạn thanh toán. Vui lòng liên hệ người bán".<br/>
+        2c. Đơn hàng đã thanh toán trước đó: Hiển thị "Đơn hàng này đã được thanh toán thành công vào lúc {thời gian}".
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Non-functional requirement</td>
+      <td class="field-value">Thời gian tải trang &lt; 1.0 giây; tương thích giao diện hoàn hảo trên cả Desktop và Mobile.</td>
+    </tr>
+  </table>
+
+  <div class="wf-section-title">📌 Phần 2: Bảng Đặc tả Thành phần Giao diện Chi tiết (6 Cột Tiêu chuẩn)</div>
+  <table class="wf-table">
+    <tr>
+      <th style="width: 20%;">Component Name</th>
+      <th style="width: 12%;">Data Type</th>
+      <th style="width: 8%;">M/O/C</th>
+      <th style="width: 8%;">Editable</th>
+      <th style="width: 24%;">Other Validation</th>
+      <th style="width: 28%;">Action rules</th>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Header Hosted Form</td></tr>
+    <tr>
+      <td><b>Logo EPAY</b></td>
+      <td style="text-align: center;">Image</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Logo nhận diện EPAY</td>
+      <td>Căn trái.</td>
+    </tr>
+    <tr>
+      <td><b>Chuyển đổi Ngôn ngữ [VI/EN]</b></td>
+      <td style="text-align: center;">Toggle</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Biểu tượng cờ Việt Nam / UK</td>
+      <td>Chuyển đổi giao diện sang Tiếng Việt hoặc Tiếng Anh.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối 1: Thông tin Đơn vị Cung cấp Hàng hóa</td></tr>
+    <tr>
+      <td><b>Avatar / Logo Merchant</b></td>
+      <td style="text-align: center;">Image</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Kích thước 44x44px bo tròn</td>
+      <td>Logo đại diện của người bán.</td>
+    </tr>
+    <tr>
+      <td><b>Tên đơn vị bán hàng</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Ví dụ: <code>Công ty TNHH Cà phê Việt Nam</code></td>
+      <td>Font chữ đậm 14px, màu #0F172A.</td>
+    </tr>
+    <tr>
+      <td><b>Mã số thuế / Hotline</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>MST: 0102030405 • Hotline: 1900 6475</td>
+      <td>Màu xám #64748B, font 11px.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối 2: Thông tin Khách hàng</td></tr>
+    <tr>
+      <td><b>Họ và tên khách hàng</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Tên người nhận đơn</td>
+      <td>Font 12px, màu #1E293B.</td>
+    </tr>
+    <tr>
+      <td><b>Số điện thoại & Email</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>SĐT và email nhận biên lai</td>
+      <td>Font 12px, màu #1E293B.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối 3: Thông tin Đơn hàng Thanh toán</td></tr>
+    <tr>
+      <td><b>Mã đơn hàng</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Mã đơn trong khung đơn hàng</td>
+      <td>Font bán đậm, màu #0F172A.</td>
+    </tr>
+    <tr>
+      <td><b>Số tiền thanh toán</b></td>
+      <td style="text-align: center;">Amount</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Ví dụ: <code>450,000 VND</code> (hoặc $19.99)</td>
+      <td>Font 20px bold, màu xanh Brand #2563EB.</td>
+    </tr>
+    <tr>
+      <td><b>Hạn thanh toán</b></td>
+      <td style="text-align: center;">Datetime</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Thời gian hết hạn</td>
+      <td>Màu xanh lá #16A34A.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khối Xác nhận Điều khoản</td></tr>
+    <tr>
+      <td><b>Checkbox Đồng ý Điều khoản *</b></td>
+      <td style="text-align: center;">Checkbox</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Mặc định: Unchecked. Bắt buộc tích</td>
+      <td>Khi tích chọn: Kích hoạt nút [Tiếp tục thanh toán].</td>
+    </tr>
+    <tr>
+      <td><b>Link "Điều khoản & Điều kiện"</b></td>
+      <td style="text-align: center;">Hyperlink</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">Y</td>
+      <td>Chữ xanh #2563EB, gạch chân</td>
+      <td>Mở Popup Modal xem toàn văn điều khoản (<code>PL-UC-07</code>).</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Nút Thao tác Tiếp tục</td></tr>
+    <tr>
+      <td><b>Nút [Tiếp tục thanh toán]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Active khi Checked (Nền xanh #2563EB)</td>
+      <td>Chuyển sang bước chọn Phương thức thanh toán (PTTT).</td>
+    </tr>
+  </table>
+
+  <!-- ==================== USE CASE 07 ==================== -->
+  <div class="uc-title">3.7. USE CASE 07: XEM MODAL ĐIỀU KHOẢN & ĐIỀU KIỆN THANH TOÁN (PL-UC-07)</div>
+
+  <div class="wf-section-title">📌 Phần 1: Bảng Đặc tả Use Case Tổng quan (10 Dòng Tiêu chuẩn)</div>
+  <table class="uc-table">
+    <tr>
+      <td class="field-name">Use Case</td>
+      <td class="field-value"><b>Xem Modal Điều khoản & Điều kiện Dịch vụ Thanh toán (Payment Terms & Conditions Modal View)</b></td>
+    </tr>
+    <tr>
+      <td class="field-name">ID</td>
+      <td class="field-value"><code>PL-UC-07</code></td>
+    </tr>
+    <tr>
+      <td class="field-name">Description</td>
+      <td class="field-value">Khi khách hàng nhấp vào liên kết chữ "Điều khoản & Điều kiện" tại trang Hosted Form xác nhận thanh toán, hệ thống hiển thị cửa sổ Modal Popup (Screen 26:147) chứa toàn văn quy chế, điều khoản bảo mật, quyền và trách nhiệm của khách hàng và trung gian thanh toán EPAY; người dùng có thể cuộn đọc toàn bộ nội dung và bấm nút [Tôi đồng ý] để tự động đóng modal và tích chọn checkbox đồng ý điều khoản.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Actor</td>
+      <td class="field-value">Khách hàng (Customer / Người mua hàng)</td>
+    </tr>
+    <tr>
+      <td class="field-name">Trigger</td>
+      <td class="field-value">Khách hàng nhấp vào cụm chữ gạch chân <b>"Điều khoản & Điều kiện"</b> trên trang xác nhận thanh toán.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Pre-Condition</td>
+      <td class="field-value">Khách hàng đang ở màn hình xác nhận điều khoản thanh toán.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Post-Condition</td>
+      <td class="field-value">Khách hàng đã đọc điều khoản và bấm đồng ý để tự động tích chọn checkbox trên màn hình chính.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Basic flow</td>
+      <td class="field-value">
+        1. Khách hàng nhấp vào dòng chữ "Điều khoản & Điều kiện".<br/>
+        2. Hệ thống hiển thị Modal popup <code>Terms Modal Dialog</code> kích thước 580x680px tại trung tâm màn hình.<br/>
+        3. Tiêu đề modal hiển thị: <b>"Điều khoản & Điều kiện sử dụng dịch vụ thanh toán"</b>.<br/>
+        4. Khung nội dung <code>Terms Content Box</code> hiển thị toàn bộ các mục điều khoản pháp lý, có thanh cuộn dọc (scrollable) để khách hàng đọc hết nội dung.<br/>
+        5. Khách hàng chọn 1 trong 2 thao tác:<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;- Bấm <b>[Tôi đồng ý]</b>: Đóng modal và tự động <b>tích chọn ô Checkbox đồng ý điều khoản</b> trên màn hình chính, kích hoạt nút [Tiếp tục thanh toán].<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;- Bấm <b>[Đóng]</b>: Đóng modal, giữ nguyên trạng thái checkbox trước đó.
+      </td>
+    </tr>
+    <tr>
+      <td class="field-name">Alternative flow</td>
+      <td class="field-value">5a. Đóng bằng click bên ngoài vùng modal dialog.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Exception flow</td>
+      <td class="field-value">Trường hợp mất kết nối mạng nội dung tĩnh vẫn được cache để hiển thị.</td>
+    </tr>
+    <tr>
+      <td class="field-name">Non-functional requirement</td>
+      <td class="field-value">Tốc độ mở modal tức thì (&lt; 0.1 giây), cuộn mượt mà trên màn hình cảm ứng điện thoại.</td>
+    </tr>
+  </table>
+
+  <div class="wf-section-title">📌 Phần 2: Bảng Đặc tả Thành phần Giao diện Chi tiết (6 Cột Tiêu chuẩn)</div>
+  <table class="wf-table">
+    <tr>
+      <th style="width: 20%;">Component Name</th>
+      <th style="width: 12%;">Data Type</th>
+      <th style="width: 8%;">M/O/C</th>
+      <th style="width: 8%;">Editable</th>
+      <th style="width: 24%;">Other Validation</th>
+      <th style="width: 28%;">Action rules</th>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Header Modal Điều khoản</td></tr>
+    <tr>
+      <td><b>Tiêu đề Modal</b></td>
+      <td style="text-align: center;">Label</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Text: <code>Điều khoản & Điều kiện...</code></td>
+      <td>Font 15px bold, màu #0F172A.</td>
+    </tr>
+    <tr>
+      <td><b>Nút Đóng [✕]</b></td>
+      <td style="text-align: center;">Icon Button</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Ký tự ✕ góc phải</td>
+      <td>Đóng modal mà không đổi trạng thái checkbox.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Khung Nội dung Điều khoản</td></tr>
+    <tr>
+      <td><b>Khung Scroll Điều khoản</b></td>
+      <td style="text-align: center;">Scrollable Box</td>
+      <td style="text-align: center;">-</td>
+      <td style="text-align: center;">N</td>
+      <td>Khung scroll 532x504px</td>
+      <td>Chứa toàn văn quy chế thanh toán và bảo mật thông tin.</td>
+    </tr>
+    <tr class="wf-divider-row"><td colspan="6">-- Nút Thao tác Footer Modal</td></tr>
+    <tr>
+      <td><b>Nút [Đóng]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">O</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền trắng viền xám, kích thước 100x38</td>
+      <td>Đóng modal, giữ nguyên trạng thái checkbox màn hình chính.</td>
+    </tr>
+    <tr>
+      <td><b>Nút [Tôi đồng ý]</b></td>
+      <td style="text-align: center;">Button</td>
+      <td style="text-align: center;">M</td>
+      <td style="text-align: center;">Y</td>
+      <td>Nền xanh Brand #2563EB, kích thước 196x38</td>
+      <td>Đóng modal, ĐỒNG THỜI tự động tích chọn checkbox trên màn hình chính và active nút Tiếp tục thanh toán.</td>
+    </tr>
+  </table>
+
+  <div class="sec-title">4. QUY TẮC NGHIỆP VỤ LIÊN THÔNG (BUSINESS RULES)</div>
+  <div class="br-box">
+    <b>BR-PL-01: Quy tắc Duy nhất của Mã đơn hàng (Order Code Uniqueness)</b><br/>
+    Mỗi Merchant có không gian mã đơn hàng độc lập. Mã đơn hàng không được phép trùng lặp giữa các đơn hàng của cùng một Merchant. Khi tạo theo lô, nếu trong cùng một file upload có từ 2 dòng trở lên trùng mã đơn hàng, hệ thống đánh dấu lỗi <code>ERR_04</code> cho toàn bộ các dòng bị trùng.
+  </div>
+
+  <div class="br-box">
+    <b>BR-PL-02: Quy tắc Khung thời gian Hiệu lực và Hết hạn (Time Window Validity)</b><br/>
+    <code>Thời gian hiệu lực</code> phải lớn hơn hoặc bằng ngày giờ hiện tại. <code>Thời gian hết hạn</code> phải lớn hơn <code>Thời gian hiệu lực</code> và không vượt quá <code>Thời gian hiệu lực + 15 ngày</code>. Quá thời gian hết hạn, link tự động chuyển trạng thái <code>Hết hạn</code> và bị khóa thanh toán.
+  </div>
+
+  <div class="br-box">
+    <b>BR-PL-03: Quy tắc Định dạng và Bản quyền Mã QR Link Thanh toán</b><br/>
+    Mã QR sinh ra tại tính năng này là <b>Mã QR của Payment Link</b> (chứa URL truy cập Hosted Form), <b>tuyệt đối KHÔNG phải là mã VietQR chuyển khoản ngân hàng tĩnh</b>. Quét mã QR sẽ mở trình duyệt tới link thanh toán để khách hàng xác nhận điều khoản và chọn PTTT.
+  </div>
+
+  <div class="br-box">
+    <b>BR-PL-04: Quy tắc Đọc File Lô và Hiển thị Bảng Lỗi (Batch Error Presentation)</b><br/>
+    Khi phát hiện file có dòng lỗi, bảng danh sách giữ <b>nền trắng sạch sẽ (KHÔNG phủ nền đỏ / KHÔNG hover đỏ trên các hàng)</b>. Không có banner cảnh báo đỏ lớn che khuất bảng. Các trường lỗi in chữ đỏ, cột MÃ LỖI hiển thị badge chi tiết, cột link hiển thị <code>Chưa tạo</code>. Nút [Tải file lỗi (.xlsx)] xuất file kèm cột <i>LÝ DO LỖI CHI TIẾT</i> để đối soát.
+  </div>
+
+  <div class="br-box">
+    <b>BR-PL-05: Quy tắc Bắt buộc Xác nhận Điều khoản Trước khi Thanh toán</b><br/>
+    Khách hàng bắt buộc phải tích chọn xác nhận <i>Tôi đã đọc và đồng ý với Điều khoản & Điều kiện sử dụng dịch vụ thanh toán</i> mới được phép bấm nút <code>[Tiếp tục thanh toán]</code>. Hệ thống lưu vết thời điểm xác nhận điều khoản vào audit log.
+  </div>
+
+  <table class="footer-table">
+    <tr>
+      <td style="width: 50%;">© EPAY 2026 - Tài liệu Thiết kế Hệ thống & Đặc tả Use Case SRS</td>
+      <td style="width: 50%; text-align: right;">Mã tài liệu: EPAY-QT.CG.02_BM33 | Phiên bản v2.0</td>
+    </tr>
+  </table>
+
+</body>
+</html>
+`;
+
+const srsDir = path.dirname(fileURLToPath(import.meta.url));
+const docPath = path.join(srsDir, 'payment-link-usecases.doc');
+const htmlPreviewPath = path.join(srsDir, 'payment-link-usecases-word-preview.html');
+
+fs.writeFileSync(docPath, wordDocHtml, 'utf8');
+console.log('✅ Đã tạo thành công file Word .doc:', docPath);
+
+fs.writeFileSync(htmlPreviewPath, wordDocHtml, 'utf8');
+console.log('✅ Đã tạo thành công file HTML Preview:', htmlPreviewPath);
