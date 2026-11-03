@@ -1,8 +1,8 @@
-# BPMN Template — IR-driven (kiến trúc 2 lớp)
+# BPMN Template — IR-driven (kiến trúc 2 lớp)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-## Nguyên tắc
+## Nguyên tắc‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-## IR schema (`{slug}.ir.json`)
+## IR schema (`{slug}.ir.json`)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 ```jsonc
 {
@@ -26,7 +26,7 @@
 }
 ```
 
-## Source facts (`{slug}.src.json`) — để semcheck đối chiếu nguồn
+## Source facts (`{slug}.src.json`) — để semcheck đối chiếu nguồn‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 ```json
 {
@@ -36,19 +36,19 @@
 }
 ```
 
-- `actors` = mọi actor trong UC Mục b → semcheck kiểm mỗi cái có lane.
-- `branches` = mọi nhánh UC Mục d → semcheck kiểm có gateway-nhánh tương ứng.
-- `errors` = E-code liên quan → semcheck kiểm có end/nhánh xử lý.
-- Semcheck so khớp gần đúng (bỏ dấu, lowercase) → cảnh báo nếu IR sót, KHÔNG chặn (phán xét cuối là nghiệp vụ).
+* `actors` = mọi actor trong UC Mục b → semcheck kiểm mỗi cái có lane.
+* `branches` = mọi nhánh UC Mục d → semcheck kiểm có gateway-nhánh tương ứng.
+* `errors` = E-code liên quan → semcheck kiểm có end/nhánh xử lý.
+* Semcheck so khớp gần đúng (bỏ dấu, lowercase) → cảnh báo nếu IR sót, KHÔNG chặn (phán xét cuối là nghiệp vụ).
 
-## Cách suy luận IR từ UC (gap-driven, không bịa)
+## Cách suy luận IR từ UC (gap-driven, không bịa)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | Nguồn trong UC | → IR |
 |---|---|
 | Mục b Actors (primary + supporting) | `lanes[]` |
 | Mục a/c trigger | `start` node |
 | Mỗi bước trong Mục d Expected result | `task` node (lane = actor làm bước đó) |
-| Mỗi "Nếu... thì..." trong Mục d Branches | `gateway` + các `flow` có `name` = điều kiện |
+| Mỗi "Nếu... thì..." trong Mục d Branches | `gateway` + các `flow` có `name` = điều kiện |‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 | Kết quả chính + mỗi error-path | `end` node (mỗi kết cục 1 cái) |
 | Mục g Related FR / Error Matrix | đối chiếu errors trong src.json |
 
@@ -56,11 +56,11 @@
 
 ## IR rules (semcheck enforce — structural, BẮT BUỘC pass)
 
-- Đúng 1 `start`; ≥1 `end`.
-- `gateway` có ≥2 outgoing; mỗi outgoing có `name`.
-- Mọi node reachable từ start + dẫn được tới end.
-- Không self-loop; id duy nhất; lane/src/tgt tham chiếu hợp lệ.
-- Loop (vd revise→draft, retry) hợp lệ — engine nhận back-edge tự đi vòng band trống.
+* Đúng 1 `start`; ≥1 `end`.
+* `gateway` có ≥2 outgoing; mỗi outgoing có `name`.
+* Mọi node reachable từ start + dẫn được tới end.
+* Không self-loop; id duy nhất; lane/src/tgt tham chiếu hợp lệ.
+* Loop (vd revise→draft, retry) hợp lệ — engine nhận back-edge tự đi vòng band trống.
 
 ## Pipeline (engine lo, AI chỉ chạy lệnh)
 
@@ -86,5 +86,9 @@ updated: {{date}}
 
 ## Cross-ref
 
-- `srs/{{feature}}-flows.md` — Mermaid activity (nhẹ, render Obsidian). BPMN cho chuẩn OMG + import tool BPM.
-- `.claude/rules/diagram-selection.md` — khi nào `/activity` vs `/bpmn`.
+* `srs/{{feature}}-flows.md` — Mermaid activity (nhẹ, render Obsidian). BPMN cho chuẩn OMG + import tool BPM.
+* `.claude/rules/diagram-selection.md` — khi nào `/activity` vs `/bpmn`.‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền hoangphan.blog</sub>

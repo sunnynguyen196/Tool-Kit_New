@@ -4,29 +4,29 @@ feature: {{feature}}
 updated: {{date}}
 ---
 
-# {{process}} — Activity Diagram
+# {{process}} — Activity Diagram‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-> Quy trình nghiệp vụ **{{process}}** trong feature **{{feature}}**.
+> Quy trình nghiệp vụ __{{process}}__ trong feature __{{feature}}__.
 
-## Process overview
+## Process overview‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 {{overview}}
 
 *1-2 đoạn mô tả mục đích process, ai chạy, khi nào trigger.*
 
-## Roles / Lanes (nếu có)
+## Roles / Lanes (nếu có)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | Lane | Role | Trách nhiệm |
 |---|---|---|
 | {{lane_1}} | {{role}} | {{responsibility}} |
 
-## Diagram
+## Diagram‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 ```mermaid
 {{mermaid_code}}
 ```
 
-## Decision points
+## Decision points‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | ID | Khi nào | YES | NO |
 |---|---|---|---|
@@ -42,4 +42,8 @@ updated: {{date}}
 
 {{notes}}
 
-*Cross-ref: `docs/{{feature}}/srs/{{feature}}-flows.md`, related sequence diagrams, `usecases/`.*
+*Cross-ref: `docs/{{feature}}/srs/{{feature}}-flows.md`, related sequence diagrams, `usecases/`.*‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền ai4ba.com</sub>

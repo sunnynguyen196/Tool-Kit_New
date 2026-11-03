@@ -7,11 +7,11 @@ paths:
   - ".claude/skills/srs/**"
 ---
 
-# Review Finding Format
+# Review Finding Format‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Structure cho tất cả agent review outputs. các phase review tự-động trong `/urd`/`/brd`/`/prd-epic`/`/srs` parse format này để aggregate findings across agents.
 
-## Severity levels
+## Severity levels‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | Severity | Meaning | Effect on doc status |
 |----------|---------|----------------------|
@@ -19,7 +19,7 @@ paths:
 | `WARNING` | Should fix. Approval khả thi với explicit ack. | Status stays `in-review`, ack note |
 | `SUGGESTION` | Nice-to-have. Approval not blocked. | Status unchanged |
 
-## Verdict semantics
+## Verdict semantics‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | Verdict | When |
 |---------|------|
@@ -27,16 +27,16 @@ paths:
 | `revise` | ≥1 WARNING, no BLOCKING |
 | `block` | ≥1 BLOCKING |
 
-## Finding anatomy
+## Finding anatomy‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 Mỗi finding có:
 
 - **Title** — 5-10 word descriptor
 - **Description** — what's wrong, why matters (1-3 sentences)
 - **Location** — section reference nếu specific (`Mục 4 Pre-conditions`, `screens/login.md Mục 2.3`)
-- **Suggested fix** — concrete next action (1-2 sentences)
+- **Suggested fix** — concrete next action (1-2 sentences)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-## Aggregation rules (used by phase review trong /urd /brd /prd-epic /srs)
+## Aggregation rules (used by phase review trong /urd /brd /prd-epic /srs)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 Khi multiple agents review cùng 1 doc:
 
@@ -66,10 +66,10 @@ Khi multiple agents review cùng 1 doc:
 
 ## Output location
 
-Phase review aggregate findings rồi **tự fix** (safe áp thẳng, business decision đánh 🔶 cho user review sau — theo memory `feedback_review_auto_run`). Sự kiện review ghi vào `docs/_shared/activity.log` (KHÔNG ghi gì vào doc — set env note trước edit, hook lo):
+Phase review aggregate findings rồi **tự fix** (safe áp thẳng, business decision đánh 🔶 cho user review sau — theo memory `feedback_review_auto_run`). Sự kiện review ghi vào `docs/_shared/changelog.md` (KHÔNG ghi gì vào doc — set env note trước edit, hook lo):
 
 ```
-2026-05-12 | /srs | @hoangpm | docs/payment/srs/payment-spec.md | reviewed by @senior-ba, @qa-reviewer: 1 blocking applied, 2 warnings ack
+2026-05-12 | /srs | @ba | docs/payment/srs/payment-spec.md | reviewed by @senior-ba, @qa-reviewer: 1 blocking applied, 2 warnings ack
 ```
 
 ## Tools agent CAN'T use directly
@@ -98,4 +98,8 @@ Giữ agents fast + deterministic.
 2. {second doc/action}
 ```
 
-`/cr` analyze phase parses cả 3 sections (severity findings + impacted artifacts + apply order) để build impact report.
+`/cr` analyze phase parses cả 3 sections (severity findings + impacted artifacts + apply order) để build impact report.‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền ai4ba.com</sub>

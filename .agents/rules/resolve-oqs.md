@@ -11,15 +11,15 @@ paths:
   - ".claude/skills/reverse-doc/**"
 ---
 
-# Resolve Open Questions (Phase E)
+# Resolve Open Questions (Phase E)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Canonical pattern cho mọi BA skill (`/prd`, `/brainstorm`, `/urd`, `/brd`, `/prd-epic`, `/srs`) chạy SAU Write doc, TRƯỚC khi suggest downstream skills. Mục đích: không để OQ debt accumulate cross-stage — buộc resolve hoặc ack hold ngay.
 
-## Trigger
+## Trigger‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 Skill chạy Phase E ngay sau khi Write doc thành công (cả create + update mode).
 
-## Step 1 — Collect OQs
+## Step 1 — Collect OQs‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 Skill gom 2 nguồn OQs:
 
@@ -31,6 +31,7 @@ Skill gom 2 nguồn OQs:
 | `/prd` | (none — PRD sản phẩm là gốc cấp sản phẩm; chỉ own OQs Mục 11) |
 | `/brainstorm` | (none — brainstorm là gốc cấp feature) |
 | `/reverse-doc` | (none — reverse-doc là gốc: OQ suy từ nguồn, không có upstream. Own OQ ở `docs/_reverse/{feature}/reverse-gaps.md`. Selector nhiều feature: `{feature}:OQ-n`.) |
+| `/code-to-srs` | (none — như `/reverse-doc`: gốc, OQ suy từ SOURCE CODE, không có upstream. Own OQ ở `docs/_reverse/{feature}/reverse-gaps.md` (đa số là "vì sao/cho ai" code câm). Selector nhiều feature: `{feature}:OQ-n`.) |
 | `/urd` | `docs/{feature}/brainstorms/*.md` + `docs/_reverse/{feature}/reverse-gaps.md` (nếu có) Mục "Open Questions" |
 | `/brd` | brainstorm + `_reverse/{feature}/reverse-gaps.md` + `{feature}-urd.md` |
 | `/prd-epic` | brainstorm + `_reverse/{feature}/reverse-gaps.md` + `{feature}-urd.md` + `{feature}-brd.md` |
@@ -40,7 +41,7 @@ Skill gom 2 nguồn OQs:
 
 Skill scan §"Open Questions" của mỗi upstream doc, extract OQs còn `[ ]` (unresolved) hoặc `[~]` (deferred but not closed). Bỏ qua `[x]` (resolved).
 
-## Step 2 — Prompt user
+## Step 2 — Prompt user‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 In danh sách OQs theo format:
 
@@ -65,7 +66,7 @@ Resolve ngay bây giờ trước khi qua {next_skill}?
 
 Nếu `N == 0` → skip Phase E entirely, đi thẳng final report.
 
-## Step 3 — Resolve loop (one-at-a-time)
+## Step 3 — Resolve loop (one-at-a-time)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 User chọn `Y` hoặc `<ids>` → loop từng OQ targeted:
 
@@ -76,7 +77,7 @@ User chọn `Y` hoặc `<ids>` → loop từng OQ targeted:
    - **`không cần` / `OOS`** → mark `[~]`, note "out of scope".
    - **`không biết` / `hỏi sau`** → giữ `[ ]`, không retry trong session này.
 3. **Side-effect detection (within current doc)** — propose L2 diff cho section chịu ảnh hưởng của OQ answer. Xem Step 3.5 mapping.
-4. Nếu OQ inherited từ upstream → skill **update cả upstream doc** (mark `[x]`/`[~]` + thêm note "resolved via /{current_skill}"). L2 diff cho mỗi upstream edit. Set `CLAUDE_CHANGELOG_NOTE` trước mỗi edit — hook tự ghi sự kiện vào `docs/_shared/activity.log`.
+4. Nếu OQ inherited từ upstream → skill **update cả upstream doc** (mark `[x]`/`[~]` + thêm note "resolved via /{current_skill}"). L2 diff cho mỗi upstream edit. Set `CLAUDE_CHANGELOG_NOTE` trước mỗi edit — hook tự ghi sự kiện vào `docs/_shared/changelog.md`.
 
 ## Step 3.5 — Cascade scan (CRITICAL — đừng skip)
 
@@ -98,7 +99,8 @@ Nếu doc hiện tại không phải cuối chain, skill scan downstream docs tr
 |---|---|
 | `/prd` (project-level) | cascade scan **trong chính `docs/_product/prd.md`** (Assumptions/Risks/Constraints/Feature Map — per topic map 3.5.3); KHÔNG scan feature doc (chưa tồn tại lúc PRD sản phẩm). `docs/_product/roadmap.md` đọc 1 chiều từ Feature Map nên KHÔNG cascade OQ sang đó — muốn đồng bộ thì chạy lại `/roadmap`. |
 | `/reverse-doc` | (chỉ scan TRONG `docs/_reverse/{feature}/` reverse-spec + reverse-gaps — reverse ghi TÁCH, KHÔNG đè `urd/brd/srs`; không cascade sang doc khác) |
-| `/brainstorm` | `{feature}-urd.md`, `{feature}-brd.md`, `{feature}-prd.md`, `srs/{feature}-spec.md` (nếu tồn tại) |
+| `/code-to-srs` | (như `/reverse-doc`: chỉ scan TRONG `docs/_reverse/{feature}/` reverse-spec + reverse-gaps; không cascade sang doc khác) |
+| `/brainstorm` | `{feature}-urd.md`, `{feature}-brd.md`, `{feature}-prd.md`, `srs/{feature}-spec.md` (nếu tồn tại) |‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 | `/urd` | `{feature}-brd.md`, `{feature}-prd.md`, `srs/{feature}-spec.md` |
 | `/brd` | `{feature}-prd.md`, `srs/{feature}-spec.md` |
 | `/prd-epic` | `srs/{feature}-spec.md`, `srs/{feature}-flows.md`, `srs/{feature}-erd.md`, `ascii-wireframe/*.md` |
@@ -146,7 +148,7 @@ Sau đó loop L2 diff per item, user Y/n mỗi cái.
 
 ### 3.5.5 — Activity log cascade
 
-Mỗi doc bị update (hiện tại + upstream + downstream) → 1 dòng riêng trong `docs/_shared/activity.log` (hook tự ghi khi skill set env note trước edit):
+Mỗi doc bị update (hiện tại + upstream + downstream) → 1 dòng riêng trong `docs/_shared/changelog.md` (hook tự ghi khi skill set env note trước edit):
 
 ```
 {date} | /{current_skill} | {@author} | {file-path} | cascade từ OQ-{id} resolved: {section list} updated
@@ -154,7 +156,7 @@ Mỗi doc bị update (hiện tại + upstream + downstream) → 1 dòng riêng 
 
 ## Step 4 — Activity log
 
-Sau khi loop xong (resolve ≥1 OQ), sự kiện cho doc hiện tại đã nằm trong `activity.log` (hook ghi). Note chuẩn:
+Sau khi loop xong (resolve ≥1 OQ), sự kiện cho doc hiện tại đã nằm trong `changelog.md` (hook ghi). Note chuẩn:
 
 ```
 {date} | /{current_skill} | {@author} | {file-path} | resolved OQ-{ids}: {short summary}
@@ -202,4 +204,8 @@ Nếu user skip Phase E:
 
 ## Tóm tắt
 
-Sau Write → **Collect OQs (own + inherited) → Prompt Y/skip/ids → Loop 1-by-1: [answer → cascade scan toàn bộ doc + downstream → L2 diff per impacted section] → Activity log qua hook → Final report**.
+Sau Write → **Collect OQs (own + inherited) → Prompt Y/skip/ids → Loop 1-by-1: [answer → cascade scan toàn bộ doc + downstream → L2 diff per impacted section] → Activity log qua hook → Final report**.‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền hoangphan.blog</sub>

@@ -1,16 +1,17 @@
 ---
 name: dbdiagram
-description: Dùng khi cần sinh schema database dạng DBML (.dbml, import dbdiagram.io / dbdocs.io, export SQL) cho data model 1 feature — tầng gần dev nhất trong họ ERD. Kích hoạt bằng `/dbdiagram --feature <slug>`. Khác `/erd` (Mermaid nhúng inline, type gọn cho BA đọc) và `/d2-erd` (D2 hình đẹp standalone).
+description: Dùng khi cần sinh schema database dạng DBML (.dbml, import dbdiagram.io / dbdocs.io, export SQL) cho data model 1 feature — tầng gần dev nhất trong họ ERD. Khác `/erd` (Mermaid nhúng inline, type gọn cho BA đọc) và `/d2-erd` (D2 hình đẹp standalone).
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 user-invocable: true
 argument-hint: "[--feature <slug>]"
 ---
+<!-- Licensed to nguyenduong280196@gmail.com — Order XKTV2KA26 -->
 
-# /dbdiagram — Database schema (DBML, import dbdiagram.io)
+# /dbdiagram — Database schema (DBML, import dbdiagram.io)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Họ 3 skill ERD: `/erd` (Mermaid, nhúng inline GitHub/Obsidian, type gọn) · `/d2-erd` (D2 `sql_table`, hình đẹp standalone) · `/dbdiagram` (DBML này — **tầng gần dev nhất**: file `.dbml` import dbdiagram.io/dbdocs.io, export ra SQL thật).
 
-## Goal
+## Goal‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 Sinh **schema database** 1 feature dưới dạng [DBML](https://dbml.dbdiagram.io) (Database Markup Language) — file `.dbml` chuẩn mà [dbdiagram.io](https://dbdiagram.io) và [dbdocs.io](https://dbdocs.io) import trực tiếp để vẽ sơ đồ + export SQL (Postgres/MySQL/…). Output trong `docs/{feature}/dbdiagram/`:
 
@@ -19,7 +20,7 @@ Sinh **schema database** 1 feature dưới dạng [DBML](https://dbml.dbdiagram.
 
 Plus `dbdiagram/{feature}-dbdiagram-index.md` (metadata + bảng table).
 
-## Tại sao DBML bên cạnh /erd + /d2-erd?
+## Tại sao DBML bên cạnh /erd + /d2-erd?‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | | `/erd` (Mermaid) | `/d2-erd` (D2) | `/dbdiagram` (DBML) |
 |---|---|---|---|
@@ -31,7 +32,9 @@ Plus `dbdiagram/{feature}-dbdiagram-index.md` (metadata + bảng table).
 
 > **DBML là artifact kỹ thuật gần dev nhất** — đây là chỗ ĐƯỢC PHÉP chi tiết DB thật (kiểu `uuid`/`varchar`, index, enum, default, note) vì `.dbml` sinh ra để dev import DB. Vẫn KHÔNG hỏi user bằng ngôn ngữ DB (per `ba-conventions.md` Mục 3) — skill TỰ suy kiểu DB hợp lý từ nghĩa nghiệp vụ. Xem [[feedback_erd_technical_ok]].
 
-## Constraints
+## Constraints‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+### Hard rules — never violate‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 - **Output cố định** `docs/{feature}/dbdiagram/{feature}.dbml` + `.sql`. KHÔNG ghi vào `srs/`.
 - **`--feature` optional** — auto-detect từ ngữ cảnh; file đã tồn tại → tự vào update mode (L2 diff), không cần flag. **Feature chưa có + mô tả data model → tự derive slug + tạo feature** (điểm-vào, `feature-bootstrap.md` nhóm A).
@@ -44,6 +47,18 @@ Plus `dbdiagram/{feature}-dbdiagram-index.md` (metadata + bảng table).
 - **Per `diagram-selection.md`** — `/dbdiagram` khi cần bàn giao schema dev / export SQL / dbdocs. Nhúng inline BA → `/erd`; hình đẹp standalone → `/d2-erd`.
 - **Idempotent** — 1 feature = 1 file `{feature}.dbml`; chạy lại → tự vào update mode (L2 diff), không refuse.
 
+### Pitfalls — easy to get wrong
+
+- **dbml2sql chưa cài** → dừng, in 1 dòng: `npm install -g @dbml/cli` (cài 1 lần, như mmdc/d2). KHÔNG ghi file rồi bỏ mặc không validate.
+- **DBML KHÔNG có đuôi .dbdiagram** — dbdiagram.io là tên *công cụ*, ngôn ngữ là DBML đuôi `.dbml`. Lệnh skill là `/dbdiagram` (gợi nhớ công cụ) nhưng file sinh ra là `.dbml` (import được). Đừng đặt đuôi `.dbdiagram` — toolchain không nhận.
+- **Đây là tầng ĐƯỢC chi tiết DB thật** — khác `/erd`/`/d2-erd` (type gọn). DBML dùng `uuid`/`varchar`/`timestamp`, index, enum, default. Vì `.dbml` sinh ra để dev import DB. Nhưng VẪN không hỏi user kiểu DB — skill tự suy (xem [[feedback_erd_technical_ok]]).
+- **Ref direction** — `[ref: > users.id]` trên cột `user_id` của bảng `decks` nghĩa "nhiều decks trỏ 1 user" (nhiều-một). Nhầm chiều `<`/`>` → sơ đồ vẽ ngược cardinality. Nhớ: `>` là "về phía một".
+- **Enum phải khai TRƯỚC khi dùng** — cột `status order_status` mà chưa có `Enum order_status {...}` → dbml2sql fail. Khai enum ở đầu hoặc cuối file đều được, miễn có.
+- **Nguồn tốt nhất là srs/{feature}-erd.md** — nếu có, chuyển 1-1 (mỗi entity Mermaid → 1 Table DBML). Kiểu DB: nâng từ type gọn của Mermaid lên kiểu DB thật (`string id PK` → `id uuid [pk]`). Đừng bịa table ngoài spec.
+- **Index đừng bịa** — chỉ thêm index có căn cứ nghiệp vụ (unique để chống trùng, cột hay lọc/sắp xếp). Không rải index bừa "cho có".
+- **Update mode (feature đã có .dbml)** → Read source cũ, L2 diff, re-validate + regen .sql sau khi user Y.
+- **Đừng over-dùng** — feature nhỏ 2-3 bảng chỉ cần xem quan hệ → `/erd` đủ. `/dbdiagram` phát huy khi cần bàn giao dev, export SQL, hoặc schema nhiều enum/index.
+
 ## Inputs
 
 ```
@@ -53,7 +68,7 @@ Plus `dbdiagram/{feature}-dbdiagram-index.md` (metadata + bảng table).
 
 Feature đã có `.dbml` → skill tự nhận ra và vào update mode (L2 diff), không cần gõ thêm gì.
 
-## Context (dynamic)
+## Context (dynamic)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 Today: !`date +%Y-%m-%d`
 Features có sẵn: !`ls -d docs/*/ 2>/dev/null | xargs -I{} basename {} 2>/dev/null | grep -vE '^_' | head -20`
@@ -86,9 +101,17 @@ User gọi /dbdiagram --feature X   (hoặc /dbdiagram "<mô tả data model>")
 4. L1 plan preview (prose: N table, M quan hệ). User Y → tiếp
    ▼
 5. Write {feature}.dbml → dbml2sql regen {feature}.sql (validate fail → sửa, tối đa 2 lần)
+5.5. **Đối chiếu canonical (BẮT BUỘC)** — `node .claude/scripts/erd-consistency.mjs --feature {slug}`.
+   So table + quan hệ (Ref) của bản DBML vừa sinh với **canonical `srs/{feature}-erd.md`** (nguồn
+   khai ở bước 1). `dbml2sql` PASS chỉ nghĩa là DBML đúng cú pháp, KHÔNG nghĩa là cùng data model
+   với bản Mermaid/D2 — 3 file mỗi cái tự hợp lệ vẫn có thể mô tả 3 model khác nhau.
+   - Lệch vì DBML sinh thiếu/thừa → sửa `.dbml` cho khớp canonical (nhớ regen `.sql`).
+   - Lệch vì **canonical sai** → báo user, sửa `srs/{feature}-erd.md` trước rồi sinh lại.
+   - DBML cố ý thêm bảng kỹ thuật (junction, audit) → giải thích trong report, đây là cảnh báo
+     không phải lỗi cứng.
    ▼
 6. Update dbdiagram/{feature}-dbdiagram-index.md — set env note trước Write,
-   │  hook append activity.log.
+   │  hook append changelog.md.
    ▼ Báo user (mở dbdiagram.io, paste .dbml — hoặc dùng .sql).
 ```
 
@@ -177,18 +200,6 @@ Tạo DB:    dùng {feature}.sql (PostgreSQL).
 Cần sửa?   /dbdiagram --feature {feature} (skill tự vào update mode)
 ```
 
-## Gotchas
-
-- **dbml2sql chưa cài** → dừng, in 1 dòng: `npm install -g @dbml/cli` (cài 1 lần, như mmdc/d2). KHÔNG ghi file rồi bỏ mặc không validate.
-- **DBML KHÔNG có đuôi .dbdiagram** — dbdiagram.io là tên *công cụ*, ngôn ngữ là DBML đuôi `.dbml`. Lệnh skill là `/dbdiagram` (gợi nhớ công cụ) nhưng file sinh ra là `.dbml` (import được). Đừng đặt đuôi `.dbdiagram` — toolchain không nhận.
-- **Đây là tầng ĐƯỢC chi tiết DB thật** — khác `/erd`/`/d2-erd` (type gọn). DBML dùng `uuid`/`varchar`/`timestamp`, index, enum, default. Vì `.dbml` sinh ra để dev import DB. Nhưng VẪN không hỏi user kiểu DB — skill tự suy (xem [[feedback_erd_technical_ok]]).
-- **Ref direction** — `[ref: > users.id]` trên cột `user_id` của bảng `decks` nghĩa "nhiều decks trỏ 1 user" (nhiều-một). Nhầm chiều `<`/`>` → sơ đồ vẽ ngược cardinality. Nhớ: `>` là "về phía một".
-- **Enum phải khai TRƯỚC khi dùng** — cột `status order_status` mà chưa có `Enum order_status {...}` → dbml2sql fail. Khai enum ở đầu hoặc cuối file đều được, miễn có.
-- **Nguồn tốt nhất là srs/{feature}-erd.md** — nếu có, chuyển 1-1 (mỗi entity Mermaid → 1 Table DBML). Kiểu DB: nâng từ type gọn của Mermaid lên kiểu DB thật (`string id PK` → `id uuid [pk]`). Đừng bịa table ngoài spec.
-- **Index đừng bịa** — chỉ thêm index có căn cứ nghiệp vụ (unique để chống trùng, cột hay lọc/sắp xếp). Không rải index bừa "cho có".
-- **Update mode (feature đã có .dbml)** → Read source cũ, L2 diff, re-validate + regen .sql sau khi user Y.
-- **Đừng over-dùng** — feature nhỏ 2-3 bảng chỉ cần xem quan hệ → `/erd` đủ. `/dbdiagram` phát huy khi cần bàn giao dev, export SQL, hoặc schema nhiều enum/index.
-
 ## References
 
 - @../../rules/ba-conventions.md
@@ -196,5 +207,10 @@ Cần sửa?   /dbdiagram --feature {feature} (skill tự vào update mode)
 - @../../rules/naming-conventions.md
 - @../../rules/changelog.md
 - @../../rules/diagram-selection.md
+- @../../rules/diagram-correctness.md
 - @../../rules/feature-bootstrap.md
-- @./references/example-dbdiagram.dbml (mẫu chuẩn đã validate qua dbml2sql)
+- @./references/example-dbdiagram.dbml (mẫu chuẩn đã validate qua dbml2sql)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền ai4ba.com</sub>

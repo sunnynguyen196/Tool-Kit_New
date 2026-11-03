@@ -1,43 +1,57 @@
 ---
 name: d2-erd
-description: Dùng khi cần vẽ ERD đẹp bằng D2 (sql_table với PK/FK, layout ELK). Kích hoạt bằng `/d2-erd --feature <slug>`. Khác `/erd` (Mermaid, nhúng inline). Cùng họ với `/d2-activity`, `/d2-architect`.
+description: Dùng khi cần vẽ ERD đẹp bằng D2 (sql_table với PK/FK, layout ELK). Khác `/erd` (Mermaid, nhúng inline). Cùng họ với `/d2-activity`, `/d2-architect`.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 user-invocable: true
 argument-hint: "[--feature <slug>]"
 ---
+<!-- Licensed to nguyenduong280196@gmail.com — Order XKTV2KA26 -->
 
-# /d2-erd — Entity-Relationship Diagram (D2, sql_table + ELK)
+# /d2-erd — Entity-Relationship Diagram (D2, sql_table + ELK)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Họ skill D2: `/d2-activity` (flow) · `/d2-erd` (data model này) · `/d2-architect` (kiến trúc). Cả 3 dùng chung `render.sh` ở `.claude/skills/d2-activity/`.
 
-## Goal
+## Goal‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-Vẽ data model 1 feature thành ERD **đẹp, gọn** bằng [D2](https://d2lang.com) `shape: sql_table` — mỗi entity 1 bảng có cột + kiểu + constraint PK/FK, quan hệ giữa bảng có nhãn nghiệp vụ. Output trong `docs/{feature}/d2-erd/`:
+Vẽ data model 1 feature thành ERD __đẹp, gọn__ bằng [D2](https://d2lang.com) `shape: sql_table` — mỗi entity 1 bảng có cột + kiểu + constraint PK/FK, quan hệ giữa bảng có nhãn nghiệp vụ. Output trong `docs/{feature}/d2-erd/`:
 
-1. `{feature}.d2` — source D2 (text, version git). Sửa khi gọi lại skill (tự vào update mode).
-2. `{feature}.svg` — render sẵn (mở browser/IDE/Obsidian).
+1) `{feature}.d2` — source D2 (text, version git). Sửa khi gọi lại skill (tự vào update mode).
+2) `{feature}.svg` — render sẵn (mở browser/IDE/Obsidian).
 
 Plus `d2-erd/{feature}-d2-erd-index.md` (metadata + bảng entity).
 
-## Tại sao D2 thay vì Mermaid?
+## Tại sao D2 thay vì Mermaid?‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 `shape: sql_table` của D2 vẽ header đậm, cột thẳng cột, cột constraint (PK/FK) canh phải rõ; quan hệ là mũi tên có nhãn nghiệp vụ (`sở hữu`, `chứa`, `clone từ`). Mermaid `erDiagram` cardinality ký hiệu (`||--o{`) khó đọc + layout kém khi >5 entity. D2 + ELK dàn bảng gọn hơn.
 
-> Giữ `/erd` (Mermaid) cho **nhúng inline** GitHub/Obsidian. Dùng `/d2-erd` khi cần **bản đẹp standalone** cho stakeholder / export / review data model phức tạp.
+> Giữ `/erd` (Mermaid) cho __nhúng inline__ GitHub/Obsidian. Dùng `/d2-erd` khi cần __bản đẹp standalone__ cho stakeholder / export / review data model phức tạp.
 
-## Constraints
+## Constraints‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-- **Output cố định** `docs/{feature}/d2-erd/{feature}.d2` + `.svg`. KHÔNG ghi vào `srs/{feature}-erd.md`.
-- **`--feature` optional** — auto-detect từ ngữ cảnh; file đã tồn tại → tự vào update mode, không cần flag. **Feature chưa có + mô tả data model → tự derive slug + tạo feature** (điểm-vào, xem `feature-bootstrap.md` nhóm A).
-- **AI viết source, KHÔNG toạ độ** — ELK lo layout.
-- **Render qua `.claude/skills/d2-activity/render.sh`** (dùng chung). KHÔNG gọi d2/Chrome trực tiếp.
-- **Compile phải PASS** trước khi báo xong.
-- **L1 approval** trước Write — prose BA-friendly, mô tả bằng từ nghiệp vụ (các thực thể + quan hệ), KHÔNG dump source.
-- **KHÔNG L3 iterate** — review từ .svg.
-- **KHÔNG hỏi kiểu DB/column type kỹ thuật** — data model ở mức nghiệp vụ (theo `ba-conventions.md` IT-BA framing). Cột = "loại thông tin nghiệp vụ" (email, status, ngày tạo), KHÔNG phải "varchar(255)".
-- **Vietnamese-first** nhãn quan hệ; tên entity/cột giữ theo srs/{feature}-erd.md nếu đã có (thường English).
-- **Per `diagram-selection.md`** — `/d2-erd` khi cần ERD đẹp standalone; nhúng inline → `/erd`.
-- **Idempotent** — 1 feature = 1 file `{feature}.d2`; chạy lại → tự vào update mode (L2 diff), không refuse.
+### Hard rules — never violate‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+* __Output cố định__ `docs/{feature}/d2-erd/{feature}.d2` + `.svg`. KHÔNG ghi vào `srs/{feature}-erd.md`.
+* **`--feature` optional** — auto-detect từ ngữ cảnh; file đã tồn tại → tự vào update mode, không cần flag. __Feature chưa có + mô tả data model → tự derive slug + tạo feature__ (điểm-vào, xem `feature-bootstrap.md` nhóm A).
+* __AI viết source, KHÔNG toạ độ__ — ELK lo layout.
+* **Render qua `.claude/skills/d2-activity/render.sh`** (dùng chung). KHÔNG gọi d2/Chrome trực tiếp.
+* __Compile phải PASS__ trước khi báo xong.
+* __L1 approval__ trước Write — prose BA-friendly, mô tả bằng từ nghiệp vụ (các thực thể + quan hệ), KHÔNG dump source.
+* __KHÔNG L3 iterate__ — review từ .svg.
+* __KHÔNG hỏi kiểu DB/column type kỹ thuật__ — data model ở mức nghiệp vụ (theo `ba-conventions.md` IT-BA framing). Cột = "loại thông tin nghiệp vụ" (email, status, ngày tạo), KHÔNG phải "varchar(255)".
+* __Vietnamese-first__ nhãn quan hệ; tên entity/cột giữ theo srs/{feature}-erd.md nếu đã có (thường English).
+* **Per `diagram-selection.md`** — `/d2-erd` khi cần ERD đẹp standalone; nhúng inline → `/erd`.
+* __Idempotent__ — 1 feature = 1 file `{feature}.d2`; chạy lại → tự vào update mode (L2 diff), không refuse.
+
+### Pitfalls — easy to get wrong
+
+* __d2 chưa cài__ → dừng, in 1 dòng install.
+* __QUOTE giá trị cột có ký tự đặc biệt__ (gotcha #1) — `"free | premium"`, `"string (nullable)"`, `"A1 | A2 | B1"`. Quên quote → compile fail "unexpected text".
+* __Nguồn tốt nhất là srs/{feature}-erd.md__ — nếu có, chuyển 1-1 (USER {...} → sql_table). Đừng bịa entity ngoài spec.
+* __ERD >8 entity__ → cân nhắc `direction: down` + nhóm entity liên quan gần nhau bằng thứ tự khai báo.
+* __Quan hệ nhiều-nhiều__ → thể hiện qua bảng nối (junction table) như 1 entity riêng, đúng như data model thật.
+* __KHÔNG hỏi DB detail__ — index, migration, column length là việc dev/DBA, không phải ERD nghiệp vụ.
+* __Update mode (feature đã có ERD)__ → Read source cũ, L2 diff, re-render sau khi user Y.
+* __Feature vừa bootstrap__ — không có xử lý đặc biệt: sự kiện luôn vào changelog.md qua hook, không phụ thuộc spec.md.
 
 ## Inputs
 
@@ -50,7 +64,7 @@ Feature đã có ERD D2 → skill tự nhận ra và vào update mode (L2 diff),
 
 ## Context (dynamic)
 
-Today: !`date +%Y-%m-%d`
+Today: !`date +%Y-%m-%d`‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 Features có sẵn: !`ls -d docs/*/ 2>/dev/null | xargs -I{} basename {} | head -20`
 Feature có srs/{feature}-erd.md (nguồn tốt): !`for d in docs/*/srs/*-erd.md; do [ -f "$d" ] && dirname "$d" | xargs dirname | xargs basename; done 2>/dev/null | head -10`
 d2 cài chưa: !`test -x "$HOME/.local/bin/d2" && echo "✅ $($HOME/.local/bin/d2 --version)" || echo "❌ chưa cài — curl -fsSL https://d2lang.com/install.sh | sh -s --"`
@@ -83,9 +97,17 @@ User gọi /d2-erd --feature X   (hoặc /d2-erd "<mô tả data model>")
 4. L1 plan preview (prose: N entity, M quan hệ). User Y → tiếp
    ▼
 5. Write {feature}.d2 → render.sh → {feature}.svg (compile fail → sửa, tối đa 2 lần)
+5.5. **Đối chiếu canonical (BẮT BUỘC)** — `node .claude/scripts/erd-consistency.mjs --feature {slug}`.
+   So entity + quan hệ của bản D2 vừa sinh với **canonical `srs/{feature}-erd.md`** (nguồn khai ở
+   bước 1). Compile PASS chỉ nghĩa là D2 hợp lệ, KHÔNG nghĩa là nó cùng data model với bản Mermaid —
+   mỗi file tự nó hợp lệ nên không có cách nào khác phát hiện lệch (đo thật: bản D2 của
+   premium-payment thiếu quan hệ `USER ||--o{ PAYMENT_METHOD` mà Mermaid có).
+   - Lệch vì D2 sinh thiếu → sửa `.d2` cho khớp canonical.
+   - Lệch vì **canonical sai** (vd quan hệ không có FK chống lưng) → báo user, sửa `srs/{feature}-erd.md`
+     trước rồi sinh lại; KHÔNG tự ý chỉnh D2 cho "khớp" một canonical sai.
    ▼
 6. Update d2-erd/{feature}-d2-erd-index.md — set env note trước Write,
-   │  hook append activity.log (không phụ thuộc spec.md tồn tại hay chưa).
+   │  hook append changelog.md (không phụ thuộc spec.md tồn tại hay chưa).
    ▼ Báo user.
 ```
 
@@ -119,12 +141,12 @@ DECK: {
 USER.id -> DECK.userId: sở hữu
 ```
 
-**Quy tắc:**
-- 1 entity = 1 block `shape: sql_table`. Cột: `tên: kiểu { constraint: primary_key | foreign_key }`.
-- **QUOTE giá trị cột** khi chứa `()`, `|`, `/`, `:` — vd `"free | premium"`, `"string (nullable)"`. Tên cột trần (`id`, `userId`) không cần.
-- Quan hệ: `A.pk -> B.fk: nhãn`. Nhãn tiếng Việt nghiệp vụ (`sở hữu`, `chứa`, `được ôn`).
-- Loại nghiệp vụ đủ dùng: `string`, `int`, `boolean`, `datetime`, enum liệt kê `"a | b | c"`. KHÔNG `varchar(255)`, KHÔNG index/DB detail.
-- KHÔNG toạ độ/width — ELK lo.
+__Quy tắc:__
+* 1 entity = 1 block `shape: sql_table`. Cột: `tên: kiểu { constraint: primary_key | foreign_key }`.
+* __QUOTE giá trị cột__ khi chứa `()`, `|`, `/`, `:` — vd `"free | premium"`, `"string (nullable)"`. Tên cột trần (`id`, `userId`) không cần.
+* Quan hệ: `A.pk -> B.fk: nhãn`. Nhãn tiếng Việt nghiệp vụ (`sở hữu`, `chứa`, `được ôn`).
+* Loại nghiệp vụ đủ dùng: `string`, `int`, `boolean`, `datetime`, enum liệt kê `"a | b | c"`. KHÔNG `varchar(255)`, KHÔNG index/DB detail.
+* KHÔNG toạ độ/width — ELK lo.
 
 ### Bước 3 — Render + verify
 
@@ -135,14 +157,14 @@ USER.id -> DECK.userId: sở hữu
 
 ## L1 plan preview (mẫu BA-friendly)
 
-> Em sẽ vẽ sơ đồ dữ liệu (ERD) feature **{feature}** tại `docs/{feature}/d2-erd/{feature}.d2` (+ ảnh `.svg`):
+> Em sẽ vẽ sơ đồ dữ liệu (ERD) feature __{feature}__ tại `docs/{feature}/d2-erd/{feature}.d2` (+ ảnh `.svg`):
 >
-> **Các thực thể ({N}):** {liệt kê: USER, DECK, CARD, CARD_REVIEW...}
-> **Quan hệ chính ({M}):** {vd "USER sở hữu DECK", "DECK chứa CARD", "CARD được ôn qua CARD_REVIEW"}
+> __Các thực thể ({N}):__ {liệt kê: USER, DECK, CARD, CARD_REVIEW...}
+> __Quan hệ chính ({M}):__ {vd "USER sở hữu DECK", "DECK chứa CARD", "CARD được ôn qua CARD_REVIEW"}
 >
 > Nguồn: {srs/{feature}-erd.md | srs/{feature}-spec.md | bạn cung cấp}.
 >
-> **Ghi nhận:** activity log "{note}".
+> __Ghi nhận:__ activity log "{note}".
 >
 > Apply? (Y / sửa)
 
@@ -156,22 +178,16 @@ Mở {feature}.svg bằng browser/IDE/Obsidian để xem (bảng PK/FK gọn).
 Cần sửa? /d2-erd --feature {feature} (skill tự vào update mode)
 ```
 
-## Gotchas
-
-- **d2 chưa cài** → dừng, in 1 dòng install.
-- **QUOTE giá trị cột có ký tự đặc biệt** (gotcha #1) — `"free | premium"`, `"string (nullable)"`, `"A1 | A2 | B1"`. Quên quote → compile fail "unexpected text".
-- **Nguồn tốt nhất là srs/{feature}-erd.md** — nếu có, chuyển 1-1 (USER {...} → sql_table). Đừng bịa entity ngoài spec.
-- **ERD >8 entity** → cân nhắc `direction: down` + nhóm entity liên quan gần nhau bằng thứ tự khai báo.
-- **Quan hệ nhiều-nhiều** → thể hiện qua bảng nối (junction table) như 1 entity riêng, đúng như data model thật.
-- **KHÔNG hỏi DB detail** — index, migration, column length là việc dev/DBA, không phải ERD nghiệp vụ.
-- **Update mode (feature đã có ERD)** → Read source cũ, L2 diff, re-render sau khi user Y.
-- **Feature vừa bootstrap** — không có xử lý đặc biệt: sự kiện luôn vào activity.log qua hook, không phụ thuộc spec.md.
-
 ## References
 
-- @../../rules/ba-conventions.md
-- @../../rules/approval-gate.md
-- @../../rules/naming-conventions.md
-- @../../rules/changelog.md
-- @../../rules/diagram-selection.md
-- @../../rules/feature-bootstrap.md
+* @../../rules/ba-conventions.md
+* @../../rules/approval-gate.md
+* @../../rules/naming-conventions.md
+* @../../rules/changelog.md
+* @../../rules/diagram-selection.md
+* @../../rules/diagram-correctness.md
+* @../../rules/feature-bootstrap.md‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền ai4ba.com</sub>

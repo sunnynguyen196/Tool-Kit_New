@@ -24,6 +24,22 @@ command -v python3 >/dev/null 2>&1 || { echo "❌ Cần python3 (dùng để enc
 
 SVG="${SRC%.puml}.svg"
 
+# ── GATE CẤU TRÚC LUỒNG (chạy TRƯỚC khi gửi lên server) ──
+# Render chỉ kiểm "có ra ảnh"; if-thiếu-endif, nhánh không nhãn, thiếu stop đều render đẹp.
+# Bỏ qua có chủ đích: LINT_SKIP=1 ./render.sh <file> (chỉ khi debug).
+LINTER="$SCRIPT_DIR/puml-activity-lint.mjs"
+if [ -z "${LINT_SKIP:-}" ] && [ -f "$LINTER" ]; then
+  if command -v node >/dev/null 2>&1; then
+    if ! node "$LINTER" "$SRC"; then
+      echo ""
+      echo "❌ DỪNG: cấu trúc luồng sai — KHÔNG render (sửa .puml theo hướng dẫn trên rồi chạy lại)."
+      exit 1
+    fi
+  else
+    echo "⚠️  Không có node — bỏ qua gate cấu trúc. Ảnh sinh ra CHƯA được kiểm luồng."
+  fi
+fi
+
 ENCODED="$(python3 "$ENCODER" "$SRC")" || { echo "❌ Encode PlantUML thất bại — kiểm tra cú pháp file $SRC"; exit 1; }
 
 URL="https://www.plantuml.com/plantuml/svg/${ENCODED}"
@@ -49,7 +65,7 @@ if grep -q "Syntax Error\|An error has occured\|cannot find message" "$SVG" 2>/d
   exit 1
 fi
 
-echo "✅ SVG: $SVG (qua plantuml.com — nội dung đã gửi qua internet, xem gotcha trong SKILL.md nếu cần offline)"
+echo "✅ SVG: $SVG (qua plantuml.com — nội dung đã gửi qua internet, xem Pitfalls trong SKILL.md nếu cần offline)"
 
 if [ "$WANT_PNG" = "--png" ]; then
   PNG="${SRC%.puml}.png"

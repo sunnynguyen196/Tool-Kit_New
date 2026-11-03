@@ -6,11 +6,11 @@ paths:
   - ".claude/skills/discover/**"
 ---
 
-# Keyword Detection Patterns
+# Keyword Detection Patterns‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Patterns để skill `/meet`, `/brainstorm`, `/reverse-doc` extract structured info từ unstructured text (transcript, notes, tài liệu cũ). Hỗ trợ tiếng Việt + tiếng Anh.
 
-## Language detection
+## Language detection‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 Detect language từ content trước khi extract.
 
@@ -20,7 +20,7 @@ Detect language từ content trước khi extract.
 
 **Mixed:** >30% dòng EN-only → coi là mixed. Skill ưu tiên format VN.
 
-## Decision patterns
+## Decision patterns‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 **Trigger phrases:**
 
@@ -34,7 +34,7 @@ Detect language từ content trước khi extract.
 - Title verb-object: "Chốt là dùng Stripe" → `"Use Stripe for payments"`
 - Slug: kebab-case, max 40 chars, ASCII transliteration cho VN.
 
-## Blocker patterns
+## Blocker patterns‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 **Trigger phrases:**
 
@@ -49,7 +49,7 @@ Detect language từ content trước khi extract.
 - `medium`: mentions integration, third-party, vendor.
 - `low`: nice-to-have, formatting, minor.
 
-## Action item patterns
+## Action item patterns‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 **Trigger phrases:**
 
@@ -73,7 +73,7 @@ Detect language từ content trước khi extract.
 | "Không biết...", "Liệu..." | "Not sure...", "Wonder if..." |
 
 **Capture:**
-- Format: `- [ ] OQ: {question}`.
+- Format: `- [ ] OQ: {question}`.‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 - Owner default `TBD`.
 
 ## Attendee patterns
@@ -118,7 +118,7 @@ Skill nên show preview với confidence levels trước khi write — user revi
 ## Content-signal classification patterns
 
 > Dùng khi `/reverse-doc` đọc nguồn cũ để **nhận diện loại nội dung** (phần nào là flow, rule, wording,
-> user story...) phục vụ cluster theo feature + điền đúng mục trong `reverse-{feature}.md`. KHÔNG còn dùng
+> user story...) phục vụ cluster theo feature + điền đúng Mục trong `{feature}-reverse-spec.md`. KHÔNG còn dùng
 > để import 1-1 sang doc type (nghiệp vụ import 1-1 đã bỏ cùng `/legacy`).
 
 | Source content signal | Loại nội dung nhận diện |
@@ -134,4 +134,8 @@ Skill nên show preview với confidence levels trước khi write — user revi
 | Meeting metadata (date + attendees + agenda) | `meeting` |
 | Empty / unclear | `inbox` (raw capture) |
 
-Multi-pattern detect → priority: explicit metadata > section headers > content keywords.
+Multi-pattern detect → priority: explicit metadata > section headers > content keywords.‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền hoangphan.blog</sub>

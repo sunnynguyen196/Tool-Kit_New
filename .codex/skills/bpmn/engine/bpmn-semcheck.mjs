@@ -15,6 +15,18 @@ export function checkIR(ir, source = {}) {
   const laneIds = new Set(lanes.map(l => l.id));
 
   // ───────── (A) STRUCTURAL ─────────
+  // A0. id duy nhất — PHẢI kiểm TRƯỚC mọi thứ khác: nodeById/laneIds ở trên dùng Map nên
+  // id trùng bị ghi đè ÂM THẦM (node sau thắng node trước) → mọi check sau đó soi trên đồ thị
+  // đã mất node, báo "OK" trong khi IR thật sự hỏng. SKILL.md hứa "id duy nhất" → phải là error.
+  const dupOf = list => {
+    const seen = new Set(), dup = new Set();
+    list.forEach(id => { if (seen.has(id)) dup.add(id); else seen.add(id); });
+    return [...dup];
+  };
+  dupOf(nodes.map(n => n.id)).forEach(id => errors.push(`Node id trùng: "${id}" — id phải duy nhất (bản sau ghi đè bản trước, đồ thị mất node)`));
+  dupOf(flows.map(f => f.id)).forEach(id => errors.push(`Flow id trùng: "${id}" — id phải duy nhất`));
+  dupOf(lanes.map(l => l.id)).forEach(id => errors.push(`Lane id trùng: "${id}" — id phải duy nhất`));
+
   // A1. references hợp lệ
   nodes.forEach(n => {
     if (!laneIds.has(n.lane)) errors.push(`Node "${n.id}" tham chiếu lane không tồn tại: ${n.lane}`);
@@ -31,7 +43,10 @@ export function checkIR(ir, source = {}) {
   const starts = nodes.filter(n => n.kind === 'start');
   const ends   = nodes.filter(n => n.kind === 'end');
   if (starts.length === 0) errors.push('Không có startEvent — mọi quy trình cần đúng 1 điểm bắt đầu');
-  if (starts.length > 1) warnings.push(`Có ${starts.length} startEvent — cân nhắc gộp về 1 (auto-layout chọn 1 gốc)`);
+  // Nhiều start = ERROR (không phải cảnh báo): SKILL.md Mục "IR rules" hứa "đúng 1 start", và
+  // auto-layout chỉ chọn 1 gốc → start thứ 2 trở đi bị vẽ lạc chỗ. Muốn nhiều điểm khởi phát thật
+  // thì mô hình bằng 1 start + gateway, hoặc tách thành 2 process riêng.
+  if (starts.length > 1) errors.push(`Có ${starts.length} startEvent — quy trình phải có ĐÚNG 1 điểm bắt đầu (dùng 1 start + gateway, hoặc tách process)`);
   if (ends.length === 0) errors.push('Không có endEvent — quy trình phải có ít nhất 1 kết cục');
 
   // A3. degree (in/out)
@@ -47,8 +62,10 @@ export function checkIR(ir, source = {}) {
     if (n.kind === 'task' && (di === 0 || dout === 0)) errors.push(`task "${n.id}" thiếu ${di===0?'incoming':'outgoing'} (đứt mạch)`);
     if (n.kind === 'gateway') {
       if (dout < 2) errors.push(`gateway "${n.id}" chỉ có ${dout} nhánh ra — gateway cần ≥2 (nếu 1 thì bỏ gateway)`);
-      // mọi nhánh ra của gateway nên có nhãn
-      outOf[n.id].forEach(f => { if (!f.name || !String(f.name).trim()) warnings.push(`Nhánh "${f.id}" từ gateway "${n.id}" thiếu nhãn (đặt name= cho rõ điều kiện)`); });
+      // Nhánh gateway thiếu nhãn = ERROR: SKILL.md gọi "gateway ≥2 outgoing CÓ NAME" là rule
+      // bắt buộc. Gateway không nhãn = người đọc không biết điều kiện nào dẫn đi đâu — đúng loại
+      // "vẽ đẹp nhưng vô nghĩa nghiệp vụ" mà gate này tồn tại để chặn.
+      outOf[n.id].forEach(f => { if (!f.name || !String(f.name).trim()) errors.push(`Nhánh "${f.id}" từ gateway "${n.id}" THIẾU nhãn điều kiện — mỗi nhánh gateway phải có name= (vd "hợp lệ" / "sai mật khẩu")`); });
     }
   });
 
@@ -59,10 +76,22 @@ export function checkIR(ir, source = {}) {
   // tới end: reverse bfs từ ends
   const canEnd = new Set();
   (function rbfs(seed){ const q=[...seed]; while(q.length){const u=q.shift(); if(canEnd.has(u))continue; canEnd.add(u); inOf[u].forEach(f=>q.push(f.src));} })(ends.map(e=>e.id));
-  nodes.forEach(n => { if (n.kind!=='end' && reach.has(n.id) && !canEnd.has(n.id)) warnings.push(`Node "${n.id}" không dẫn tới end nào (nhánh cụt?)`); });
+  // Không tới được end = ERROR: SKILL.md hứa "mọi node reachable từ start + TỚI ĐƯỢC end".
+  // Đây chính là lớp lỗi "vào được trạng thái mà không ra được" — nghiệp vụ bị treo, không phải
+  // chuyện thẩm mỹ. Loop hợp lệ (revise→draft) KHÔNG bị bắt oan: reverse-BFS đi qua nhánh thoát
+  // của gateway nên mọi node trong vòng lặp vẫn tính là tới được end (đã test với IR loop thật).
+  nodes.forEach(n => { if (n.kind!=='end' && reach.has(n.id) && !canEnd.has(n.id)) errors.push(`Node "${n.id}" KHÔNG dẫn tới end nào — nhánh cụt, nghiệp vụ vào rồi không ra được (thêm đường tới end hoặc bỏ node)`); });
 
   // ───────── (B) COVERAGE vs source ─────────
   const coverage = {};
+  // Thiếu source facts → tầng (B) KHÔNG chạy. Trước đây skip IM LẶNG nên output vẫn in
+  // "✅ IR structural OK" và người đọc tưởng đã đối chiếu nghiệp vụ (đo thật: 2/3 process
+  // authentication không có src.json). Nay phải nói rõ là chưa đối chiếu gì.
+  const hasSource = !!(source.actors?.length || source.branches?.length || source.errors?.length);
+  if (!hasSource) {
+    coverage._skipped = 'Không có source facts (.src.json) — CHƯA đối chiếu actor/branch/error với nguồn UC/SRS';
+    warnings.push('THIẾU .src.json — chỉ kiểm được cấu trúc đồ thị, CHƯA đối chiếu phủ actor/nhánh/lỗi với nguồn nghiệp vụ. Sinh {process}.src.json để bật tầng coverage.');
+  }
   const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
   function fuzzyHas(haystack, needle) {
     const n = norm(needle);
@@ -98,9 +127,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const ir = JSON.parse(readFileSync(process.argv[2], 'utf8'));
   const src = process.argv[3] ? JSON.parse(readFileSync(process.argv[3], 'utf8')) : {};
   const r = checkIR(ir, src);
-  console.log(r.ok ? '✅ IR structural OK' : `❌ ${r.errors.length} structural error`);
+  // Báo TÁCH 2 tầng, không gộp 1 dòng "OK" đại diện cho cả structural lẫn coverage —
+  // gộp là cách sinh ra ngộ nhận "đã kiểm hết" (bài học audit 2026-07-26).
+  console.log(r.ok ? '✅ Structural: PASS' : `❌ Structural: FAIL (${r.errors.length} lỗi)`);
   r.errors.forEach(e => console.log('  ✗ ' + e));
+  const covSkipped = !!r.coverage._skipped;
+  console.log(covSkipped ? '⚠  Coverage:   SKIPPED (thiếu .src.json — chưa đối chiếu nguồn)' : '✅ Coverage:   đã đối chiếu nguồn');
   if (r.warnings.length) { console.log(`\n⚠ ${r.warnings.length} cảnh báo:`); r.warnings.forEach(w => console.log('  • ' + w)); }
-  if (Object.keys(r.coverage).length) console.log('\nCoverage:', JSON.stringify(r.coverage, null, 2));
+  const shown = { ...r.coverage }; delete shown._skipped;
+  if (Object.keys(shown).length) console.log('\nCoverage:', JSON.stringify(shown, null, 2));
   process.exit(r.ok ? 0 : 1);
 }

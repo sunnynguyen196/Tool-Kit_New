@@ -186,26 +186,31 @@ Sau khi có file Brainstorm/SRS, BA tiến hành vẽ sơ đồ để trực qua
 
 ### 1. Claude Code
 Trong thư mục dự án BA của bạn:
-- Skill được tự động nhận diện trong thư mục `.claude/skills/`.
-- Rule được nhận diện trong `.claude/rules/`.
-- Chạy lệnh trực tiếp bằng dấu gạch chéo `/`: `/brainstorm`, `/user-flow`, `/wireframe-html`, `/userguide`.
+- Hệ sinh thái đầy đủ được nhận diện tự động trong `.claude/skills/` (58 skills), `.claude/agents/` (12 review agents), `.claude/rules/` (19 rules), `.claude/hooks/` (6 hooks).
+- Chạy lệnh trực tiếp bằng dấu gạch chéo `/`: `/brainstorm`, `/srs`, `/screen-spec`, `/userstory`, `/test-cases`, `/jira`, `/userguide`...
 
 ### 2. Google Antigravity IDE
-- Bản copy của Skill và Rule đã được đặt sẵn tại `.agents/skills/` và `.agents/rules/`.
-- Bạn chỉ cần mở Antigravity tại thư mục workspace hiện tại và gõ yêu cầu tương ứng.
+- Bản copy của toàn bộ 58 Skill và 19 Rule đã được đồng bộ sẵn sàng tại `.agents/skills/` và `.agents/rules/`.
+- Bao gồm đầy đủ skill chuyên biệt **`/screen-spec`** (Chuẩn EPAY-QT.CG.02_BM33) và bộ Design System Figma Portal 2.0.
 
 ### 3. Codex CLI
-- Các skill nằm trong thư mục `.codex/skills/`.
+- Các skill nằm sẵn trong thư mục `.codex/skills/` và `.codex/rules/`.
 
 ---
 
-## 📋 5. TỔNG KẾT BỘ FILE TÀI NGUYÊN TRONG WORKSPACE
+## 📋 5. TỔNG KẾT BỘ FILE TÀI NGUYÊN TRONG WORKSPACE (ĐÃ NÂNG CẤP)
 
-| Thư mục / File | Mô tả chức năng |
-| :--- | :--- |
-| **`WORKFLOW-BA-MASTER.md`** | Tài liệu Master Workflow Hướng dẫn toàn bộ quy trình (File bạn đang đọc) |
-| **`index.html`** | Ứng dụng Web BA Workflow Dashboard tương tác trực quan |
-| **`.claude/skills/`** | Chứa 15 Skill chuyên sâu phục vụ đủ 4 giai đoạn làm việc BA |
-| **`.claude/rules/`** | Chứa 12 Bộ Quy tắc Chuẩn hóa Nghiệp vụ (HITL, BA Language, OQs) |
-| **`_templates/`** | Mẫu khung tài liệu chuẩn cho Brainstorm, Diagram, Wireframe, Guide |
-| **`examples/`** | Các dự án mẫu đã được render sản phẩm thật (Food Delivery, Auth, Enrich Translate) |
+| Thư mục / File | Số lượng / Quy mô | Mô tả chức năng |
+| :--- | :--- | :--- |
+| **`WORKFLOW-BA-MASTER.md`** | 1 file | Tài liệu Master Workflow Hướng dẫn toàn bộ quy trình (File bạn đang đọc) |
+| **`HUONG-DAN-BA-KIT.html`** | 1 file trực quan | **Cẩm nang toàn thư BA Kit**: Mở trực tiếp trên trình duyệt, gồm 10 chương + 64 bài giải thích |
+| **`huong-dan/`** | 10 tài liệu | Các chương cẩm nang hướng dẫn chi tiết cách chọn pipeline, tối ưu token, tích hợp |
+| **`explain-skills/`** | 64 bài phân tích | Cẩm nang nghiệp vụ giải thích sâu công dụng và ví dụ của từng skill |
+| **`.agents/skills/` & `.claude/skills/`** | **58 Skills** | Trọn vẹn 57 skill AI4BA thế hệ mới + 1 skill độc quyền **`screen-spec`** chuẩn EPAY |
+| **`.claude/agents/` & `.agents/agents/`** | **12 Review Agents** | Đội ngũ Reviewer độc lập: `senior-ba`, `po-reviewer`, `pm-reviewer`, `tech-reviewer`, `qa-reviewer`... |
+| **`.claude/rules/` & `.agents/rules/`** | **19 Rules** | Bộ quy chuẩn nghiệp vụ: HITL, API Integration, Jira Mapping, Delivery Readiness, OQs... |
+| **`.claude/hooks/`** | 6 Hooks tự động | Tự động cập nhật Changelog, rà soát tài liệu lỗi thời (Doc-drift), đồng bộ phiên |
+| **`_templates/`** | **48 Templates** | Bộ khung mẫu chuẩn cho mọi giai đoạn: PRD, SRS, Use case, Story, AC, Test, API, Guide |
+| **`_scripts/`** | 5 Python scripts | Công cụ tự động hoá xuất bản: `build-preview.py`, `build-export.py`, `workspace-status.py` |
+| **`examples/`** | Nhiều dự án mẫu | Ví dụ minh họa sản phẩm thật chạy qua pipeline (Food Delivery, Auth, Dispute...) |
+

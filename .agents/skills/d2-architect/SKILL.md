@@ -1,43 +1,57 @@
 ---
 name: d2-architect
-description: Dùng khi cần vẽ sơ đồ kiến trúc hệ thống (component, service, DB lồng nhau) bằng D2 — layout ELK, đẹp hơn Mermaid cho loại sơ đồ này. Kích hoạt bằng `/d2-architect --feature <slug>`. Cùng họ với `/d2-activity`, `/d2-erd`.
+description: Dùng khi cần vẽ sơ đồ kiến trúc hệ thống (component, service, DB lồng nhau) bằng D2 — layout ELK, đẹp hơn Mermaid cho loại sơ đồ này. Cùng họ với `/d2-activity`, `/d2-erd`.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 user-invocable: true
 argument-hint: "[--feature <slug> | \"<mô tả hệ thống>\"]"
 ---
+<!-- Licensed to nguyenduong280196@gmail.com — Order XKTV2KA26 -->
 
-# /d2-architect — System / Architecture Diagram (D2, nested container + ELK)
+# /d2-architect — System / Architecture Diagram (D2, nested container + ELK)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Họ skill D2: `/d2-activity` (flow) · `/d2-erd` (data model) · `/d2-architect` (kiến trúc này). Cả 3 dùng chung `render.sh` ở `.claude/skills/d2-activity/`.
 
-## Goal
+## Goal‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-Vẽ **bức tranh kiến trúc hệ thống** ở tầm nghiệp vụ: các khối (client, backend, dịch vụ ngoài) lồng các thành phần con (service, DB, gateway), luồng gọi giữa chúng có nhãn nghiệp vụ. Dùng nested container của [D2](https://d2lang.com) — thứ **Mermaid không vẽ được đẹp**. Output trong `docs/{feature}/d2-architect/`:
+Vẽ __bức tranh kiến trúc hệ thống__ ở tầm nghiệp vụ: các khối (client, backend, dịch vụ ngoài) lồng các thành phần con (service, DB, gateway), luồng gọi giữa chúng có nhãn nghiệp vụ. Dùng nested container của [D2](https://d2lang.com) — thứ __Mermaid không vẽ được đẹp__. Output trong `docs/{feature}/d2-architect/`:
 
 1. `{slug}.d2` — source D2 (text, version git). Sửa khi gọi lại skill (tự vào update mode).
 2. `{slug}.svg` — render sẵn (mở browser/IDE/Obsidian).
 
 Plus `d2-architect/{feature-or-shared}-d2-architect-index.md` (metadata + bảng khối). Nếu vẽ kiến trúc toàn hệ thống (không thuộc 1 feature) → lưu `docs/_shared/d2-architect/`.
 
-## Kiến trúc = tầm nghiệp vụ, KHÔNG phải sơ đồ triển khai
+## Kiến trúc = tầm nghiệp vụ, KHÔNG phải sơ đồ triển khai‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-Skill phục vụ IT-BA, KHÔNG phải solution architect. Vẽ ở mức **"hệ thống gồm khối gì, gọi dịch vụ ngoài nào, luồng dữ liệu chính"** — đủ để stakeholder + dev hiểu bối cảnh. KHÔNG vẽ: pod/replica, load balancer config, VPC/subnet, port number, container image. Nếu user cần mức đó → đó là việc của architect, ngoài scope.
+Skill phục vụ IT-BA, KHÔNG phải solution architect. Vẽ ở mức __"hệ thống gồm khối gì, gọi dịch vụ ngoài nào, luồng dữ liệu chính"__ — đủ để stakeholder + dev hiểu bối cảnh. KHÔNG vẽ: pod/replica, load balancer config, VPC/subnet, port number, container image. Nếu user cần mức đó → đó là việc của architect, ngoài scope.
 
-**ĐƯỢC vẽ:** khối logic (Client/Backend/Mobile), service theo chức năng nghiệp vụ (Auth, SRS Engine, Import), database (1 khối), dịch vụ ngoài theo tên + mục đích (Google OAuth, Stripe, SendGrid), luồng gọi có nhãn nghiệp vụ.
+__ĐƯỢC vẽ:__ khối logic (Client/Backend/Mobile), service theo chức năng nghiệp vụ (Auth, SRS Engine, Import), database (1 khối), dịch vụ ngoài theo tên + mục đích (Google OAuth, Stripe, SendGrid), luồng gọi có nhãn nghiệp vụ.
 
-## Constraints
+## Constraints‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-- **Output cố định** `docs/{feature}/d2-architect/{slug}.d2` + `.svg` (hoặc `docs/_shared/d2-architect/` nếu cross-feature).
-- **`--feature` optional** — auto-detect từ ngữ cảnh; không có `--feature` mà có mô tả kiến trúc TỔNG → vẽ vào `_shared/d2-architect/` (escape hatch, GIỮ nguyên). File đã tồn tại → tự vào update mode, không cần flag. **Muốn gắn vào 1 feature cụ thể mà feature chưa có → tự derive slug + tạo feature** (điểm-vào, xem `feature-bootstrap.md` nhóm A); kiến trúc tổng thì vẫn vào `_shared/` như cũ.
-- **AI viết source, KHÔNG toạ độ** — ELK lo layout.
-- **Render qua `.claude/skills/d2-activity/render.sh`** (dùng chung). KHÔNG gọi d2/Chrome trực tiếp.
-- **Compile phải PASS** trước khi báo xong.
-- **L1 approval** trước Write — prose BA-friendly (các khối + dịch vụ ngoài + luồng chính), KHÔNG dump source.
-- **KHÔNG L3 iterate** — review từ .svg.
-- **KHÔNG hỏi/vẽ infra detail** (port, replica, VPC) — xem Mục "tầm nghiệp vụ" trên.
-- **Vietnamese-first** nhãn luồng + tên khối; tên service giữ theo hệ thống thật.
-- **Per `diagram-selection.md`** — `/d2-architect` cho bức tranh hệ thống; luồng nghiệp vụ nhiều nhánh → `/d2-activity`; data model → `/d2-erd`.
-- **Idempotent** — 1 slug = 1 file; chạy lại → tự vào update mode (L2 diff), không refuse.
+### Hard rules — never violate‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+* __Output cố định__ `docs/{feature}/d2-architect/{slug}.d2` + `.svg` (hoặc `docs/_shared/d2-architect/` nếu cross-feature).
+* **`--feature` optional** — auto-detect từ ngữ cảnh; không có `--feature` mà có mô tả kiến trúc TỔNG → vẽ vào `_shared/d2-architect/` (escape hatch, GIỮ nguyên). File đã tồn tại → tự vào update mode, không cần flag. __Muốn gắn vào 1 feature cụ thể mà feature chưa có → tự derive slug + tạo feature__ (điểm-vào, xem `feature-bootstrap.md` nhóm A); kiến trúc tổng thì vẫn vào `_shared/` như cũ.
+* __AI viết source, KHÔNG toạ độ__ — ELK lo layout.
+* **Render qua `.claude/skills/d2-activity/render.sh`** (dùng chung). KHÔNG gọi d2/Chrome trực tiếp.
+* __Compile phải PASS__ trước khi báo xong.
+* __L1 approval__ trước Write — prose BA-friendly (các khối + dịch vụ ngoài + luồng chính), KHÔNG dump source.
+* __KHÔNG L3 iterate__ — review từ .svg.
+* __KHÔNG hỏi/vẽ infra detail__ (port, replica, VPC) — xem Mục "tầm nghiệp vụ" trên.
+* __Vietnamese-first__ nhãn luồng + tên khối; tên service giữ theo hệ thống thật.
+* **Per `diagram-selection.md`** — `/d2-architect` cho bức tranh hệ thống; luồng nghiệp vụ nhiều nhánh → `/d2-activity`; data model → `/d2-erd`.
+* __Idempotent__ — 1 slug = 1 file; chạy lại → tự vào update mode (L2 diff), không refuse.
+
+### Pitfalls — easy to get wrong
+
+* __d2 chưa cài__ → dừng, in 1 dòng install.
+* __QUOTE nhãn có ký tự đặc biệt__ (gotcha #1) — `/ | ( ) :` trong tên/nhãn phải bọc `"..."`. Quên → compile fail.
+* __Đừng vẽ infra__ — port, replica, load balancer, VPC là mức triển khai, ngoài scope IT-BA. Giữ ở tầm khối logic + dịch vụ ngoài.
+* __Nguồn tốt nhất là system-overview.md__ — nếu chưa có, gợi ý user chạy `/update-overview system` trước để có nguồn chuẩn.
+* __Container quá sâu__ (lồng >3 tầng) → khó đọc; gộp bớt hoặc tách 2 diagram (vd 1 tổng quan + 1 zoom backend).
+* __Dịch vụ ngoài__ luôn gói viền đứt + ghi tên thật + mục đích 1 cụm từ (Google OAuth, không phải "IdP #1").
+* __Cross-feature__ (kiến trúc toàn app) → lưu `docs/_shared/d2-architect/`, KHÔNG nhét vào 1 feature folder.
+* __Update mode (slug đã tồn tại)__ → Read source cũ, L2 diff, re-render sau khi user Y.
 
 ## Inputs
 
@@ -52,7 +66,7 @@ Slug đã tồn tại → skill tự nhận ra và vào update mode (L2 diff), k
 ## Context (dynamic)
 
 Today: !`date +%Y-%m-%d`
-Features có sẵn: !`ls -d docs/*/ 2>/dev/null | xargs -I{} basename {} | head -20`
+Features có sẵn: !`ls -d docs/*/ 2>/dev/null | xargs -I{} basename {} | head -20`‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 Có system-overview (nguồn tốt): !`test -f docs/_shared/system-overview.md && echo "✅ docs/_shared/system-overview.md" || echo "(chưa có — /update-overview system)"`
 d2 cài chưa: !`test -x "$HOME/.local/bin/d2" && echo "✅ $($HOME/.local/bin/d2 --version)" || echo "❌ chưa cài — curl -fsSL https://d2lang.com/install.sh | sh -s --"`
 
@@ -87,7 +101,7 @@ User gọi /d2-architect [--feature X | "<mô tả>"]
    ▼
 5. Write {slug}.d2 → render.sh → {slug}.svg (compile fail → sửa, tối đa 2 lần)
    ▼
-6. Update {feature-or-shared}-d2-architect-index.md (env note → activity.log). Báo user mở .svg.
+6. Update {feature-or-shared}-d2-architect-index.md (env note → changelog.md). Báo user mở .svg.
 ```
 
 ## Cách xây (build step-by-step)
@@ -132,13 +146,13 @@ Backend.Core -> Backend.DB: đọc/ghi
 Backend.Auth -> External.Google: OAuth callback
 ```
 
-**Quy tắc:**
-- Container lồng: `Backend: { API: ...; DB: {shape: cylinder} }`. Tham chiếu con: `Backend.API`.
-- Shape gợi ý: `person` (actor), `cylinder` (DB/storage), `queue` (message queue), mặc định ▭ (service).
-- Dịch vụ ngoài: gói trong 1 container `style.stroke-dash: 3` (viền đứt) — phân biệt "ngoài tầm kiểm soát".
-- Nhấn thành phần chính bằng `style.fill`. Đừng tô màu loạn — 1-2 màu nhấn là đủ.
-- **QUOTE nhãn/tên có ký tự đặc biệt** `() / | :` — vd `Client (Web / Mobile)` OK không space-only, nhưng `"API v2 / gateway"` cần quote.
-- KHÔNG toạ độ — ELK lo. KHÔNG infra detail (port/replica).
+__Quy tắc:__
+* Container lồng: `Backend: { API: ...; DB: {shape: cylinder} }`. Tham chiếu con: `Backend.API`.
+* Shape gợi ý: `person` (actor), `cylinder` (DB/storage), `queue` (message queue), mặc định ▭ (service).
+* Dịch vụ ngoài: gói trong 1 container `style.stroke-dash: 3` (viền đứt) — phân biệt "ngoài tầm kiểm soát".
+* Nhấn thành phần chính bằng `style.fill`. Đừng tô màu loạn — 1-2 màu nhấn là đủ.
+* __QUOTE nhãn/tên có ký tự đặc biệt__ `() / | :` — vd `Client (Web / Mobile)` OK không space-only, nhưng `"API v2 / gateway"` cần quote.
+* KHÔNG toạ độ — ELK lo. KHÔNG infra detail (port/replica).
 
 ### Bước 3 — Render + verify
 
@@ -149,16 +163,16 @@ Backend.Auth -> External.Google: OAuth callback
 
 ## L1 plan preview (mẫu BA-friendly)
 
-> Em sẽ vẽ sơ đồ kiến trúc **{tên hệ thống}** tại `docs/{...}/d2-architect/{slug}.d2` (+ ảnh `.svg`):
+> Em sẽ vẽ sơ đồ kiến trúc __{tên hệ thống}__ tại `docs/{...}/d2-architect/{slug}.d2` (+ ảnh `.svg`):
 >
-> **Các khối ({K}):** {vd Client (Web/Mobile), Backend, Dịch vụ ngoài}
-> **Thành phần chính:** {vd API Gateway, Auth Service, SRS Engine, Database}
-> **Dịch vụ ngoài ({M}):** {vd Google OAuth, Web Speech API, AI Model}
-> **Luồng chính:** {vd "Client gọi Backend qua REST", "Auth gọi Google OAuth"}
+> __Các khối ({K}):__ {vd Client (Web/Mobile), Backend, Dịch vụ ngoài}
+> __Thành phần chính:__ {vd API Gateway, Auth Service, SRS Engine, Database}
+> __Dịch vụ ngoài ({M}):__ {vd Google OAuth, Web Speech API, AI Model}
+> __Luồng chính:__ {vd "Client gọi Backend qua REST", "Auth gọi Google OAuth"}
 >
 > Nguồn: {system-overview.md | srs/{feature}-spec.md | bạn cung cấp}.
 >
-> **Ghi nhận:** activity log "{note}".
+> __Ghi nhận:__ activity log "{note}".
 >
 > Apply? (Y / sửa)
 
@@ -172,22 +186,16 @@ Mở {slug}.svg bằng browser/IDE/Obsidian để xem (khối lồng nhau, DB cy
 Cần sửa? /d2-architect --feature {feature} (skill tự vào update mode)
 ```
 
-## Gotchas
-
-- **d2 chưa cài** → dừng, in 1 dòng install.
-- **QUOTE nhãn có ký tự đặc biệt** (gotcha #1) — `/ | ( ) :` trong tên/nhãn phải bọc `"..."`. Quên → compile fail.
-- **Đừng vẽ infra** — port, replica, load balancer, VPC là mức triển khai, ngoài scope IT-BA. Giữ ở tầm khối logic + dịch vụ ngoài.
-- **Nguồn tốt nhất là system-overview.md** — nếu chưa có, gợi ý user chạy `/update-overview system` trước để có nguồn chuẩn.
-- **Container quá sâu** (lồng >3 tầng) → khó đọc; gộp bớt hoặc tách 2 diagram (vd 1 tổng quan + 1 zoom backend).
-- **Dịch vụ ngoài** luôn gói viền đứt + ghi tên thật + mục đích 1 cụm từ (Google OAuth, không phải "IdP #1").
-- **Cross-feature** (kiến trúc toàn app) → lưu `docs/_shared/d2-architect/`, KHÔNG nhét vào 1 feature folder.
-- **Update mode (slug đã tồn tại)** → Read source cũ, L2 diff, re-render sau khi user Y.
-
 ## References
 
-- @../../rules/ba-conventions.md
-- @../../rules/approval-gate.md
-- @../../rules/naming-conventions.md
-- @../../rules/changelog.md
-- @../../rules/diagram-selection.md
-- @../../rules/feature-bootstrap.md
+* @../../rules/ba-conventions.md
+* @../../rules/approval-gate.md
+* @../../rules/naming-conventions.md
+* @../../rules/changelog.md
+* @../../rules/diagram-selection.md
+* @../../rules/diagram-correctness.md
+* @../../rules/feature-bootstrap.md‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền hoangphan.blog</sub>

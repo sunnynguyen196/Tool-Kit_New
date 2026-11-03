@@ -1,8 +1,8 @@
-# Approval Gate Convention
+# Approval Gate Convention‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Mọi skill phải tuân thủ rule này khi write/edit file. Mục đích: human-in-the-loop (HITL) thống nhất — không skill nào tự ý ghi file mà không qua approval.
 
-## 3 levels
+## 3 levels‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | Level | Bắt buộc khi | Cơ chế |
 |-------|--------------|--------|
@@ -10,7 +10,7 @@
 | **L2 Diff** | Khi `Edit` 1 file đã tồn tại (kể cả khi skill tự vào update mode do file đã có, không cần flag) | Hiển thị unified diff; user confirm Y/n/edit-prompt |
 | **L3 Iterate** | Output sáng tạo: ASCII wireframe, mermaid diagram, prose draft | Render trong chat → loop refine; max 3 vòng |
 
-## L1 — Plan preview
+## L1 — Plan preview‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 **Format chuẩn** (skill in ra trước khi ghi):
 
@@ -25,18 +25,18 @@ Apply? (Y/n/select):
 ```
 
 **User response:**
-- `Y` / `<enter>` / `yes` / `ok` → proceed tất cả.
-- `n` / `no` / `abort` → huỷ toàn bộ, không ghi gì.
-- `select skip 2,3` → chạy item 1, bỏ 2 và 3.
-- `select only 1` → chỉ chạy item 1.
-- Bất kỳ free text khác → treat như request thay đổi plan, skill phải re-plan.
+* `Y` / `<enter>` / `yes` / `ok` → proceed tất cả.
+* `n` / `no` / `abort` → huỷ toàn bộ, không ghi gì.
+* `select skip 2,3` → chạy item 1, bỏ 2 và 3.
+* `select only 1` → chỉ chạy item 1.
+* Bất kỳ free text khác → treat như request thay đổi plan, skill phải re-plan.
 
 **Rules:**
-- L1 **bắt buộc** ngay cả khi chỉ tạo 1 file.
-- Bảng plan tối đa 1 dòng/file. Summary ngắn (≤50 ký tự).
-- Skill KHÔNG được skip L1 với cớ "user đã confirm trong skill khác".
+* L1 **bắt buộc** ngay cả khi chỉ tạo 1 file.
+* Bảng plan tối đa 1 dòng/file. Summary ngắn (≤50 ký tự).
+* Skill KHÔNG được skip L1 với cớ "user đã confirm trong skill khác".
 
-## L2 — Diff confirm
+## L2 — Diff confirm‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 **Khi nào:** edit file đã tồn tại (cả khi skill tự vào update mode vì file đã có, hoặc apply patch trong /cr).
 
@@ -58,21 +58,21 @@ Apply? (Y/n/edit-prompt):
 ```
 
 **User response:**
-- `Y` → apply diff.
-- `n` → huỷ edit này (giữ file cũ).
-- `edit-prompt: <text>` → quay lại bước synthesize với feedback `<text>`, tạo diff mới.
+* `Y` → apply diff.
+* `n` → huỷ edit này (giữ file cũ).
+* `edit-prompt: <text>` → quay lại bước synthesize với feedback `<text>`, tạo diff mới.
 
 **Rules:**
-- Diff phải là unified format với ≥3 dòng context.
-- Nếu diff > 50 dòng: skill cảnh báo "diff lớn, có muốn xem full hay summary?" trước khi in.
-- L2 chạy SAU L1 (L1 list path + action `update`, L2 mới show diff khi user đã Y ở L1).
+* Diff phải là unified format với ≥3 dòng context.
+* Nếu diff > 50 dòng: skill cảnh báo "diff lớn, có muốn xem full hay summary?" trước khi in.
+* L2 chạy SAU L1 (L1 list path + action `update`, L2 mới show diff khi user đã Y ở L1).
 
-## L3 — Iterate refine
+## L3 — Iterate refine‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 **Khi nào:** output sáng tạo **render được trong chat** cần feedback nhiều vòng. Tiêu biểu:
-- ASCII wireframe (`/wireframe-ascii`) — monospace render OK
-- ASCII flow diagram trong brainstorm — monospace render OK
-- Prose draft dài (vd executive summary BRD)
+* ASCII wireframe (`/wireframe-ascii`) — monospace render OK
+* ASCII flow diagram trong brainstorm — monospace render OK
+* Prose draft dài (vd executive summary BRD)
 
 **KHÔNG áp L3 cho mermaid** (`/sequence`, `/erd`) — chat chỉ in source code mermaid, không render diagram. User nhìn text raw không review được. Mermaid skills đi thẳng L1 → Write → user review từ rendered file (IDE/Obsidian/GitHub preview) → gọi lại skill, skill tự vào update mode.
 
@@ -87,14 +87,14 @@ Apply? (Y/n/edit-prompt):
 ```
 
 **User response:**
-- `Đồng ý` / `ok` / `approve` / `Y` → tiếp đến L1 (plan write).
-- `Sửa: ...` / free text → skill regenerate v2 với feedback.
-- `Hủy` / `cancel` / `n` → abort.
+* `Đồng ý` / `ok` / `approve` / `Y` → tiếp đến L1 (plan write).‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+* `Sửa: ...` / free text → skill regenerate v2 với feedback.
+* `Hủy` / `cancel` / `n` → abort.
 
 **Rules:**
-- Max 3 vòng iterate. Vòng 3 (v3) là vòng ép chốt — nếu user vẫn `Sửa:`, skill thông báo "đã đạt max 3 vòng, em chốt v3 và đi tiếp L1; anh edit file manually sau nếu cần."
-- Mỗi vòng số hiệu rõ ràng: `Phiên bản 1`, `Phiên bản 2`, `Phiên bản 3`.
-- L3 chạy TRƯỚC L1.
+* Max 3 vòng iterate. Vòng 3 (v3) là vòng ép chốt — nếu user vẫn `Sửa:`, skill thông báo "đã đạt max 3 vòng, em chốt v3 và đi tiếp L1; anh edit file manually sau nếu cần."
+* Mỗi vòng số hiệu rõ ràng: `Phiên bản 1`, `Phiên bản 2`, `Phiên bản 3`.
+* L3 chạy TRƯỚC L1.
 
 ## Soft gate vs Hard gate
 
@@ -107,8 +107,8 @@ Approval gate ≠ readiness gate. Hai khái niệm khác nhau:
 | Default | L1 luôn chạy | **Soft** — warn nếu thiếu, vẫn proceed |
 
 Readiness gate examples:
-- `/userstory payment` nhưng chưa có `/usecase` → warn "Chưa có UC, em vẫn chạy" + proceed.
-- `/jira push` nhưng có US `status: stale` → **refuse** (đây là exception hard gate, vì Jira là external side-effect).
+* `/userstory payment` nhưng chưa có `/usecase` → warn "Chưa có UC, em vẫn chạy" + proceed.
+* `/jira push` nhưng có US `status: stale` → **refuse** (đây là exception hard gate, vì Jira là external side-effect).
 
 ## Tham chiếu trong SKILL.md
 
@@ -142,7 +142,7 @@ Mọi skill khác (kể cả `/reverse-doc` tái lập từ nguồn ngoài) đ�
 
 KHÔNG có exception "Write-rồi-confirm". Nếu 1 skill dùng Task tool sub-agent để tận dụng context riêng, sub-agent phải **trả về proposed content** (không tự Write file đích) — main thread gom lại, show L1/L2, user Y rồi main thread mới Write.
 
-Lý do bỏ mô hình "sub-agent Write thẳng rồi rollback nếu user từ chối": rollback không đáng tin. `git checkout -- file` trả về HEAD (không phải trạng thái ngay trước sub-agent) → nuốt thay đổi chưa commit; `rm` không phân biệt file vừa tạo với file untracked có sẵn; hook (activity.log/staleness) đã kịp chạy side-effect không hoàn tác được. An toàn dữ liệu > tốc độ song song.
+Lý do bỏ mô hình "sub-agent Write thẳng rồi rollback nếu user từ chối": rollback không đáng tin. `git checkout -- file` trả về HEAD (không phải trạng thái ngay trước sub-agent) → nuốt thay đổi chưa commit; `rm` không phân biệt file vừa tạo với file untracked có sẵn; hook (changelog.md/staleness) đã kịp chạy side-effect không hoàn tác được. An toàn dữ liệu > tốc độ song song.
 
 `/srs` đã chuyển sang mô hình tuần tự này (L1 trước mỗi Write). Không skill nào được ghi file đích trước approval với cớ "chạy sub-agent song song".
 
@@ -156,4 +156,8 @@ Lý do bỏ mô hình "sub-agent Write thẳng rồi rollback nếu user từ ch
 
 ## Tóm tắt 1 dòng
 
-> **L3 (iterate nếu sáng tạo) → L1 (plan + Y/n) → L2 (diff nếu update) → Write.**
+> **L3 (iterate nếu sáng tạo) → L1 (plan + Y/n) → L2 (diff nếu update) → Write.**‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền hoangphan.blog</sub>

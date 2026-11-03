@@ -6,27 +6,27 @@ updated: {{date}}
 links: {{links}}
 ---
 
-# {{title}}
+# {{title}}‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-## 1. Idea Seed
+## 1. Idea Seed‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 {{seed}}
 
 *Raw input từ user — câu/đoạn description gốc.*
 
-## 2. Context
+## 2. Context‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 {{context}}
 
 *Background, why now, related features, market signal.*
 
-## 3. User Types (preliminary)
+## 3. User Types (preliminary)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | User Type | Pain Point | Primary Need |
 |-----------|-----------|--------------|
 | {{user_type}} | {{pain}} | {{need}} |
 
-## 4. Capabilities Breakdown
+## 4. Capabilities Breakdown‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 ### P0 — must have
 {{p0_capabilities}}
@@ -102,7 +102,7 @@ links: {{links}}
 
 *Edge cases gom chung ở đây — KHÔNG tách section riêng. Bao gồm: empty state, concurrent, timeout, network down, validation fail, không thuộc các matrix trên.*
 
-## 7. Validation, Limits & Wording
+## 7. Validation, Limits & Wording‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 ### 7.1 Validation rules
 
@@ -155,12 +155,12 @@ links: {{links}}
 | {{risk}} | thường / thỉnh thoảng / hiếm | {{impact_business}} | {{mitigation}} |
 
 *Rủi ro nghiệp vụ — KHÔNG phải bug/infra. Ví dụ loại:*
-- *Adoption: "User không hiểu flow mới → conversion giảm"*
-- *Vendor: "Đối tác thanh toán đổi phí → vượt budget"*
-- *Compliance: "Chưa đủ document cho audit PCI"*
-- *Process: "Team CSKH chưa được train flow refund"*
-- *Timeline: "Legal review T&C chậm → trễ launch"*
-- *Data: "Dữ liệu user cũ thiếu phone → OTP fail khi migrate"*
+* *Adoption: "User không hiểu flow mới → conversion giảm"*
+* *Vendor: "Đối tác thanh toán đổi phí → vượt budget"*
+* *Compliance: "Chưa đủ document cho audit PCI"*
+* *Process: "Team CSKH chưa được train flow refund"*
+* *Timeline: "Legal review T&C chậm → trễ launch"*
+* *Data: "Dữ liệu user cũ thiếu phone → OTP fail khi migrate"*
 
 *Hậu quả nghiệp vụ viết bằng từ business: mất khách / mất doanh thu / complaint tăng / delay launch / vi phạm hợp đồng. KHÔNG viết "API chậm", "DB lock".*
 
@@ -172,13 +172,17 @@ links: {{links}}
 
 ## 11. Open Questions
 
-- [ ] OQ-1: {{open_question_1}}
-- [ ] OQ-2: {{open_question_2}}
-- [ ] OQ-3: {{open_question_3}}
+* [ ] OQ-1: {{open_question_1}}
+* [ ] OQ-2: {{open_question_2}}
+* [ ] OQ-3: {{open_question_3}}
 
 ## 12. Next Steps
 
 Sau brainstorm này (sau khi BA approve):
-- `/urd {{feature}}` — capture user perspective
-- `/brd {{feature}}` — business case
-- `/prd {{feature}}` — product scope
+* `/urd {{feature}}` — capture user perspective
+* `/brd {{feature}}` — business case
+* `/prd {{feature}}` — product scope‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền hoangphan.blog</sub>

@@ -14,11 +14,11 @@ paths:
   - "docs/**/srs/*.md"
 ---
 
-# Diagram Selection — Khi nào dùng diagram nào
+# Diagram Selection — Khi nào dùng diagram nào‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Guide cho IT-BA: chọn đúng loại diagram cho từng tình huống. Áp dụng khi viết `/srs`, `/brainstorm`, hoặc khi user hỏi "vẽ diagram cho X".
 
-## Decision matrix
+## Decision matrix‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | Tình huống nghiệp vụ | Diagram type | Skill | Output file (1 cố định) | Lý do |
 |---|---|---|---|---|
@@ -34,7 +34,7 @@ paths:
 | Data model — cần **bàn giao dev / export SQL / dbdocs** (kiểu DB thật, enum, index) | **Schema (DBML)** | `/dbdiagram` | `docs/{feature}/dbdiagram/{feature}.dbml` (+ `.sql`) | Tầng gần dev nhất: DBML import dbdiagram.io/dbdocs.io, `dbml2sql` export SQL thật. Enum/index/default là first-class (Mermaid/D2 không có) |
 | **Kiến trúc hệ thống** (component/service/DB/dịch vụ ngoài lồng nhau, bức tranh bối cảnh) | **Architecture (D2)** | `/d2-architect` | `docs/{feature}/d2-architect/{slug}.svg` hoặc `_shared/` | Nested container + shape cylinder/person; Mermaid không vẽ được đẹp loại này |
 
-## Abstraction level — KHÔNG trộn diagram với UC
+## Abstraction level — KHÔNG trộn diagram với UC‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 **Use Case (UC) = business black-box** (actor goal + expected result + numbered steps). Mở UC là đọc *prose nghiệp vụ*, KHÔNG đọc technical detail.
 
@@ -44,9 +44,9 @@ paths:
 
 **Activity** là exception duy nhất được phép inline UC Mục e — vì activity cùng level abstraction business (diễn tả quy trình nghiệp vụ, không phải call component). Mặc định UC Mục e vẫn skip; chỉ fill khi process có ≥3 decision/parallel.
 
-## Khi nào dùng diagram nào (chi tiết)
+## Khi nào dùng diagram nào (chi tiết)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-### Sequence diagram — `/sequence`
+### Sequence diagram — `/sequence`‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 **Dùng khi:**
 - Có ≥2 actors tương tác qua thời gian (user, backend, third-party).
@@ -147,7 +147,7 @@ paths:
 
 **Dùng khi:**
 - Có ≥2 entity với relationship.
-- Cần show cardinality (1:1, 1:N, N:N).
+- Cần show cardinality (1:1, 1:N, N:N).‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 - Data model cần share với dev/architect.
 
 **KHÔNG dùng khi:**
@@ -210,21 +210,74 @@ Mermaid parser strict với 1 số ký tự trong node label. Vi phạm → cả
 
 ### Sequence (`sequenceDiagram`)
 - Message text sau `:` được tự do — `A->>B: Đăng nhập "với Google"` OK (sequence parser lenient hơn flowchart).
+- **Cẩn thận `;` trong message của self-message** (`S->>S: ...`) — dấu `;` có thể làm parser lỗi (đo thật:
+  `S->>S: Tăng đếm; đủ 3 lần thì khóa` → parse error). Thay `;` → `(...)` hoặc `,`.
 - `Note over`, `alt/else/opt/loop` block — text tự do sau `:`.
 
 ### State (`stateDiagram-v2`)
-- Transition label sau `:` tự do — `A --> B: Click verify link còn hạn` OK.
+- Transition label sau `:` gần như tự do — `A --> B: Click verify link còn hạn` OK.
+- **CẤM dấu `;` trong transition label** — `;` là ký tự phân cách statement → mermaid cắt phần sau `;` thành các
+  **node rác rời** bay ra ngoài sơ đồ (đo thật: `LOCKING --> VALID: ... không còn đúng; không thấy job mở khóa`
+  → sinh box rác `; không thấy job mở khóa...`). `mmdc`/verify **KHÔNG bắt** lỗi này (tha `;`) nhưng renderer
+  thật vỡ. Thay `;` → `,` hoặc tách câu, hoặc **rút gọn label** (giải thích dài để ở prose ngoài diagram).
+- Label transition nên **NGẮN** (1 cụm) — nhồi cả giải thích + `file:line` vào label làm rối + dễ dính ký tự
+  đặc biệt. Chi tiết để ở text/ghi chú dưới diagram.
 - KHÔNG dùng `"..."` quanh state name (vd `state "Locked Account" as Locked` chỉ dùng khi cần alias).
 
 ### ERD (`erDiagram`)
 - Relationship label `||--o{` bắt buộc trong `"..."` — `ACCOUNT ||--o{ SESSION : "có nhiều session"`.
 - Attribute comment trong entity block dùng `"..."` — `string email PK "unique, primary key"`.
 
+### Escape tầng hiển thị — "file ĐÚNG mà vẫn báo Invalid syntax"
+
+> Ca thật 2026-08-01 (`authentication-userflow.md`): user gửi ảnh "Invalid mermaid syntax", nhưng
+> file **hoàn toàn hợp lệ** — verify PASS cả 3 lớp, parse PASS trên mermaid 8.14 *và* 11.15, render
+> ra SVG đủ 63 node, không BOM/CRLF/ký tự vô hình. Thủ phạm nằm **ngoài file**.
+
+**Cơ chế:** một lớp nào đó HTML-escape cả khối ```mermaid trước khi đưa vào renderer, biến dấu
+nháy bao label `"` thành `&quot;`. Label mất trạng thái được-quote ⇒ parser vỡ. Bisect đo được:
+
+| Dòng đưa vào parser | Kết quả |
+|---|---|
+| `n1[&quot;A&lt;br/&gt;B&quot;]` | **FAIL** ← lỗi user thấy |
+| `n1["A&lt;br/&gt;B"]` (chỉ `<br/>` bị escape) | PASS |
+| `n1["[1] A<br/>(x/y + z)"]` (bản gốc trong vault) | PASS |
+
+⇒ Thủ phạm là **`&quot;`**, KHÔNG phải `&lt;br/&gt;`.
+
+**Dấu hiệu nhận biết (nhìn ảnh/chỗ hiển thị là biết ngay):** `<br/>` hiện ra thành **chữ thường**
+thay vì xuống dòng, hoặc thấy `&quot;` / `&lt;` trong khối code.
+
+**Xử lý — quan trọng nhất:**
+1. Chạy `mermaid-verify.mjs` TRƯỚC KHI sửa bất cứ gì. PASS hết ⇒ **nguồn đúng, ĐỪNG sửa file**.
+2. Sửa **lớp render** (viewer/engine đang escape nhầm): bỏ escape cho khối ```mermaid, hoặc
+   un-escape trước khi gọi `mermaid.render()`.
+3. ❌ **Anti-pattern:** viết lại label / bỏ `<br/>` / đổi tên node để "né lỗi". File vốn đã đúng —
+   sửa nó làm hỏng một file hợp lệ mà nguyên nhân vẫn nguyên, lỗi sẽ quay lại ở sơ đồ tiếp theo.
+
+> Đây là lý do gate báo **tách 4 mức** (`diagram-correctness.md` Mục 2): "có lỗi ở chỗ người xem"
+> và "file sai" là hai mệnh đề khác nhau — đừng suy cái sau từ cái trước.
+
 ### Khi nghi ngờ
 - **Mặc định QUOTE mọi node label + edge label flowchart** — rẻ, an toàn, tránh cả lớp lỗi "ký tự đặc biệt trần". Chỉ bỏ quote khi label thuần chữ-số không dấu đặc biệt.
-- **`mmdc` PASS ≠ renderer thật PASS.** `mermaid-verify.mjs` (mmdc) lenient hơn GitHub/Obsidian — nó tha `≥`/`+`/`/` trần trong label mà renderer strict crash. Vì vậy verify-compile chỉ là lớp cuối; lớp CHÍNH là quote phòng thủ ngay khi compose (quy tắc số 1 trên). Đừng dựa verify để "phát hiện", hãy quote để "phòng ngừa".
+- **Đừng suy "user báo lỗi" ⇒ "file sai".** Verify trước; PASS hết thì lỗi ở tầng hiển thị (xem Mục "Escape tầng hiển thị" trên).
+- **`mmdc` PASS ≠ renderer thật PASS.** `mmdc` lenient hơn GitHub/Obsidian — nó tha `≥`/`+`/`/` trần trong label mà renderer strict crash. Vì vậy `mermaid-verify.mjs` có **lớp lint riêng chạy trước compile** để bắt đúng nhóm này (bắt mechanically, không dựa mắt người). Nhưng lớp CHÍNH vẫn là quote phòng thủ ngay khi compose (quy tắc số 1 trên) — lint là lưới an toàn, không phải cái thay cho việc viết đúng.
+
+### `mermaid-verify.mjs` kiểm 3 lớp (exit 0 = qua cả 3)
+
+| Lớp | Bắt gì | Chặn? |
+|---|---|---|
+| 1. Lint cú pháp-strict | Label chưa quote có `≥ ≤ + / ? & ( ) : "`, HTML entity, quote lồng, **`&quot;` (nháy bao label bị escape — báo riêng kèm chỉ dẫn sửa lớp render)** — cái mmdc tha mà renderer crash | ✗ FAIL |
+| 2. Compile `mmdc` | Sai cú pháp thật sự | ✗ FAIL |
+| 3. Lint NGHĨA | State mồ côi / thiếu `[*]` / `;` trong nhãn transition; ERD entity ma; sequence lifeline chưa khai | `error` FAIL, `warn` chỉ cảnh báo |
+
+Lớp 3 bắt loại lỗi **compile PASS nhưng sơ đồ sai nghiệp vụ** — hình vẫn render đẹp nên mắt người rất dễ bỏ qua. Output in kèm `file:dòng` + bản sửa gợi ý (`→ sửa:`); áp thẳng gợi ý đó. `--no-lint` chỉ để debug, KHÔNG dùng trong flow skill.
 - Skill `/user-flow` `/sequence` `/activity` `/state` `/erd` `/srs` PHẢI tuân rules trên khi sinh mermaid. Nếu user yêu cầu label phức tạp → đề xuất reformulate.
 
 ## Tóm tắt 1 dòng
 
-> **Time-based → Sequence. State-based → State. Process đa-vai → Activity-swimlane (PlantUML). Process gọn cần nhúng inline → Activity (Mermaid). Scope-based → Use Case. Data-based → ERD. Chuẩn-OMG/import-BPM → BPMN.**
+> **Time-based → Sequence. State-based → State. Process đa-vai → Activity-swimlane (PlantUML). Process gọn cần nhúng inline → Activity (Mermaid). Scope-based → Use Case. Data-based → ERD. Chuẩn-OMG/import-BPM → BPMN.**‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền ai4ba.com</sub>

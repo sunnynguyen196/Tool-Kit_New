@@ -13,7 +13,7 @@ Placeholder `{{feature}}` (vd srs/{{feature}}-spec.md) là ký hiệu — skill 
 feature thật trước khi Write, KHÔNG để lọt vào trang stakeholder đọc.
 -->
 
-# {Tiêu đề trang}
+# {Tiêu đề trang}‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > {1 câu: trang này giúp người vận hành làm/hiểu gì. Đứng độc lập, không cần đọc trang trước.}
 
@@ -23,7 +23,7 @@ feature thật trước khi Write, KHÔNG để lọt vào trang stakeholder đ�
 
 **Trước khi bắt đầu:** {điều kiện trước — quyền cần có, dữ liệu cần sẵn, trạng thái hệ thống. Đặt điều kiện TRƯỚC hành động.}
 
-## Các bước
+## Các bước‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 1. {Hành động — 1 việc/bước, bắt đầu bằng động từ.}
    → *Kết quả:* {hệ thống phản hồi gì sau bước này.}
@@ -43,7 +43,7 @@ feature thật trước khi Write, KHÔNG để lọt vào trang stakeholder đ�
 
 <!-- Tối đa 1–3 callout/ảnh. >10 thao tác → tách ảnh. Nếu có wireframe ASCII sẵn, nhúng thay placeholder.
      Nếu user TỰ chụp (không cấp quyền auto): giữ placeholder + comment "CHỖ CHỤP ẢNH" ở trên làm brief
-     — user chỉ việc bỏ file đúng tên {slug}.png vào images/, callout (1)(2)(3) trong bảng đã sẵn để họ vẽ theo. -->
+     — user chỉ việc bỏ file đúng tên {slug}.png vào images/, callout (1)(2)(3) trong bảng đã sẵn để họ vẽ theo. -->‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 **Xử lý khi lỗi:** {lỗi hay gặp ở tác vụ này → trỏ sang trang Xử lý sự cố mã E-... nếu có.}
 
@@ -93,4 +93,8 @@ Câu hỏi thực người vận hành hay hỏi. Mỗi câu 1 đáp ngắn, lin
 <!-- ───────────────── Cuối mọi trang ───────────────── -->
 
 <!-- Open Question nếu nguồn thiếu — KHÔNG bịa nội dung:
-<!-- TBD: {chỗ thiếu} — nguồn BA chưa có. OQ-{n} -->
+<!-- TBD: {chỗ thiếu} — nguồn BA chưa có. OQ-{n} -->‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền hoangphan.blog</sub>

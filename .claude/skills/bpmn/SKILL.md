@@ -1,14 +1,15 @@
 ---
 name: bpmn
-description: Dùng khi cần vẽ BPMN 2.0 chuẩn OMG cho 1 quy trình nghiệp vụ đa vai trò (approval, onboarding, refund...). Kích hoạt bằng `/bpmn "<mô tả quy trình>" --feature <slug>`. Khác `/activity` (Mermaid gần đúng, không phải chuẩn OMG).
+description: Dùng khi cần vẽ BPMN 2.0 chuẩn OMG cho 1 quy trình nghiệp vụ đa vai trò (approval, onboarding, refund...). Khác `/activity` (Mermaid gần đúng, không phải chuẩn OMG).
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 user-invocable: true
 argument-hint: "\"<mô tả quy trình>\" [--feature <slug>]"
 ---
+<!-- Licensed to nguyenduong280196@gmail.com — Order XKTV2KA26 -->
 
-# /bpmn — BPMN 2.0 Process Diagram (chuẩn OMG, kiến trúc 2 lớp)
+# /bpmn — BPMN 2.0 Process Diagram (chuẩn OMG, kiến trúc 2 lớp)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-## Goal
+## Goal‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 Sinh BPMN 2.0 cho 1 quy trình nghiệp vụ đa vai trò, **chạy là vẽ đúng + đúng nghiệp vụ**.
 
@@ -24,7 +25,7 @@ Sinh BPMN 2.0 cho 1 quy trình nghiệp vụ đa vai trò, **chạy là vẽ đ�
 
 > **Không nhân bản engine.** Trước đây engine + node_modules copy vào mỗi feature (18+ file/feature). Từ 2026-07-09: engine 1 nơi chung, feature chỉ giữ output.
 
-## Kiến trúc 2 lớp (CỐT LÕI — đừng đổi)
+## Kiến trúc 2 lớp (CỐT LÕI — đừng đổi)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 ```
 UC/SRS/flows ──(AI đọc + suy luận)──► {slug}.ir.json   (lanes / nodes / flows)
@@ -52,18 +53,30 @@ UC/SRS/flows ──(AI đọc + suy luận)──► {slug}.ir.json   (lanes / n
 >
 > **Tại sao IR?** Tách "hiểu nghiệp vụ" (AI giỏi) khỏi "vẽ pixel" (engine giỏi). AI sai toạ độ = thảm hoạ; AI sinh cấu trúc nghiệp vụ thì đáng tin + kiểm được. IR cũng khiến update mode chỉ sửa JSON, layout tự regen.
 
-## Constraints
+## Constraints‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-- **AI sinh IR + src, KHÔNG sinh XML.** Vi phạm = quay lại đúng vấn đề cũ (toạ độ sai, line đè). Engine (auto-layout / grid) lo toạ độ.
-- **Lane mặc định tắt.** KHÔNG ép swimlane trừ khi user muốn rõ + quy trình phân vai sạch. Đa số flow → no-lane đẹp hơn.
-- **Semcheck structural phải PASS** trước khi có .bpmn. Coverage warning → review nghiệp vụ (thiếu actor/branch/error?), sửa IR nếu thật sự sót.
-- **L1 approval** trước Write — prose BA-friendly (xem `ba-conventions.md` Mục 5), trình bày IR bằng từ nghiệp vụ (vai trò / bước / nhánh), KHÔNG dump JSON.
-- **KHÔNG L3 iterate** — review từ `{feature}-bpmn-editor.html`.
-- **Vietnamese-first** trong name; engine tự escape XML.
-- **Per `diagram-selection.md`** — `/bpmn` khi cần chuẩn OMG + import tool BPM / kéo-thả editor. Đa vai trò mô tả nghiệp vụ thường (không cần engine) → `/activity-swimlane` (swimlane thật, nhẹ hơn). Flow gọn cần nhúng inline → `/activity` (Mermaid).
-- **1 quy trình = 1 mục tiêu.** Quy trình quá lớn / 2 luồng merge phức tạp → tách 2 BPMN (như login email vs Google), gọn + dropdown nhiều process.
-- **Idempotent** — `bpmn/{feature}-bpmn-index.md` track process; trùng slug → tự vào update mode (L2 diff cho IR), không refuse.
-- **`--feature` optional** — auto-detect từ ngữ cảnh/feature đang làm dở; mơ hồ mới hỏi bằng picker. **Feature chưa tồn tại + arg là mô tả quy trình → tự derive slug + tạo feature** (điểm-vào, xem `feature-bootstrap.md` nhóm A). KHÔNG bắt qua `/brainstorm` trước.
+### Hard rules — never violate‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+* **AI sinh IR + src, KHÔNG sinh XML.** Vi phạm = quay lại đúng vấn đề cũ (toạ độ sai, line đè). Engine (auto-layout / grid) lo toạ độ.
+* **Lane mặc định tắt.** KHÔNG ép swimlane trừ khi user muốn rõ + quy trình phân vai sạch. Đa số flow → no-lane đẹp hơn.
+* **Semcheck structural phải PASS** trước khi có .bpmn. Coverage warning → review nghiệp vụ (thiếu actor/branch/error?), sửa IR nếu thật sự sót.
+* **L1 approval** trước Write — prose BA-friendly (xem `ba-conventions.md` Mục 5), trình bày IR bằng từ nghiệp vụ (vai trò / bước / nhánh), KHÔNG dump JSON.
+* **KHÔNG L3 iterate** — review từ `{feature}-bpmn-editor.html`.
+* **Vietnamese-first** trong name; engine tự escape XML.
+* **Per `diagram-selection.md`** — `/bpmn` khi cần chuẩn OMG + import tool BPM / kéo-thả editor. Đa vai trò mô tả nghiệp vụ thường (không cần engine) → `/activity-swimlane` (swimlane thật, nhẹ hơn). Flow gọn cần nhúng inline → `/activity` (Mermaid).
+* **1 quy trình = 1 mục tiêu.** Quy trình quá lớn / 2 luồng merge phức tạp → tách 2 BPMN (như login email vs Google), gọn + dropdown nhiều process.
+* **Idempotent** — `bpmn/{feature}-bpmn-index.md` track process; trùng slug → tự vào update mode (L2 diff cho IR), không refuse.
+* **`--feature` optional** — auto-detect từ ngữ cảnh/feature đang làm dở; mơ hồ mới hỏi bằng picker. **Feature chưa tồn tại + arg là mô tả quy trình → tự derive slug + tạo feature** (điểm-vào, xem `feature-bootstrap.md` nhóm A). KHÔNG bắt qua `/brainstorm` trước.
+
+### Pitfalls — easy to get wrong
+
+* **AI viết XML tay = sai mục đích.** Chỉ sinh IR JSON. Nếu user paste BPMN XML để sửa → trích về IR rồi mới layout lại.
+* **Semcheck báo coverage thiếu** (vd "branch X chưa có gateway") → ĐỌC LẠI UC, nếu thật sự sót thì thêm vào IR; nếu nhánh đó out-of-scope thì OK bỏ qua (warning, không chặn).
+* **Quy trình 2 luồng merge phức tạp** (vd login email+Google chung) → tách 2 BPMN. Engine xử lý fan-out/fan-in tốt nhưng 1 quy trình nên 1 mục tiêu.
+* **Loop/back-edge** — engine tự nhận (DFS) + đi vòng band trên/dưới. AI cứ khai flow quay lại bình thường.
+* **Gateway 1 nhánh** — semcheck chặn. Gateway phải ≥2 outgoing.
+* **Viewer cần internet lần đầu** (CDN bpmn-js, như `/dashboard`). Offline tuyệt đối → user yêu cầu, inline lib (~600KB).
+* **Đừng over-dùng** — tuyến tính 1 vai trò → `/sequence` / `/activity`; đa vai không cần chuẩn OMG/engine → `/activity-swimlane`.
 
 ## Inputs
 
@@ -84,19 +97,19 @@ Features có bpmn/: !`for d in docs/*/bpmn/*-bpmn-index.md; do [ -f "$d" ] && di
 ## Approach
 
 1. **Resolve feature + quy trình.** Nếu chỉ có `<feature>` (không mô tả) → đọc context, đề xuất quy trình nào nên vẽ (gateway nhiều/đa vai trò), hỏi user chọn. Slug = verb-object kebab-case.
-   - **Feature chưa tồn tại (điểm-vào, per `feature-bootstrap.md` nhóm A):** nếu arg là 1 mô tả quy trình thô mà chưa có `docs/{feature}/` nào khớp (vd `/bpmn "khách đặt hàng, shipper giao, admin duyệt hoàn tiền"`) → `/bpmn` ĐƯỢC PHÉP tự khởi tạo: derive feature slug từ mô tả (kebab-case, ASCII, ≤50 ký tự), confirm slug ở L1 (user override được), tạo `docs/{feature}/bpmn/` khi Write. KHÔNG bắt user chạy `/brainstorm` trước.
+   * **Feature chưa tồn tại (điểm-vào, per `feature-bootstrap.md` nhóm A):** nếu arg là 1 mô tả quy trình thô mà chưa có `docs/{feature}/` nào khớp (vd `/bpmn "khách đặt hàng, shipper giao, admin duyệt hoàn tiền"`) → `/bpmn` ĐƯỢC PHÉP tự khởi tạo: derive feature slug từ mô tả (kebab-case, ASCII, ≤50 ký tự), confirm slug ở L1 (user override được), tạo `docs/{feature}/bpmn/` khi Write. KHÔNG bắt user chạy `/brainstorm` trước.
 2. **Đọc nguồn nghiệp vụ** (nếu có, không bịa): UC liên quan (`usecases/uc-*.md` Mục b Actors, d Expected result + **Branches**, g Related FR), `srs/{feature}-flows.md`, `srs/{feature}-spec.md` Error Matrix.
-   - **Có UC/SRS** → trích facts từ đó (bước 3), không hỏi lại cái đã có (no-re-ask).
-   - **CHƯA có UC/SRS (feature mới hoặc feature cũ thiếu nguồn)** → **phỏng vấn ĐÚNG PHẠM VI BPMN cần** (per `feature-bootstrap.md` nhóm A bước 3), hỏi gom 1 batch business-language (KHÔNG hỏi DB/SDK): **vai trò/lanes** nào tham gia · **các bước** chính theo thứ tự · **điểm rẽ nhánh** (câu hỏi quyết định + các nhánh) · **kết cục** (thành công + mỗi error-path). KHÔNG bịa — thiếu ý nào hỏi ý đó. Đây là phỏng vấn làm rõ đủ để vẽ đúng, không lan man toàn diện như `/brainstorm`.
+   * **Có UC/SRS** → trích facts từ đó (bước 3), không hỏi lại cái đã có (no-re-ask).
+   * **CHƯA có UC/SRS (feature mới hoặc feature cũ thiếu nguồn)** → **phỏng vấn ĐÚNG PHẠM VI BPMN cần** (per `feature-bootstrap.md` nhóm A bước 3), hỏi gom 1 batch business-language (KHÔNG hỏi DB/SDK): **vai trò/lanes** nào tham gia · **các bước** chính theo thứ tự · **điểm rẽ nhánh** (câu hỏi quyết định + các nhánh) · **kết cục** (thành công + mỗi error-path). KHÔNG bịa — thiếu ý nào hỏi ý đó. Đây là phỏng vấn làm rõ đủ để vẽ đúng, không lan man toàn diện như `/brainstorm`.
 3. **Trích source facts** → `{slug}.src.json`:
-   - `actors`: mọi actor trong UC Mục b (primary + supporting).
-   - `branches`: mọi nhánh "Nếu... thì..." trong UC Mục d Branches.
-   - `errors`: mọi E-code liên quan (từ UC + Error Matrix).
+   * `actors`: mọi actor trong UC Mục b (primary + supporting).
+   * `branches`: mọi nhánh "Nếu... thì..." trong UC Mục d Branches.
+   * `errors`: mọi E-code liên quan (từ UC + Error Matrix).
 4. **Suy luận IR** → `{slug}.ir.json`:
-   - `lanes` = actors (mỗi actor 1 lane; gộp nếu cùng vai trò).
-   - `nodes`: 1 `start` (trigger UC Mục a/c) · `task` cho mỗi bước (động từ+tân ngữ, lane = ai làm) · `gateway` cho mỗi điểm rẽ (từ Branches) · `end` cho mỗi kết cục (success + mỗi error-path).
-   - `flows`: nối node theo Expected result + Branches; mỗi gateway-outgoing có `name` = điều kiện nhánh.
-   - **Lane đặt node theo AI** (ai chịu trách nhiệm bước đó); cột/toạ độ KHÔNG cần — engine tự lo.
+   * `lanes` = actors (mỗi actor 1 lane; gộp nếu cùng vai trò).
+   * `nodes`: 1 `start` (trigger UC Mục a/c) · `task` cho mỗi bước (động từ+tân ngữ, lane = ai làm) · `gateway` cho mỗi điểm rẽ (từ Branches) · `end` cho mỗi kết cục (success + mỗi error-path).‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+   * `flows`: nối node theo Expected result + Branches; mỗi gateway-outgoing có `name` = điều kiện nhánh.
+   * **Lane đặt node theo AI** (ai chịu trách nhiệm bước đó); cột/toạ độ KHÔNG cần — engine tự lo.
 5. **L1 plan preview** — prose BA-friendly:
    > Em sẽ tạo BPMN **{title}** trong `docs/{feature}/bpmn/`:
    > - **{N} vai trò**: {liệt kê}
@@ -106,13 +119,13 @@ Features có bpmn/: !`for d in docs/*/bpmn/*-bpmn-index.md; do [ -f "$d" ] && di
    >
    > Apply? (Y / sửa)
 6. **Write** sau khi user Y:
-   - Tạo `docs/{feature}/bpmn/` (chỉ chứa OUTPUT — KHÔNG copy engine vào feature nữa).
-   - Write `{slug}.ir.json` + `{slug}.src.json`.
-   - Chạy engine CHUNG trỏ vào feature: `node .claude/skills/bpmn/engine/bpmn-build.mjs --dir docs/{feature}/bpmn` → semcheck + layout → `{slug}.bpmn` + rebuild `{feature}-bpmn-editor.html` (trong feature dir).
-   - Tạo/cập nhật `bpmn/{feature}-bpmn-index.md`.
+   * Tạo `docs/{feature}/bpmn/` (chỉ chứa OUTPUT — KHÔNG copy engine vào feature nữa).
+   * Write `{slug}.ir.json` + `{slug}.src.json`.
+   * Chạy engine CHUNG trỏ vào feature: `node .claude/skills/bpmn/engine/bpmn-build.mjs --dir docs/{feature}/bpmn` → semcheck + layout → `{slug}.bpmn` + rebuild `{feature}-bpmn-editor.html` (trong feature dir).
+   * Tạo/cập nhật `bpmn/{feature}-bpmn-index.md`.
 7. **Gọi lại với slug trùng** (update mode tự động) → L2 diff cho `{slug}.ir.json`, rồi rerun `... bpmn-build.mjs --dir docs/{feature}/bpmn` (layout regen tự động).
 8. **Verify** (BẮT BUỘC): `node .claude/skills/bpmn/engine/bpmn-build.mjs --dir docs/{feature}/bpmn --verify` → semcheck + layout sạch. Có lỗi structural → sửa IR. Coverage warning → đối chiếu nguồn. KHÔNG báo thành công khi còn ✗.
-9. **Activity log** — trước Write set env `CLAUDE_SKILL_NAME=/bpmn` + `CLAUDE_CHANGELOG_AUTHOR={@author}` + `CLAUDE_CHANGELOG_NOTE=added BPMN {title} ({N} lanes, phủ {a}/{b} branch)` (≤80 ký tự); hook ghép cả dòng vào `docs/_shared/activity.log`.
+9. **Activity log** — trước Write set env `CLAUDE_SKILL_NAME=/bpmn` + `CLAUDE_CHANGELOG_AUTHOR={@author}` + `CLAUDE_CHANGELOG_NOTE=added BPMN {title} ({N} lanes, phủ {a}/{b} branch)` (≤80 ký tự); hook ghép cả dòng vào `docs/_shared/changelog.md`.
 10. **Output report:**
     ```
     ✅ BPMN created: docs/{feature}/bpmn/{slug}.bpmn (chuẩn OMG, swimlane)
@@ -124,6 +137,18 @@ Features có bpmn/: !`for d in docs/*/bpmn/*-bpmn-index.md; do [ -f "$d" ] && di
     Import: kéo {slug}.bpmn vào Camunda/Bizagi/draw.io
     Sửa:    gọi lại /bpmn "<thay đổi>" --feature {feature}, em tự vào update mode.
     ```
+
+## Output
+
+| File | Nội dung |
+|---|---|
+| `docs/{feature}/bpmn/{process}.ir.json` | IR nghiệp vụ do AI sinh (lanes/nodes/flows) — **source of intent**, sửa cái này khi chạy lại |
+| `docs/{feature}/bpmn/{process}.src.json` | Source facts (actor/branch/error trích UC) để semcheck đối chiếu |
+| `docs/{feature}/bpmn/{process}.bpmn` | XML BPMN 2.0 chuẩn OMG (engine sinh từ IR, gồm cả `<bpmndi:BPMNDiagram>`). Import Camunda/Bizagi/draw.io |
+| `docs/{feature}/bpmn/{feature}-bpmn-editor.html` | Editor kéo-thả bpmn-js, dropdown đa-process |
+| `docs/{feature}/bpmn/{feature}-bpmn-index.md` | Master metadata (`type: bpmn-index`) + bảng process |
+
+AI **chỉ sinh IR**; toạ độ/layout do engine `.claude/skills/bpmn/engine/` dựng. Hook tự ghi `docs/_shared/changelog.md`.
 
 ## IR schema (AI sinh đúng format này)
 
@@ -144,9 +169,24 @@ Features có bpmn/: !`for d in docs/*/bpmn/*-bpmn-index.md; do [ -f "$d" ] && di
 }
 ```
 
-src.json: `{ "actors": [...], "branches": [...], "errors": [...] }` — facts trích từ UC để semcheck đối chiếu.
+src.json: `{ "actors": [...], "branches": [...], "errors": [...] }` — facts trích từ UC để semcheck đối chiếu. **BẮT BUỘC sinh 1 file `{process}.src.json` cho MỖI process** — thiếu nó thì tầng coverage không chạy, semcheck chỉ kiểm được hình dạng đồ thị chứ KHÔNG biết diagram có phủ đủ actor/nhánh/lỗi của nguồn hay không (báo cáo sẽ in `Coverage: SKIPPED`). Không được coi `Structural: PASS` là "đã đúng nghiệp vụ".
 
-**IR rules** (semcheck enforce): đúng 1 start · ≥1 end · gateway ≥2 outgoing có name · mọi node reachable từ start + tới được end · không self-loop · id duy nhất. Loop (revise→draft) hợp lệ — engine tự nhận back-edge + đi vòng.
+**IR rules** — semcheck enforce THẬT (mọi mục dưới đây là **error → exit 1**, đã kiểm chứng bằng fixture 2026-07-26):
+
+| Luật | Mức |
+|---|---|
+| id duy nhất (node/flow/lane) | error — id trùng làm mất node âm thầm |
+| đúng 1 start | error |
+| ≥1 end | error |
+| gateway ≥2 nhánh ra, **mỗi nhánh có `name`** | error |
+| mọi node reachable từ start | error |
+| mọi node **tới được** end (không nhánh cụt) | error |
+| không self-loop (`src == tgt`) | error |
+| task không đứt mạch (có in + out) | error |
+| thiếu `.src.json` → coverage skip | warning + in `Coverage: SKIPPED` |
+| actor/branch/error trong nguồn chưa thấy trong IR | warning (fuzzy match, cần người xác nhận) |
+
+Loop (revise→draft) hợp lệ — reverse-BFS đi qua nhánh thoát của gateway nên node trong vòng lặp vẫn tính "tới được end", KHÔNG bị bắt oan.
 
 ## Assets (engine — đừng sửa khi chạy skill, chỉ copy)
 
@@ -160,22 +200,17 @@ src.json: `{ "actors": [...], "branches": [...], "errors": [...] }` — facts tr
 | `bpmn-build.mjs` | Pipeline: IR → semcheck → chọn engine → .bpmn → viewer. `--verify` / `--no-ir`. |
 | `_viewer_template.html` | Viewer bpmn-js CDN, dropdown đa-process. |
 
-## Gotchas
-
-- **AI viết XML tay = sai mục đích.** Chỉ sinh IR JSON. Nếu user paste BPMN XML để sửa → trích về IR rồi mới layout lại.
-- **Semcheck báo coverage thiếu** (vd "branch X chưa có gateway") → ĐỌC LẠI UC, nếu thật sự sót thì thêm vào IR; nếu nhánh đó out-of-scope thì OK bỏ qua (warning, không chặn).
-- **Quy trình 2 luồng merge phức tạp** (vd login email+Google chung) → tách 2 BPMN. Engine xử lý fan-out/fan-in tốt nhưng 1 quy trình nên 1 mục tiêu.
-- **Loop/back-edge** — engine tự nhận (DFS) + đi vòng band trên/dưới. AI cứ khai flow quay lại bình thường.
-- **Gateway 1 nhánh** — semcheck chặn. Gateway phải ≥2 outgoing.
-- **Viewer cần internet lần đầu** (CDN bpmn-js, như `/dashboard`). Offline tuyệt đối → user yêu cầu, inline lib (~600KB).
-- **Đừng over-dùng** — tuyến tính 1 vai trò → `/sequence` / `/activity`; đa vai không cần chuẩn OMG/engine → `/activity-swimlane`.
-
 ## References
 
-- @../../rules/ba-conventions.md
-- @../../rules/approval-gate.md
-- @../../rules/naming-conventions.md
-- @../../rules/changelog.md
-- @../../rules/diagram-selection.md
-- @../../rules/feature-bootstrap.md
-- @../../../_templates/diagram-bpmn.md
+* @../../rules/ba-conventions.md
+* @../../rules/approval-gate.md
+* @../../rules/naming-conventions.md
+* @../../rules/changelog.md
+* @../../rules/diagram-selection.md
+* @../../rules/diagram-correctness.md
+* @../../rules/feature-bootstrap.md
+* @../../../_templates/diagram-bpmn.md‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền ai4ba.com</sub>

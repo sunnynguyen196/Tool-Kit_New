@@ -3,11 +3,11 @@ paths:
   - ".claude/agents/**"
 ---
 
-# Agent Conventions
+# Agent Conventions‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Patterns cho review agents trong vault. Mọi agent ở `.claude/agents/<name>.md` tuân rules này.
 
-## Agent file structure
+## Agent file structure‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 ```yaml
 ---
@@ -47,10 +47,10 @@ Follow [review-format.md](./review-format.md) v1 strictly.
 When reviewing, agent reads:
 - Target doc (provided by orchestrator)
 - @.claude/rules/{relevant-rule}.md
-- @docs/{feature}/... (runtime resolved by /review skill — placeholder `{feature}` thay bằng target's frontmatter feature value)
+- @docs/{feature}/... (runtime resolved by phase review của skill sinh doc — placeholder `{feature}` thay bằng target's frontmatter feature value)
 ```
 
-## Roles + review_targets
+## Roles + review_targets‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 | Role | `name` | Phase | Domain |
 |------|--------|-------|--------|
@@ -63,23 +63,27 @@ When reviewing, agent reads:
 | Change Tracker | `change-tracker` | 6 | Impact analysis cho /cr |
 | Gap Analyst | `gap-analyst` | 6 | Traceability, orphaned reqs, stale chain |
 
-## Path conventions (placeholder resolution)
+## Path conventions (placeholder resolution)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-Agent reference materials dùng path placeholder `{feature}` — resolved bởi `/review` skill khi spawn agent:
+Agent reference materials dùng path placeholder `{feature}` — resolved bởi phase review khi spawn agent:
 
 - `@docs/{feature}/{feature}-urd.md` → resolves to target doc's `feature` frontmatter value.
 - `@docs/_shared/...` → no resolution, project-level shared.
 
 Agent KHÔNG được hardcode feature slug (vd `@docs/payment/payment-urd.md`) — luôn dùng placeholder.
 
-Nếu target không có `feature:` frontmatter, `/review` skip reference đó hoặc prompt user pick feature context.
+Nếu target không có `feature:` frontmatter, phase review skip reference đó hoặc prompt user pick feature context.
 
-## Guidelines
+## Guidelines‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-- **One agent = one persona.** Đừng merge senior-ba + qa — different thinking.
-- **Agents critique, không write content.** Không propose new sections; chỉ propose edits to specific lines.
-- **Stay in-scope.** Senior BA không flag tech feasibility — đó là tech-reviewer's job.
-- **No double-counting.** Nếu BLOCKING tồn tại, không repeat WARNING. Pick severity cao nhất.
-- **Findings atomic.** Mỗi finding 1 thing, 1 suggested fix. Compound findings split.
-- **Agent KHÔNG dùng directly Edit tool.** `/review` orchestrator áp dụng fixes user accept.
-- **Stale chain awareness** (Phase 6+): agents nên check `status: stale` của target và `docs/_shared/staleness.log` để flag cascade.
+- __One agent = one persona.__ Đừng merge senior-ba + qa — different thinking.
+- __Agents critique, không write content.__ Không propose new sections; chỉ propose edits to specific lines.
+- __Stay in-scope.__ Senior BA không flag tech feasibility — đó là tech-reviewer's job.
+- __No double-counting.__ Nếu BLOCKING tồn tại, không repeat WARNING. Pick severity cao nhất.
+- __Findings atomic.__ Mỗi finding 1 thing, 1 suggested fix. Compound findings split.
+- __Agent KHÔNG dùng directly Edit tool.__ phase review orchestrator áp dụng fixes (auto-fix).
+- __Stale chain awareness__ (Phase 6+): agents nên check `status: stale` của target và `docs/_shared/staleness.md` để flag cascade.‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền hoangphan.blog</sub>

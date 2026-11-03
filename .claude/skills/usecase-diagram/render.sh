@@ -22,6 +22,24 @@ command -v python3 >/dev/null 2>&1 || { echo "❌ Cần python3 (dùng để enc
 
 SVG="${SRC%.puml}.svg"
 
+# ── GATE NGỮ PHÁP (chạy TRƯỚC khi gửi lên server) ──
+# Vì sao trước: render chỉ kiểm "có ra ảnh", còn mọi lỗi ngữ pháp UML (association có mũi tên,
+# include/extend chạm actor, nhãn thiếu guillemet, dependency bịa) đều render ra ảnh ĐẸP + HTTP 200.
+# Chặn ở đây thì diagram sai KHÔNG bao giờ thành file .svg để người ta tin là đúng.
+# Bỏ qua có chủ đích: LINT_SKIP=1 ./render.sh <file> (chỉ dùng khi debug).
+LINTER="$SCRIPT_DIR/puml-usecase-lint.mjs"
+if [ -z "${LINT_SKIP:-}" ] && [ -f "$LINTER" ]; then
+  if command -v node >/dev/null 2>&1; then
+    if ! node "$LINTER" "$SRC"; then
+      echo ""
+      echo "❌ DỪNG: ngữ pháp use case diagram sai — KHÔNG render (sửa .puml theo hướng dẫn trên rồi chạy lại)."
+      exit 1
+    fi
+  else
+    echo "⚠️  Không có node — bỏ qua gate ngữ pháp. Ảnh sinh ra CHƯA được kiểm ngữ pháp UML."
+  fi
+fi
+
 ENCODED="$(python3 "$ENCODER" "$SRC")" || { echo "❌ Encode PlantUML thất bại — kiểm tra cú pháp file $SRC"; exit 1; }
 
 URL="https://www.plantuml.com/plantuml/svg/${ENCODED}"
@@ -42,4 +60,12 @@ if [ "$SIZE" -lt 200 ]; then
   exit 1
 fi
 
-echo "✅ SVG: $SVG (qua plantuml.com — nội dung đã gửi qua internet, xem gotcha trong SKILL.md nếu cần offline)"
+# PlantUML trả HTTP 200 kèm ẢNH CHỨA CHỮ LỖI khi cú pháp sai (không phải lỗi HTTP) — ảnh đó
+# thường >200 byte nên check size ở trên không bắt được. Lớp này đã có ở activity-swimlane/render.sh
+# nhưng trước đây thiếu ở đây (phòng thủ áp không đều — audit 2026-07-26).
+if grep -q "Syntax Error\|An error has occured\|cannot find message" "$SVG" 2>/dev/null; then
+  echo "❌ PlantUML trả về ảnh LỖI cú pháp (HTTP 200 nhưng nội dung là thông báo lỗi). Mở $SVG xem chi tiết, sửa .puml rồi chạy lại."
+  exit 1
+fi
+
+echo "✅ SVG: $SVG (qua plantuml.com — nội dung đã gửi qua internet, xem Pitfalls trong SKILL.md nếu cần offline)"

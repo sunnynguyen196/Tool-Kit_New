@@ -1,45 +1,60 @@
 ---
 name: d2-activity
-description: Dùng khi cần vẽ activity/flowchart diagram ĐẸP đứng riêng (nhiều nhánh quyết định, swimlane) bằng D2 — layout ELK gọn hơn Mermaid rõ rệt. Kích hoạt bằng `/d2-activity "<mô tả quy trình>" --feature <slug>`. Khác `/activity` (Mermaid inline vào flows.md, dàn xấu khi nhiều nhánh), `/d2-erd` (ERD), `/d2-architect` (kiến trúc hệ thống) và `/bpmn` (chuẩn OMG, import Camunda).
+description: Dùng khi cần vẽ activity/flowchart diagram đẹp đứng riêng (nhiều nhánh quyết định, swimlane) bằng D2, layout ELK gọn hơn Mermaid.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 user-invocable: true
 argument-hint: "\"<mô tả quy trình>\" [--feature <slug>]"
 ---
+<!-- Licensed to nguyenduong280196@gmail.com — Order XKTV2KA26 -->
 
-# /d2-activity — Activity / Flowchart Diagram (D2, layout ELK)
+# /d2-activity — Activity / Flowchart Diagram (D2, layout ELK)‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
 > Họ skill D2: `/d2-activity` (flow này) · `/d2-erd` (data model) · `/d2-architect` (kiến trúc hệ thống). Cả 3 dùng chung `render.sh` ở `.claude/skills/d2-activity/`.
 
-## Goal
+## Goal‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-Vẽ 1 quy trình nghiệp vụ nhiều nhánh (decision/parallel/loop/swimlane) thành diagram **đẹp, gọn, đường vuông góc không đè** bằng [D2](https://d2lang.com) + layout engine **ELK**. Đứng hoàn toàn riêng, KHÔNG trộn vào `srs/{feature}-flows.md`.
+Vẽ 1 quy trình nghiệp vụ nhiều nhánh (decision/parallel/loop/swimlane) thành diagram __đẹp, gọn, đường vuông góc không đè__ bằng [D2](https://d2lang.com) + layout engine __ELK__. Đứng hoàn toàn riêng, KHÔNG trộn vào `srs/{feature}-flows.md`.
 
 Output trong `docs/{feature}/d2/`:
-1. `{process-slug}.d2` — **source** D2 do AI viết (text, version git được). Sửa cái này khi gọi lại skill (tự vào update mode).
+1. `{process-slug}.d2` — __source__ D2 do AI viết (text, version git được). Sửa cái này khi gọi lại skill (tự vào update mode).
 2. `{process-slug}.svg` — render sẵn (mở bằng browser/IDE/Obsidian, không cần server).
 
 Plus `d2/{feature}-d2-index.md` (metadata + bảng process).
 
-## Tại sao D2 thay vì Mermaid?
+## Tại sao D2 thay vì Mermaid?‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-Mermaid (`/activity`) dùng layout dagre — với flow >5 nhánh + nhiều điểm hội tụ, nó dàn mũi tên cong tùy tiện, cắt chéo qua node, chỗ merge chụm loạn. **Bạn mô tả logic, engine tự dàn, bạn chịu kết quả** — không kiểm soát được.
+Mermaid (`/activity`) dùng layout dagre — với flow >5 nhánh + nhiều điểm hội tụ, nó dàn mũi tên cong tùy tiện, cắt chéo qua node, chỗ merge chụm loạn. __Bạn mô tả logic, engine tự dàn, bạn chịu kết quả__ — không kiểm soát được.
 
-D2 + ELK cho: đường **orthogonal gom máng**, node **thẳng hàng cột/hàng**, **swimlane thật** (không hack subgraph), phân biệt shape+màu (decision ◇ / start-end ○ / process ▭). Cùng 1 flow, D2 sạch hơn Mermaid thấy rõ bằng mắt.
+D2 + ELK cho: đường __orthogonal gom máng__, node __thẳng hàng cột/hàng__, __swimlane thật__ (không hack subgraph), phân biệt shape+màu (decision ◇ / start-end ○ / process ▭). Cùng 1 flow, D2 sạch hơn Mermaid thấy rõ bằng mắt.
 
-> Giữ `/activity` (Mermaid) cho trường hợp cần **nhúng inline** render tự động trên GitHub/Obsidian. Dùng `/d2-activity` khi cần **bản đẹp standalone** để stakeholder xem / export.
+> Giữ `/activity` (Mermaid) cho trường hợp cần __nhúng inline__ render tự động trên GitHub/Obsidian. Dùng `/d2-activity` khi cần __bản đẹp standalone__ để stakeholder xem / export.
 
-## Constraints
+## Constraints‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 
-- **Output cố định** `docs/{feature}/d2/{slug}.d2` + `.svg`. KHÔNG ghi vào `flows.md`. KHÔNG flag layout/theme/direction (đã chốt ELK + theme neutral trong `render.sh`).
-- **`--feature` optional** — auto-detect từ ngữ cảnh/feature đang làm dở; mơ hồ mới hỏi. File đã tồn tại → tự vào update mode, không cần flag. **Feature chưa có + arg là mô tả quy trình → tự derive slug + tạo feature** (điểm-vào, xem `feature-bootstrap.md` nhóm A). Mọi thứ khác suy luận từ mô tả (theo flag-diet).
-- **AI viết source .d2, KHÔNG tự tính toạ độ** — ELK lo layout. Vai trò AI = mô tả đúng nghiệp vụ (node/nhánh/lane), giống viết Mermaid.
+### Hard rules — never violate‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+- __Output cố định__ `docs/{feature}/d2/{slug}.d2` + `.svg`. KHÔNG ghi vào `flows.md`. KHÔNG flag layout/theme/direction (đã chốt ELK + theme neutral trong `render.sh`).
+- **`--feature` optional** — auto-detect từ ngữ cảnh/feature đang làm dở; mơ hồ mới hỏi. File đã tồn tại → tự vào update mode, không cần flag. __Feature chưa có + arg là mô tả quy trình → tự derive slug + tạo feature__ (điểm-vào, xem `feature-bootstrap.md` nhóm A). Mọi thứ khác suy luận từ mô tả (theo flag-diet).
+- __AI viết source .d2, KHÔNG tự tính toạ độ__ — ELK lo layout. Vai trò AI = mô tả đúng nghiệp vụ (node/nhánh/lane), giống viết Mermaid.
 - **Render qua `render.sh`** — KHÔNG gọi `d2`/Chrome trực tiếp trong skill (script lo path + flag).
-- **Compile phải PASS** trước khi báo xong. Fail cú pháp → sửa source, KHÔNG để .svg hỏng/thiếu.
-- **L1 approval** trước Write — prose BA-friendly (xem `ba-conventions.md` Mục 5), mô tả bằng từ nghiệp vụ (các bước / nhánh quyết định / vai trò), KHÔNG dump source D2.
-- **KHÔNG L3 iterate** — D2 không render trong chat; user review từ file .svg (theo `approval-gate.md` + memory skip-L3-mermaid, áp cả D2).
-- **Vietnamese-first** trong label (D2 hỗ trợ Unicode); keyword cú pháp English.
+- __Compile phải PASS__ trước khi báo xong. Fail cú pháp → sửa source, KHÔNG để .svg hỏng/thiếu.
+- __L1 approval__ trước Write — prose BA-friendly (xem `ba-conventions.md` Mục 5), mô tả bằng từ nghiệp vụ (các bước / nhánh quyết định / vai trò), KHÔNG dump source D2.
+- __KHÔNG L3 iterate__ — D2 không render trong chat; user review từ file .svg (theo `approval-gate.md` + memory skip-L3-mermaid, áp cả D2).
+- __Vietnamese-first__ trong label (D2 hỗ trợ Unicode); keyword cú pháp English.
 - **Per `diagram-selection.md`** — `/d2-activity` khi cần activity đẹp standalone. Cần chuẩn OMG/import Camunda → `/bpmn`. Cần nhúng inline auto-render GitHub → `/activity`.
-- **Idempotent** — `d2/{feature}-d2-index.md` track process; trùng slug → tự vào update mode (L2 diff), không refuse.
+- __Idempotent__ — `d2/{feature}-d2-index.md` track process; trùng slug → tự vào update mode (L2 diff), không refuse.
+- __Đừng tự chốt lane từ heuristic__ — bước 3.5 bắt buộc hỏi user xác nhận danh sách vai trò detect được trước khi generate, vì suy luận từ mô tả dễ bỏ sót actor bị ẩn/ngụ ý trong câu văn.
+
+### Pitfalls — easy to get wrong
+
+- __d2 chưa cài__ → dừng ngay bước 1, in đúng 1 dòng install. KHÔNG ghi file rỗng.
+- __QUOTE label có ký tự đặc biệt__ (gotcha hay gặp nhất) — D2 hiểu `[] {} / () :` là cú pháp. Label chứa các ký tự này PHẢI bọc `"..."`. Vd: `A -> B: "POST /review {id}"` (đúng) vs `A -> B: POST /review {id}` (compile fail). Tiếng Việt/space/dấu → OK không cần quote; chỉ quote khi có ký tự cấu trúc.
+- __Compile fail__ — đọc lỗi d2 (chỉ rõ dòng:cột), thường là thiếu quote (xem trên) hoặc thiếu `:` trước label cạnh. Sửa, render lại.
+- __SVG mở ra trắng__ → thường do label rỗng hoặc node mồ côi. Kiểm mọi node có ít nhất 1 cạnh.
+- __PNG (khi cần export)__ → `render.sh {file}.d2 --png` (qua Chrome puppeteer-cache). Mặc định chỉ SVG cho nhẹ. Script tự đọc `viewBox` trong SVG để set đúng `--window-size` Chrome (khớp kích thước diagram thật) — __KHÔNG__ đổi sang gọi D2 native PNG (`d2 file.d2 file.png`) để "đơn giản hoá": D2 v0.7.1 native PNG export phụ thuộc Playwright driver tự tải, và bản driver D2 cần (`playwright-1.47.2-mac-arm64.zip`) đã bị gỡ khỏi mọi CDN mirror của Playwright (404 vĩnh viễn tại thời điểm 2026-07, không phải lỗi mạng tạm) — Chrome/Puppeteer sẵn có là đường ổn định duy nhất trên môi trường này.
+- __Đừng over-engineer__ — flow 3-4 bước tuyến tính không cần diagram; numbered steps đủ.
+- __Không trộn với /activity__ — nếu feature đã có activity trong flows.md, /d2 vẫn ghi riêng d2/, KHÔNG xoá/sửa flows.md.
+- __Update mode (slug đã tồn tại)__ → Read source .d2 cũ, L2 diff phần sửa, re-render sau khi user Y.
 
 ## Inputs
 
@@ -53,7 +68,7 @@ Trùng slug đã tồn tại → skill tự nhận ra và vào update mode (L2 d
 
 ## Context (dynamic)
 
-Today: !`date +%Y-%m-%d`
+Today: !`date +%Y-%m-%d`‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
 Features có sẵn: !`ls -d docs/*/ 2>/dev/null | xargs -I{} basename {} | head -20`
 Features đã có d2/: !`for d in docs/*/d2/*-d2-index.md; do [ -f "$d" ] && dirname "$d" | xargs dirname | xargs basename; done 2>/dev/null | head -10`
 d2 cài chưa: !`test -x "$HOME/.local/bin/d2" && echo "✅ $($HOME/.local/bin/d2 --version)" || echo "❌ chưa cài — curl -fsSL https://d2lang.com/install.sh | sh -s --"`
@@ -96,7 +111,7 @@ User gọi /d2-activity "<mô tả>" --feature X
 6. Write {slug}.d2 → chạy render.sh → sinh {slug}.svg
    │  compile fail? → sửa source, render lại (tối đa 2 lần), rồi mới báo
    ▼
-7. Update d2/{feature}-d2-index.md (thêm row) — env note → activity.log. Báo user mở .svg xem.
+7. Update d2/{feature}-d2-index.md (thêm row) — env note → changelog.md. Báo user mở .svg xem.
 ```
 
 ## Cách xây (build step-by-step)
@@ -124,7 +139,7 @@ stepA -> end
 stepB -> end
 ```
 
-**Swimlane (nhiều vai trò)** — dùng container, ELK dàn lane thật:
+__Swimlane (nhiều vai trò)__ — dùng container, ELK dàn lane thật:
 ```
 User: {
   u1: Gửi yêu cầu
@@ -138,7 +153,7 @@ User.u1 -> CSKH.c1
 CSKH.approve -> User.u2: Đã duyệt
 ```
 
-**Quy tắc:**
+__Quy tắc:__
 - Label tiếng Việt tự nhiên; xuống dòng bằng `\n` trong label dài.
 - Decision >3 nhánh: cứ để nhiều cạnh ra từ 1 diamond (D2 xử lý được, khác Mermaid).
 - Loop `A -> B -> A` OK; ≥2 loop chồng → tách 2 diagram.
@@ -153,16 +168,16 @@ CSKH.approve -> User.u2: Đã duyệt
 
 ## L1 plan preview (mẫu BA-friendly)
 
-> Em sẽ tạo diagram quy trình **{tên}** tại `docs/{feature}/d2/{slug}.d2` (+ ảnh `.svg` xem sẵn):
+> Em sẽ tạo diagram quy trình __{tên}__ tại `docs/{feature}/d2/{slug}.d2` (+ ảnh `.svg` xem sẵn):
 >
-> **Nội dung:**
+> __Nội dung:__
 > - {N} bước xử lý, {M} nhánh quyết định (vd "Kết quả đánh giá?", "interval ≥ 30 ngày?")
 > - {K} vai trò/lane: {liệt kê nếu có}
 > - Điểm bắt đầu: {...}; kết thúc: {...}
 >
-> **Vẽ bằng D2 + ELK** cho đường gọn, không đè (đẹp hơn Mermaid khi nhiều nhánh).
+> __Vẽ bằng D2 + ELK__ cho đường gọn, không đè (đẹp hơn Mermaid khi nhiều nhánh).
 >
-> **Ghi nhận:** activity log "{note}".
+> __Ghi nhận:__ activity log "{note}".
 >
 > Apply? (Y / sửa)
 
@@ -176,18 +191,6 @@ Mở {slug}.svg bằng browser/IDE/Obsidian để xem (đường vuông góc, go
 Cần sửa? /d2-activity "<thay đổi>" --feature {feature} (skill tự vào update mode)
 ```
 
-## Gotchas
-
-- **d2 chưa cài** → dừng ngay bước 1, in đúng 1 dòng install. KHÔNG ghi file rỗng.
-- **QUOTE label có ký tự đặc biệt** (gotcha hay gặp nhất) — D2 hiểu `[] {} / () :` là cú pháp. Label chứa các ký tự này PHẢI bọc `"..."`. Vd: `A -> B: "POST /review {id}"` (đúng) vs `A -> B: POST /review {id}` (compile fail). Tiếng Việt/space/dấu → OK không cần quote; chỉ quote khi có ký tự cấu trúc.
-- **Compile fail** — đọc lỗi d2 (chỉ rõ dòng:cột), thường là thiếu quote (xem trên) hoặc thiếu `:` trước label cạnh. Sửa, render lại.
-- **SVG mở ra trắng** → thường do label rỗng hoặc node mồ côi. Kiểm mọi node có ít nhất 1 cạnh.
-- **PNG (khi cần export)** → `render.sh {file}.d2 --png` (qua Chrome puppeteer-cache). Mặc định chỉ SVG cho nhẹ. Script tự đọc `viewBox` trong SVG để set đúng `--window-size` Chrome (khớp kích thước diagram thật) — **KHÔNG** đổi sang gọi D2 native PNG (`d2 file.d2 file.png`) để "đơn giản hoá": D2 v0.7.1 native PNG export phụ thuộc Playwright driver tự tải, và bản driver D2 cần (`playwright-1.47.2-mac-arm64.zip`) đã bị gỡ khỏi mọi CDN mirror của Playwright (404 vĩnh viễn tại thời điểm 2026-07, không phải lỗi mạng tạm) — Chrome/Puppeteer sẵn có là đường ổn định duy nhất trên môi trường này.
-- **Đừng tự chốt lane từ heuristic** — bước 3.5 bắt buộc hỏi user xác nhận danh sách vai trò detect được trước khi generate, vì suy luận từ mô tả dễ bỏ sót actor bị ẩn/ngụ ý trong câu văn.
-- **Đừng over-engineer** — flow 3-4 bước tuyến tính không cần diagram; numbered steps đủ.
-- **Không trộn với /activity** — nếu feature đã có activity trong flows.md, /d2 vẫn ghi riêng d2/, KHÔNG xoá/sửa flows.md.
-- **Update mode (slug đã tồn tại)** → Read source .d2 cũ, L2 diff phần sửa, re-render sau khi user Y.
-
 ## References
 
 - @../../rules/ba-conventions.md
@@ -195,4 +198,9 @@ Cần sửa? /d2-activity "<thay đổi>" --feature {feature} (skill tự vào u
 - @../../rules/naming-conventions.md
 - @../../rules/changelog.md
 - @../../rules/diagram-selection.md
-- @../../rules/feature-bootstrap.md
+- @../../rules/diagram-correctness.md
+- @../../rules/feature-bootstrap.md‍‌​‌‌​​‌​‌​‌‌‌‌‌​‌​‌​‌‌​‌​​​‌​​​‌‌‌​‌​​‌‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​‌‌‌​‌​‌​‌‌​​‌‌​​‌‌‌‌​​‌​​‌​​‌​‌‌​‌​​​‌‌‌​​​‌‌​‌​​‌​‌‌‌​​​‌‌​‌‌‌‌‍
+
+
+<!-- wm:160b985c6b06ce6563ee2ce12d9493cd -->
+<sub>Tài liệu thuộc bộ AI4BA BA-Kit — bản quyền ai4ba.com</sub>
