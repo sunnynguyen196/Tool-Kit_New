@@ -40,12 +40,13 @@ if (!fs.existsSync(FILE)) {
 }
 
 function findChrome() {
-  // Check Windows standard Chrome path first if on Windows
-  if (process.platform === 'win32') {
-    const winChrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-    if (fs.existsSync(winChrome)) return winChrome;
-    const winChromeX86 = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe';
-    if (fs.existsSync(winChromeX86)) return winChromeX86;
+  const winPaths = [
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe')
+  ];
+  for (const wp of winPaths) {
+    if (fs.existsSync(wp)) return wp;
   }
   const glob = path.join(os.homedir(), '.puppeteer-cache', 'chrome');
   if (!fs.existsSync(glob)) return null;
@@ -100,10 +101,9 @@ blocks.forEach((b, i) => {
     ? path.join(PNG_DIR, `block-${i}.png`)
     : path.join(tmpDir, `block-${i}.svg`);
   fs.writeFileSync(mmdPath, b.code);
-  const res = spawnSync('npx', ['-y', '@mermaid-js/mermaid-cli', '-i', mmdPath, '-o', outPath, '-s', '2'], {
+  const res = spawnSync('mmdc', ['-i', mmdPath, '-o', outPath, '-s', '2'], {
     encoding: 'utf8',
     env: { ...process.env, PUPPETEER_EXECUTABLE_PATH: CHROME },
-    shell: true,
   });
   const ok = res.status === 0 && fs.existsSync(outPath);
   if (!ok) failCount++;

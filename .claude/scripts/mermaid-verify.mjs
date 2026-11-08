@@ -40,6 +40,14 @@ if (!fs.existsSync(FILE)) {
 }
 
 function findChrome() {
+  const winPaths = [
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe')
+  ];
+  for (const wp of winPaths) {
+    if (fs.existsSync(wp)) return wp;
+  }
   const glob = path.join(os.homedir(), '.puppeteer-cache', 'chrome');
   if (!fs.existsSync(glob)) return null;
   for (const versionDir of fs.readdirSync(glob)) {
