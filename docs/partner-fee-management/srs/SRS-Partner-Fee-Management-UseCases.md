@@ -264,15 +264,15 @@ Bảng định danh chuẩn các loại Yêu cầu Phê duyệt (YCPD) được 
 | **KHỐI THÔNG TIN CHUNG** | Container | M | N | Readonly | Nằm góc trên bên trái, chiều cao 182px, phẳng mép đáy với Khối YCPD. |
 | **Mã phí** | Text | M | N | Unique String | Hiển thị mã cấu hình phí (vd: `QR_FE_NAPAS_002`). |
 | **Loại phí** | Text | M | N | String | Loại phí thu (vd: *Phí thanh toán*). |
-| **Trạng thái cấu hình** | Badge | M | N | Enum Status | Badge trực quan: `● ACTIVE` (nền xanh lá `#dcfce7`), `● PENDING` (nền vàng cam `#fef3c7`), `● INACTIVE` (nền đỏ nhạt). |
-| **Trạng thái YCPD** | Badge | C | N | Enum Status | Hiển thị trạng thái của yêu cầu phê duyệt liên kết: `● PENDING` (cam), `● APPROVAL` (xanh). |
+| **Trạng thái cấu hình** | Badge | M | N | Enum Status | Badge trực quan: `ACTIVE`, `PENDING`, `INACTIVE`. |
+| **Trạng thái YCPD** | Badge | C | N | Enum Status | Hiển thị trạng thái của yêu cầu phê duyệt liên kết: `PENDING`, `APPROVAL`. |
 | **Người khởi tạo / Thời gian tạo** | Text / Date | M | N | String / Datetime | Tên tài khoản Maker và mốc thời gian tạo ban đầu dạng `dd/MM/yyyy, HH:mm:ss`. |
 | **Người cập nhật cuối / Thời gian** | Text / Date | M | N | String / Datetime | Tên tài khoản và mốc thời gian cập nhật gần nhất. |
 | **Người phê duyệt** | Text | C | N | String | Tên Checker được phân công phê duyệt hồ sơ. |
 | **KHỐI YÊU CẦU PHÊ DUYỆT** | Container | C | N | Readonly | Nằm góc trên bên phải, chiều cao 182px, phẳng đáy. Chỉ hiển thị khi có hồ sơ YCPD liên kết. |
 | **Mã yêu cầu** | Text | M | N | String | Mã định danh hồ sơ phê duyệt `AR_MM_MC_[Timestamp]`. |
 | **Thời gian tạo YCPD** | Date time | M | N | Datetime | Thời điểm gửi yêu cầu phê duyệt. |
-| **Trạng thái phê duyệt** | Badge | M | N | Enum | Badge `● Pending` (nền vàng nhạt `#fef3c7`, chữ cam đậm `#b45309`). |
+| **Trạng thái phê duyệt** | Badge | M | N | Enum | Badge hiển thị trạng thái: `Pending`. |
 | **Người tạo YCPD / Phòng ban** | Text | M | N | String | Tài khoản Maker đề xuất và đơn vị công tác (vd: *Kinh doanh - Maker*). |
 | **Nút [Thay đổi người PD]** | Button | C | Y | Click | Hiển thị trong Khối YCPD ở vai trò Maker. Click mở popup chọn Checker mới. |
 | **CỤM NÚT TÁC VỤ CHÂN TRANG** | Button Group | M | Y | Click | Thanh công cụ nổi/chân trang chứa các tác vụ động theo trạng thái bản ghi và quyền hạn người dùng. |

@@ -1,44 +1,70 @@
 ---
 type: usecase-index
 feature: partner-fee-management
-status: draft
-updated: 2026-10-31
+status: approved
+updated: 2026-11-08
 links:
   - srs: docs/partner-fee-management/srs/partner-fee-management-spec.md
+  - srs_ctt: docs/partner-fee-management/srs/SRS-Partner-Fee-CTT.md
+  - srs_qrgw: docs/partner-fee-management/srs/SRS-Partner-Fee-QRGW.md
   - erd: docs/partner-fee-management/srs/partner-fee-management-erd.md
   - flows: docs/partner-fee-management/srs/partner-fee-management-flows.md
   - states: docs/partner-fee-management/srs/partner-fee-management-states.md
 ---
 
-# Quản lý Cấu hình Phí Trả Đối tác — Use Cases Index
-
-## 1. Danh sách Use Cases (Traceability Matrix)
-
-> Bảng ma trận truy vết per-feature kết nối đa chiều giữa Use Case, Yêu cầu chức năng (FR), Màn hình giao diện (Screens trên Figma canvas `CHP Đối tác`), Mã lỗi (Error Matrix) và Mức độ ưu tiên.
-
-| # | Tên Use Case | Mã Slug | Cấp độ | Trạng thái | Actor chính | Đáp ứng FR | Màn hình liên kết (Figma Frame ID) | Mã lỗi liên quan | Ưu tiên |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | **Tìm kiếm và xem danh sách cấu hình phí trả đối tác** | [uc-search-list-fee](uc-search-list-fee.md) | Sea | Draft | Maker, Checker | FR-001, FR-002 | `4020:50223`, `4020:51051`, `4020:51879` | E-004, E-010 | P0 |
-| 2 | **Xuất tệp dữ liệu CHP trả đối tác** | [uc-export-fee](uc-export-fee.md) | Fish | Draft | Maker, Checker | FR-001 | `4020:50223` (Nút [Xuất tệp ▼]) | E-010 | P1 |
-| 3 | **Xem chi tiết thông tin phí trả đối tác** | [uc-view-detail-fee](uc-view-detail-fee.md) | Sea | Draft | Maker, Checker | FR-010, FR-011 | `4020:43846`, `4020:44666`, `4020:45486`, `4020:46336`, `4020:47172` | E-010 | P0 |
-| 4 | **Xóa CHP trả đối tác** | [uc-delete-fee](uc-delete-fee.md) | Fish | Draft | Maker | FR-001, FR-010 | `4020:50223` (Menu row), `4020:50006` | E-007, E-008 | P1 |
-| 5 | **Xử lý thông tin hồ sơ CHP trả đối tác** | [uc-process-fee-profile](uc-process-fee-profile.md) | Sea | Draft | Maker, Checker | FR-003, FR-004, FR-005, FR-006, FR-007, FR-008, FR-009, FR-012 | `4022:53508` – `4022:58264`, `4018:36498` – `4018:36826`, `4020:36844` – `4020:43097`, `4020:47923`, `4020:48856` | E-001, E-002, E-003, E-005, E-006, E-009 | P0 |
-| 6 | **Job tự động kích hoạt cấu hình** | [uc-auto-golive](uc-auto-golive.md) | System | Draft | Scheduler Job | FR-013 | System background task (Không có màn hình UI) | E-003, E-010 | P0 |
+# Quản lý Cấu hình Phí Trả Đối tác — Danh mục Use Cases (CTT & QRGW)
 
 ---
 
-## 2. CRUD Matrix (Ma trận Phân quyền & Thao tác Dữ liệu)
+# PHẦN 1: QUẢN LÝ CẤU HÌNH PHÍ ĐỐI TÁC CTT (CỔNG THANH TOÁN)
 
-> Quy ước thao tác: **C** = Create (Tạo mới), **R** = Read (Tra cứu / Đọc), **U** = Update (Cập nhật / Sửa), **D** = Delete (Xóa). Ô trống = Không tác động.
+## 1.1 Danh sách Use Cases CTT (Traceability Matrix)
 
-| Use Case \ Thực thể | `PARTNER_FEE_CONFIG` | `FEE_TIER_DETAIL` | `FEE_SERVICE_DETAIL` | `FEE_AUDIT_LOG` | `MCC_CATEGORY` |
+| # | Mã UC | Tên Use Case CTT | Tệp tài liệu | Actor chính | Đáp ứng FR | Màn hình liên kết | Ưu tiên |
+|---|---|---|---|---|---|---|:---:|
+| 1 | **CTT-UC01** | Tìm kiếm và xem danh sách cấu hình phí đối tác CTT | [uc-ctt-01-search-list](uc-ctt-01-search-list.md) | Maker, Checker, Đối soát | FR-001, FR-002 | `4020:50223`, `4020:51051`, `4020:51879` | P0 |
+| 2 | **CTT-UC02** | Xuất tệp dữ liệu CHP Trả đối tác CTT | [uc-ctt-02-export](uc-ctt-02-export.md) | Maker, Checker, Kế toán | FR-001 | `4020:50223` (Menu [Xuất tệp]) | P1 |
+| 3 | **CTT-UC03** | Xem chi tiết thông tin phí Trả đối tác CTT | [uc-ctt-03-view-detail](uc-ctt-03-view-detail.md) | Maker, Checker, Kiểm toán | FR-010, FR-011 | `4020:43846`, `4020:45486`, `4020:47172` | P0 |
+| 4 | **CTT-UC04** | Xóa CHP Trả đối tác CTT | [uc-ctt-04-delete](uc-ctt-04-delete.md) | Maker | FR-001, FR-010 | `4020:50223` (Menu row), `4020:50006` | P1 |
+| 5 | **CTT-UC05** | Xử lý thông tin hồ sơ CHP Trả đối tác CTT | [uc-ctt-05-process-fee-profile](uc-ctt-05-process-fee-profile.md) | Maker, Checker, Quản lý | FR-003 đến FR-009, FR-012 | `4022:53508` – `4022:58264`, `4020:47923`, `4020:48856` | P0 |
+| 6 | **CTT-UC06** | Job tự động kích hoạt cấu hình CTT | [uc-ctt-06-auto-golive](uc-ctt-06-auto-golive.md) | Hệ thống (Scheduler) | FR-013 | System background task | P0 |
+
+## 1.2 CRUD Matrix phân hệ CTT
+
+| Use Case CTT \ Thực thể | `PARTNER_FEE_CONFIG` | `FEE_TIER_DETAIL` | `FEE_SERVICE_DETAIL` | `FEE_AUDIT_LOG` | `MCC_CATEGORY` |
 |---|---|---|---|---|---|
-| **[uc-search-list-fee](uc-search-list-fee.md)** | **R** | | | | **R** |
-| **[uc-export-fee](uc-export-fee.md)** | **R** | **R** | **R** | | |
-| **[uc-view-detail-fee](uc-view-detail-fee.md)** | **R** | **R** | **R** | **R** | **R** |
-| **[uc-delete-fee](uc-delete-fee.md)** | **D** (Logic: `DELETED`) | **D** | **D** | **C** (Log xóa) | |
-| **[uc-process-fee-profile](uc-process-fee-profile.md)** | **C, R, U** | **C, R, U** | **C, R, U** | **C** (Ghi vết) | **R** |
-| **[uc-auto-golive](uc-auto-golive.md)** | **R, U** (`READY` $\to$ `ACTIVE`) | | | **C** (Log hệ thống)| |
+| **[CTT-UC01](uc-ctt-01-search-list.md)** | **R** | | | | **R** |
+| **[CTT-UC02](uc-ctt-02-export.md)** | **R** | **R** | **R** | | |
+| **[CTT-UC03](uc-ctt-03-view-detail.md)** | **R** | **R** | **R** | **R** | **R** |
+| **[CTT-UC04](uc-ctt-04-delete.md)** | **D** (Soft-delete) | **D** | **D** | **C** (Log xóa) | |
+| **[CTT-UC05](uc-ctt-05-process-fee-profile.md)** | **C, R, U** | **C, R, U** | **C, R, U** | **C** (Ghi vết) | **R** |
+| **[CTT-UC06](uc-ctt-06-auto-golive.md)** | **R, U** (`READY` $\to$ `ACTIVE`) | | | **C** (Log hệ thống) | |
+
+---
+
+# PHẦN 2: QUẢN LÝ CẤU HÌNH PHÍ ĐỐI TÁC QRGW (CỔNG VIETQR / QR GATEWAY)
+
+## 2.1 Danh sách Use Cases QRGW (Traceability Matrix)
+
+| # | Mã UC | Tên Use Case QRGW | Tệp tài liệu | Actor chính | Đáp ứng FR | Màn hình liên kết | Ưu tiên |
+|---|---|---|---|---|---|---|:---:|
+| 1 | **QR-UC01** | Tìm kiếm và xem danh sách cấu hình phí đối tác QRGW | [uc-qr-01-search-list](uc-qr-01-search-list.md) | Maker, Checker, Đối soát QR | FR-001, FR-002 | `4020:50223`, `4020:51051`, `4020:51879` | P0 |
+| 2 | **QR-UC02** | Xuất tệp dữ liệu CHP Trả đối tác QRGW | [uc-qr-02-export](uc-qr-02-export.md) | Maker, Checker, Kế toán | FR-001 | `4020:50223` (Menu [Xuất tệp]) | P1 |
+| 3 | **QR-UC03** | Xem chi tiết thông tin phí Trả đối tác QRGW | [uc-qr-03-view-detail](uc-qr-03-view-detail.md) | Maker, Checker, Kiểm toán | FR-010, FR-011 | `4020:44666`, `4020:46306`, `4020:47172` | P0 |
+| 4 | **QR-UC04** | Xóa CHP Trả đối tác QRGW | [uc-qr-04-delete](uc-qr-04-delete.md) | Maker | FR-001, FR-010 | `4020:50223` (Menu row), `4020:50006` | P1 |
+| 5 | **QR-UC05** | Xử lý thông tin hồ sơ CHP Trả đối tác QRGW | [uc-qr-05-process-fee-profile](uc-qr-05-process-fee-profile.md) | Maker, Checker, Quản lý | FR-003 đến FR-009, FR-012 | `4020:47923`, `4020:48856` | P0 |
+| 6 | **QR-UC06** | Job tự động kích hoạt cấu hình QRGW | [uc-qr-06-auto-golive](uc-qr-06-auto-golive.md) | Hệ thống (Scheduler) | FR-013 | System background task | P0 |
+
+## 2.2 CRUD Matrix phân hệ QRGW
+
+| Use Case QRGW \ Thực thể | `PARTNER_FEE_CONFIG` | `FEE_TIER_DETAIL` | `FEE_SERVICE_DETAIL` | `FEE_AUDIT_LOG` | `MCC_CATEGORY` |
+|---|---|---|---|---|---|
+| **[QR-UC01](uc-qr-01-search-list.md)** | **R** | | | | |
+| **[QR-UC02](uc-qr-02-export.md)** | **R** | **R** | **R** | | |
+| **[QR-UC03](uc-qr-03-view-detail.md)** | **R** | **R** | **R** | **R** | |
+| **[QR-UC04](uc-qr-04-delete.md)** | **D** (Soft-delete) | **D** | **D** | **C** (Log xóa) | |
+| **[QR-UC05](uc-qr-05-process-fee-profile.md)** | **C, R, U** | **C, R, U** | **C, R, U** | **C** (Ghi vết) | |
+| **[QR-UC06](uc-qr-06-auto-golive.md)** | **R, U** (`READY` $\to$ `ACTIVE`) | | | **C** (Log hệ thống) | |
 
 ---
 
@@ -46,27 +72,7 @@ links:
 
 | Actor | Loại | Mô tả vai trò nghiệp vụ | Nguồn thẩm quyền |
 |---|---|---|---|
-| **Maker** | Primary Actor (Người dùng nội bộ) | Chuyên viên Vận hành / Tính cước EPAY. Phụ trách tra cứu, thêm mới, sửa đổi, xóa nháp và gửi phê duyệt hồ sơ biểu phí. | Phân quyền vai trò Maker trên EPAY Portal |
-| **Checker** | Primary Actor (Người dùng nội bộ) | Trưởng phòng / Cán bộ Phê duyệt EPAY. Phụ trách thẩm định hồ sơ so sánh CŨ - MỚI, ra quyết định Phê duyệt hoặc Từ chối hồ sơ. | Phân quyền vai trò Checker trên EPAY Portal |
-| **Scheduler Job** | System Actor (Hệ thống ngầm) | Tiến trình tự động hóa chạy định kỳ trên máy chủ Portal, phụ trách quét thời gian hiệu lực và kích hoạt biểu phí tự động (Auto Golive). | Cron Job / Scheduler Service |
-| **Billing & Settlement Engine** | Secondary Actor (Hệ thống nội bộ) | Động cơ tính cước và đối soát doanh thu chi phí, nhận dữ liệu cấu hình `ACTIVE` để cấn trừ phí giao dịch đối tác. | Module Billing Backend |
-
----
-
-## 4. Use Case Relationships
-
-| Mối quan hệ | Từ Use Case (From) | Đến Use Case (To) | Giải thích lý do nghiệp vụ |
-|---|---|---|---|
-| **extend** | `uc-export-fee` | `uc-search-list-fee` | Người dùng mở rộng thao tác xuất tệp Excel trực tiếp từ kết quả danh sách đang tìm kiếm. |
-| **extend** | `uc-delete-fee` | `uc-search-list-fee` | Người dùng chọn xóa bản ghi `DRAFT` hoặc `NEW` từ menu thao tác trên từng dòng danh sách. |
-| **extend** | `uc-delete-fee` | `uc-view-detail-fee` | Người dùng thực hiện xóa bản ghi từ màn hình Xem chi tiết. |
-| **include** | `uc-process-fee-profile` | `uc-view-detail-fee` | Luồng thẩm định của Checker và chỉnh sửa của Maker luôn cần nạp thông tin chi tiết cấu hình hiện tại làm dữ liệu nền. |
-| **trigger** | `uc-process-fee-profile` | `uc-auto-golive` | Khi Checker duyệt một cấu hình có ngày áp dụng trong tương lai (`READY`), bản ghi trở thành đối tượng theo dõi của Scheduler Job. |
-
----
-
-## 5. Nguồn dữ liệu tham chiếu
-- **Core Spec SRS**: [`docs/partner-fee-management/srs/partner-fee-management-spec.md`](../srs/partner-fee-management-spec.md)
-- **Data ERD**: [`docs/partner-fee-management/srs/partner-fee-management-erd.md`](../srs/partner-fee-management-erd.md)
-- **Sơ đồ luồng**: [`docs/partner-fee-management/srs/partner-fee-management-flows.md`](../srs/partner-fee-management-flows.md)
-- **Sơ đồ trạng thái**: [`docs/partner-fee-management/srs/partner-fee-management-states.md`](../srs/partner-fee-management-states.md)
+| **Maker (CTT / QRGW)** | Primary Actor | Chuyên viên Vận hành / Tính cước phân hệ tương ứng. Phụ trách tra cứu, thêm mới, sửa đổi, xóa nháp và gửi phê duyệt. | Phân quyền Maker trên EPAY Portal |
+| **Checker (CTT / QRGW)** | Primary Actor | Trưởng phòng / Cán bộ Phê duyệt. Phụ trách thẩm định so sánh CŨ - MỚI, ra quyết định Phê duyệt hoặc Từ chối hồ sơ. | Phân quyền Checker trên EPAY Portal |
+| **Scheduler Job** | System Actor | Tiến trình tự động hóa chạy lúc 00:00:00 hàng ngày, quét thời gian hiệu lực và kích hoạt biểu phí tự động (Auto Golive). | Cron Job / Scheduler Service |
+| **Billing & Settlement Engine** | Secondary Actor | Động cơ tính cước và đối soát doanh thu chi phí, nhận dữ liệu cấu hình `ACTIVE` để cấn trừ phí giao dịch đối tác. | Module Billing Backend |

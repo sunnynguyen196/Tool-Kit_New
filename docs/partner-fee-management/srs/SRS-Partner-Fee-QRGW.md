@@ -163,7 +163,7 @@ links:
 | Component Name | Data Type | Validation rules (M/O/C) | Editable (Y/N) | Other Validation | Action rules |
 |---|---|:---:|:---:|---|---|
 | **Khối Thông tin chung** | Container | M | N | Height = 182px | Chứa thông tin tổng quan bản ghi QRGW, mép đáy phẳng với Khối YCPD. |
-| **Trạng thái cấu hình** | Badge | M | N | Enum Status | `● ACTIVE` (xanh lá `#dcfce7`) hoặc `● PENDING` (vàng cam `#fef3c7`). |
+| **Trạng thái cấu hình** | Badge | M | N | Enum Status | Hiển thị trạng thái: `ACTIVE`, `PENDING`, `INACTIVE`. |
 | **Khối Yêu cầu phê duyệt** | Container | C | N | Height = 182px | Hiển thị khi bản ghi QRGW đang chờ duyệt hoặc có hồ sơ YCPD. |
 | **Nút [Thay đổi người PD]** | Button | C | Y | Click | Hiển thị trong Khối YCPD cho Maker khi bản ghi PENDING. |
 | **Nguồn dữ liệu cấu hình** | Text | M | N | Fixed = "QRGW" | Cố định `QRGW`. |
