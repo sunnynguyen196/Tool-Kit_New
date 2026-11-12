@@ -100,19 +100,17 @@ sequenceDiagram
         UI->>UI: Hiển thị popup xác nhận phê duyệt
         Checker->>UI: Xác nhận Đồng ý
         UI->>API: POST /api/v1/fee-configs/{id}/approve
-        API->>API: Kiểm tra Thời gian áp dụng phí so với thời điểm hiện tại (NOW)
-        alt Ngày áp dụng phí > NOW (Áp dụng trong tương lai)
-            API->>DB: UPDATE fee_configs SET status='READY', ycpd='APPROVAL' WHERE id={id}
-            API->>Audit: Ghi log: "Checker duyệt cấu hình; chuyển trạng thái READY"
-        else Ngày áp dụng phí <= NOW (Áp dụng ngay)
-            API->>DB: UPDATE fee_configs SET status='ACTIVE', ycpd='APPROVAL' WHERE id={id}
-            API->>Audit: Ghi log: "Checker duyệt cấu hình; chuyển trạng thái ACTIVE"
+        API->>API: Kiểm tra YCPD còn Pending và chưa quá ngày hiệu lực
+        alt Chưa quá ngày hiệu lực và YCPD chưa được xử lý
+            API->>DB: Cập nhật CHP tạo mới thành READY, YCPD thành APPROVAL
+            API->>Audit: Ghi nhận Checker duyệt cấu hình, chuyển READY
+            API->>Noti: Thông báo kết quả phê duyệt tới Maker
+            Noti-->>Maker: Cấu hình đã duyệt và chờ Auto-golive
+            API-->>UI: Phê duyệt thành công, CHP READY
+        else Đã quá ngày hiệu lực hoặc YCPD đã được xử lý
+            API-->>UI: Không duyệt hiệu lực ngay, tải lại trạng thái YCPD
+            Note over API,DB: Job riêng từ chối YCPD còn Pending đã quá ngày hiệu lực
         end
-        DB-->>API: Ghi nhận thành công
-        API->>Noti: Bắn thông báo phê duyệt thành công tới Maker
-        Noti-->>Maker: Nhận thông báo cấu hình đã được duyệt
-        API-->>UI: Response HTTP 200 OK
-        UI-->>Checker: Toast thông báo: "Phê duyệt cấu hình phí thành công"
     else Nhánh 2: Checker bác bỏ [❌ Từ chối]
         Checker->>UI: Bấm [❌ Từ chối]
         UI-->>Checker: Bật popup yêu cầu nhập Lý do từ chối (bắt buộc)
@@ -172,4 +170,23 @@ sequenceDiagram
         UI->>DB: UPDATE fee_configs SET status='ACTIVE', ycpd='APPROVAL'
         UI->>Core: Gửi tín hiệu nạp lại biểu phí vào cache Core Engine
     end
+```
+
+
+## Flow Job tự động từ chối YCPD quá ngày hiệu lực
+
+**Related UC**: [CTT-UC07](../usecases/uc-ctt-07-auto-reject-expired.md), [QR-UC07](../usecases/uc-qr-07-auto-reject-expired.md)
+
+```mermaid
+flowchart TD
+    Job[Job quét YCPD] --> Pending{YCPD vẫn Pending?}
+    Pending -->|Không| Skip[Bỏ qua]
+    Pending -->|Có| Due{Đã quá ngày hiệu lực?}
+    Due -->|Không| Skip
+    Due -->|Có| Recheck{Kiểm tra lại vẫn Pending?}
+    Recheck -->|Không| Skip
+    Recheck -->|Có| Reject[YCPD Rejected bởi Hệ thống]
+    Reject --> Reason[Lý do: Tự động từ chối bởi hệ thống]
+    Reason --> Result[CHP tạo mới về NEW; bảo toàn bản gốc với yêu cầu thay đổi]
+    Result --> Log[Ghi thời gian và lịch sử từ chối tự động]
 ```

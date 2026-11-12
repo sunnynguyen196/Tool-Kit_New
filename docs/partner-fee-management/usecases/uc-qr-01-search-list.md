@@ -25,7 +25,7 @@ links:
 | **Trigger** | Người dùng click menu điều hướng: **`Quản lý cấu hình phí` > `Phí đối tác QRGW`** trên thanh Navigation bên trái; hoặc click nút [Tìm kiếm]. |
 | **Pre-Condition** | - Tài khoản người dùng đã được tạo và cấp quyền tra cứu phân hệ QRGW.<br>- Người dùng đã đăng nhập vào hệ thống EPAY Portal.<br>- Dữ liệu biểu phí QRGW đã được ghi nhận trong cơ sở dữ liệu. |
 | **Post-Condition** | Hệ thống hiển thị danh sách các cấu hình phí QRGW thỏa mãn đúng tiêu chí lọc và tab trạng thái kích hoạt. |
-| **Basic flow** | 1. Click **[Quản lý cấu hình phí]** >> click **[Phí đối tác QRGW]** ở thanh Navigation bên trái. Hệ thống hiển thị Danh sách cấu hình phí QRGW tương ứng.<br>2. Chọn nút **[Tìm kiếm]** ở góc trên bên phải $\rightarrow$ Màn hình show ra các trường điều kiện lọc dữ liệu dành riêng cho QRGW, cho phép user lựa chọn giá trị để tra cứu.<br>3. Lựa chọn giá trị tại các trường thông tin: Đối tác/Ngân hàng (BIDV QRGW, VCB QRGW, Napas VietQR...), Loại dịch vụ QRGW (Thu hộ Pay-In / Chi hộ Pay-Out), Loại QR (QR tĩnh / QR động), Kỳ trả phí, Trạng thái.<br>4. Click nút **[Tìm kiếm]**.<br>5. Hệ thống kiểm tra tính hợp lệ thông tin, thực hiện truy vấn dữ liệu từ CSDL theo điều kiện lọc.<br>6. Hệ thống hiển thị danh sách cấu hình phí QRGW theo điều kiện lọc ở trên. |
+| **Basic flow** | 1. Người dùng vào menu **[Quản lý cấu hình phí] > [Phí trả đối tác] > [Phí đối tác QRGW]** ở thanh menu bên trái.<br>2. Hệ thống hiển thị màn hình danh sách cấu hình phí QRGW.<br>3. Người dùng chọn **[Tìm kiếm]** để mở bộ lọc.<br>4. Hệ thống hiển thị các tiêu chí tra cứu cấu hình phí QRGW. |
 | **Alternative flow** | - **A1**: Bấm nút **[Xóa]** $\rightarrow$ Khôi phục các tiêu chí lọc về giá trị mặc định.<br>- **A2**: Click chuyển sang **Tab Đang hoạt động** $\rightarrow$ Lọc bản ghi QRGW có `status = ACTIVE`.<br>- **A3**: Click chuyển sang **Tab Chờ phê duyệt** $\rightarrow$ Lọc bản ghi QRGW có `status = PENDING`.<br>- **A4**: Không tìm thấy bản ghi $\rightarrow$ Hiển thị bảng rỗng kèm thông báo không tìm thấy kết quả phù hợp. |
 | **Exception flow** | - **E1**: Lỗi kết nối cơ sở dữ liệu hoặc API Timeout $> 10$s.<br>- **E2**: Người dùng chọn thời gian áp dụng Từ ngày lớn hơn Đến ngày $\rightarrow$ Báo lỗi inline `E-004`. |
 | **Business Rules** | [Yêu cầu nghiệp vụ chung tra cứu cấu hình phí QRGW](#323-yêu-cầu-nghiệp-vụ-chung) |
@@ -51,7 +51,7 @@ links:
 | **Loại mã QR** | Dropdown list | O | Y | Multiple selection | Mặc định = *“Tất cả”*. Danh mục: QR Tĩnh (Static), QR Động (Dynamic). |
 | **Trạng thái** | Dropdown list | O | Y | Multiple selection | Mặc định = *“NEW, ACTIVE, INACTIVE”*. Các giá trị: New, Active, Inactive, Draft. |
 | **Kỳ trả phí** | Dropdown list | O | Y | Multiple selection | Mặc định = *“Tất cả”*. Các giá trị: Ngày, Tháng, Năm, Quý. |
-| **Tiến trình phê duyệt** | Dropdown list | O | Y | Multiple selection | Mặc định = *“Tất cả”*. Giá trị: Chờ Checker phê duyệt, Duyệt hiệu lực ngay, Duyệt chờ ngày hiệu lực, Từ chối hồ sơ, Hủy yêu cầu. |
+| **Tiến trình phê duyệt** | Dropdown list | O | Y | Multiple selection | - Giá trị mặc định = “Tất cả”.<br>- Danh sách hiển thị theo thứ tự ABC.<br>- Tiến trình phê duyệt bao gồm các giá trị tham chiếu tại [Danh sách các loại yêu cầu phê duyệt](../srs/SRS-Partner-Fee-QRGW.md#217-danh-sách-các-loại-yêu-cầu-phê-duyệt). |
 | **Quicksearch** | Search bar | O | Y | Text $\le 100$ chars | Tìm nhanh theo Mã cấu hình, Tên cấu hình hoặc Mô tả. Nhấn Enter để tìm. |
 | **Nút [Xóa]** | Button | O | Y | Click | Clear các điều kiện tìm kiếm về giá trị mặc định. |
 | **Nút [Tìm kiếm]** | Button | O | Y | Click | Thực hiện truy vấn danh sách CHP QRGW theo điều kiện lọc. |
@@ -62,6 +62,16 @@ links:
 ---
 
 ## 3.2.3 Yêu cầu nghiệp vụ chung
+
+#### Chi tiết xử lý nghiệp vụ
+
+1. Click **[Quản lý cấu hình phí]** >> click **[Phí đối tác QRGW]** ở thanh Navigation bên trái. Hệ thống hiển thị Danh sách cấu hình phí QRGW tương ứng.
+2. Chọn nút **[Tìm kiếm]** ở góc trên bên phải $\rightarrow$ Màn hình show ra các trường điều kiện lọc dữ liệu dành riêng cho QRGW, cho phép user lựa chọn giá trị để tra cứu.
+3. Lựa chọn giá trị tại các trường thông tin: Đối tác/Ngân hàng (BIDV QRGW, VCB QRGW, Napas VietQR...), Loại dịch vụ QRGW (Thu hộ Pay-In / Chi hộ Pay-Out), Loại QR (QR tĩnh / QR động), Kỳ trả phí, Trạng thái.
+4. Click nút **[Tìm kiếm]**.
+5. Hệ thống kiểm tra tính hợp lệ thông tin, thực hiện truy vấn dữ liệu từ CSDL theo điều kiện lọc.
+6. Hệ thống hiển thị danh sách cấu hình phí QRGW theo điều kiện lọc ở trên.
+
 
 | Mã Quy tắc | Tên Quy tắc | Nội dung đặc tả nghiệp vụ chi tiết |
 |---|---|---|
@@ -93,7 +103,7 @@ links:
 | **4** | **Loại phí** | **Y** | Loại phí của CHP QRGW (Phí dịch vụ QR, Phí xử lý GD). |
 | **5** | **Trạng thái** | **Y** | Trạng thái của CHP QRGW (`Active`, `Pending`, `Inactive`, `New`, `Draft`). |
 | **6** | **Kỳ trả phí** | **Y** | Kỳ trả phí của CHP QRGW. |
-| **7** | **Số lượng MC đang gắn** | **Y** | Số lượng merchant đang áp dụng cấu hình phí QR này. |
+| **7** | **Loại dịch vụ** | **Y** | Loại dịch vụ của cấu hình phí QRGW: Thu hộ VietQR (Pay-In) hoặc Chi hộ VietQR (Pay-Out). |
 | **8** | **Thời gian hiệu lực** | **Y** | Thời điểm bắt đầu có hiệu lực tính cước. |
 | **9** | **Thời gian khởi tạo** | **Y** | Thời điểm tạo bản ghi cấu hình phí QRGW. |
 | **10** | **Yêu cầu phê duyệt** | **N** | Phân loại yêu cầu phê duyệt thông tin phí QRGW. |

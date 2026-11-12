@@ -24,7 +24,7 @@ links:
 | **Trigger** | Maker bấm nút gửi phê duyệt / tạm dừng / kích hoạt; hoặc Checker bấm nút phê duyệt / từ chối trên hồ sơ QRGW. |
 | **Pre-Condition** | Bản ghi cấu hình QRGW ở trạng thái hợp lệ tương ứng với từng hành động; người dùng có vai trò và thẩm quyền phê duyệt QRGW. |
 | **Post-Condition** | Bản ghi cấu hình phí QRGW và hồ sơ YCPD liên kết được chuyển trạng thái chính xác theo đúng ma trận quy tắc nghiệp vụ. |
-| **Basic flow** | **[Luồng A — Maker Gửi yêu cầu phê duyệt QRGW]**:<br>1. Maker mở bản ghi QRGW ở trạng thái `NEW` (hoặc `ACTIVE`, `INACTIVE`).<br>2. Bấm nút **[Gửi yêu cầu phê duyệt]** (hoặc *Gửi duyệt cập nhật*, *Gửi tạm dừng*, *Gửi mở kích hoạt*).<br>3. Hệ thống sinh mã YCPD `AR_MM_MC_[Timestamp]`, insert 1 bản ghi YCPD tương ứng với trạng thái `Pending`.<br>4. Bản ghi CHP QRGW chuyển trạng thái tương ứng (`PENDING`).<br><br>**[Luồng B — Checker Thẩm định & Phê duyệt QRGW]**:<br>1. Checker đăng nhập, truy cập tab *Chờ phê duyệt* và mở hồ sơ YCPD QRGW cần xử lý.<br>2. Hệ thống hiển thị màn hình Thẩm định đối chiếu CŨ – MỚI (đánh dấu các trường có sự thay đổi).<br>3. Checker đối chiếu tham số biểu phí VietQR với hợp đồng liên ngân hàng.<br>4. Checker lựa chọn hành động:<br>   - **Trường hợp Đồng ý**: Bấm **[Phê duyệt]** $\rightarrow$ Hệ thống cập nhật YCPD thành `Approval`; Chuyển trạng thái CHP QRGW sang `ACTIVE` (nếu ngày áp dụng $\le$ hiện tại) hoặc `READY` (nếu ngày áp dụng $>$ hiện tại).<br>   - **Trường hợp Không đồng ý**: Bấm **[Từ chối]** $\rightarrow$ Hệ thống hiển thị modal bắt buộc Checker nhập lý do từ chối (tối thiểu 10 ký tự) $\rightarrow$ Cập nhật YCPD thành `Rejected`, trả bản ghi CHP QRGW về `NEW` (hoặc `REJECTED`) để Maker xử lý lại. |
+| **Basic flow** | 1. Người dùng vào menu **[Quản lý cấu hình phí] > [Phí trả đối tác] > [Phí đối tác QRGW]** ở thanh menu bên trái.<br>2. Hệ thống hiển thị màn hình danh sách cấu hình phí QRGW.<br>3. Người dùng tìm kiếm và chọn mã cấu hình phí cần xử lý.<br>4. Hệ thống hiển thị màn hình chi tiết hồ sơ cấu hình phí QRGW cùng các thao tác theo quyền và trạng thái. |
 | **Alternative flow** | - **A1 (Rút yêu cầu)**: Khi hồ sơ QRGW đang `PENDING` và Checker chưa xử lý, Maker bấm **[Rút yêu cầu]** $\rightarrow$ Bản ghi quay về `NEW`, YCPD chuyển `Cancelled`.<br>- **A2 (Đổi người duyệt)**: Maker bấm **[Thay đổi người PD]** $\rightarrow$ Chọn Checker hợp lệ khác $\rightarrow$ Cập nhật trường Người phê duyệt trong YCPD.<br>- **A3 (Tạm dừng cấu hình)**: Maker gửi yêu cầu tạm dừng từ `ACTIVE` $\rightarrow$ Checker duyệt $\rightarrow$ Bản ghi chuyển sang `INACTIVE`.<br>- **A4 (Mở kích hoạt)**: Maker gửi yêu cầu mở kích hoạt từ `INACTIVE` $\rightarrow$ Checker duyệt $\rightarrow$ Bản ghi chuyển sang `ACTIVE` (hoặc `READY`). |
 | **Exception flow** | - **E1 (Vi phạm kiểm soát 4 mắt)**: Maker cố tình tự phê duyệt bản ghi do chính mình tạo ra $\rightarrow$ Hệ thống chặn trực tiếp với mã lỗi `E-partner-fee-management-006`.<br>- **E2 (Thiếu lý do từ chối)**: Checker bấm xác nhận từ chối nhưng bỏ trống lý do hoặc nhập $< 10$ ký tự $\rightarrow$ Báo lỗi `E-partner-fee-management-005`. |
 | **Business Rules** | [Yêu cầu nghiệp vụ chung xử lý hồ sơ và Phê duyệt Maker - Checker QRGW](#363-yêu-cầu-nghiệp-vụ-chung) |
@@ -54,6 +54,23 @@ links:
 
 ## 3.6.3 Yêu cầu nghiệp vụ chung
 
+#### Chi tiết xử lý nghiệp vụ
+
+**[Luồng A — Maker Gửi yêu cầu phê duyệt QRGW]**:
+1. Maker mở bản ghi QRGW ở trạng thái `NEW` (hoặc `ACTIVE`, `INACTIVE`).
+2. Bấm nút **[Gửi yêu cầu phê duyệt]** (hoặc *Gửi duyệt cập nhật*, *Gửi tạm dừng*, *Gửi mở kích hoạt*).
+3. Hệ thống sinh mã YCPD `AR_MM_MC_[Timestamp]`, insert 1 bản ghi YCPD tương ứng với trạng thái `Pending`.
+4. Bản ghi CHP QRGW chuyển trạng thái tương ứng (`PENDING`).
+
+**[Luồng B — Checker Thẩm định & Phê duyệt QRGW]**:
+1. Checker đăng nhập, truy cập tab *Chờ phê duyệt* và mở hồ sơ YCPD QRGW cần xử lý.
+2. Hệ thống hiển thị màn hình Thẩm định đối chiếu CŨ – MỚI (đánh dấu các trường có sự thay đổi).
+3. Checker đối chiếu tham số biểu phí VietQR với hợp đồng liên ngân hàng.
+4. Checker lựa chọn hành động:
+   - **Trường hợp Đồng ý**: Bấm **[Phê duyệt]** $\rightarrow$ Hệ thống cập nhật YCPD thành `Approval`; Chuyển trạng thái CHP QRGW sang `READY` khi chưa quá ngày hiệu lực; việc kích hoạt sang `ACTIVE` do job Auto-golive thực hiện. YCPD vẫn chờ duyệt khi quá ngày hiệu lực được job tự động từ chối.
+   - **Trường hợp Không đồng ý**: Bấm **[Từ chối]** $\rightarrow$ Hệ thống hiển thị modal bắt buộc Checker nhập lý do từ chối (tối thiểu 10 ký tự) $\rightarrow$ Cập nhật YCPD thành `Rejected`, trả bản ghi CHP QRGW về `NEW` để Maker xử lý lại.
+
+
 ```text
 ┌─────────────────┐             ┌─────────────────┐             ┌─────────────────┐
 │   MAKER QRGW    │             │   EPAY SYSTEM   │             │  CHECKER QRGW   │
@@ -71,12 +88,12 @@ links:
          │                               │  4A. [PHÊ DUYỆT]              │
          │                               │<──────────────────────────────┤
          │  5A. Thông báo Duyệt QR       │     - YCPD = Approval         │
-         │<──────────────────────────────┤     - CHP = ACTIVE / READY    │
+         │<──────────────────────────────┤     - CHP = READY             │
          │                               │                               │
          │                               │  4B. [TỪ CHỐI + Lý do]        │
          │                               │<──────────────────────────────┤
          │  5B. Báo Từ chối kèm lý do   │     - YCPD = Rejected         │
-         │<──────────────────────────────┤     - CHP = NEW / REJECTED    │
+         │<──────────────────────────────┤     - CHP = NEW               │
          │                               │                               │
 ```
 
@@ -100,7 +117,7 @@ links:
 | **1** | **Chưa có bản ghi** | Quản lý CHP QRGW | Lưu nháp bản ghi | Maker | N/A | N/A | Hệ thống lưu bản ghi với trạng thái Draft | `DRAFT` | `[Username] đã lưu nháp CHP Trả đối tác QRGW mới ngày [Datetime]` |
 | **2** | **Chưa có bản ghi** | Quản lý CHP QRGW | Lưu mới bản ghi | Maker | N/A | N/A | Hệ thống lưu bản ghi với trạng thái New | `NEW` | `[Username] đã tạo CHP Trả đối tác QRGW mới ngày [Datetime]` |
 | **3** | **NEW** | Quản lý CHP QRGW | Gửi yêu cầu phê duyệt | Maker | Pending | Chờ Checker duyệt | - Bản ghi chuyển sang trạng thái Pending<br>- Sinh mã YCPD `AR_MM_MC_[Timestamp]` | `PENDING` | `[Username] đã gửi Yêu cầu phê duyệt [Mã YC] cho CHP QRGW [Mã CHP] ngày [Datetime]` |
-| **4** | **PENDING** | Quản lý CHP QRGW | Phê duyệt ($\le$ Hiện tại) | Checker | Pending | Duyệt hiệu lực ngay | - Chuyển sang trạng thái Active<br>- Cập nhật YCPD thành "Approval" | `ACTIVE` | `[Username] đã phê duyệt CHP QRGW [Mã CHP], trạng thái chuyển sang ACTIVE ngày [Datetime]` |
+| **4** | **PENDING** | Quản lý CHP QRGW | Phê duyệt khi chưa quá ngày hiệu lực | Checker | Pending | Duyệt chờ hiệu lực | - Chuyển sang trạng thái Ready<br>- Cập nhật YCPD thành "Approval" | `READY` | `[Username] đã phê duyệt CHP QRGW [Mã CHP], trạng thái chuyển sang READY ngày [Datetime]` |
 | **5** | **PENDING** | Quản lý CHP QRGW | Từ chối phê duyệt | Checker | Pending | Từ chối hồ sơ | - Chuyển về trạng thái New<br>- Cập nhật YCPD thành "Rejected" | `NEW` | `[Username] đã từ chối phê duyệt YCPD [Mã YC] của CHP QRGW [Mã CHP], Lý do: [Lý do] ngày [Datetime]` |
 | **6** | **ACTIVE** | Quản lý CHP QRGW | Gửi yêu cầu tạm dừng | Maker | Pending | Chờ Checker duyệt tạm dừng | - Giữ nguyên trạng thái Active<br>- Sinh YCPD "Duyệt tạm dừng hồ sơ" | `ACTIVE` (Chờ tạm dừng) | `[Username] đã gửi Yêu cầu tạm dừng [Mã YC] cho CHP QRGW [Mã CHP], Lý do: [Lý do] ngày [Datetime]` |
 | **7** | **ACTIVE** | Quản lý CHP QRGW | Phê duyệt tạm dừng | Checker | Pending | Duyệt tạm dừng | - Chuyển sang trạng thái Inactive<br>- Cập nhật YCPD thành "Approval" | `INACTIVE` | `[Username] đã phê duyệt Tạm dừng CHP QRGW [Mã CHP], trạng thái chuyển sang INACTIVE ngày [Datetime]` |

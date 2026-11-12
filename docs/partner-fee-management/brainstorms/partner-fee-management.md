@@ -56,8 +56,8 @@ Quy trình quản lý vòng đời cấu hình tuân thủ mô hình 2 bước *
   - Nút *Xóa bộ lọc* và *Tìm kiếm*.
 - **Thêm mới cấu hình phí trả đối tác (4 loại phí):**
   - *Tab Phí duy trì sử dụng dịch vụ*: Thu phí theo MID đối tác cung cấp (Áp dụng chung hoặc riêng từng MID) hoặc theo thiết bị. Mức phí cố định VNĐ/kỳ.
-  - *Tab Phí xử lý giao dịch*: Chọn đa mã ngành MCC qua Dual-Listbox, áp dụng chung hoặc riêng từng Loại giao dịch (Thanh toán / Hoàn trả), mức phí cố định (vd: 1.800 đ/GD).
-  - *Tab Phí thanh toán*: Chọn đa mã ngành MCC, Cổng TGTT, Loại NHPH, PTTT, áp dụng chung hoặc cấu hình riêng theo từng Thương hiệu thẻ / Cổng TGTT (NAPAS, BIDV, MB...). Hỗ trợ 1 bậc phí hoặc Bậc thang theo Tổng GTGD/Tổng SLGD, tỷ lệ %, mức phí tối thiểu, mức phí tối đa.
+  - *Tab Phí xử lý giao dịch (XLGD)*: Cấu hình 11 tham số chuẩn: Đối tác/ngân hàng hưởng phí, Phương thức thanh toán (Thẻ nội địa, thẻ quốc tế, tài khoản ngân hàng), Loại giao dịch (Thanh toán, hoàn trả), Trạng thái giao dịch (Thành công, Thất bại), Kỳ trả phí (Phiên, ngày, tháng, quý, năm), MCC qua Dual-Listbox, Thời gian áp dụng, Thuế VAT, Checkbox áp dụng chung cho toàn bộ loại giao dịch hoặc riêng từng loại GD, Hình thức thu phí (Cố định, bậc thang) và Mức phí chi tiết.
+  - *Tab Phí thanh toán*: Cấu hình đầy đủ: Đối tác/ngân hàng hưởng phí, Kỳ trả phí (Phiên, ngày, tháng, quý, năm), Thời gian áp dụng, MCC qua Dual-Listbox, PTTT (Thẻ nội địa, tài khoản ngân hàng, thẻ quốc tế), Loại giao dịch (Thanh toán, hoàn trả), Thuế VAT, Hình thức thu phí (1 bậc / Bậc thang theo Tổng GTGD/SLGD), Mức phí tỉ lệ %, Mức phí tối thiểu, Mức phí tối đa. Riêng khi PTTT = Thẻ quốc tế (TQT): Tự động mở rộng trường Thương hiệu thẻ (Visa, MC, JCB...), Checkbox áp dụng chung hoặc cấu hình riêng từng thương hiệu, và Loại thẻ phát hành (Trong nước / Nước ngoài). Tích hợp công cụ Tính thử phí 🧮.
   - *Tab Phí quản lý dịch vụ gia tăng*: Cấu hình chi tiết các dịch vụ Quản lý token (bậc thang số lượng token tạo mới), Quản lý rủi ro (cố định), FastPay off 3DS (cố định).
   - Bộ chọn đa mã ngành MCC (Merchant Category Code) dạng Dual-Listbox (Transfer List) hỗ trợ tìm kiếm và chuyển chọn nhiều MCC.
   - Nút *[Hủy]*, *[Lưu nháp]* (tạo trạng thái `DRAFT`), và *[Tạo mới +]* (chuyển trạng thái `NEW`).
@@ -84,7 +84,7 @@ Quy trình quản lý vòng đời cấu hình tuân thủ mô hình 2 bước *
     - ❌ **Từ chối** (Reject): Nút từ chối cho Checker.
 - **Màn hình Lịch sử thay đổi (Audit Trail Timeline View):**
   - Bộ lọc: Thông tin thay đổi (tên trường), Người cập nhật (tài khoản), Khoảng thời gian cập nhật.
-  - Dòng thời gian chi tiết từng lần cập nhật: Actor, thời gian, biến động trạng thái (`Pending --> Active`), biến động trường dữ liệu (`Field: Old --> New`).
+  - Dòng thời gian chi tiết từng lần cập nhật: Actor, thời gian, biến động trạng thái (`Pending --> Ready`), biến động trường dữ liệu (`Field: Old --> New`).
 - **Tùy chỉnh cột hiển thị (Customize Columns):** Bật/tắt các cột dữ liệu trên bảng danh sách.
 - **Xuất tệp dữ liệu (Export):** Xuất danh sách cấu hình phí ra định dạng Excel (.xlsx).
 
@@ -219,7 +219,7 @@ Quy trình quản lý vòng đời cấu hình tuân thủ mô hình 2 bước *
    - Người dùng có thể lọc theo: *Thông tin thay đổi* (tên trường), *Người cập nhật* (tài khoản), *Thời gian cập nhật* (Từ ngày giờ - Đến ngày giờ).
    - Danh sách hiển thị dòng thời gian (Timeline) từng lần thay đổi từ lúc khởi tạo đến lần sửa/duyệt mới nhất.
    - Thể hiện rõ người thực hiện (`Maker01`, `Checker01`), thời điểm và chi tiết thay đổi dữ liệu:
-     - Biến động trạng thái: `Pending --> Active`, `Draft --> New`...
+     - Biến động trạng thái: `Pending --> Ready`, `Draft --> New`...
      - Biến động dữ liệu trường tin: `Mã NVKD: Epay001 --> Epay0002`, `User: phela_tea --> hightlands_coffee`...
 
 ---
@@ -245,7 +245,7 @@ Quy trình quản lý vòng đời cấu hình tuân thủ mô hình 2 bước *
 |---|---|---|---|---|
 | `DRAFT` | *(Trống)* | Chỉnh sửa / Xóa nháp / Bấm [Tạo mới +] | Không nhìn thấy tại tab Chờ duyệt | Cập nhật dữ liệu nháp, hoặc chuyển sang `NEW` |
 | `NEW` | *(Trống)* | Cập nhật thông tin / Xóa / Gửi phê duyệt | Không thao tác | Chuyển sang YCPD `PENDING` khi Maker bấm gửi duyệt |
-| `NEW` | `PENDING` | Khóa sửa, chỉ được Xem chi tiết | Duyệt / Từ chối (kèm lý do) | Duyệt ➔ `READY`/`ACTIVE`; Từ chối ➔ `NEW` (YCPD `REJECTED`) |
+| `NEW` | `PENDING` | Khóa sửa, chỉ được Xem chi tiết | Duyệt / Từ chối (kèm lý do) | Duyệt ➔ `READY`; Từ chối ➔ `NEW` (YCPD `REJECTED`) |
 | `NEW` | `REJECTED` | Xem lý do từ chối, Cập nhật thông tin, Gửi duyệt lại | Không thao tác | Quay lại chu trình gửi duyệt |
 | `READY` | `APPROVAL` | Xem chi tiết / Cập nhật thông tin | Không thao tác | Nếu Cập nhật thông tin ➔ Reset trạng thái về `NEW`, YCPD = Trống |
 | `ACTIVE` | *(Trống)* | Xem chi tiết / Gửi duyệt Tạm dừng / Gửi duyệt Sửa thông tin | Không thao tác | Tạo YCPD mới, Trạng thái YCPD chuyển `PENDING` |
@@ -315,7 +315,7 @@ Dựa trên sơ đồ thiết kế kiến trúc chuẩn của EPAY:
 | **5** | `New` | `Pending` | Gửi phê duyệt | Maker | Tạo bản ghi YCPD, gửi sang hàng đợi của Checker |
 | **6** | `Pending` | `New` | Từ chối duyệt | Checker | Bắt buộc nhập lý do từ chối; YCPD = `REJECTED` |
 | **7A** | `Pending` | `Ready` | Phê duyệt (áp dụng tương lai) | Checker | Khi `Thời gian áp dụng phí` > Thời điểm duyệt |
-| **7B** | `Pending` | `Active` | Phê duyệt (áp dụng ngay) | Checker | Khi `Thời gian áp dụng phí` <= Thời điểm duyệt |
+| **7B** | `Pending` | `New` | Job tự động từ chối YCPD quá ngày hiệu lực | Hệ thống | YCPD = Rejected; Người từ chối = Hệ thống; Lý do = Tự động từ chối bởi hệ thống |
 | **8A** | `Ready` | `New` | Cập nhật thông tin | Maker | **Reset về New**: Phải gửi duyệt lại từ đầu |
 | **8B** | `Ready` | `Active` | Auto golive | Scheduler Job | Job tự động quét khi chạm mốc thời gian áp dụng |
 | **10** | `Active` | `Pending` | Gửi phê duyệt Tạm dừng | Maker | Cấu hình vẫn giữ `Active` tính phí cho đến khi Checker duyệt |
@@ -452,7 +452,9 @@ Theo quy định chính thức của EPAY:
 
 ## 8. Assumptions (Các giả định nghiệp vụ)
 
-1. Mỗi đối tác tại một thời điểm chỉ áp dụng một cấu hình phí Active duy nhất cho cùng một tổ hợp `(Nguồn dữ liệu + Đối tác + Cổng TGTT + PTTT + Mã MCC + Loại GD)`.
+1. **Ràng buộc hiệu lực biểu phí theo kênh:**
+   - **Kênh QRGW:** Mỗi dịch vụ (`Thu hộ` / `Chi hộ`) của mỗi đối tác chỉ được phép tồn tại duy nhất **01 biểu phí ở trạng thái `ACTIVE`** trong cùng một khoảng thời gian áp dụng.
+   - **Kênh CTT:** Mỗi PTTT của mỗi đối tác được cấu hình 1 hoặc nhiều mã ngành MCC, nhưng **tuyệt đối không được trùng lặp mã MCC** giữa 2 biểu phí cùng có trạng thái `ACTIVE` trong cùng một khoảng thời gian hiệu lực ($\text{MCC}_1 \cap \text{MCC}_2 = \emptyset$).
 2. Toàn bộ tiền phí tính toán mặc định sử dụng đồng tiền `VND`. Trường hợp giao dịch ngoại tệ sẽ quy đổi theo tỷ giá thanh toán của ngân hàng tại ngày đối soát.
 3. Cán bộ Maker không được phép tự phê duyệt cấu hình do chính mình tạo ra (nguyên tắc 4-eyes / Segregation of Duties).
 4. Các giao dịch đã tính phí trong quá khứ không bị hồi tố tính lại khi một cấu hình phí bị chỉnh sửa hoặc tạm dừng; cấu hình mới chỉ áp dụng cho các giao dịch phát sinh từ thời điểm có hiệu lực trở đi.

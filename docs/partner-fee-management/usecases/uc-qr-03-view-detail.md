@@ -24,7 +24,7 @@ links:
 | **Trigger** | Người dùng click vào hyperlink **[Mã phí QRGW]** trên bảng danh sách, hoặc chọn **[Xem chi tiết]** từ menu thao tác. |
 | **Pre-Condition** | Bản ghi cấu hình QRGW tồn tại trong CSDL và người dùng có quyền tra cứu cấu hình phí QRGW. |
 | **Post-Condition** | Màn hình hiển thị đầy đủ thông tin chi tiết cấu hình phí QRGW và lịch sử cập nhật biến động dữ liệu. |
-| **Basic flow** | 1. Người dùng click vào Mã cấu hình QRGW (vd: `QR_FE_NAPAS_002`) trên bảng danh sách.<br>2. Hệ thống truy vấn CSDL và nạp thông tin bản ghi biểu phí QRGW.<br>3. Hệ thống hiển thị màn hình Chi tiết cấu hình phí gồm:<br>   - Breadcrumb điều hướng: `Quản lý cấu hình phí trả đối tác QRGW > [MÃ CẤU HÌNH]`.<br>   - Header tiêu đề: Mã phí — Tên biểu phí kèm badge trạng thái cấu hình (`ACTIVE`, `PENDING` hoặc `INACTIVE`).<br>   - **Khối Thông tin chung**: Mã phí, Loại phí, Trạng thái cấu hình, Trạng thái YCPD, Người tạo, Ngày tạo, Người cập nhật cuối, Ngày cập nhật, Người phê duyệt.<br>   - **Khối Yêu cầu phê duyệt** (hiển thị khi bản ghi PENDING hoặc đã có hồ sơ YCPD): Mã yêu cầu, Thời gian tạo, Trạng thái phê duyệt, Người tạo, Phòng ban.<br>   - **Khối Thông tin cấu hình phí QRGW**: Nguồn dữ liệu (QRGW), Đối tác/Ngân hàng hưởng phí, Kỳ trả phí, Thời gian áp dụng phí, Loại dịch vụ (Thu hộ / Chi hộ), Loại QR (Tĩnh / Động), Đồng tiền, Thuế VAT, Mô tả.<br>   - **Khối Thông tin Phí cho từng loại giao dịch**: Bảng mức phí chi tiết (Tỷ lệ %, Min, Max, Phí cố định theo từng giao dịch QR).<br>   - Thanh nút tác vụ chân trang động theo vai trò và trạng thái bản ghi.<br>4. Người dùng click tab **[Lịch sử thay đổi / Hoạt động]**.<br>5. Hệ thống hiển thị dòng thời gian Timeline View ghi lại toàn bộ lịch sử: Người sửa, Thời gian, Trường thay đổi, Giá trị CŨ $\rightarrow$ Giá trị MỚI. |
+| **Basic flow** | 1. Người dùng vào menu **[Quản lý cấu hình phí] > [Phí trả đối tác] > [Phí đối tác QRGW]** ở thanh menu bên trái.<br>2. Hệ thống hiển thị màn hình danh sách cấu hình phí QRGW.<br>3. Người dùng tìm kiếm và chọn mã cấu hình phí cần xem trên danh sách.<br>4. Hệ thống hiển thị màn hình chi tiết cấu hình phí QRGW đó. |
 | **Alternative flow** | - **A1 (Bản ghi ACTIVE)**: Chân trang hiển thị cụm nút: `[← Quay lại]`, `[Lịch sử]`, `[Sao chép]`, `[Tạm dừng]`, `[Chỉnh sửa]`.<br>- **A2 (Bản ghi PENDING — Maker View)**: Chân trang hiển thị: `[← Quay lại]`, `[Lịch sử]`, `[Rút yêu cầu]`, tại Khối YCPD có nút `[Thay đổi người PD]`.<br>- **A3 (Bản ghi PENDING — Checker View)**: Chân trang hiển thị: `[← Quay lại]`, `[Lịch sử]`, `[Từ chối]`, `[Phê duyệt]`.<br>- **A4 (Bản ghi INACTIVE)**: Chân trang hiển thị: `[← Quay lại]`, `[Lịch sử]`, `[Sao chép]`, `[Kích hoạt lại]`. |
 | **Exception flow** | - **E1**: Bản ghi đã bị xóa bởi người dùng khác trong phiên làm việc $\rightarrow$ Thông báo lỗi: *“Bản ghi không tồn tại hoặc đã bị xóa”*, tự động quay lại trang danh sách. |
 | **Business Rules** | [Yêu cầu nghiệp vụ chung xem chi tiết và Audit Trail QRGW](#343-yêu-cầu-nghiệp-vụ-chung) |
@@ -62,6 +62,22 @@ links:
 ---
 
 ## 3.4.3 Yêu cầu nghiệp vụ chung
+
+#### Chi tiết xử lý nghiệp vụ
+
+1. Người dùng click vào Mã cấu hình QRGW (vd: `QR_FE_NAPAS_002`) trên bảng danh sách.
+2. Hệ thống truy vấn CSDL và nạp thông tin bản ghi biểu phí QRGW.
+3. Hệ thống hiển thị màn hình Chi tiết cấu hình phí gồm:
+   - Breadcrumb điều hướng: `Quản lý cấu hình phí trả đối tác QRGW > [MÃ CẤU HÌNH]`.
+   - Header tiêu đề: Mã phí — Tên biểu phí kèm badge trạng thái cấu hình (`ACTIVE`, `PENDING` hoặc `INACTIVE`).
+   - **Khối Thông tin chung**: Mã phí, Loại phí, Trạng thái cấu hình, Trạng thái YCPD, Người tạo, Ngày tạo, Người cập nhật cuối, Ngày cập nhật, Người phê duyệt.
+   - **Khối Yêu cầu phê duyệt** (hiển thị khi bản ghi PENDING hoặc đã có hồ sơ YCPD): Mã yêu cầu, Thời gian tạo, Trạng thái phê duyệt, Người tạo, Phòng ban.
+   - **Khối Thông tin cấu hình phí QRGW**: Nguồn dữ liệu (QRGW), Đối tác/Ngân hàng hưởng phí, Kỳ trả phí, Thời gian áp dụng phí, Loại dịch vụ (Thu hộ / Chi hộ), Loại QR (Tĩnh / Động), Đồng tiền, Thuế VAT, Mô tả.
+   - **Khối Thông tin Phí cho từng loại giao dịch**: Bảng mức phí chi tiết (Tỷ lệ %, Min, Max, Phí cố định theo từng giao dịch QR).
+   - Thanh nút tác vụ chân trang động theo vai trò và trạng thái bản ghi.
+4. Người dùng click tab **[Lịch sử thay đổi / Hoạt động]**.
+5. Hệ thống hiển thị dòng thời gian Timeline View ghi lại toàn bộ lịch sử: Người sửa, Thời gian, Trường thay đổi, Giá trị CŨ $\rightarrow$ Giá trị MỚI.
+
 
 | Mã Quy tắc | Tên Quy tắc | Nội dung đặc tả nghiệp vụ chi tiết |
 |---|---|---|

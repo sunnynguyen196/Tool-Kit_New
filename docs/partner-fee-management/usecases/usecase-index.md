@@ -28,6 +28,7 @@ links:
 | 4 | **CTT-UC04** | Xóa CHP Trả đối tác CTT | [uc-ctt-04-delete](uc-ctt-04-delete.md) | Maker | FR-001, FR-010 | `4020:50223` (Menu row), `4020:50006` | P1 |
 | 5 | **CTT-UC05** | Xử lý thông tin hồ sơ CHP Trả đối tác CTT | [uc-ctt-05-process-fee-profile](uc-ctt-05-process-fee-profile.md) | Maker, Checker, Quản lý | FR-003 đến FR-009, FR-012 | `4022:53508` – `4022:58264`, `4020:47923`, `4020:48856` | P0 |
 | 6 | **CTT-UC06** | Job tự động kích hoạt cấu hình CTT | [uc-ctt-06-auto-golive](uc-ctt-06-auto-golive.md) | Hệ thống (Scheduler) | FR-013 | System background task | P0 |
+| 7 | **CTT-UC07** | Tự động từ chối YCPD CTT quá ngày hiệu lực | [uc-ctt-07-auto-reject-expired](uc-ctt-07-auto-reject-expired.md) | Hệ thống | FR-014 | Job nền và lịch sử YCPD | P0 |
 
 ## 1.2 CRUD Matrix phân hệ CTT
 
@@ -54,6 +55,7 @@ links:
 | 4 | **QR-UC04** | Xóa CHP Trả đối tác QRGW | [uc-qr-04-delete](uc-qr-04-delete.md) | Maker | FR-001, FR-010 | `4020:50223` (Menu row), `4020:50006` | P1 |
 | 5 | **QR-UC05** | Xử lý thông tin hồ sơ CHP Trả đối tác QRGW | [uc-qr-05-process-fee-profile](uc-qr-05-process-fee-profile.md) | Maker, Checker, Quản lý | FR-003 đến FR-009, FR-012 | `4020:47923`, `4020:48856` | P0 |
 | 6 | **QR-UC06** | Job tự động kích hoạt cấu hình QRGW | [uc-qr-06-auto-golive](uc-qr-06-auto-golive.md) | Hệ thống (Scheduler) | FR-013 | System background task | P0 |
+| 7 | **QR-UC07** | Tự động từ chối YCPD QRGW quá ngày hiệu lực | [uc-qr-07-auto-reject-expired](uc-qr-07-auto-reject-expired.md) | Hệ thống | FR-014 | Job nền và lịch sử YCPD | P0 |
 
 ## 2.2 CRUD Matrix phân hệ QRGW
 

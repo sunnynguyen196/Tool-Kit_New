@@ -24,7 +24,7 @@ links:
 | **Trigger** | Người dùng click chọn button **[Xuất tệp ▼]** trên thanh công cụ phía trên bảng danh sách CTT. |
 | **Pre-Condition** | Người dùng đã đăng nhập, có quyền xuất tệp dữ liệu phân hệ CTT và đã có kết quả tìm kiếm/danh sách trên màn hình. |
 | **Post-Condition** | Hệ thống sinh tệp tải về thành công (định dạng `.xlsx` hoặc `.pdf`) chứa danh sách cấu hình phí CTT theo đúng điều kiện lọc hiện tại. |
-| **Basic flow** | 1. Người dùng chọn các tiêu chí lọc CTT và bấm [Tìm kiếm] để nạp danh sách kết quả (hoặc sử dụng danh sách mặc định).<br>2. Click button **[Xuất tệp ▼]** ở góc trên bên phải bảng danh sách CTT.<br>3. Hệ thống hiển thị dropdown gồm 2 lựa chọn: *Xuất Excel (.xlsx)* và *Xuất PDF (.pdf)*.<br>4. Người dùng click chọn định dạng mong muốn.<br>5. Hệ thống kiểm tra số lượng bản ghi thỏa mãn điều kiện lọc.<br>6. Hệ thống thực hiện kết xuất dữ liệu và kích hoạt trình tải tệp xuống máy tính của người dùng. |
+| **Basic flow** | 1. Người dùng vào menu **[Quản lý cấu hình phí] > [Phí trả đối tác] > [Phí đối tác CTT]** ở thanh menu bên trái.<br>2. Hệ thống hiển thị màn hình danh sách cấu hình phí CTT.<br>3. Người dùng chọn **[Xuất tệp]** trên màn hình danh sách.<br>4. Hệ thống hiển thị danh sách định dạng tệp hỗ trợ xuất. |
 | **Alternative flow** | - **A1**: Không có bản ghi nào thỏa mãn điều kiện lọc $\rightarrow$ Hệ thống hiển thị cảnh báo: *“Không có dữ liệu để xuất tệp”*, không thực hiện sinh tệp trống.<br>- **A2**: Số lượng bản ghi vượt quá 50.000 dòng $\rightarrow$ Hệ thống hiển thị thông báo yêu cầu người dùng thu hẹp khoảng thời gian hoặc xuất dữ liệu qua hàng đợi tác vụ ngầm. |
 | **Exception flow** | - **E1**: Lỗi timeout khi kết xuất tệp (> 30 giây) $\rightarrow$ Thông báo lỗi hệ thống và gợi ý người dùng thử lại.<br>- **E2**: Mất kết nối mạng internet trong lúc tải file. |
 | **Business Rules** | [Yêu cầu nghiệp vụ chung xuất tệp dữ liệu CHP CTT](#233-yêu-cầu-nghiệp-vụ-chung) |
@@ -49,6 +49,16 @@ links:
 ---
 
 ## 2.3.3 Yêu cầu nghiệp vụ chung
+
+#### Chi tiết xử lý nghiệp vụ
+
+1. Người dùng chọn các tiêu chí lọc CTT và bấm [Tìm kiếm] để nạp danh sách kết quả (hoặc sử dụng danh sách mặc định).
+2. Click button **[Xuất tệp ▼]** ở góc trên bên phải bảng danh sách CTT.
+3. Hệ thống hiển thị dropdown gồm 2 lựa chọn: *Xuất Excel (.xlsx)* và *Xuất PDF (.pdf)*.
+4. Người dùng click chọn định dạng mong muốn.
+5. Hệ thống kiểm tra số lượng bản ghi thỏa mãn điều kiện lọc.
+6. Hệ thống thực hiện kết xuất dữ liệu và kích hoạt trình tải tệp xuống máy tính của người dùng.
+
 
 | Mã Quy tắc | Tên Quy tắc | Nội dung đặc tả nghiệp vụ chi tiết |
 |---|---|---|

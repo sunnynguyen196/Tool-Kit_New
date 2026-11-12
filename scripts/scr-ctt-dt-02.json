@@ -1,0 +1,1563 @@
+{
+  "type": "FRAME",
+  "name": "SCR-CTT-DT-02: Chi tiết Phí Thanh toán CTT - Chờ phê duyệt",
+  "x": 1540,
+  "y": 2600,
+  "width": 1440,
+  "height": 960,
+  "fill": "#F8FAFC",
+  "layoutMode": "HORIZONTAL",
+  "children": [
+    {
+      "type": "FRAME",
+      "name": "Sidebar",
+      "width": 230,
+      "height": 960,
+      "fill": "#FFFFFF",
+      "stroke": "#E2E8F0",
+      "strokeWeight": 1,
+      "layoutMode": "VERTICAL",
+      "children": [
+        {
+          "type": "FRAME",
+          "name": "Sidebar Header Box",
+          "layoutMode": "HORIZONTAL",
+          "layoutAlign": "STRETCH",
+          "primaryAxisAlignItems": "SPACE_BETWEEN",
+          "counterAxisAlignItems": "CENTER",
+          "height": 60,
+          "padding": {
+            "left": 16,
+            "right": 16
+          },
+          "fill": "#74B4F7",
+          "children": [
+            {
+              "type": "FRAME",
+              "name": "Logo Group",
+              "layoutMode": "HORIZONTAL",
+              "counterAxisAlignItems": "CENTER",
+              "itemSpacing": 8,
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Logo Symbol",
+                  "width": 28,
+                  "height": 28,
+                  "cornerRadius": 14,
+                  "fill": "#FFFFFF44",
+                  "layoutMode": "HORIZONTAL",
+                  "primaryAxisAlignItems": "CENTER",
+                  "counterAxisAlignItems": "CENTER",
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "characters": "✦",
+                      "fontSize": 16,
+                      "fill": "#FFFFFF"
+                    }
+                  ]
+                },
+                {
+                  "type": "TEXT",
+                  "characters": "epay",
+                  "fontSize": 20,
+                  "fontWeight": 700,
+                  "fill": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Collapse Btn",
+              "width": 24,
+              "height": 24,
+              "layoutMode": "HORIZONTAL",
+              "primaryAxisAlignItems": "CENTER",
+              "counterAxisAlignItems": "CENTER",
+              "children": [
+                {
+                  "type": "TEXT",
+                  "characters": "⇇",
+                  "fontSize": 16,
+                  "fill": "#FFFFFF"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "FRAME",
+          "name": "Menu List",
+          "layoutMode": "VERTICAL",
+          "layoutAlign": "STRETCH",
+          "padding": {
+            "top": 16,
+            "bottom": 16,
+            "left": 0,
+            "right": 0
+          },
+          "itemSpacing": 4,
+          "children": [
+            {
+              "type": "FRAME",
+              "name": "Menu Group: Fee Config",
+              "layoutMode": "VERTICAL",
+              "layoutAlign": "STRETCH",
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Parent Menu Item",
+                  "height": 40,
+                  "layoutAlign": "STRETCH",
+                  "layoutMode": "HORIZONTAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "padding": {
+                    "left": 16,
+                    "right": 16
+                  },
+                  "itemSpacing": 10,
+                  "fill": "#EFF6FF",
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "characters": "⚙️",
+                      "fontSize": 13,
+                      "fill": "#2563EB"
+                    },
+                    {
+                      "type": "TEXT",
+                      "characters": "Quản lý cấu hình phí",
+                      "fontSize": 12,
+                      "fontWeight": 700,
+                      "fill": "#2563EB"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Submenu Tier 1",
+                  "height": 36,
+                  "layoutAlign": "STRETCH",
+                  "layoutMode": "HORIZONTAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "padding": {
+                    "left": 32,
+                    "right": 16
+                  },
+                  "itemSpacing": 8,
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "characters": "▾",
+                      "fontSize": 11,
+                      "fill": "#475569"
+                    },
+                    {
+                      "type": "TEXT",
+                      "characters": "Phí trả đối tác",
+                      "fontSize": 12,
+                      "fontWeight": 600,
+                      "fill": "#1E293B"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Submenu Item: CTT",
+                  "height": 34,
+                  "layoutAlign": "STRETCH",
+                  "layoutMode": "HORIZONTAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "padding": {
+                    "left": 48,
+                    "right": 16
+                  },
+                  "fill": "#DBEAFE",
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "characters": "• Phí đối tác CTT",
+                      "fontSize": 12,
+                      "fontWeight": 700,
+                      "fill": "#2563EB"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Submenu Item: QRGW",
+                  "height": 34,
+                  "layoutAlign": "STRETCH",
+                  "layoutMode": "HORIZONTAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "padding": {
+                    "left": 48,
+                    "right": 16
+                  },
+                  "fill": "#00000000",
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "characters": "• Phí đối tác QRGW",
+                      "fontSize": 12,
+                      "fontWeight": 400,
+                      "fill": "#475569"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Menu Item: Đối tác",
+              "height": 40,
+              "layoutAlign": "STRETCH",
+              "layoutMode": "HORIZONTAL",
+              "counterAxisAlignItems": "CENTER",
+              "padding": {
+                "left": 16,
+                "right": 16
+              },
+              "itemSpacing": 10,
+              "children": [
+                {
+                  "type": "TEXT",
+                  "characters": "🏢",
+                  "fontSize": 13,
+                  "fill": "#64748B"
+                },
+                {
+                  "type": "TEXT",
+                  "characters": "Quản lý đối tác",
+                  "fontSize": 12,
+                  "fill": "#475569"
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Menu Item: Báo cáo",
+              "height": 40,
+              "layoutAlign": "STRETCH",
+              "layoutMode": "HORIZONTAL",
+              "counterAxisAlignItems": "CENTER",
+              "padding": {
+                "left": 16,
+                "right": 16
+              },
+              "itemSpacing": 10,
+              "children": [
+                {
+                  "type": "TEXT",
+                  "characters": "📊",
+                  "fontSize": 13,
+                  "fill": "#64748B"
+                },
+                {
+                  "type": "TEXT",
+                  "characters": "Báo cáo & Đối soát",
+                  "fontSize": 12,
+                  "fill": "#475569"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "FRAME",
+      "name": "Main Content Wrapper",
+      "layoutMode": "VERTICAL",
+      "width": 1210,
+      "height": 960,
+      "fill": "#F8FAFC",
+      "children": [
+        {
+          "type": "FRAME",
+          "name": "Top Header",
+          "height": 60,
+          "layoutAlign": "STRETCH",
+          "layoutMode": "HORIZONTAL",
+          "primaryAxisAlignItems": "SPACE_BETWEEN",
+          "counterAxisAlignItems": "CENTER",
+          "padding": {
+            "left": 24,
+            "right": 24
+          },
+          "fill": "#74B4F7",
+          "children": [
+            {
+              "type": "FRAME",
+              "name": "Search Bar",
+              "width": 380,
+              "height": 36,
+              "cornerRadius": 6,
+              "fill": "#FFFFFF",
+              "stroke": "#E2E8F0",
+              "strokeWeight": 1,
+              "layoutMode": "HORIZONTAL",
+              "counterAxisAlignItems": "CENTER",
+              "padding": {
+                "left": 12,
+                "right": 12
+              },
+              "itemSpacing": 8,
+              "children": [
+                {
+                  "type": "TEXT",
+                  "characters": "🔍",
+                  "fontSize": 13,
+                  "fill": "#64748B"
+                },
+                {
+                  "type": "TEXT",
+                  "characters": "Tìm kiếm theo mã cấu hình, tên đối tác...",
+                  "fontSize": 12,
+                  "fill": "#94A3B8"
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Right User Box",
+              "layoutMode": "HORIZONTAL",
+              "counterAxisAlignItems": "CENTER",
+              "itemSpacing": 16,
+              "children": [
+                {
+                  "type": "TEXT",
+                  "characters": "🔔",
+                  "fontSize": 14,
+                  "fill": "#FFFFFF"
+                },
+                {
+                  "type": "TEXT",
+                  "characters": "⚙️",
+                  "fontSize": 14,
+                  "fill": "#FFFFFF"
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Profile Capsule",
+                  "layoutMode": "HORIZONTAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "itemSpacing": 8,
+                  "padding": {
+                    "left": 8,
+                    "right": 10,
+                    "top": 4,
+                    "bottom": 4
+                  },
+                  "cornerRadius": 18,
+                  "fill": "#FFFFFF33",
+                  "children": [
+                    {
+                      "type": "FRAME",
+                      "name": "Avatar Circle",
+                      "width": 28,
+                      "height": 28,
+                      "cornerRadius": 14,
+                      "fill": "#DC2626",
+                      "layoutMode": "HORIZONTAL",
+                      "primaryAxisAlignItems": "CENTER",
+                      "counterAxisAlignItems": "CENTER",
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "L",
+                          "fontSize": 12,
+                          "fontWeight": 700,
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "characters": "Lisa ▾",
+                      "fontSize": 12,
+                      "fontWeight": 500,
+                      "fill": "#FFFFFF"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "FRAME",
+          "name": "Page Scroll Area",
+          "layoutMode": "VERTICAL",
+          "layoutAlign": "STRETCH",
+          "padding": {
+            "left": 24,
+            "right": 24,
+            "top": 16,
+            "bottom": 24
+          },
+          "itemSpacing": 14,
+          "children": [
+            {
+              "type": "FRAME",
+              "name": "Top Navigation Bar",
+              "layoutAlign": "STRETCH",
+              "layoutMode": "HORIZONTAL",
+              "primaryAxisAlignItems": "SPACE_BETWEEN",
+              "counterAxisAlignItems": "CENTER",
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Title & Breadcrumb",
+                  "layoutMode": "VERTICAL",
+                  "itemSpacing": 4,
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "characters": "Quản lý cấu hình phí  /  Phí đối tác CTT  /  Chi tiết cấu hình",
+                      "fontSize": 11,
+                      "fill": "#64748B"
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Title with Badge",
+                      "layoutMode": "HORIZONTAL",
+                      "counterAxisAlignItems": "CENTER",
+                      "itemSpacing": 12,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "CTT_FE_TT_009 - Biểu phí Thẻ Nội địa Techcombank Gateway",
+                          "fontSize": 16,
+                          "fontWeight": 700,
+                          "fill": "#1E293B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Status Badge",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "itemSpacing": 6,
+                          "padding": {
+                            "left": 10,
+                            "right": 10,
+                            "top": 4,
+                            "bottom": 4
+                          },
+                          "cornerRadius": 12,
+                          "fill": "#FEF3C7",
+                          "children": [
+                            {
+                              "type": "FRAME",
+                              "name": "Dot",
+                              "width": 8,
+                              "height": 8,
+                              "cornerRadius": 4,
+                              "fill": "#D97706"
+                            },
+                            {
+                              "type": "TEXT",
+                              "characters": "Chờ phê duyệt",
+                              "fontSize": 11,
+                              "fontWeight": 600,
+                              "fill": "#B45309"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Action Buttons Group",
+                  "layoutMode": "HORIZONTAL",
+                  "itemSpacing": 8,
+                  "children": [
+                    {
+                      "type": "FRAME",
+                      "name": "Btn: ← Quay lại",
+                      "height": 36,
+                      "cornerRadius": 6,
+                      "fill": "#F1F5F9",
+                      "stroke": "#E2E8F0",
+                      "strokeWeight": 1,
+                      "layoutMode": "HORIZONTAL",
+                      "primaryAxisAlignItems": "CENTER",
+                      "counterAxisAlignItems": "CENTER",
+                      "padding": {
+                        "left": 14,
+                        "right": 14
+                      },
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "← Quay lại",
+                          "fontSize": 12,
+                          "fontWeight": 600,
+                          "fill": "#1E293B"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Btn: ↩ Rút yêu cầu",
+                      "height": 36,
+                      "cornerRadius": 6,
+                      "fill": "#FFFFFF",
+                      "stroke": "#2563EB",
+                      "strokeWeight": 1,
+                      "layoutMode": "HORIZONTAL",
+                      "primaryAxisAlignItems": "CENTER",
+                      "counterAxisAlignItems": "CENTER",
+                      "padding": {
+                        "left": 14,
+                        "right": 14
+                      },
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "↩ Rút yêu cầu",
+                          "fontSize": 12,
+                          "fontWeight": 600,
+                          "fill": "#2563EB"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Btn: ✕ Từ chối",
+                      "height": 36,
+                      "cornerRadius": 6,
+                      "fill": "#DC2626",
+                      "stroke": "#DC2626",
+                      "strokeWeight": 1,
+                      "layoutMode": "HORIZONTAL",
+                      "primaryAxisAlignItems": "CENTER",
+                      "counterAxisAlignItems": "CENTER",
+                      "padding": {
+                        "left": 14,
+                        "right": 14
+                      },
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "✕ Từ chối",
+                          "fontSize": 12,
+                          "fontWeight": 600,
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Btn: ✓ Phê duyệt cấu hình",
+                      "height": 36,
+                      "cornerRadius": 6,
+                      "fill": "#16A34A",
+                      "stroke": "#16A34A",
+                      "strokeWeight": 1,
+                      "layoutMode": "HORIZONTAL",
+                      "primaryAxisAlignItems": "CENTER",
+                      "counterAxisAlignItems": "CENTER",
+                      "padding": {
+                        "left": 14,
+                        "right": 14
+                      },
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "✓ Phê duyệt cấu hình",
+                          "fontSize": 12,
+                          "fontWeight": 600,
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Status Banner",
+              "layoutAlign": "STRETCH",
+              "layoutMode": "HORIZONTAL",
+              "counterAxisAlignItems": "CENTER",
+              "padding": {
+                "left": 16,
+                "right": 16,
+                "top": 10,
+                "bottom": 10
+              },
+              "cornerRadius": 8,
+              "fill": "#FEF3C7",
+              "stroke": "#FDE68A",
+              "strokeWeight": 1,
+              "itemSpacing": 10,
+              "children": [
+                {
+                  "type": "TEXT",
+                  "characters": "⏳",
+                  "fontSize": 14
+                },
+                {
+                  "type": "TEXT",
+                  "characters": "⏳ Cấu hình đang CHỜ PHÊ DUYỆT bởi Checker. Người tạo: nguyen.van.a (Maker) lúc 10:15 04/11/2026.",
+                  "fontSize": 12,
+                  "fontWeight": 500,
+                  "fill": "#92400E"
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Card: Thông tin chung",
+              "layoutAlign": "STRETCH",
+              "layoutMode": "VERTICAL",
+              "padding": 16,
+              "cornerRadius": 8,
+              "fill": "#FFFFFF",
+              "stroke": "#E2E8F0",
+              "strokeWeight": 1,
+              "itemSpacing": 12,
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Card Header",
+                  "layoutMode": "HORIZONTAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "itemSpacing": 8,
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "characters": "📋",
+                      "fontSize": 13
+                    },
+                    {
+                      "type": "TEXT",
+                      "characters": "THÔNG TIN CHUNG CẤU HÌNH",
+                      "fontSize": 12,
+                      "fontWeight": 700,
+                      "fill": "#1E40AF"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Row 1",
+                  "layoutAlign": "STRETCH",
+                  "layoutMode": "HORIZONTAL",
+                  "itemSpacing": 16,
+                  "children": [
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Mã cấu hình",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Mã cấu hình",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "CTT_FE_TT_009",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Tên cấu hình",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Tên cấu hình",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "Biểu phí Thẻ Nội địa Techcombank Gateway",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Đối tác",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Đối tác",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "Techcombank Gateway",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Phương thức TT",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Phương thức TT",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "Thẻ nội địa & TK ngân hàng",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Row 2",
+                  "layoutAlign": "STRETCH",
+                  "layoutMode": "HORIZONTAL",
+                  "itemSpacing": 16,
+                  "children": [
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Mã ngành (MCC)",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Mã ngành (MCC)",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "MCC 5311 - Bán lẻ tổng hợp",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Thời gian hiệu lực",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Thời gian hiệu lực",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "15/11/2026 - Không thời hạn",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Người tạo yêu cầu",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Người tạo yêu cầu",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "nguyen.van.a (Maker)",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Ngày gửi yêu cầu",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Ngày gửi yêu cầu",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "04/11/2026 10:15",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Card: Cơ chế tính phí",
+              "layoutAlign": "STRETCH",
+              "layoutMode": "VERTICAL",
+              "padding": 16,
+              "cornerRadius": 8,
+              "fill": "#FFFFFF",
+              "stroke": "#E2E8F0",
+              "strokeWeight": 1,
+              "itemSpacing": 12,
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Card Header",
+                  "layoutMode": "HORIZONTAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "itemSpacing": 8,
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "characters": "💰",
+                      "fontSize": 13
+                    },
+                    {
+                      "type": "TEXT",
+                      "characters": "QUY TẮC & CƠ CHẾ TÍNH PHÍ",
+                      "fontSize": 12,
+                      "fontWeight": 700,
+                      "fill": "#1E40AF"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Row 1",
+                  "layoutAlign": "STRETCH",
+                  "layoutMode": "HORIZONTAL",
+                  "itemSpacing": 16,
+                  "children": [
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Loại biểu phí",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Loại biểu phí",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "Phí thanh toán",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Hình thức thu phí",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Hình thức thu phí",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "Theo GTGD (% giá trị)",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Tỷ lệ phí (%)",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Tỷ lệ phí (%)",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "0.75%",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Mức phí tối thiểu (Min)",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Mức phí tối thiểu (Min)",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "1.100 VNĐ",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Row 2",
+                  "layoutAlign": "STRETCH",
+                  "layoutMode": "HORIZONTAL",
+                  "itemSpacing": 16,
+                  "children": [
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Mức phí tối đa (Max)",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Mức phí tối đa (Max)",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "15.000 VNĐ",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Thuế VAT",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Thuế VAT",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "Đã bao gồm VAT",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Loại GD áp dụng",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Loại GD áp dụng",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "Thanh toán & Hoàn trả",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "ReadOnly: Ngày áp dụng phí hoàn trả",
+                      "width": 275,
+                      "layoutMode": "VERTICAL",
+                      "itemSpacing": 4,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "Ngày áp dụng phí hoàn trả",
+                          "fontSize": 11,
+                          "fontWeight": 500,
+                          "fill": "#64748B"
+                        },
+                        {
+                          "type": "FRAME",
+                          "name": "Value Box",
+                          "height": 36,
+                          "layoutAlign": "STRETCH",
+                          "layoutMode": "HORIZONTAL",
+                          "counterAxisAlignItems": "CENTER",
+                          "padding": {
+                            "left": 12,
+                            "right": 12
+                          },
+                          "cornerRadius": 6,
+                          "fill": "#F8FAFC",
+                          "stroke": "#E2E8F0",
+                          "strokeWeight": 1,
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "characters": "Ngày tạo giao dịch hoàn trả",
+                              "fontSize": 12,
+                              "fontWeight": 600,
+                              "fill": "#1E293B"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Card: Audit Trail",
+              "layoutAlign": "STRETCH",
+              "layoutMode": "VERTICAL",
+              "padding": 16,
+              "cornerRadius": 8,
+              "fill": "#FFFFFF",
+              "stroke": "#E2E8F0",
+              "strokeWeight": 1,
+              "itemSpacing": 12,
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Card Header",
+                  "layoutMode": "HORIZONTAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "itemSpacing": 8,
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "characters": "🕒",
+                      "fontSize": 13
+                    },
+                    {
+                      "type": "TEXT",
+                      "characters": "LỊCH SỬ PHÊ DUYỆT & NHẬT KÝ HOẠT ĐỘNG (AUDIT TRAIL)",
+                      "fontSize": 12,
+                      "fontWeight": 700,
+                      "fill": "#1E40AF"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Logs List",
+                  "layoutAlign": "STRETCH",
+                  "layoutMode": "VERTICAL",
+                  "itemSpacing": 8,
+                  "children": [
+                    {
+                      "type": "FRAME",
+                      "name": "Log Item 1",
+                      "layoutAlign": "STRETCH",
+                      "layoutMode": "HORIZONTAL",
+                      "counterAxisAlignItems": "CENTER",
+                      "padding": {
+                        "left": 12,
+                        "right": 12,
+                        "top": 6,
+                        "bottom": 6
+                      },
+                      "fill": "#F8FAFC",
+                      "cornerRadius": 4,
+                      "itemSpacing": 16,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "•",
+                          "fontSize": 12,
+                          "fill": "#2563EB"
+                        },
+                        {
+                          "type": "TEXT",
+                          "characters": "04/11/2026 09:30",
+                          "fontSize": 11,
+                          "fontWeight": 600,
+                          "fill": "#475569",
+                          "width": 130
+                        },
+                        {
+                          "type": "TEXT",
+                          "characters": "tran.van.b (Maker)",
+                          "fontSize": 11,
+                          "fontWeight": 600,
+                          "fill": "#1E293B",
+                          "width": 160
+                        },
+                        {
+                          "type": "TEXT",
+                          "characters": "Tạo mới và gửi yêu cầu phê duyệt cấu hình",
+                          "fontSize": 11,
+                          "fill": "#475569"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Log Item 2",
+                      "layoutAlign": "STRETCH",
+                      "layoutMode": "HORIZONTAL",
+                      "counterAxisAlignItems": "CENTER",
+                      "padding": {
+                        "left": 12,
+                        "right": 12,
+                        "top": 6,
+                        "bottom": 6
+                      },
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 4,
+                      "itemSpacing": 16,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "•",
+                          "fontSize": 12,
+                          "fill": "#2563EB"
+                        },
+                        {
+                          "type": "TEXT",
+                          "characters": "04/11/2026 11:15",
+                          "fontSize": 11,
+                          "fontWeight": 600,
+                          "fill": "#475569",
+                          "width": 130
+                        },
+                        {
+                          "type": "TEXT",
+                          "characters": "le.thi.c (Checker)",
+                          "fontSize": 11,
+                          "fontWeight": 600,
+                          "fill": "#1E293B",
+                          "width": 160
+                        },
+                        {
+                          "type": "TEXT",
+                          "characters": "Phê duyệt cấu hình biểu phí",
+                          "fontSize": 11,
+                          "fill": "#475569"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Log Item 3",
+                      "layoutAlign": "STRETCH",
+                      "layoutMode": "HORIZONTAL",
+                      "counterAxisAlignItems": "CENTER",
+                      "padding": {
+                        "left": 12,
+                        "right": 12,
+                        "top": 6,
+                        "bottom": 6
+                      },
+                      "fill": "#F8FAFC",
+                      "cornerRadius": 4,
+                      "itemSpacing": 16,
+                      "children": [
+                        {
+                          "type": "TEXT",
+                          "characters": "•",
+                          "fontSize": 12,
+                          "fill": "#2563EB"
+                        },
+                        {
+                          "type": "TEXT",
+                          "characters": "04/11/2026 11:15",
+                          "fontSize": 11,
+                          "fontWeight": 600,
+                          "fill": "#475569",
+                          "width": 130
+                        },
+                        {
+                          "type": "TEXT",
+                          "characters": "Hệ thống tự động",
+                          "fontSize": 11,
+                          "fontWeight": 600,
+                          "fill": "#1E293B",
+                          "width": 160
+                        },
+                        {
+                          "type": "TEXT",
+                          "characters": "Kích hoạt cấu hình sang trạng thái Đang hoạt động",
+                          "fontSize": 11,
+                          "fill": "#475569"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

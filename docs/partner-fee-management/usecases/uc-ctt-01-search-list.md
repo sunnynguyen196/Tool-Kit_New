@@ -25,7 +25,7 @@ links:
 | **Trigger** | Người dùng click menu điều hướng: **`Quản lý cấu hình phí` > `Phí đối tác CTT`** trên thanh Navigation bên trái; hoặc click nút [Tìm kiếm]. |
 | **Pre-Condition** | - Tài khoản người dùng đã được tạo và kích hoạt.<br>- Người dùng đã đăng nhập vào hệ thống EPAY Portal.<br>- Người dùng có quyền truy cập chức năng xem danh sách và tra cứu cấu hình phí CTT.<br>- Dữ liệu biểu phí CTT đã được ghi nhận trong cơ sở dữ liệu. |
 | **Post-Condition** | Hệ thống hiển thị danh sách các mã phí CTT thỏa mãn đúng tiêu chí tìm kiếm và tab trạng thái kích hoạt. |
-| **Basic flow** | 1. Click **[Quản lý cấu hình phí]** >> click **[Phí đối tác CTT]** ở thanh Navigation bên trái. Hệ thống hiển thị Danh sách cấu hình phí CTT tương ứng.<br>2. Chọn nút **[Tìm kiếm]** ở góc trên bên phải $\rightarrow$ Màn hình show ra các trường điều kiện lọc dữ liệu dành riêng cho CTT, cho phép user lựa chọn giá trị để tra cứu.<br>3. Lựa chọn giá trị tại các trường thông tin: Đối tác/Ngân hàng (Vietcombank, BIDV, MBBank...), Loại phí CTT (Duy trì dịch vụ, Xử lý GD, Thanh toán, DVGT), PTTT (Thẻ quốc tế Visa/Master/JCB, Thẻ nội địa Napas), Kỳ trả phí, Trạng thái.<br>4. Click nút **[Tìm kiếm]**.<br>5. Hệ thống kiểm tra tính hợp lệ thông tin, thực hiện truy vấn dữ liệu từ CSDL theo điều kiện lọc.<br>6. Hệ thống hiển thị danh sách cấu hình phí CTT theo điều kiện lọc ở trên. |
+| **Basic flow** | 1. Người dùng vào menu **[Quản lý cấu hình phí] > [Phí trả đối tác] > [Phí đối tác CTT]** ở thanh menu bên trái.<br>2. Hệ thống hiển thị màn hình danh sách cấu hình phí CTT.<br>3. Người dùng chọn **[Tìm kiếm]** để mở bộ lọc.<br>4. Hệ thống hiển thị các tiêu chí tra cứu cấu hình phí CTT. |
 | **Alternative flow** | - **A1**: User không nhập tiêu chí lọc $\rightarrow$ Hệ thống hiển thị tất cả cấu hình phí CTT theo giá trị lọc mặc định.<br>- **A2**: Người dùng chọn **[Xóa]** $\rightarrow$ Hệ thống xóa các điều kiện lọc, trả giao diện về trạng thái ban đầu với tất cả cấu hình phí CTT theo giá trị lọc ban đầu.<br>- **A3**: Người dùng chọn **[Xuất tệp]** $\rightarrow$ Hệ thống xuất danh sách tổng hợp theo các trường tin tương ứng tại bảng danh sách (định dạng file: PDF, Excel) *(Chi tiết xem CTT-UC02)*.<br>- **A4**: User chọn tiêu chí lọc $\rightarrow$ Hệ thống hiển thị bảng rỗng kèm thông báo không tìm thấy kết quả phù hợp. |
 | **Exception flow** | - **E1**: Lỗi kết nối với cơ sở dữ liệu hoặc API Timeout $> 10$s.<br>- **E2**: Người dùng không có quyền truy cập chức năng CTT.<br>- **E3**: Lỗi kết nối mạng internet.<br>- **E4**: Người dùng chọn thời gian áp dụng Từ ngày lớn hơn Đến ngày. |
 | **Business Rules** | [Yêu cầu nghiệp vụ chung tra cứu cấu hình phí CTT](#223-yêu-cầu-nghiệp-vụ-chung) |
@@ -51,7 +51,7 @@ links:
 | **Trạng thái** | Dropdown list | O | Y | Multiple selection | Mặc định = *“NEW, ACTIVE, INACTIVE”*. Các giá trị: New, Active, Inactive, Draft. |
 | **Phương thức thanh toán** | Dropdown list | O | Y | Multiple selection | Mặc định = *“Tất cả”*. Danh mục CTT: Thẻ quốc tế (Visa, Master, JCB), Thẻ nội địa ATM, Chuyển khoản ngân hàng. |
 | **Kỳ trả phí** | Dropdown list | O | Y | Multiple selection | Mặc định = *“Tất cả”*. Các giá trị: Ngày, Tháng, Năm, Quý. |
-| **Tiến trình phê duyệt** | Dropdown list | O | Y | Multiple selection | Mặc định = *“Tất cả”*. Giá trị: Chờ Checker phê duyệt, Duyệt hiệu lực ngay, Duyệt chờ ngày hiệu lực, Từ chối hồ sơ, Hủy yêu cầu. |
+| **Tiến trình phê duyệt** | Dropdown list | O | Y | Multiple selection | - Giá trị mặc định = “Tất cả”.<br>- Danh sách hiển thị theo thứ tự ABC.<br>- Tiến trình phê duyệt bao gồm các giá trị tham chiếu tại [Danh sách các loại yêu cầu phê duyệt](../srs/SRS-Partner-Fee-CTT.md#217-danh-sách-các-loại-yêu-cầu-phê-duyệt). |
 | **Quicksearch** | Search bar | O | Y | Text $\le 100$ chars | Tìm nhanh theo Mã cấu hình, Tên cấu hình hoặc Mô tả. Nhấn Enter để tìm. |
 | **Nút [Xóa]** | Button | O | Y | Click | Clear các điều kiện tìm kiếm về giá trị mặc định. |
 | **Nút [Tìm kiếm]** | Button | O | Y | Click | Thực hiện truy vấn danh sách CHP CTT theo điều kiện lọc. |
@@ -62,6 +62,16 @@ links:
 ---
 
 ## 2.2.3 Yêu cầu nghiệp vụ chung
+
+#### Chi tiết xử lý nghiệp vụ
+
+1. Click **[Quản lý cấu hình phí]** >> click **[Phí đối tác CTT]** ở thanh Navigation bên trái. Hệ thống hiển thị Danh sách cấu hình phí CTT tương ứng.
+2. Chọn nút **[Tìm kiếm]** ở góc trên bên phải $\rightarrow$ Màn hình show ra các trường điều kiện lọc dữ liệu dành riêng cho CTT, cho phép user lựa chọn giá trị để tra cứu.
+3. Lựa chọn giá trị tại các trường thông tin: Đối tác/Ngân hàng (Vietcombank, BIDV, MBBank...), Loại phí CTT (Duy trì dịch vụ, Xử lý GD, Thanh toán, DVGT), PTTT (Thẻ quốc tế Visa/Master/JCB, Thẻ nội địa Napas), Kỳ trả phí, Trạng thái.
+4. Click nút **[Tìm kiếm]**.
+5. Hệ thống kiểm tra tính hợp lệ thông tin, thực hiện truy vấn dữ liệu từ CSDL theo điều kiện lọc.
+6. Hệ thống hiển thị danh sách cấu hình phí CTT theo điều kiện lọc ở trên.
+
 
 | Mã Quy tắc | Tên Quy tắc | Nội dung đặc tả nghiệp vụ chi tiết |
 |---|---|---|
@@ -93,11 +103,10 @@ links:
 | **4** | **Loại phí** | **Y** | Loại phí của CHP CTT. |
 | **5** | **Trạng thái** | **Y** | Trạng thái của CHP CTT (`Active`, `Pending`, `Inactive`, `New`, `Draft`). |
 | **6** | **Kỳ trả phí** | **Y** | Kỳ trả phí của CHP CTT. |
-| **7** | **Số lượng MC đang gắn** | **Y** | Số lượng merchant đang áp dụng cấu hình phí này. |
-| **8** | **Thời gian hiệu lực** | **Y** | Thời điểm bắt đầu có hiệu lực tính cước. |
-| **9** | **Thời gian khởi tạo** | **Y** | Thời điểm tạo bản ghi cấu hình phí CTT. |
-| **10** | **Yêu cầu phê duyệt** | **N** | Phân loại yêu cầu phê duyệt thông tin phí CTT. |
-| **11** | **Trạng thái phê duyệt** | **N** | Trạng thái phê duyệt tương ứng với YCPD. |
-| **12** | **Mã yêu cầu** | **N** | Mã yêu cầu phê duyệt liên kết. |
-| **13** | **Ghi chú** | **N** | Thông tin mô tả chi tiết cấu hình. |
-| **14** | **Đồng tiền giao dịch** | **N** | Loại tiền tệ sử dụng khi giao dịch (VND, USD...). |
+| **7** | **Thời gian hiệu lực** | **Y** | Thời điểm bắt đầu có hiệu lực tính cước. |
+| **8** | **Thời gian khởi tạo** | **Y** | Thời điểm tạo bản ghi cấu hình phí CTT. |
+| **9** | **Yêu cầu phê duyệt** | **N** | Phân loại yêu cầu phê duyệt thông tin phí CTT. |
+| **10** | **Trạng thái phê duyệt** | **N** | Trạng thái phê duyệt tương ứng với YCPD. |
+| **11** | **Mã yêu cầu** | **N** | Mã yêu cầu phê duyệt liên kết. |
+| **12** | **Ghi chú** | **N** | Thông tin mô tả chi tiết cấu hình. |
+| **13** | **Đồng tiền giao dịch** | **N** | Loại tiền tệ sử dụng khi giao dịch (VND, USD...). |

@@ -24,10 +24,10 @@ stateDiagram-v2
     New --> Deleted : 4b. Xóa bản ghi (Maker)
 
     Pending --> New : 6. Từ chối duyệt (Checker - kèm lý do)
-    Pending --> Ready : 7A. Phê duyệt (Checker - Ngày áp dụng > Hiện tại)
-    Pending --> Active : 7B. Phê duyệt (Checker - Ngày áp dụng <= Hiện tại)
+    Pending --> Ready : 7A. Phê duyệt (Checker - Chưa quá ngày hiệu lực)
+    Pending --> New : 7B. Job quá ngày hiệu lực (YCPD Rejected, người từ chối Hệ thống)
     Pending --> Inactive : 7C. Phê duyệt Tạm dừng (Checker)
-    Pending --> Active : 7D. Phê duyệt Cập nhật / Kích hoạt lại (Checker)
+    Active --> Active : 7D. Checker duyệt cập nhật; bản ghi gốc vẫn Active
 
     Ready --> New : 8A. Cập nhật thông tin (Maker - Reset về New)
     Ready --> Active : 8B. Auto golive (Scheduler Job quét đúng thời điểm)

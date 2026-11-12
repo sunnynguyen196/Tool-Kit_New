@@ -9,3 +9,7 @@ Thumbs.db
 # Dependencies
 node_modules/
 
+# Local document rendering and generated knowledge graph cache
+.tmp-word-export/
+docs/_shared/kg/
+
