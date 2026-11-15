@@ -31,9 +31,10 @@ links:
 | **HÀNG 2: MÀN HÌNH THÊM MỚI (CREATE FORMS - 5 BIẾN THỂ)** | | | | | |
 | 4 | `SCR-CTT-CR-01A: Thêm mới Phí XLGD CTT (Áp dụng chung loại GD)` | `4104:10585` | (135, 2246) | 1440 x 960 | Maker |
 | 5 | `SCR-CTT-CR-01B: Thêm mới Phí XLGD CTT (Tách riêng Thanh toán / Hoàn trả)` | `4105:13189` | (1675, 2246) | 1440 x 960 | Maker |
-| 6 | `SCR-CTT-CR-03: Thêm mới Phí Thanh toán CTT - Thẻ nội địa` | `4104:10909` | (3215, 2246) | 1440 x 960 | Maker |
-| 7 | `SCR-CTT-CR-04A: Thêm mới Phí Thanh toán CTT - Thẻ quốc tế (Áp dụng chung)` | `4104:11084` | (4755, 2246) | 1440 x 960 | Maker |
-| 8 | `SCR-CTT-CR-04B: Thêm mới Phí Thanh toán CTT - Thẻ quốc tế (Theo thương hiệu thẻ)` | `4109:13966` | (6295, 2246) | 1440 x 1207 | Maker |
+| 6 | SCR-CTT-CR-04A: Thêm mới Phí Thanh toán CTT - Thẻ quốc tế (Áp dụng chung / 1 bậc phí) | 4235:6194 | (200, 352) | 1440 x 1040 | Maker |
+| 7 | SCR-CTT-CR-04B: Thêm mới Phí Thanh toán CTT - Thẻ quốc tế (Cấu hình riêng theo thương hiệu / Bậc thang) | 4235:6676 | (1740, 352) | 1440 x 1520 | Maker |
+| 8 | SCR-CTT-CR-03A: Thêm mới Phí Thanh toán CTT - Thẻ nội địa (1 bậc phí) | 4235:7052 | (3280, 352) | 1440 x 1040 | Maker |
+| 8b | SCR-CTT-CR-03B: Thêm mới Phí Thanh toán CTT - Thẻ nội địa (Bậc thang) | 4235:7304 | (4820, 352) | 1440 x 1100 | Maker |
 | **HÀNG 3: MÀN HÌNH XEM CHI TIẾT THEO 6 TRẠNG THÁI & DRAWER CHECKER** | | | | | |
 | 9 | `SCR-CTT-DT-01: Chi tiết Phí CTT - DRAFT (Bản nháp)` | `4116:28761` | (135, 3586) | 1440 x 1400 | Maker |
 | 10 | `SCR-CTT-DT-02A: Chi tiết Phí CTT - PENDING (Maker View)` | `4116:29110` | (1675, 3586) | 1440 x 1400 | Maker |
