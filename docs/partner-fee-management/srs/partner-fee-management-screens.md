@@ -25,9 +25,9 @@ links:
 | STT | Mã màn hình & Tên trên Figma | Node ID Figma | Tọa độ (x, y) | Kích thước | Vai trò sử dụng |
 |:---:|---|---|---|---|---|
 | **HÀNG 1: MÀN HÌNH DANH SÁCH (SEARCH & LIST - 3 TABS)** | | | | | |
-| 1 | `SCR-PFEE-CTT-01: Danh sách Phí Đối tác CTT` (Tab Tất cả) | `4082:10325` | (135, 686) | 1440 x 960 | Maker, Checker |
-| 2 | `SCR-CTT-LIST-02: Danh sách Phí CTT - Tab Đang hoạt động` | `4087:10703` | (1675, 686) | 1440 x 960 | Maker, Checker |
-| 3 | `SCR-CTT-LIST-03: Danh sách Phí CTT - Tab Chờ xử lý` | `4088:10992` | (3215, 686) | 1440 x 960 | Maker, Checker |
+| 1 | SCR-PFEE-CTT-01: Danh sách Phí Đối tác CTT (Tab Tất cả) | 4237:14372 | (200, 352) | 1440 x 1024 | Maker, Checker |
+| 2 | SCR-CTT-LIST-02: Danh sách Phí CTT (Tab Đang hoạt động) | 4237:14634 | (1740, 352) | 1440 x 1024 | Maker, Checker |
+| 3 | SCR-CTT-LIST-03: Danh sách Phí CTT (Tab Chờ xử lý) | 4237:14896 | (3280, 352) | 1440 x 1024 | Maker, Checker |
 | **HÀNG 2: MÀN HÌNH THÊM MỚI (CREATE FORMS - 5 BIẾN THỂ)** | | | | | |
 | 4 | `SCR-CTT-CR-01A: Thêm mới Phí XLGD CTT (Áp dụng chung loại GD)` | `4104:10585` | (135, 2246) | 1440 x 960 | Maker |
 | 5 | `SCR-CTT-CR-01B: Thêm mới Phí XLGD CTT (Tách riêng Thanh toán / Hoàn trả)` | `4105:13189` | (1675, 2246) | 1440 x 960 | Maker |
