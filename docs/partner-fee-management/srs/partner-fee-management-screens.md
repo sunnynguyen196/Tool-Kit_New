@@ -2,7 +2,7 @@
 type: screen-index
 feature: partner-fee-management
 status: approved
-updated: 2026-11-09
+updated: 2026-11-16
 links:
   - srs: docs/partner-fee-management/srs/partner-fee-management-spec.md
   - srs_ctt: docs/partner-fee-management/srs/SRS-Partner-Fee-CTT.md
@@ -73,6 +73,16 @@ links:
 | 29 | `SCR-QR-DT-05: Chi tiết Phí QRGW - INACTIVE (Tạm dừng / Hết hiệu lực)` | `4116:32805` | (7809, 3586) | 1440 x 1250 | Maker, Checker |
 | 30 | `SCR-QR-DT-06: Chi tiết Phí QRGW - NEW (YCPD bị từ chối)` | `4116:33064` | (9349, 3586) | 1440 x 1250 | Maker |
 | 31 | `Xem chi tiết / Tab Lịch sử hoạt động / 1920 (Audit Trail QRGW)` | `4140:3342` | (11086, 3569) | 1918 x 1080 | Maker, Checker, Audit |
+| **HÀNG 4: MÀN HÌNH XỬ LÝ CẤU HÌNH THEO TRẠNG THÁI (SECTION `4273:13064`)** | | | | | |
+| 32 | `QRGW / Xử lý cấu hình / 1504 / DRAFT` | `4273:11572` | (80, 3929) | 1504 x 1250 | Maker |
+| 33 | `QRGW / Xử lý cấu hình / 1504 / NEW sau từ chối` | `4273:11873` | (1620, 3929) | 1504 x 1250 | Maker |
+| 34 | `QRGW / Xử lý cấu hình / 1504 / READY` | `4273:12182` | (3160, 3929) | 1504 x 1250 | Maker |
+| 35 | `QRGW / Xử lý cấu hình / 1504 / ACTIVE` | `4273:12468` | (4700, 3929) | 1504 x 1250 | Maker |
+| 36 | `QRGW / Xử lý cấu hình / 1504 / INACTIVE` | `4273:12767` | (6240, 3929) | 1504 x 1250 | Maker |
+
+**Quy tắc thao tác trên các màn xử lý QRGW:** Cụm thao tác dọc bên phải kế thừa từ màn chi tiết tương ứng theo trạng thái; thao tác không khả dụng được thể hiện disabled. Hàng nút phía dưới căn giữa và luôn có nút `Đóng` (không icon). Nút nghiệp vụ theo trạng thái: DRAFT — `Xóa nháp`, `Cập nhật thông tin`, `Gửi phê duyệt`; NEW sau từ chối — `Xóa cấu hình`, `Cập nhật thông tin`, `Gửi phê duyệt lại`; READY — `Cập nhật thông tin`; ACTIVE — `Cập nhật thông tin`, `Gửi phê duyệt cập nhật`, `Gửi yêu cầu tạm dừng`; INACTIVE — `Cập nhật thông tin`, `Gửi yêu cầu mở kích hoạt`. PENDING Maker không có màn chỉnh sửa vì bản ghi đang chờ Checker xử lý.
+
+Khung `Thông tin chung` của năm màn xử lý được mở rộng để chứa toàn bộ hàng thông tin; các section cấu hình phí và footer được đẩy xuống theo, không thay đổi nội dung hoặc bố cục trường cấu hình.
 
 ---
 

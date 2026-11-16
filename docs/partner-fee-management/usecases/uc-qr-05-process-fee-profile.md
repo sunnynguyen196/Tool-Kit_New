@@ -4,11 +4,11 @@ title: "Xử lý thông tin hồ sơ CHP Trả đối tác QRGW"
 feature: partner-fee-management
 module: QRGW
 status: approved
-updated: 2026-11-08
+updated: 2026-11-16
 links:
   - srs: docs/partner-fee-management/srs/partner-fee-management-spec.md
   - srs_qrgw: docs/partner-fee-management/srs/SRS-Partner-Fee-QRGW.md
-  - figma: "Figma File: ForWork · Page: CHP Đối tác"
+  - figma: "Figma File: ForWork · Page: CHP Đối tác v2"
 ---
 
 # 3.6 QR-UC05: Xử lý thông tin hồ sơ CHP Trả đối tác QRGW
@@ -39,6 +39,20 @@ links:
 * **QR-UC05-WF02**: Phê duyệt / Checker — Màn hình Thẩm định so sánh CŨ MỚI (`4020:48856`)
 * **QR-UC05-WF03**: Modal Xác nhận từ chối phê duyệt (bắt buộc nhập lý do)
 * **QR-UC05-WF04**: Modal Xác nhận thay đổi người phê duyệt
+
+### Màn hình xử lý CHP QRGW theo trạng thái
+
+Các màn xử lý là biến thể theo trạng thái, được mở từ cụm thao tác bên phải của màn chi tiết. Mỗi màn giữ nguyên các section và trường cấu hình; footer nằm dưới nội dung, căn giữa, có nút `Đóng` không icon. Cụm thao tác bên phải giữ nguyên như màn chi tiết tương ứng và disable các thao tác không khả dụng.
+
+| Trạng thái CHP | Màn Figma | Nút ở footer ngoài `Đóng` |
+|---|---|---|
+| `DRAFT` | `4273:11572` | `Xóa nháp`, `Cập nhật thông tin`, `Gửi phê duyệt` |
+| `NEW` sau YCPD bị từ chối | `4273:11873` | `Xóa cấu hình`, `Cập nhật thông tin`, `Gửi phê duyệt lại` |
+| `READY` | `4273:12182` | `Cập nhật thông tin` |
+| `ACTIVE` | `4273:12468` | `Cập nhật thông tin`, `Gửi phê duyệt cập nhật`, `Gửi yêu cầu tạm dừng` |
+| `INACTIVE` | `4273:12767` | `Cập nhật thông tin`, `Gửi yêu cầu mở kích hoạt` |
+
+`PENDING` Maker không mở màn chỉnh sửa; Maker xử lý bằng `Rút yêu cầu` hoặc `Thay đổi người phê duyệt` theo quyền. Khi thao tác không khả dụng, control tương ứng trên cụm nút bên phải được disable.
 
 ### Bảng Đặc tả Từ điển Trường Dữ liệu (Screen Data Dictionary):
 
