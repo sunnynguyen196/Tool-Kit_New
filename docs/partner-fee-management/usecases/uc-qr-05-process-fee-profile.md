@@ -4,7 +4,7 @@ title: "Xử lý thông tin hồ sơ CHP Trả đối tác QRGW"
 feature: partner-fee-management
 module: QRGW
 status: approved
-updated: 2026-11-16
+updated: 2026-11-24
 links:
   - srs: docs/partner-fee-management/srs/partner-fee-management-spec.md
   - srs_qrgw: docs/partner-fee-management/srs/SRS-Partner-Fee-QRGW.md
@@ -35,14 +35,14 @@ links:
 ## 3.6.2 Giao diện
 
 ### Màn hình Wireframe liên kết:
-* **QR-UC05-WF01**: Phê duyệt / Checker — Chờ phê duyệt (`4020:47923`)
-* **QR-UC05-WF02**: Phê duyệt / Checker — Màn hình Thẩm định so sánh CŨ MỚI (`4020:48856`)
-* **QR-UC05-WF03**: Modal Xác nhận từ chối phê duyệt (bắt buộc nhập lý do)
-* **QR-UC05-WF04**: Modal Xác nhận thay đổi người phê duyệt
+* **QR-UC05-WF01**: Chi tiết Maker đang chờ phê duyệt (`4116:31644`)
+* **QR-UC05-WF02**: Chi tiết Checker / Drawer phê duyệt (`4118:1345`)
+* **QR-UC05-WF03**: Màn xử lý theo trạng thái (`4273:11572`, `4273:11873`, `4273:12182`, `4273:12468`, `4273:12767`)
+* Figma v2 chưa có frame riêng cho modal từ chối và thay đổi người phê duyệt; các kiểm tra nghiệp vụ này tiếp tục là yêu cầu, nhưng giao diện modal cần mapping riêng.
 
 ### Màn hình xử lý CHP QRGW theo trạng thái
 
-Các màn xử lý là biến thể theo trạng thái, được mở từ cụm thao tác bên phải của màn chi tiết. Mỗi màn giữ nguyên các section và trường cấu hình; footer nằm dưới nội dung, căn giữa, có nút `Đóng` không icon. Cụm thao tác bên phải giữ nguyên như màn chi tiết tương ứng và disable các thao tác không khả dụng.
+Các màn xử lý là biến thể theo trạng thái, được mở từ nút xử lý trên thanh tác vụ bên phải của màn chi tiết. Mỗi màn giữ nguyên nội dung các section và trường cấu hình; footer nằm dưới nội dung, căn giữa, có nút `Đóng` không icon. Thanh thao tác bên phải giữ nguyên như màn chi tiết tương ứng và disable các thao tác không khả dụng.
 
 | Trạng thái CHP | Màn Figma | Nút ở footer ngoài `Đóng` |
 |---|---|---|

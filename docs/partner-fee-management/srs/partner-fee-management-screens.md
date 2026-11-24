@@ -2,7 +2,7 @@
 type: screen-index
 feature: partner-fee-management
 status: approved
-updated: 2026-11-16
+updated: 2026-11-24
 links:
   - srs: docs/partner-fee-management/srs/partner-fee-management-spec.md
   - srs_ctt: docs/partner-fee-management/srs/SRS-Partner-Fee-CTT.md
@@ -20,7 +20,7 @@ links:
 
 ## 1. Bản đồ Tổng thể Màn hình trên Figma Canvas (Page: `CHP Đối tác v2`)
 
-### 1.1 PHÂN HỆ CẤU HÌNH PHÍ ĐỐI TÁC CTT (Section Node `4139:39`)
+### 1.1 PHÂN HỆ CẤU HÌNH PHÍ ĐỐI TÁC CTT
 
 | STT | Mã màn hình & Tên trên Figma | Node ID Figma | Tọa độ (x, y) | Kích thước | Vai trò sử dụng |
 |:---:|---|---|---|---|---|
@@ -39,50 +39,56 @@ links:
 | 5b | SCR-CTT-CR-04B: Thêm mới Phí Thanh toán CTT - Thẻ quốc tế (Cấu hình riêng theo thương hiệu / Bậc thang) | 4235:6676 | (1740, 352) | 1440 x 1520 | Maker |
 | 5c | SCR-CTT-CR-03A: Thêm mới Phí Thanh toán CTT - Thẻ nội địa (1 bậc phí) | 4235:7052 | (3280, 352) | 1440 x 1040 | Maker |
 | 5d | SCR-CTT-CR-03B: Thêm mới Phí Thanh toán CTT - Thẻ nội địa (Bậc thang) | 4235:7304 | (4820, 352) | 1440 x 1100 | Maker |
-| **HÀNG 3: MÀN HÌNH XEM CHI TIẾT THEO 6 TRẠNG THÁI & DRAWER CHECKER** | | | | | |
-| 9 | `SCR-CTT-DT-01: Chi tiết Phí CTT - DRAFT (Bản nháp)` | `4116:28761` | (135, 3586) | 1440 x 1400 | Maker |
-| 10 | `SCR-CTT-DT-02A: Chi tiết Phí CTT - PENDING (Maker View)` | `4116:29110` | (1675, 3586) | 1440 x 1400 | Maker |
-| 11 | `SCR-CTT-DT-02B: Chi tiết Phí CTT - PENDING (Checker View - Drawer Phê duyệt)` | `4118:863` | (3215, 3586) | 1440 x 1400 | Checker |
-| 12 | `SCR-CTT-DT-03: Chi tiết Phí CTT - READY (Chờ hiệu lực)` | `4116:29986` | (4755, 3586) | 1440 x 1400 | Maker, Checker |
-| 13 | `SCR-CTT-DT-04: Chi tiết Phí CTT - ACTIVE (Đang hoạt động)` | `4116:30335` | (6295, 3586) | 1440 x 1400 | Maker, Checker |
-| 14 | `SCR-CTT-DT-05: Chi tiết Phí CTT - INACTIVE (Tạm dừng / Hết hiệu lực)` | `4116:30687` | (7835, 3586) | 1440 x 1400 | Maker, Checker |
-| 15 | `SCR-CTT-DT-06: Chi tiết Phí CTT - NEW (YCPD bị từ chối)` | `4116:31036` | (9375, 3586) | 1440 x 1487 | Maker |
-| 16 | `Xem chi tiết / Tab Lịch sử hoạt động / 1920 (Audit Trail CTT)` | `4140:4426` | (11068, 3562) | 1918 x 1080 | Maker, Checker, Audit |
+| **HÀNG 3: MÀN HÌNH CHI TIẾT THEO TRẠNG THÁI & DRAWER CHECKER** | | | | | |
+| 9 | `CTT / Chi tiết Phí CTT / DRAFT (Bản nháp) / 1440` | `4244:16231` | (200, 752) | 1504 x 1320 | Maker |
+| 10 | `CTT / Chi tiết Phí CTT / PENDING (Maker View) / 1440` | `4244:16477` | (1804, 752) | 1504 x 1250 | Maker |
+| 11 | `CTT / Chi tiết Phí CTT / PENDING (Checker View / Drawer Phê duyệt) / 1440` | `4244:17738` | (9824, 752) | 1504 x 1400 | Checker |
+| 12 | `CTT / Chi tiết Phí CTT / READY (Chờ hiệu lực) / 1440` | `4244:16743` | (3408, 752) | 1504 x 1320 | Maker, Checker |
+| 13 | `CTT / Chi tiết Phí CTT / ACTIVE (Đang hoạt động) / 1440` | `4244:16987` | (5012, 752) | 1504 x 1320 | Maker, Checker |
+| 14 | `CTT / Chi tiết Phí CTT / INACTIVE (Tạm dừng / Hết hiệu lực) / 1440` | `4244:17234` | (6616, 752) | 1504 x 1320 | Maker, Checker |
+| 15 | `CTT / Chi tiết cấu hình / 1504 / NEW sau từ chối` | `4244:17484` | (8220, 752) | 1504 x 1320 | Maker |
+| 16 | `CTT / Lịch sử hoạt động / 1504` | `4287:13664` | (200, 352) | 1504 x 1250 | Maker, Checker, Audit |
 
 ---
 
-### 1.2 PHÂN HỆ CẤU HÌNH PHÍ ĐỐI TÁC QRGW (Section Node `4139:40`)
+### 1.2 PHÂN HỆ CẤU HÌNH PHÍ ĐỐI TÁC QRGW
 
 | STT | Mã màn hình & Tên trên Figma | Node ID Figma | Tọa độ (x, y) | Kích thước | Vai trò sử dụng |
 |:---:|---|---|---|---|---|
 | **HÀNG 1: MÀN HÌNH DANH SÁCH (SEARCH & LIST - 3 TABS)** | | | | | |
-| 17 | `SCR-QR-LIST-01: Danh sách Phí QRGW - Tab Tất cả` | `4088:11297` | (109, 686) | 1440 x 960 | Maker, Checker |
-| 18 | `SCR-QR-LIST-02: Danh sách Phí QRGW - Tab Đang hoạt động` | `4089:11559` | (1649, 686) | 1440 x 960 | Maker, Checker |
-| 19 | `SCR-QR-LIST-03: Danh sách Phí QRGW - Tab Chờ xử lý` | `4090:11821` | (3189, 686) | 1440 x 960 | Maker, Checker |
+| 17 | `QRGW / Danh sách Phí QRGW / Tab Tất cả / 1440` | `4088:11297` | (200, 352) | 1440 x 960 | Maker, Checker |
+| 18 | `QRGW / Danh sách Phí QRGW / Tab Đang hoạt động / 1440` | `4089:11559` | (1740, 352) | 1440 x 960 | Maker, Checker |
+| 19 | `QRGW / Danh sách Phí QRGW / Tab Chờ xử lý / 1440` | `4090:11821` | (3280, 352) | 1440 x 960 | Maker, Checker |
 | **HÀNG 2: MÀN HÌNH THÊM MỚI (CREATE FORMS - 4 BIẾN THỂ)** | | | | | |
-| 20 | `SCR-QR-CR-01: Thêm mới Phí XLGD QRGW (Áp dụng chung loại GD)` | `4116:18663` | (109, 2246) | 1440 x 960 | Maker |
-| 21 | `SCR-QR-CR-02: Thêm mới Phí XLGD QRGW (Tách riêng Thanh toán / Hoàn trả)` | `4116:18825` | (1649, 2246) | 1440 x 1020 | Maker |
-| 22 | `SCR-QR-CR-03: Thêm mới Phí Thanh toán QRGW (Áp dụng chung loại GD)` | `4116:19078` | (3189, 2246) | 1440 x 960 | Maker |
-| 23 | `SCR-QR-CR-04: Thêm mới Phí Thanh toán QRGW (Tách riêng Thanh toán / Hoàn trả)` | `4116:19262` | (4729, 2246) | 1440 x 960 | Maker |
-| **HÀNG 3: MÀN HÌNH XEM CHI TIẾT THEO 6 TRẠNG THÁI & DRAWER CHECKER** | | | | | |
-| 24 | `SCR-QR-DT-01: Chi tiết Phí QRGW - DRAFT (Bản nháp)` | `4116:31385` | (109, 3586) | 1440 x 1250 | Maker |
-| 25 | `SCR-QR-DT-02A: Chi tiết Phí QRGW - PENDING (Maker View)` | `4116:31644` | (1649, 3586) | 1440 x 965 | Maker |
-| 26 | `SCR-QR-DT-02B: Chi tiết Phí QRGW - PENDING (Checker View - Drawer Phê duyệt)` | `4118:1345` | (3189, 3586) | 1440 x 1400 | Checker |
-| 27 | `SCR-QR-DT-03: Chi tiết Phí QRGW - READY (Chờ hiệu lực)` | `4116:32284` | (4729, 3586) | 1440 x 1250 | Maker, Checker |
-| 28 | `SCR-QR-DT-04: Chi tiết Phí QRGW - ACTIVE (Đang hoạt động)` | `4116:32543` | (6269, 3586) | 1440 x 1250 | Maker, Checker |
-| 29 | `SCR-QR-DT-05: Chi tiết Phí QRGW - INACTIVE (Tạm dừng / Hết hiệu lực)` | `4116:32805` | (7809, 3586) | 1440 x 1250 | Maker, Checker |
-| 30 | `SCR-QR-DT-06: Chi tiết Phí QRGW - NEW (YCPD bị từ chối)` | `4116:33064` | (9349, 3586) | 1440 x 1250 | Maker |
-| 31 | `Xem chi tiết / Tab Lịch sử hoạt động / 1920 (Audit Trail QRGW)` | `4140:3342` | (11086, 3569) | 1918 x 1080 | Maker, Checker, Audit |
-| **HÀNG 4: MÀN HÌNH XỬ LÝ CẤU HÌNH THEO TRẠNG THÁI (SECTION `4273:13064`)** | | | | | |
-| 32 | `QRGW / Xử lý cấu hình / 1504 / DRAFT` | `4273:11572` | (80, 3929) | 1504 x 1250 | Maker |
-| 33 | `QRGW / Xử lý cấu hình / 1504 / NEW sau từ chối` | `4273:11873` | (1620, 3929) | 1504 x 1250 | Maker |
-| 34 | `QRGW / Xử lý cấu hình / 1504 / READY` | `4273:12182` | (3160, 3929) | 1504 x 1250 | Maker |
-| 35 | `QRGW / Xử lý cấu hình / 1504 / ACTIVE` | `4273:12468` | (4700, 3929) | 1504 x 1250 | Maker |
-| 36 | `QRGW / Xử lý cấu hình / 1504 / INACTIVE` | `4273:12767` | (6240, 3929) | 1504 x 1250 | Maker |
+| 20 | `QRGW / Thêm mới Phí XLGD QRGW (Áp dụng chung loại GD) / 1440` | `4116:18663` | (200, 352) | 1440 x 960 | Maker |
+| 21 | `QRGW / Thêm mới Phí XLGD QRGW (Theo từng loại GD: Thanh toán, Hoàn trả) / 1440` | `4116:18825` | (1740, 352) | 1440 x 1020 | Maker |
+| 22 | `QRGW / Thêm mới Phí Thanh toán QRGW (Áp dụng chung loại GD) / 1440` | `4116:19078` | (200, 352) | 1440 x 960 | Maker |
+| 23 | `QRGW / Thêm mới Phí Thanh toán QRGW (Theo từng loại GD: Thanh toán, Hoàn trả) / 1440` | `4116:19262` | (1740, 352) | 1440 x 960 | Maker |
+| **HÀNG 3: MÀN HÌNH CHI TIẾT THEO TRẠNG THÁI & DRAWER CHECKER** | | | | | |
+| 24 | `QRGW / Chi tiết Phí QRGW / DRAFT (Bản nháp) / 1504` | `4116:31385` | (200, 352) | 1504 x 1250 | Maker |
+| 25 | `QRGW / Chi tiết Phí QRGW / PENDING (Maker View) / 1504` | `4116:31644` | (1804, 352) | 1504 x 1250 | Maker |
+| 26 | `QRGW / Chi tiết Phí QRGW / PENDING (Checker View / Drawer Phê duyệt) / 1504` | `4118:1345` | (9824, 352) | 1504 x 1400 | Checker |
+| 27 | `QRGW / Chi tiết Phí QRGW / READY (Chờ hiệu lực) / 1504` | `4116:32284` | (3408, 352) | 1504 x 1250 | Maker, Checker |
+| 28 | `QRGW / Chi tiết Phí QRGW / ACTIVE (Đang hoạt động) / 1504` | `4116:32543` | (5012, 352) | 1504 x 1250 | Maker, Checker |
+| 29 | `QRGW / Chi tiết Phí QRGW / INACTIVE (Tạm dừng / Hết hiệu lực) / 1504` | `4116:32805` | (6616, 352) | 1504 x 1250 | Maker, Checker |
+| 30 | `QRGW / Chi tiết Phí QRGW / NEW (YCPD bị từ chối) / 1504` | `4116:33064` | (8220, 352) | 1504 x 1250 | Maker |
+| 31 | `QRGW / Lịch sử hoạt động / 1504` | `4270:11424` | (80, 80) | 1504 x 1250 | Maker, Checker, Audit |
+| **HÀNG 4: MÀN HÌNH XỬ LÝ CẤU HÌNH CTT THEO TRẠNG THÁI** | | | | | |
+| 32 | `CTT / Xử lý DRAFT / 1504` | `4276:11637` | (200, 352) | 1504 x 1328 | Maker |
+| 33 | `CTT / Xử lý NEW sau từ chối / 1504` | `4276:12834` | (6616, 352) | 1504 x 1328 | Maker |
+| 34 | `CTT / Xử lý READY / 1504` | `4276:11937` | (1804, 352) | 1504 x 1328 | Maker |
+| 35 | `CTT / Xử lý ACTIVE / 1504` | `4276:12231` | (3408, 352) | 1504 x 1328 | Maker |
+| 36 | `CTT / Xử lý INACTIVE / 1504` | `4276:12532` | (5012, 352) | 1504 x 1328 | Maker |
+| **HÀNG 5: MÀN HÌNH XỬ LÝ CẤU HÌNH QRGW THEO TRẠNG THÁI (SECTION `4273:13064`)** | | | | | |
+| 37 | `QRGW / Xử lý DRAFT / 1504` | `4273:11572` | (200, 352) | 1504 x 1250 | Maker |
+| 38 | `QRGW / Xử lý NEW sau từ chối / 1504` | `4273:11873` | (1804, 352) | 1504 x 1250 | Maker |
+| 39 | `QRGW / Xử lý READY / 1504` | `4273:12182` | (3408, 352) | 1504 x 1250 | Maker |
+| 40 | `QRGW / Xử lý ACTIVE / 1504` | `4273:12468` | (5012, 352) | 1504 x 1250 | Maker |
+| 41 | `QRGW / Xử lý INACTIVE / 1504` | `4273:12767` | (6616, 352) | 1504 x 1250 | Maker |
 
-**Quy tắc thao tác trên các màn xử lý QRGW:** Cụm thao tác dọc bên phải kế thừa từ màn chi tiết tương ứng theo trạng thái; thao tác không khả dụng được thể hiện disabled. Hàng nút phía dưới căn giữa và luôn có nút `Đóng` (không icon). Nút nghiệp vụ theo trạng thái: DRAFT — `Xóa nháp`, `Cập nhật thông tin`, `Gửi phê duyệt`; NEW sau từ chối — `Xóa cấu hình`, `Cập nhật thông tin`, `Gửi phê duyệt lại`; READY — `Cập nhật thông tin`; ACTIVE — `Cập nhật thông tin`, `Gửi phê duyệt cập nhật`, `Gửi yêu cầu tạm dừng`; INACTIVE — `Cập nhật thông tin`, `Gửi yêu cầu mở kích hoạt`. PENDING Maker không có màn chỉnh sửa vì bản ghi đang chờ Checker xử lý.
+**Quy tắc thao tác:** Màn chi tiết có thanh tác vụ dọc bên phải theo quyền/trạng thái; nút không khả dụng ở trạng thái hiện tại được disabled. Footer của màn chi tiết và lịch sử chỉ có nút `Đóng`, căn giữa, không icon. Màn xử lý mở từ nút hồ sơ trên thanh bên phải; footer căn giữa gồm `Đóng` và các nút nghiệp vụ theo trạng thái. DRAFT: `Xóa nháp`, `Cập nhật thông tin`, `Gửi phê duyệt`; NEW sau từ chối: `Xóa cấu hình`, `Cập nhật thông tin`, `Gửi phê duyệt lại`; READY: `Cập nhật thông tin`; ACTIVE: `Cập nhật thông tin`, `Gửi phê duyệt cập nhật`, `Gửi yêu cầu tạm dừng`; INACTIVE: `Cập nhật thông tin`, `Gửi yêu cầu mở kích hoạt`. PENDING Maker không có màn chỉnh sửa.
 
-Khung `Thông tin chung` của năm màn xử lý được mở rộng để chứa toàn bộ hàng thông tin; các section cấu hình phí và footer được đẩy xuống theo, không thay đổi nội dung hoặc bố cục trường cấu hình.
+**Lịch sử hoạt động:** Màn hình CTT/QRGW hiển thị các sự kiện theo thời gian, tên/ vai trò người thực hiện, dấu thời gian và nội dung thay đổi (bao gồm chuyển trạng thái/YCPD hoặc thay đổi trường cấu hình); footer chỉ có `Đóng`.
 
 ---
 
@@ -90,19 +96,19 @@ Khung `Thông tin chung` của năm màn xử lý được mở rộng để ch�
 
 | STT | Tên Modal / Toast / Popup | Node ID Figma | Kích thước | Mô tả & Trigger |
 |:---:|---|---|---|---|
-| 32 | `confirm trước khi "Dừng hoạt động cấu hình"` | `4140:3190` | 594 x 254 | Hiển thị khi Maker chọn [Tạm dừng] hoặc Checker duyệt tạm dừng |
-| 33 | `Modal: Xác nhận lưu cập nhật` | `4140:3206` | 381 x 196 | Hiển thị khi Maker bấm [Lưu cập nhật] từ màn hình Chỉnh sửa |
-| 34 | `Modal: Xác nhận hủy cập nhật` | `4140:3221` | 381 x 196 | Hiển thị khi bấm [Hủy] trong luồng chỉnh sửa |
-| 35 | `Modal: Xác nhận hủy thêm mới` | `4140:3236` | 381 x 196 | Hiển thị khi bấm [Hủy] trong luồng thêm mới |
-| 36 | `Modal: Xác nhận lưu nháp` | `4140:3251` | 381 x 196 | Hiển thị khi Maker bấm [Lưu nháp] tạo trạng thái `DRAFT` |
-| 37 | `Toast: Dừng hoạt động thành công` | `4140:3266` | 417 x 223 | Toast notification khi chuyển trạng thái sang `INACTIVE` |
-| 38 | `Toast: Cập nhật thành công` | `4140:3273` | 417 x 223 | Toast notification khi gửi duyệt cập nhật thành công |
-| 39 | `Toast: Lưu nháp thành công` | `4140:3280` | 417 x 223 | Toast notification khi lưu bản ghi nháp thành công |
-| 40 | `Toast: Tạo mới thành công` | `4140:3287` | 417 x 223 | Toast notification khi gửi duyệt tạo mới thành công |
-| 41 | `Popup tính thử phí - Phí thanh toán (1 mức)` | `4140:4057` / `4140:3754` | 964 x 650 | Modal mô phỏng tính phí 1 bậc khi bấm `[Tính thử 🧮]` |
-| 42 | `Popup tính thử phí - Nhiều mức phí / Bậc thang` | `4140:4147` / `4140:3844` | 964 x 795 | Modal mô phỏng biểu phí bậc thang theo Tổng GTGD/Tổng SLGD |
-| 43 | `Alert` | `4140:4321` / `4140:4018` | 419 x 191 | Hộp thoại cảnh báo dữ liệu không hợp lệ |
-| 44 | `SCR-COMP-ACTIONS: Ma trận Menu Thao tác (6 Trạng thái)` | `4083:10606` | 1440 x 551 | Component đặc tả menu thao tác 3 chấm `[⋮]` theo từng trạng thái |
+| 42 | `confirm trước khi "Dừng hoạt động cấu hình"` | `4140:3190` | 594 x 254 | Hiển thị khi Maker chọn [Tạm dừng] hoặc Checker duyệt tạm dừng |
+| 43 | `Modal: Xác nhận lưu cập nhật` | `4140:3206` | 381 x 196 | Hiển thị khi Maker bấm [Lưu cập nhật] từ màn hình Chỉnh sửa |
+| 44 | `Modal: Xác nhận hủy cập nhật` | `4140:3221` | 381 x 196 | Hiển thị khi bấm [Hủy] trong luồng chỉnh sửa |
+| 45 | `Modal: Xác nhận hủy thêm mới` | `4140:3236` | 381 x 196 | Hiển thị khi bấm [Hủy] trong luồng thêm mới |
+| 46 | `Modal: Xác nhận lưu nháp` | `4140:3251` | 381 x 196 | Hiển thị khi Maker bấm [Lưu nháp] tạo trạng thái `DRAFT` |
+| 47 | `Toast: Dừng hoạt động thành công` | `4140:3266` | 417 x 223 | Toast notification khi chuyển trạng thái sang `INACTIVE` |
+| 48 | `Toast: Cập nhật thành công` | `4140:3273` | 417 x 223 | Toast notification khi gửi duyệt cập nhật thành công |
+| 49 | `Toast: Lưu nháp thành công` | `4140:3280` | 417 x 223 | Toast notification khi lưu bản ghi nháp thành công |
+| 50 | `Toast: Tạo mới thành công` | `4140:3287` | 417 x 223 | Toast notification khi gửi duyệt tạo mới thành công |
+| 51 | `Popup tính thử phí - Phí thanh toán (1 mức)` | `4140:4057` / `4140:3754` | 964 x 650 | Modal mô phỏng tính phí 1 bậc khi bấm `[Tính thử 🧮]` |
+| 52 | `Popup tính thử phí - Nhiều mức phí / Bậc thang` | `4140:4147` / `4140:3844` | 964 x 795 | Modal mô phỏng biểu phí bậc thang theo Tổng GTGD/Tổng SLGD |
+| 53 | `Alert` | `4140:4321` / `4140:4018` | 419 x 191 | Hộp thoại cảnh báo dữ liệu không hợp lệ |
+| 54 | `SCR-COMP-ACTIONS: Ma trận Menu Thao tác (6 Trạng thái)` | `4083:10606` | 1440 x 551 | Component đặc tả menu thao tác 3 chấm `[⋮]` theo từng trạng thái |
 
 ---
 

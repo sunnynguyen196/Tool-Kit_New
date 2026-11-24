@@ -24,9 +24,9 @@ links:
 |---|---|---|---|---|---|---|:---:|
 | 1 | **CTT-UC01** | Tìm kiếm và xem danh sách cấu hình phí đối tác CTT | [uc-ctt-01-search-list](uc-ctt-01-search-list.md) | Maker, Checker, Đối soát | FR-001, FR-002 | `4020:50223`, `4020:51051`, `4020:51879` | P0 |
 | 2 | **CTT-UC02** | Xuất tệp dữ liệu CHP Trả đối tác CTT | [uc-ctt-02-export](uc-ctt-02-export.md) | Maker, Checker, Kế toán | FR-001 | `4020:50223` (Menu [Xuất tệp]) | P1 |
-| 3 | **CTT-UC03** | Xem chi tiết thông tin phí Trả đối tác CTT | [uc-ctt-03-view-detail](uc-ctt-03-view-detail.md) | Maker, Checker, Kiểm toán | FR-010, FR-011 | `4020:43846`, `4020:45486`, `4020:47172` | P0 |
+| 3 | **CTT-UC03** | Xem chi tiết thông tin phí Trả đối tác CTT | [uc-ctt-03-view-detail](uc-ctt-03-view-detail.md) | Maker, Checker, Kiểm toán | FR-010, FR-011 | `4244:16231`–`4244:17738`, `4287:13664` | P0 |
 | 4 | **CTT-UC04** | Xóa CHP Trả đối tác CTT | [uc-ctt-04-delete](uc-ctt-04-delete.md) | Maker | FR-001, FR-010 | `4020:50223` (Menu row), `4020:50006` | P1 |
-| 5 | **CTT-UC05** | Xử lý thông tin hồ sơ CHP Trả đối tác CTT | [uc-ctt-05-process-fee-profile](uc-ctt-05-process-fee-profile.md) | Maker, Checker, Quản lý | FR-003 đến FR-009, FR-012 | `4022:53508` – `4022:58264`, `4020:47923`, `4020:48856` | P0 |
+| 5 | **CTT-UC05** | Xử lý thông tin hồ sơ CHP Trả đối tác CTT | [uc-ctt-05-process-fee-profile](uc-ctt-05-process-fee-profile.md) | Maker, Checker, Quản lý | FR-003 đến FR-009, FR-012 | `4276:11637`–`4276:12834`, `4244:17738` | P0 |
 | 6 | **CTT-UC06** | Job tự động kích hoạt cấu hình CTT | [uc-ctt-06-auto-golive](uc-ctt-06-auto-golive.md) | Hệ thống (Scheduler) | FR-013 | System background task | P0 |
 | 7 | **CTT-UC07** | Tự động từ chối YCPD CTT quá ngày hiệu lực | [uc-ctt-07-auto-reject-expired](uc-ctt-07-auto-reject-expired.md) | Hệ thống | FR-014 | Job nền và lịch sử YCPD | P0 |
 
@@ -51,9 +51,9 @@ links:
 |---|---|---|---|---|---|---|:---:|
 | 1 | **QR-UC01** | Tìm kiếm và xem danh sách cấu hình phí đối tác QRGW | [uc-qr-01-search-list](uc-qr-01-search-list.md) | Maker, Checker, Đối soát QR | FR-001, FR-002 | `4020:50223`, `4020:51051`, `4020:51879` | P0 |
 | 2 | **QR-UC02** | Xuất tệp dữ liệu CHP Trả đối tác QRGW | [uc-qr-02-export](uc-qr-02-export.md) | Maker, Checker, Kế toán | FR-001 | `4020:50223` (Menu [Xuất tệp]) | P1 |
-| 3 | **QR-UC03** | Xem chi tiết thông tin phí Trả đối tác QRGW | [uc-qr-03-view-detail](uc-qr-03-view-detail.md) | Maker, Checker, Kiểm toán | FR-010, FR-011 | `4020:44666`, `4020:46306`, `4020:47172` | P0 |
+| 3 | **QR-UC03** | Xem chi tiết thông tin phí Trả đối tác QRGW | [uc-qr-03-view-detail](uc-qr-03-view-detail.md) | Maker, Checker, Kiểm toán | FR-010, FR-011 | `4116:31385`–`4116:33064`, `4118:1345`, `4270:11424` | P0 |
 | 4 | **QR-UC04** | Xóa CHP Trả đối tác QRGW | [uc-qr-04-delete](uc-qr-04-delete.md) | Maker | FR-001, FR-010 | `4020:50223` (Menu row), `4020:50006` | P1 |
-| 5 | **QR-UC05** | Xử lý thông tin hồ sơ CHP Trả đối tác QRGW | [uc-qr-05-process-fee-profile](uc-qr-05-process-fee-profile.md) | Maker, Checker, Quản lý | FR-003 đến FR-009, FR-012 | `4020:47923`, `4020:48856` | P0 |
+| 5 | **QR-UC05** | Xử lý thông tin hồ sơ CHP Trả đối tác QRGW | [uc-qr-05-process-fee-profile](uc-qr-05-process-fee-profile.md) | Maker, Checker, Quản lý | FR-003 đến FR-009, FR-012 | `4273:11572`–`4273:12767`, `4118:1345` | P0 |
 | 6 | **QR-UC06** | Job tự động kích hoạt cấu hình QRGW | [uc-qr-06-auto-golive](uc-qr-06-auto-golive.md) | Hệ thống (Scheduler) | FR-013 | System background task | P0 |
 | 7 | **QR-UC07** | Tự động từ chối YCPD QRGW quá ngày hiệu lực | [uc-qr-07-auto-reject-expired](uc-qr-07-auto-reject-expired.md) | Hệ thống | FR-014 | Job nền và lịch sử YCPD | P0 |
 

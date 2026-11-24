@@ -4,11 +4,11 @@ title: "Xử lý thông tin hồ sơ CHP Trả đối tác CTT"
 feature: partner-fee-management
 module: CTT
 status: approved
-updated: 2026-11-08
+updated: 2026-11-24
 links:
   - srs: docs/partner-fee-management/srs/partner-fee-management-spec.md
   - srs_ctt: docs/partner-fee-management/srs/SRS-Partner-Fee-CTT.md
-  - figma: "Figma File: ForWork · Page: CHP Đối tác"
+  - figma: "Figma File: ForWork · Page: CHP Đối tác v2"
 ---
 
 # 2.6 CTT-UC05: Xử lý thông tin hồ sơ CHP Trả đối tác CTT
@@ -35,10 +35,22 @@ links:
 ## 2.6.2 Giao diện
 
 ### Màn hình Wireframe liên kết:
-* **CTT-UC05-WF01**: Phê duyệt / Checker — Chờ phê duyệt (`4020:47923`)
-* **CTT-UC05-WF02**: Phê duyệt / Checker — Màn hình Thẩm định so sánh CŨ MỚI (`4020:48856`)
-* **CTT-UC05-WF03**: Modal Xác nhận từ chối phê duyệt (bắt buộc nhập lý do)
-* **CTT-UC05-WF04**: Modal Xác nhận thay đổi người phê duyệt
+* **CTT-UC05-WF01**: Chi tiết Maker đang chờ phê duyệt (`4244:16477`)
+* **CTT-UC05-WF02**: Chi tiết Checker / Drawer phê duyệt (`4244:17738`)
+* **CTT-UC05-WF03**: Màn xử lý theo trạng thái (`4276:11637`, `4276:12834`, `4276:11937`, `4276:12231`, `4276:12532`)
+* Figma v2 chưa có frame riêng cho modal từ chối và thay đổi người phê duyệt; các kiểm tra nghiệp vụ này tiếp tục là yêu cầu, nhưng giao diện modal cần mapping riêng.
+
+### Ma trận màn xử lý và nút footer theo trạng thái
+
+| Trạng thái CHP | Màn Figma | Nút footer ngoài `Đóng` |
+|---|---|---|
+| `DRAFT` | `4276:11637` | `Xóa nháp`, `Cập nhật thông tin`, `Gửi phê duyệt` |
+| `NEW` sau từ chối | `4276:12834` | `Xóa cấu hình`, `Cập nhật thông tin`, `Gửi phê duyệt lại` |
+| `READY` | `4276:11937` | `Cập nhật thông tin` |
+| `ACTIVE` | `4276:12231` | `Cập nhật thông tin`, `Gửi phê duyệt cập nhật`, `Gửi yêu cầu tạm dừng` |
+| `INACTIVE` | `4276:12532` | `Cập nhật thông tin`, `Gửi yêu cầu mở kích hoạt` |
+
+Footer căn giữa, luôn có `Đóng` không icon; thanh tác vụ bên phải giữ cùng bộ nút như màn chi tiết và disable thao tác không khả dụng. PENDING Maker không mở màn chỉnh sửa.
 
 ### Bảng Đặc tả Từ điển Trường Dữ liệu (Screen Data Dictionary):
 
