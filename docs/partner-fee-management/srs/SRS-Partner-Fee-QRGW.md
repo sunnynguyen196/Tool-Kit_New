@@ -4,7 +4,7 @@ feature: partner-fee-management
 channel: QRGW
 status: draft
 version: "V0.7"
-updated: 2026-11-24
+updated: 2026-11-27
 template_source: "EPAY_CTT_SRS_MM04_CauHinhPhiTraDoiTac_V0.1_29102026.docx"
 links:
   - srs: docs/partner-fee-management/srs/partner-fee-management-spec.md
@@ -574,7 +574,8 @@ Mỗi yêu cầu thuộc đúng phân hệ của cấu hình phí. Tên và các
 | **Non-functional requirement** | Validate form tức thì; Lưu bản ghi mới $< 1.0$ giây. |
 
 #### 2.6.2.2 Giao diện thêm mới
-* **Màn hình Wireframe V2**: `4116:18663`, `4116:18825` (XLGD); `4116:19078`, `4116:19262` (Thanh toán); chia khối Thanh toán và Hoàn trả theo chế độ áp dụng chung hoặc tách riêng.
+* **Màn hình Wireframe V2 (27/11/2026)**: Section `4216:15623` — phí XLGD: `4116:18663` (áp dụng chung, 1 bậc), `4116:18825` (riêng theo loại GD, bậc thang), `4389:11325` (riêng theo loại GD, 1 bậc). Section `4216:15626` — phí thanh toán: `4116:19078` (chung, 1 bậc), `4390:11790` (chung, bậc thang), `4116:19262` (riêng, 1 bậc), `4390:12055` (riêng, bậc thang).
+* **Quy cách hiển thị**: Khi chọn 1 bậc phí, mọi khối có cùng bố cục ba ô. Với phí tỷ lệ, hiển thị tỷ lệ, Min, Max; với phí cố định, hiển thị giá trị cố định và hai ô Min/Max ở trạng thái Không áp dụng (không phải trường nhập hay giá trị lưu mới). Với bậc thang, mỗi bậc có nhãn bên trái, hai ô khoảng giá trị và các cột mức phí/Min/Max; nút thêm/xóa bậc nằm cuối hàng theo mẫu CTT. Chỉ thay đổi trình bày, không thay đổi công thức, validation hay quyền xử lý nêu trong SRS.
 
 #### 2.6.2.3 Quy tắc thêm mới
 

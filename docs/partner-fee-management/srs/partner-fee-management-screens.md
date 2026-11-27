@@ -2,7 +2,7 @@
 type: screen-index
 feature: partner-fee-management
 status: approved
-updated: 2026-11-24
+updated: 2026-11-27
 links:
   - srs: docs/partner-fee-management/srs/partner-fee-management-spec.md
   - srs_ctt: docs/partner-fee-management/srs/SRS-Partner-Fee-CTT.md
@@ -51,40 +51,50 @@ links:
 
 ---
 
-### 1.2 PHÂN HỆ CẤU HÌNH PHÍ ĐỐI TÁC QRGW
+### 1.2 PHÂN HỆ CẤU HÌNH PHÍ ĐỐI TÁC QRGW (Section Node `4302:3265`)
 
-| STT | Mã màn hình & Tên trên Figma | Node ID Figma | Tọa độ (x, y) | Kích thước | Vai trò sử dụng |
+Danh mục hiện hành được đối chiếu trực tiếp với Figma ngày 27/11/2026. Tọa độ tính tương đối trong từng Section con; `4139:40` là frame lưu trữ, không phải Section đang sử dụng.
+
+| STT | Tên trên Figma | Node ID Figma | Tọa độ (x, y) | Kích thước | Vai trò sử dụng |
 |:---:|---|---|---|---|---|
-| **HÀNG 1: MÀN HÌNH DANH SÁCH (SEARCH & LIST - 3 TABS)** | | | | | |
-| 17 | `QRGW / Danh sách Phí QRGW / Tab Tất cả / 1440` | `4088:11297` | (200, 352) | 1440 x 960 | Maker, Checker |
-| 18 | `QRGW / Danh sách Phí QRGW / Tab Đang hoạt động / 1440` | `4089:11559` | (1740, 352) | 1440 x 960 | Maker, Checker |
-| 19 | `QRGW / Danh sách Phí QRGW / Tab Chờ xử lý / 1440` | `4090:11821` | (3280, 352) | 1440 x 960 | Maker, Checker |
-| **HÀNG 2: MÀN HÌNH THÊM MỚI (CREATE FORMS - 4 BIẾN THỂ)** | | | | | |
-| 20 | `QRGW / Thêm mới Phí XLGD QRGW (Áp dụng chung loại GD) / 1440` | `4116:18663` | (200, 352) | 1440 x 960 | Maker |
-| 21 | `QRGW / Thêm mới Phí XLGD QRGW (Theo từng loại GD: Thanh toán, Hoàn trả) / 1440` | `4116:18825` | (1740, 352) | 1440 x 1020 | Maker |
-| 22 | `QRGW / Thêm mới Phí Thanh toán QRGW (Áp dụng chung loại GD) / 1440` | `4116:19078` | (200, 352) | 1440 x 960 | Maker |
-| 23 | `QRGW / Thêm mới Phí Thanh toán QRGW (Theo từng loại GD: Thanh toán, Hoàn trả) / 1440` | `4116:19262` | (1740, 352) | 1440 x 960 | Maker |
-| **HÀNG 3: MÀN HÌNH CHI TIẾT THEO TRẠNG THÁI & DRAWER CHECKER** | | | | | |
-| 24 | `QRGW / Chi tiết Phí QRGW / DRAFT (Bản nháp) / 1504` | `4116:31385` | (200, 352) | 1504 x 1250 | Maker |
-| 25 | `QRGW / Chi tiết Phí QRGW / PENDING (Maker View) / 1504` | `4116:31644` | (1804, 352) | 1504 x 1250 | Maker |
-| 26 | `QRGW / Chi tiết Phí QRGW / PENDING (Checker View / Drawer Phê duyệt) / 1504` | `4118:1345` | (9824, 352) | 1504 x 1400 | Checker |
-| 27 | `QRGW / Chi tiết Phí QRGW / READY (Chờ hiệu lực) / 1504` | `4116:32284` | (3408, 352) | 1504 x 1250 | Maker, Checker |
-| 28 | `QRGW / Chi tiết Phí QRGW / ACTIVE (Đang hoạt động) / 1504` | `4116:32543` | (5012, 352) | 1504 x 1250 | Maker, Checker |
-| 29 | `QRGW / Chi tiết Phí QRGW / INACTIVE (Tạm dừng / Hết hiệu lực) / 1504` | `4116:32805` | (6616, 352) | 1504 x 1250 | Maker, Checker |
-| 30 | `QRGW / Chi tiết Phí QRGW / NEW (YCPD bị từ chối) / 1504` | `4116:33064` | (8220, 352) | 1504 x 1250 | Maker |
-| 31 | `QRGW / Lịch sử hoạt động / 1504` | `4270:11424` | (80, 80) | 1504 x 1250 | Maker, Checker, Audit |
+| **QRGW · 01 · Tra cứu và danh sách (Section `4216:15620`)** | | | | | |
+| 17 | QRGW / Danh sách Phí QRGW / Tab Tất cả / 1440 | `4088:11297` | (200, 352) | 1440 x 1024 | Maker, Checker |
+| 18 | QRGW / Danh sách Phí QRGW / Tab Đang hoạt động / 1440 | `4089:11559` | (1740, 352) | 1440 x 1024 | Maker, Checker |
+| 19 | QRGW / Danh sách Phí QRGW / Tab Chờ xử lý / 1440 | `4090:11821` | (3280, 352) | 1440 x 1024 | Maker, Checker |
+| **QRGW · 02 · Thêm mới phí xử lý giao dịch (Section `4216:15623`)** | | | | | |
+| 20 | QRGW / XLGD áp dụng chung / 1 bậc phí / 1440 | `4116:18663` | (200, 352) | 1440 x 1040 | Maker |
+| 21 | QRGW / XLGD theo loại giao dịch / Bậc thang / 1440 | `4116:18825` | (1740, 352) | 1440 x 1149 | Maker |
+| 21a | QRGW / XLGD theo loại giao dịch / Bậc thang / 1440 / Một bậc phí | `4389:11325` | (1740, 1601) | 1440 x 1075 | Maker |
+| **QRGW · 03 · Thêm mới phí thanh toán (Section `4216:15626`)** | | | | | |
+| 22 | QRGW / Phí thanh toán áp dụng chung / 1 bậc phí / 1440 | `4116:19078` | (200, 352) | 1440 x 1040 | Maker |
+| 22a | QRGW / Phí thanh toán áp dụng chung / 1 bậc phí / 1440 / Bậc thang | `4390:11790` | (200, 1492) | 1440 x 1040 | Maker |
+| 23 | QRGW / Phí thanh toán theo loại giao dịch / 1 bậc phí / 1440 | `4116:19262` | (1740, 352) | 1440 x 1118 | Maker |
+| 23a | QRGW / Phí thanh toán theo loại giao dịch / 1 bậc phí / 1440 / Bậc thang | `4390:12055` | (1740, 1570) | 1440 x 1207 | Maker |
+| **QRGW · 04 · Chi tiết và phê duyệt (Section `4216:15629`)** | | | | | |
+| 24 | QRGW / Chi tiết Phí QRGW / DRAFT (Bản nháp) / 1504 | `4116:31385` | (200, 352) | 1504 x 1412 | Maker |
+| 25 | QRGW / Chi tiết Phí QRGW / PENDING (Maker View) / 1504 | `4116:31644` | (1804, 352) | 1504 x 1313 | Maker |
+| 27 | QRGW / Chi tiết Phí QRGW / READY (Chờ hiệu lực) / 1504 | `4116:32284` | (3408, 352) | 1504 x 1412 | Maker, Checker |
+| 28 | QRGW / Chi tiết Phí QRGW / ACTIVE (Đang hoạt động) / 1504 | `4116:32543` | (5012, 352) | 1504 x 1412 | Maker, Checker |
+| 29 | QRGW / Chi tiết Phí QRGW / INACTIVE (Tạm dừng / Hết hiệu lực) / 1504 | `4116:32805` | (6616, 352) | 1504 x 1412 | Maker, Checker |
+| 30 | QRGW / Chi tiết Phí QRGW / REJECTED (Bị từ chối) / 1504 | `4116:33064` | (8220, 352) | 1504 x 1412 | Maker |
+| 26a | QRGW / Chi tiết Phí QRGW / PENDING (Checker View / Drawer Phê duyệt) / 1441 | `4270:11065` | (200, 2152) | 1504 x 1400 | Checker |
+| 26 | QRGW / Chi tiết Phí QRGW / PENDING (Checker View / Drawer Phê duyệt) / 1504 | `4118:1345` | (9824, 352) | 1504 x 1400 | Checker |
+| **QRGW · Lịch sử hoạt động (Section `4271:11495`)** | | | | | |
+| 31 | QRGW / Lịch sử hoạt động / 1504 | `4270:11424` | (80, 80) | 1504 x 1250 | Maker, Checker, Audit |
 | **HÀNG 4: MÀN HÌNH XỬ LÝ CẤU HÌNH CTT THEO TRẠNG THÁI** | | | | | |
 | 32 | `CTT / Xử lý DRAFT / 1504` | `4276:11637` | (200, 352) | 1504 x 1328 | Maker |
 | 33 | `CTT / Xử lý NEW sau từ chối / 1504` | `4276:12834` | (6616, 352) | 1504 x 1328 | Maker |
 | 34 | `CTT / Xử lý READY / 1504` | `4276:11937` | (1804, 352) | 1504 x 1328 | Maker |
 | 35 | `CTT / Xử lý ACTIVE / 1504` | `4276:12231` | (3408, 352) | 1504 x 1328 | Maker |
 | 36 | `CTT / Xử lý INACTIVE / 1504` | `4276:12532` | (5012, 352) | 1504 x 1328 | Maker |
-| **HÀNG 5: MÀN HÌNH XỬ LÝ CẤU HÌNH QRGW THEO TRẠNG THÁI (SECTION `4273:13064`)** | | | | | |
-| 37 | `QRGW / Xử lý DRAFT / 1504` | `4273:11572` | (200, 352) | 1504 x 1250 | Maker |
-| 38 | `QRGW / Xử lý NEW sau từ chối / 1504` | `4273:11873` | (1804, 352) | 1504 x 1250 | Maker |
-| 39 | `QRGW / Xử lý READY / 1504` | `4273:12182` | (3408, 352) | 1504 x 1250 | Maker |
-| 40 | `QRGW / Xử lý ACTIVE / 1504` | `4273:12468` | (5012, 352) | 1504 x 1250 | Maker |
-| 41 | `QRGW / Xử lý INACTIVE / 1504` | `4273:12767` | (6616, 352) | 1504 x 1250 | Maker |
+| **QRGW · Xử lý cấu hình (Section `4273:13064`)** | | | | | |
+| 37 | QRGW / Xử lý DRAFT / 1504 | `4273:11572` | (200, 352) | 1504 x 1420 | Maker |
+| 38 | QRGW / Xử lý NEW sau từ chối / 1504 | `4273:11873` | (1804, 352) | 1504 x 1420 | Maker |
+| 39 | QRGW / Xử lý READY / 1504 | `4273:12182` | (3408, 352) | 1504 x 1420 | Maker |
+| 40 | QRGW / Xử lý ACTIVE / 1504 | `4273:12468` | (5012, 352) | 1504 x 1420 | Maker |
+| 41 | QRGW / Xử lý INACTIVE / 1504 | `4273:12767` | (6616, 352) | 1504 x 1420 | Maker |
+
+Các popup tính thử và cảnh báo nằm trong Section 03; nhóm xác nhận/thông báo nằm trong Section 05 (4216:15632), xem mục 1.3.
 
 **Quy tắc thao tác:** Màn chi tiết có thanh tác vụ dọc bên phải theo quyền/trạng thái; nút không khả dụng ở trạng thái hiện tại được disabled. Footer của màn chi tiết và lịch sử chỉ có nút `Đóng`, căn giữa, không icon. Màn xử lý mở từ nút hồ sơ trên thanh bên phải; footer căn giữa gồm `Đóng` và các nút nghiệp vụ theo trạng thái. DRAFT: `Xóa nháp`, `Cập nhật thông tin`, `Gửi phê duyệt`; NEW sau từ chối: `Xóa cấu hình`, `Cập nhật thông tin`, `Gửi phê duyệt lại`; READY: `Cập nhật thông tin`; ACTIVE: `Cập nhật thông tin`, `Gửi phê duyệt cập nhật`, `Gửi yêu cầu tạm dừng`; INACTIVE: `Cập nhật thông tin`, `Gửi yêu cầu mở kích hoạt`. PENDING Maker không có màn chỉnh sửa.
 
@@ -142,3 +152,9 @@ links:
    - `● INACTIVE`: Nền đỏ hồng (`#FEE2E2`), text đỏ đậm (`#B91C1C`)
    - `● DRAFT`: Nền xám nhạt (`#F1F5F9`), text xám (`#475569`)
    - **Badge trạng thái YCPD** `● REJECTED` (không phải trạng thái CHP): Nền đỏ cam (`#FFE4E6`), text đỏ gạch (`#BE123C`)
+
+### Lịch sử hoạt động CTT — cập nhật 17/11/2026
+
+Figma: ForWork → CHP Đối tác v2 → CTT · 06 · Lịch sử hoạt động (section 4288:13868). Màn 4287:13664 dùng layout Portal hiện hành; khối timeline có tiêu đề xanh nhạt, ghi người thao tác, thời gian, hành động, giá trị cũ/mới và trạng thái CHP/YCPD. Dữ liệu trên bản vẽ là minh họa cho CTT_FE_KBANK_001.
+
+Đã nối biểu tượng Xem lịch sử hoạt động từ 6 màn chi tiết và 5 màn xử lý hồ sơ CTT. Footer chỉ có Đóng, quay lại màn đã mở lịch sử. Màn tham chiếu 4140:4426 được giữ lại; không dùng làm màn hiện hành.
